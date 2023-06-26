@@ -1,6 +1,7 @@
 # This is a generated file; do not edit or check into version control.
 cloud_firestore=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/cloud_firestore-4.8.1/
 cloud_firestore_web=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/cloud_firestore_web-3.6.1/
+device_info=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/device_info-2.0.3/
 firebase_auth=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/firebase_auth-4.6.3/
 firebase_auth_web=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/firebase_auth_web-5.5.3/
 firebase_core=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/firebase_core-2.14.0/
@@ -8,6 +9,8 @@ firebase_core_web=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/firebase_core_
 firebase_messaging=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/firebase_messaging-14.6.3/
 firebase_messaging_web=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/firebase_messaging_web-3.5.3/
 flutter_local_notifications=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/flutter_local_notifications-14.1.1/
+location=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/location-4.4.0/
+location_web=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/location_web-3.1.1/
 url_launcher=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/url_launcher-6.1.11/
 url_launcher_android=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/url_launcher_android-6.0.36/
 url_launcher_ios=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/url_launcher_ios-6.1.4/

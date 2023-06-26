@@ -56,6 +56,8 @@ dev_dependencies:
   http: ^1.0.0
   rflutter_alert: ^2.0.4
   url_launcher: ^6.0.9
+  location: ^4.4.0
+  device_info: ^2.0.3
 
 
 # For information on the generic Dart part of this file, see the
