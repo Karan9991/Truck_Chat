@@ -373,9 +373,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
             try {
               // conversationTimestamp =
               //     int.tryParse(jsonResult['timestamp']) ?? 0;
-               conversationTimestamp = jsonResult['timestamp'] ?? 0;
-
-         
+              conversationTimestamp = jsonResult['timestamp'] ?? 0;
 
               print('try $conversationTimestamps');
             } catch (e) {
@@ -386,23 +384,36 @@ class _ChatListScreenState extends State<ChatListScreen> {
             final jsonReplyList = jsonResult['messsage_reply_list'];
             int countValue = int.parse(counts);
 
-            if (counts == jsonReplyList.length) {
-              for (var i = 0; i < countValue; ++i) {
-                final jsonReply = jsonReplyList[i];
-                final rid = jsonReply['server_msg_reply_id'];
-                final replyMsg = jsonReply['reply_msg'];
-                final uid = jsonReply['user_id'];
-                final emojiId = jsonReply['emoji_id'];
-                int timestamp;
-                try {
-                  timestamp = int.tryParse(jsonReply['timestamp']) ?? 0;
-                } catch (e) {
-                  timestamp = 0;
-                }
+            print(jsonReplyList.length);
 
-                replyMsgs.add(ReplyMsg(rid, uid, replyMsg, timestamp, emojiId));
+            //if (counts == jsonReplyList.length) {
+            print('iff');
+            for (var i = 0; i < countValue; ++i) {
+              final jsonReply = jsonReplyList[i];
+              final rid = jsonReply['server_msg_reply_id'];
+              final replyMsg = jsonReply['reply_msg'];
+              final uid = jsonReply['user_id'];
+              final emojiId = jsonReply['emoji_id'];
+
+              print("server_msg_reply_id  $rid");
+              print("reply_msg $replyMsg");
+              print("user id  $uid");
+              print("emoji_id $emojiId");
+              int timestamp;
+              try {
+                //  timestamp = int.tryParse(jsonReply['timestamp']) ?? 0;
+                timestamp = jsonReply['timestamp'] ?? 0;
+                print('try in for $timestamp');
+              } catch (e) {
+                timestamp = 0;
+                print('catch $timestamp');
               }
+
+              replyMsgs.add(ReplyMsg(rid, uid, replyMsg, timestamp, emojiId));
             }
+            // } else {
+            //   print('elsee');
+            // }
 
             setState(() {
               // Update the conversation data
@@ -437,11 +448,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
           final timestampp = conversationTimestamps[index];
           final count = replyCounts[index];
 
-     DateTime dateTime =
-                  DateTime.fromMillisecondsSinceEpoch(timestampp);
-              String formattedDateTime =
-                  DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
-             final timestamp = formattedDateTime;
+          DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestampp);
+          String formattedDateTime =
+              DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
+          final timestamp = formattedDateTime;
 
           return GestureDetector(
             onTap: () {
@@ -455,44 +465,43 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 ),
               );
             },
-           child: Card(
-  elevation: 2,
-  color: Colors.blue[300],
-  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-  child: ListTile(
-    title: Text(
-      topic,
-      style: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    subtitle: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(bottom: 5, top: 8),
-          child: Text(
-            'Last Active: $timestamp',
-            style: TextStyle(fontSize: 14),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 5),
-          child: Text(
-            'Replies: $count',
-            style: TextStyle(fontSize: 14),
-          ),
-        ),
-      ],
-    ),
-    trailing: Icon(
-      Icons.arrow_forward_ios,
-      color: Colors.white,
-    ),
-  ),
-),
-
+            child: Card(
+              elevation: 2,
+              color: Colors.blue[300],
+              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: ListTile(
+                title: Text(
+                  topic,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 5, top: 8),
+                      child: Text(
+                        'Last Active: $timestamp',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 5),
+                      child: Text(
+                        'Replies: $count',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ],
+                ),
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.white,
+                ),
+              ),
+            ),
           );
         },
       ),
