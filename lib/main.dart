@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:chat/chat_list_screen.dart';
 import 'package:chat/chat_screen.dart';
 import 'package:chat/getFcm.dart';
 import 'package:chat/get_previous_messages.dart';
@@ -13,6 +14,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 import 'package:device_info/device_info.dart';
+import 'get_all_reply_messages.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,11 +59,25 @@ class _MyHomePageState extends State<MyHomePage> {
   void _incrementCounter() async {
     setState(() {
       _counter++;
-      registerDevice();
-      //  Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => HomeScreen()),
-      // );
+      //registerDevice();
+       Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+
+
+
+    //      Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => ChatListScreen(
+    //       conversationTopics: serverMessageIds,
+    //       conversationTimestamps: conversation_timestamp,
+    //       replyCounts: counts,
+    //       replyMsgs: reply_msgs,
+    //     ),
+    //   ),
+    // );
     });
   }
 
@@ -71,6 +87,9 @@ class _MyHomePageState extends State<MyHomePage> {
     configLocalNotification();
 
     _configureFCM();
+
+          registerDevice();
+
   }
 
   @override
@@ -251,14 +270,13 @@ class _MyHomePageState extends State<MyHomePage> {
         print("Error: User ID not found in response");
       }
 
-      GetPreviousMessagesAsyncTask task = GetPreviousMessagesAsyncTask(
-       user_id,
-        1.0,
-        1.0,
+      // GetPreviousMessagesAsyncTask task = GetPreviousMessagesAsyncTask(
+      //  user_id,
+      //   1.0,
+      //   1.0,
+      // );
 
-      );
-
-      task.execute();
+      // task.execute();
 
       //getAllMessages();
 

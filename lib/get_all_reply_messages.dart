@@ -1,84 +1,101 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+//original
 
-Future<bool> runNow() async {
-  int status_code = 0;
-  int counts = 0;
-  int conversation_timestamp = 0;
+// import 'dart:convert';
+// import 'package:http/http.dart' as http;
 
-  String status_message = '';
-  String conversation_topic = '';
-  List<ReplyMsg> reply_msgs = [];
+// Future<bool> runNow() async {
+//   int status_code = 0;
+//   int counts = 0;
+//   int conversation_timestamp = 0;
 
-  final url =
-      Uri.parse("http://smarttruckroute.com/bb/v1/get_all_reply_message");
+//   String status_message = '';
+//   String conversation_topic = '';
+//   List<ReplyMsg> reply_msgs = [];
 
-  Map<String, dynamic> requestBody = {
-    "server_message_id": 48702,
-  };
+//   final url =
+//       Uri.parse("http://smarttruckroute.com/bb/v1/get_all_reply_message");
 
-  try {
-    http.Response response = await http.post(
-      url,
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(requestBody),
-    );
-    if (response.statusCode == 200) {
-      final result = response.body;
+//   Map<String, dynamic> requestBody = {
+//     "server_message_id": 48702,
+//   };
 
-      try {
-        final jsonResult = jsonDecode(result);
-        // status_code = jsonResult[PARAM_STATUS];
+//   try {
+//     http.Response response = await http.post(
+//       url,
+//       headers: {"Content-Type": "application/json"},
+//       body: jsonEncode(requestBody),
+//     );
+//     if (response.statusCode == 200) {
+//       final result = response.body;
 
-        if (jsonResult.containsKey('message')) {
-          status_message = jsonResult['message'];
-        } else {
-          status_message = '';
-        }
+//       try {
+//         final jsonResult = jsonDecode(result);
+//         // status_code = jsonResult[PARAM_STATUS];
 
-        counts = jsonResult['counts'];
+//         if (jsonResult.containsKey('message')) {
+//           status_message = jsonResult['message'];
+//         } else {
+//           status_message = '';
+//         }
 
-        conversation_topic = jsonResult['original'];
-        print("conversation topic $conversation_topic");
-        try {
-          conversation_timestamp = int.tryParse(jsonResult['timestamp']) ?? 0;
-        } catch (e) {
-          conversation_timestamp = 0;
-        }
+//         counts = jsonResult['counts'];
 
-        final jsonReplyList = jsonResult['messsage_reply_list'];
-        if (counts == jsonReplyList.length) {
-          for (var i = 0; i < counts; ++i) {
-            final jsonReply = jsonReplyList[i];
-            final rid = jsonReply['server_msg_reply_id'];
-            final replyMsg = jsonReply['reply_msg'];
-            final uid = jsonReply['user_id'];
-            final emojiId = jsonReply['emoji_id'];
-            int timestamp;
-            try {
-              timestamp = int.tryParse(jsonReply['timestamp']) ?? 0;
-            } catch (e) {
-              timestamp = 0;
-            }
+//         conversation_topic = jsonResult['original'];
+//         print("conversation topic $conversation_topic");
+//         try {
+//           conversation_timestamp = int.tryParse(jsonResult['timestamp']) ?? 0;
+//         } catch (e) {
+//           conversation_timestamp = 0;
+//         }
 
-            reply_msgs.add(ReplyMsg(rid, uid, replyMsg, timestamp, emojiId));
-          }
-        }
+//         final jsonReplyList = jsonResult['messsage_reply_list'];
+//         if (counts == jsonReplyList.length) {
+//           for (var i = 0; i < counts; ++i) {
+//             final jsonReply = jsonReplyList[i];
+//             final rid = jsonReply['server_msg_reply_id'];
+//             final replyMsg = jsonReply['reply_msg'];
+//             final uid = jsonReply['user_id'];
+//             final emojiId = jsonReply['emoji_id'];
+//             int timestamp;
+//             try {
+//               timestamp = int.tryParse(jsonReply['timestamp']) ?? 0;
+//             } catch (e) {
+//               timestamp = 0;
+//             }
 
-        return true;
-      } catch (e) {
-        print(e);
-        status_message = e.toString();
-      }
-    } else {
-      status_message = 'Connection Error';
-    }
-  } catch (e) {
-    print(e);
-  }
+//             reply_msgs.add(ReplyMsg(rid, uid, replyMsg, timestamp, emojiId));
+//           }
+//         }
 
-  return false;
-}
+//         return true;
+//       } catch (e) {
+//         print(e);
+//         status_message = e.toString();
+//       }
+//     } else {
+//       status_message = 'Connection Error';
+//     }
+//   } catch (e) {
+//     print(e);
+//   }
+
+//   return false;
+// }
+
+// class ReplyMsg {
+//   final String rid;
+//   final String uid;
+//   final String replyMsg;
+//   final int timestamp;
+//   final String emojiId;
+
+//   ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId);
+// }
+
+
+
+//testing
+
 
 class ReplyMsg {
   final String rid;
@@ -89,3 +106,4 @@ class ReplyMsg {
 
   ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId);
 }
+
