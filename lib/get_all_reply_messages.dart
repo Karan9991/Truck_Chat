@@ -103,8 +103,10 @@ class ReplyMsg {
   final String replyMsg;
   final int timestamp;
   final String emojiId;
+    final String topic;
 
-  ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId);
+
+  ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId, this.topic);
 }
 
 class ReplyMsgg {

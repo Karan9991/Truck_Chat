@@ -409,7 +409,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 print('catch $timestamp');
               }
 
-              replyMsgs.add(ReplyMsg(rid, uid, replyMsg, timestamp, emojiId));
+              replyMsgs.add(ReplyMsg(rid, uid, replyMsg, timestamp, emojiId, conversationTopic));
             }
             // } else {
             //   print('elsee');
