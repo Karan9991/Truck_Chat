@@ -245,7 +245,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       // Check if the user_id exists in the response
       if (responseBody.containsKey("user_id")) {
-         user_id = responseBody["user_id"];
+        user_id = responseBody["user_id"];
         print("User ID: $user_id");
       } else {
         print("Error: User ID not found in response");
@@ -255,10 +255,12 @@ class _MyHomePageState extends State<MyHomePage> {
        user_id,
         1.0,
         1.0,
-      
+
       );
 
       task.execute();
+
+      //getAllMessages();
 
       print(response.body);
     } else {
@@ -296,4 +298,107 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return token;
   }
+
+  //get conversations
+
+  Future<bool> getAllMessages(List<String> serverMessageIds) async {
+    int status_code = 0;
+    String counts = '';
+    int conversation_timestamp = 0;
+    //String conversation_timestamp = '';
+    List<ReplyMsg> reply_msgs = [];
+
+    String status_message = '';
+    String conversation_topic = '';
+
+    final url =
+        Uri.parse("http://smarttruckroute.com/bb/v1/get_all_reply_message");
+
+    for (var serverMessageId in serverMessageIds) {
+      Map<String, dynamic> requestBody = {
+        "server_message_id": serverMessageId,
+      };
+
+      // Map<String, dynamic> requestBody = {
+      //   "server_message_id": "48702",
+      // };
+
+      try {
+        http.Response response = await http.post(
+          url,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(requestBody),
+        );
+        if (response.statusCode == 200) {
+          final result = response.body;
+
+          try {
+            final jsonResult = jsonDecode(result);
+            // status_code = jsonResult[PARAM_STATUS];
+
+            if (jsonResult.containsKey('message')) {
+              status_message = jsonResult['message'];
+            } else {
+              status_message = '';
+            }
+
+            counts = jsonResult['counts'];
+
+            conversation_topic = jsonResult['original'];
+            print("conversation topic $conversation_topic");
+            print('counts $counts');
+            try {
+              conversation_timestamp =
+                  int.tryParse(jsonResult['timestamp']) ?? 0;
+            } catch (e) {
+              conversation_timestamp = 0;
+            }
+
+            final jsonReplyList = jsonResult['messsage_reply_list'];
+            int countValue = int.parse(counts);
+
+            if (counts == jsonReplyList.length) {
+              for (var i = 0; i < countValue; ++i) {
+                final jsonReply = jsonReplyList[i];
+                final rid = jsonReply['server_msg_reply_id'];
+                final replyMsg = jsonReply['reply_msg'];
+                final uid = jsonReply['user_id'];
+                final emojiId = jsonReply['emoji_id'];
+                int timestamp;
+                try {
+                  timestamp = int.tryParse(jsonReply['timestamp']) ?? 0;
+                } catch (e) {
+                  timestamp = 0;
+                }
+
+                reply_msgs
+                    .add(ReplyMsg(rid, uid, replyMsg, timestamp, emojiId));
+              }
+            }
+
+            return true;
+          } catch (e) {
+            print(e);
+            status_message = e.toString();
+          }
+        } else {
+          status_message = 'Connection Error';
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    return false;
+  }
+}
+
+class ReplyMsg {
+  final String rid;
+  final String uid;
+  final String replyMsg;
+  final int timestamp;
+  final String emojiId;
+
+  ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId);
 }
