@@ -164,6 +164,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "flutter_chat_bubble",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/flutter_chat_bubble-2.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_lints",
       "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/flutter_lints-2.0.1",
       "packageUri": "lib/",
@@ -440,7 +446,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-06-27T17:47:26.386318Z",
+  "generated": "2023-06-27T23:03:36.839234Z",
   "generator": "pub",
   "generatorVersion": "3.0.1"
 }
