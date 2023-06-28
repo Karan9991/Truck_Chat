@@ -409,7 +409,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 print('catch $timestamp');
               }
 
-              replyMsgs.add(ReplyMsg(rid, uid, replyMsg, timestamp, emojiId, conversationTopic));
+              replyMsgs.add(ReplyMsg(
+                  rid, uid, replyMsg, timestamp, emojiId, conversationTopic));
             }
             // } else {
             //   print('elsee');
@@ -447,6 +448,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
           final topic = conversationTopics[index];
           final timestampp = conversationTimestamps[index];
           final count = replyCounts[index];
+          final serverMsgID = serverMsgIds[index];
 
           DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestampp);
           String formattedDateTime =
@@ -461,6 +463,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   builder: (context) => ChatsScreen(
                     topic: topic,
                     replyMsgs: replyMsgs,
+                    serverMsgId: serverMsgID,
                   ),
                 ),
               );

@@ -1,3 +1,5 @@
+// import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'get_all_reply_messages.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
@@ -100,10 +102,12 @@ import 'package:http/http.dart' as http;
 class ChatsScreen extends StatefulWidget {
   final String topic;
   final List<ReplyMsg> replyMsgs;
+  final String serverMsgId;
 
   ChatsScreen({
     required this.topic,
     required this.replyMsgs,
+    required this.serverMsgId,
   });
 
   @override
@@ -118,6 +122,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
   int timestam = 0;
   String status_message = '';
   int statusCode = 0;
+
   @override
   void initState() {
     super.initState();
@@ -148,7 +153,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
 
   Future<bool> sendMessage(
     String message,
-    int serverMsgId,
+    String serverMsgId,
     int userId,
     String emojiId,
   ) async {
@@ -157,12 +162,14 @@ class _ChatsScreenState extends State<ChatsScreen> {
     print('sermsgid $serverMsgId');
     print('userid $userId');
     print('emojiid $emoji_id');
+
+    int servermsgid = int.parse(serverMsgId);
     final url =
         'http://smarttruckroute.com/bb/v1/device_post_message'; // Replace with your API endpoint
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
       'message': message,
-      'server_msg_id': serverMsgId,
+      'server_msg_id': servermsgid,
       'user_id': userId,
       'latitude': 1.0,
       'longitude': 1.0,
@@ -292,8 +299,8 @@ class _ChatsScreenState extends State<ChatsScreen> {
                 SizedBox(width: 8.0),
                 FloatingActionButton(
                   onPressed: () async {
-                    bool messageSent = await sendMessage(
-                        messageController.text, rid, 69979, emoji_id);
+                    bool messageSent = await sendMessage(messageController.text,
+                        widget.serverMsgId, 69979, emoji_id);
                     if (messageSent) {
                       print('message send');
                       // Message sent successfully, handle any UI updates if needed
