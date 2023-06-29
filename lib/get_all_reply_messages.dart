@@ -111,7 +111,7 @@ class ReplyMsg {
 }
 
 class ReplyMsgg {
-  final int rid;
+  final String rid;
   final int uid;
    final String replyMsg;
    final int timestamp;

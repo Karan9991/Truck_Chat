@@ -412,6 +412,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
               replyMsgs.add(ReplyMsg(
                   rid, uid, replyMsg, timestamp, emojiId, conversationTopic));
             }
+            
             // } else {
             //   print('elsee');
             // }
@@ -420,6 +421,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
               // Update the conversation data
               conversationTopics.add(conversationTopic);
               conversationTimestamps.add(conversationTimestamp);
+              //getAllMessages(serverMessageIds);
+              // serverMsgIds.add(serverMessageIds);
               replyCounts.add(counts);
               this.replyMsgs = replyMsgs;
             });
@@ -449,6 +452,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
           final timestampp = conversationTimestamps[index];
           final count = replyCounts[index];
           final serverMsgID = serverMsgIds[index];
+
+          print('sssserver message id  $serverMsgID');
 
           DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestampp);
           String formattedDateTime =
@@ -493,7 +498,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     Padding(
                       padding: EdgeInsets.only(bottom: 5),
                       child: Text(
-                        'Replies: $count',
+                        'Replies: $serverMsgID',
                         style: TextStyle(fontSize: 14),
                       ),
                     ),

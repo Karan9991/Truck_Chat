@@ -1,3 +1,4 @@
+import 'package:chat/chat/chatlist.dart';
 import 'package:chat/chat_list_screen.dart';
 import 'package:chat/news_tab.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = [
     NewsTab(),
-    ChatListScreen(),
+    ChatList(),
     SponsorsTab(),
     ReviewsTab(),
     PrivateChatTab(),

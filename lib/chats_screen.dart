@@ -359,6 +359,8 @@ import 'get_all_reply_messages.dart';
 //   void initState() {
 //     super.initState();
 //     filterReplyMsgs();
+
+//     print('tttttttesting 2 message appear');
 //   }
 
 //   void filterReplyMsgs() {
@@ -407,7 +409,8 @@ import 'get_all_reply_messages.dart';
 //           print('status_message $status_message');
 
 //           // Add the sent message to the list
-//           sentMessages.add(ReplyMsgg(servermsgid, userId, message, DateTime.now().millisecondsSinceEpoch));
+//           sentMessages.add(ReplyMsgg(servermsgid, userId, message,
+//               DateTime.now().millisecondsSinceEpoch));
 //         } else {
 //           String status_message = '';
 //         }
@@ -472,7 +475,8 @@ import 'get_all_reply_messages.dart';
 //                   return Padding(
 //                     padding: EdgeInsets.all(8.0),
 //                     child: ChatBubble(
-//                       clipper: ChatBubbleClipper6(type: BubbleType.receiverBubble),
+//                       clipper:
+//                           ChatBubbleClipper6(type: BubbleType.receiverBubble),
 //                       alignment: Alignment.topLeft,
 //                       margin: EdgeInsets.only(bottom: 16.0),
 //                       backGroundColor: Colors.blue[300],
@@ -483,7 +487,8 @@ import 'get_all_reply_messages.dart';
 //                           children: [
 //                             Text(
 //                               replyMsg,
-//                               style: TextStyle(color: Colors.black, fontSize: 20),
+//                               style:
+//                                   TextStyle(color: Colors.black, fontSize: 20),
 //                             ),
 //                             SizedBox(height: 4.0),
 //                             Text(
@@ -508,7 +513,8 @@ import 'get_all_reply_messages.dart';
 //                   return Padding(
 //                     padding: EdgeInsets.all(8.0),
 //                     child: ChatBubble(
-//                       clipper: ChatBubbleClipper6(type: BubbleType.receiverBubble),
+//                       clipper:
+//                           ChatBubbleClipper6(type: BubbleType.receiverBubble),
 //                       alignment: Alignment.topLeft,
 //                       margin: EdgeInsets.only(bottom: 16.0),
 //                       backGroundColor: Colors.blue[300],
@@ -519,7 +525,8 @@ import 'get_all_reply_messages.dart';
 //                           children: [
 //                             Text(
 //                               sentMessage.replyMsg,
-//                               style: TextStyle(color: Colors.black, fontSize: 20),
+//                               style:
+//                                   TextStyle(color: Colors.black, fontSize: 20),
 //                             ),
 //                             SizedBox(height: 4.0),
 //                             Text(
@@ -855,6 +862,395 @@ class ReplySMsg {
 
 //testing 44
 
+//testing 45
+
+// class ChatsScreen extends StatefulWidget {
+//   final String topic;
+//   final List<ReplyMsg> replyMsgs;
+//   final String serverMsgId;
+
+//   ChatsScreen({
+//     required this.topic,
+//     required this.replyMsgs,
+//     required this.serverMsgId,
+//   });
+
+//   @override
+//   _ChatsScreenState createState() => _ChatsScreenState();
+// }
+
+// class _ChatsScreenState extends State<ChatsScreen> {
+//   TextEditingController messageController = TextEditingController();
+//   List<ReplyMsg> filteredReplyMsgs = [];
+//   List<ReplyMsgg> sentMessages = [];
+//   List<ReplyMsg> replyMsgs = [];
+
+//   int rid = 0;
+//   String emoji_id = '';
+//   int timestam = 0;
+//   String status_message = '';
+//   int statusCode = 0;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     //getAllMessages(widget.serverMsgId);
+//     filterReplyMsgs();
+//   }
+
+//   void filterReplyMsgs() {
+//     filteredReplyMsgs =
+//         widget.replyMsgs.where((reply) => reply.topic == widget.topic).toList();
+//   }
+
+//   Future<bool> sendMessage(
+//     String message,
+//     String serverMsgId,
+//     int userId,
+//     String emojiId,
+//   ) async {
+//     print('send message');
+//     print('message $message');
+//     print('sermsgid $serverMsgId');
+//     print('userid $userId');
+//     print('emojiid $emoji_id');
+
+//     int servermsgid = int.parse(serverMsgId);
+//     final url =
+//         'http://smarttruckroute.com/bb/v1/device_post_message'; // Replace with your API endpoint
+//     final headers = {'Content-Type': 'application/json'};
+//     final body = jsonEncode({
+//       'message': message,
+//       'server_msg_id': servermsgid,
+//       'user_id': userId,
+//       'latitude': 1.0,
+//       'longitude': 1.0,
+//       'emoji_id': emojiId,
+//     });
+
+//     try {
+//       final response =
+//           await http.post(Uri.parse(url), headers: headers, body: body);
+
+//       print(response.body);
+
+//       if (response.statusCode == 200) {
+//         final jsonResult = jsonDecode(response.body);
+//         int statusCode = jsonResult['status'] as int;
+//         print('status code $statusCode');
+
+//         if (jsonResult.containsKey('message')) {
+//           String status_message = jsonResult['message'] as String;
+//           print('status_message $status_message');
+
+//           // Add the sent message to the list
+//           sentMessages.add(ReplyMsgg(servermsgid, userId, message,
+//               DateTime.now().millisecondsSinceEpoch));
+//         } else {
+//           String status_message = '';
+//         }
+
+//         return true;
+//       } else {
+//         status_message = 'Error: ${response.statusCode}';
+//       }
+//     } catch (e) {
+//       status_message = e.toString();
+//     }
+
+//     return false;
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(widget.topic),
+//       ),
+//       body: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Padding(
+//             padding: EdgeInsets.only(top: 8, left: 0, right: 8),
+//             child: Container(
+//               padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+//               decoration: BoxDecoration(
+//                 color: Colors.blue[300],
+//                 borderRadius: BorderRadius.circular(8.0),
+//               ),
+//               child: Text(
+//                 widget.topic,
+//                 style: TextStyle(
+//                   fontSize: 24,
+//                   fontWeight: FontWeight.bold,
+//                   color: Colors.white,
+//                 ),
+//               ),
+//             ),
+//           ),
+//           Expanded(
+//             child: ListView.builder(
+//               itemCount: filteredReplyMsgs.length + sentMessages.length,
+//               itemBuilder: (context, index) {
+//                 if (index < filteredReplyMsgs.length) {
+//                   final reply = filteredReplyMsgs[index];
+//                   final replyMsg = reply.replyMsg;
+//                   final timestampp = reply.timestamp;
+
+//                   DateTime dateTime =
+//                       DateTime.fromMillisecondsSinceEpoch(timestampp);
+//                   String formattedDateTime =
+//                       DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
+//                   final timestamp = formattedDateTime;
+
+//                   rid = reply.rid;
+//                   emoji_id = reply.emojiId;
+//                   timestam = timestampp;
+
+//                   bool isCurrentUser = reply.uid ==
+//                       69979; // Check if the user_id is equal to 69979
+
+//                   return Padding(
+//                     padding: EdgeInsets.all(8.0),
+//                     child: ChatBubble(
+//                       clipper: ChatBubbleClipper6(
+//                           type: isCurrentUser
+//                               ? BubbleType.sendBubble
+//                               : BubbleType.receiverBubble),
+//                       alignment: isCurrentUser
+//                           ? Alignment.topRight
+//                           : Alignment.topLeft,
+//                       margin: EdgeInsets.only(bottom: 16.0),
+//                       backGroundColor: Colors.blue[300],
+//                       child: Container(
+//                         constraints: BoxConstraints(maxWidth: 250.0),
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Text(
+//                               replyMsg,
+//                               style:
+//                                   TextStyle(color: Colors.black, fontSize: 20),
+//                             ),
+//                             SizedBox(height: 4.0),
+//                             Text(
+//                               timestamp,
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+//                   );
+//                 } else {
+//                   final sentIndex = index - filteredReplyMsgs.length;
+//                   final sentMessage = sentMessages[sentIndex];
+//                   final timestampp = sentMessage.timestamp;
+
+//                   DateTime dateTime =
+//                       DateTime.fromMillisecondsSinceEpoch(timestampp);
+//                   String formattedDateTime =
+//                       DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
+//                   final timestamp = formattedDateTime;
+
+//                   bool isCurrentUser = sentMessage.uid ==
+//                       69979; // Check if the user_id is equal to 69979
+
+//                   return Padding(
+//                     padding: EdgeInsets.all(8.0),
+//                     child: ChatBubble(
+//                       clipper: ChatBubbleClipper6(
+//                           type: isCurrentUser
+//                               ? BubbleType.sendBubble
+//                               : BubbleType.receiverBubble),
+//                       alignment: isCurrentUser
+//                           ? Alignment.topRight
+//                           : Alignment.topLeft,
+//                       margin: EdgeInsets.only(bottom: 16.0),
+//                       backGroundColor: Colors.blue[300],
+//                       child: Container(
+//                         constraints: BoxConstraints(maxWidth: 250.0),
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Text(
+//                               sentMessage.replyMsg,
+//                               style:
+//                                   TextStyle(color: Colors.black, fontSize: 20),
+//                             ),
+//                             SizedBox(height: 4.0),
+//                             Text(
+//                               timestamp,
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+//                   );
+//                 }
+//               },
+//             ),
+//           ),
+//           Container(
+//             padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+//             decoration: BoxDecoration(
+//               color: Colors.grey[200],
+//               borderRadius: BorderRadius.circular(24.0),
+//             ),
+//             child: Row(
+//               children: [
+//                 Expanded(
+//                   child: TextField(
+//                     controller: messageController,
+//                     decoration: InputDecoration(
+//                       hintText: 'Type your message...',
+//                       border: InputBorder.none,
+//                     ),
+//                   ),
+//                 ),
+//                 SizedBox(width: 8.0),
+//                 FloatingActionButton(
+//                   onPressed: () async {
+//                     bool messageSent = await sendMessage(
+//                       messageController.text,
+//                       widget.serverMsgId,
+//                       69979,
+//                       emoji_id,
+//                     );
+//                     if (messageSent) {
+//                       print('message send');
+//                       // Message sent successfully, handle any UI updates if needed
+//                     } else {
+//                       print('message failed not sent');
+//                       // Failed to send the message, handle any UI updates if needed
+//                     }
+//                     setState (()  {
+//                       messageController.clear();
+//                     // await getAllMessages(widget.serverMsgId);
+//                     });
+//                   },
+//                   backgroundColor: Colors.blue,
+//                   child: Icon(Icons.send),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Future<bool> getAllMessages(String serverMessageIds) async {
+//     print('list  $serverMessageIds');
+//     int statusCode = 0;
+//     String counts = '';
+//     int conversationTimestamp = 0;
+//     List<ReplyMsg> replyMsgs = [];
+
+//     String statusMessage = '';
+//     String conversationTopic = '';
+
+//     final url =
+//         Uri.parse("http://smarttruckroute.com/bb/v1/get_all_reply_message");
+
+//     //for (var serverMessageId in serverMessageIds) {
+//     Map<String, dynamic> requestBody = {
+//       "server_message_id": serverMessageIds,
+//     };
+
+//     try {
+//       http.Response response = await http.post(
+//         url,
+//         headers: {"Content-Type": "application/json"},
+//         body: jsonEncode(requestBody),
+//       );
+//       if (response.statusCode == 200) {
+//         final result = response.body;
+
+//         try {
+//           final jsonResult = jsonDecode(result);
+
+//           if (jsonResult.containsKey('message')) {
+//             statusMessage = jsonResult['message'];
+//           } else {
+//             statusMessage = '';
+//           }
+
+//           counts = jsonResult['counts'];
+
+//           conversationTopic = jsonResult['original'];
+//           print("conversation topic $conversationTopic");
+//           print('counts $counts');
+//           try {
+//             // conversationTimestamp =
+//             //     int.tryParse(jsonResult['timestamp']) ?? 0;
+//             conversationTimestamp = jsonResult['timestamp'] ?? 0;
+
+//             // print('try $conversationTimestamps');
+//           } catch (e) {
+//             print('catch $e');
+//             conversationTimestamp = 0;
+//           }
+
+//           final jsonReplyList = jsonResult['messsage_reply_list'];
+//           int countValue = int.parse(counts);
+
+//           print(jsonReplyList.length);
+
+//           //if (counts == jsonReplyList.length) {
+//           print('iff');
+//           for (var i = 0; i < countValue; ++i) {
+//             final jsonReply = jsonReplyList[i];
+//             final rid = jsonReply['server_msg_reply_id'];
+//             final replyMsg = jsonReply['reply_msg'];
+//             final uid = jsonReply['user_id'];
+//             final emojiId = jsonReply['emoji_id'];
+
+//             print("server_msg_reply_id  $rid");
+//             print("reply_msg $replyMsg");
+//             print("user id  $uid");
+//             print("emoji_id $emojiId");
+//             int timestamp;
+//             try {
+//               //  timestamp = int.tryParse(jsonReply['timestamp']) ?? 0;
+//               timestamp = jsonReply['timestamp'] ?? 0;
+//               print('try in for $timestamp');
+//             } catch (e) {
+//               timestamp = 0;
+//               print('catch $timestamp');
+//             }
+
+//             replyMsgs.add(ReplyMsg(
+//                 rid, uid, replyMsg, timestamp, emojiId, conversationTopic));
+//           }
+//           // } else {
+//           //   print('elsee');
+//           // }
+
+//           setState(() {
+//             // Update the conversation data
+//             // conversationTopics.add(conversationTopic);
+//             // conversationTimestamps.add(conversationTimestamp);
+//             // replyCounts.add(counts);
+//             this.replyMsgs = replyMsgs;
+//           });
+//         } catch (e) {
+//           print(e);
+//           statusMessage = e.toString();
+//         }
+//       } else {
+//         statusMessage = 'Connection Error';
+//       }
+//     } catch (e) {
+//       print(e);
+//     }
+//     //  }
+
+//     return false;
+//   }
+// }
+
+//last
+
 class ChatsScreen extends StatefulWidget {
   final String topic;
   final List<ReplyMsg> replyMsgs;
@@ -879,10 +1275,13 @@ class _ChatsScreenState extends State<ChatsScreen> {
   int timestam = 0;
   String status_message = '';
   int statusCode = 0;
+    List<ReplyMsg> replyMsgs = [];
 
   @override
   void initState() {
     super.initState();
+       // getAllMessages(widget.serverMsgId);
+
     filterReplyMsgs();
   }
 
@@ -903,13 +1302,13 @@ class _ChatsScreenState extends State<ChatsScreen> {
     print('userid $userId');
     print('emojiid $emoji_id');
 
-    int servermsgid = int.parse(serverMsgId);
+    //  int servermsgid = int.parse(serverMsgId);
     final url =
         'http://smarttruckroute.com/bb/v1/device_post_message'; // Replace with your API endpoint
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
       'message': message,
-      'server_msg_id': servermsgid,
+      'server_msg_id': serverMsgId,
       'user_id': userId,
       'latitude': 1.0,
       'longitude': 1.0,
@@ -932,7 +1331,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
           print('status_message $status_message');
 
           // Add the sent message to the list
-          sentMessages.add(ReplyMsgg(servermsgid, userId, message,
+          sentMessages.add(ReplyMsgg(serverMsgId, userId, message,
               DateTime.now().millisecondsSinceEpoch));
         } else {
           String status_message = '';
@@ -953,7 +1352,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.topic),
+        title: Text(widget.serverMsgId),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1124,5 +1523,114 @@ class _ChatsScreenState extends State<ChatsScreen> {
         ],
       ),
     );
+  }
+
+  Future<bool> getAllMessages(String serverMessageIds) async {
+    print('list  $serverMessageIds');
+    int statusCode = 0;
+    String counts = '';
+    int conversationTimestamp = 0;
+    List<ReplyMsg> replyMsgs = [];
+
+    String statusMessage = '';
+    String conversationTopic = '';
+
+    final url =
+        Uri.parse("http://smarttruckroute.com/bb/v1/get_all_reply_message");
+
+    //for (var serverMessageId in serverMessageIds) {
+    Map<String, dynamic> requestBody = {
+      "server_message_id": serverMessageIds,
+    };
+
+    try {
+      http.Response response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(requestBody),
+      );
+      if (response.statusCode == 200) {
+        final result = response.body;
+
+        try {
+          final jsonResult = jsonDecode(result);
+
+          if (jsonResult.containsKey('message')) {
+            statusMessage = jsonResult['message'];
+          } else {
+            statusMessage = '';
+          }
+
+          counts = jsonResult['counts'];
+
+          conversationTopic = jsonResult['original'];
+          print("conversation topic $conversationTopic");
+          print('counts $counts');
+          try {
+            // conversationTimestamp =
+            //     int.tryParse(jsonResult['timestamp']) ?? 0;
+            conversationTimestamp = jsonResult['timestamp'] ?? 0;
+
+            // print('try $conversationTimestamps');
+          } catch (e) {
+            print('catch $e');
+            conversationTimestamp = 0;
+          }
+
+          final jsonReplyList = jsonResult['messsage_reply_list'];
+          int countValue = int.parse(counts);
+
+          print(jsonReplyList.length);
+
+          //if (counts == jsonReplyList.length) {
+          print('iff');
+          for (var i = 0; i < countValue; ++i) {
+            final jsonReply = jsonReplyList[i];
+            final rid = jsonReply['server_msg_reply_id'];
+            final replyMsg = jsonReply['reply_msg'];
+            final uid = jsonReply['user_id'];
+            final emojiId = jsonReply['emoji_id'];
+
+            print("server_msg_reply_id  $rid");
+            print("reply_msg $replyMsg");
+            print("user id  $uid");
+            print("emoji_id $emojiId");
+            int timestamp;
+            try {
+              //  timestamp = int.tryParse(jsonReply['timestamp']) ?? 0;
+              timestamp = jsonReply['timestamp'] ?? 0;
+              print('try in for $timestamp');
+            } catch (e) {
+              timestamp = 0;
+              print('catch $timestamp');
+            }
+
+            replyMsgs.add(ReplyMsg(
+                rid, uid, replyMsg, timestamp, emojiId, conversationTopic));
+          }
+          // } else {
+          //   print('elsee');
+          // }
+
+          setState(() {
+            // Update the conversation data
+            // conversationTopics.add(conversationTopic);
+            // conversationTimestamps.add(conversationTimestamp);
+            // replyCounts.add(counts);
+            this.replyMsgs = replyMsgs;
+          });
+        } catch (e) {
+          print(e);
+          statusMessage = e.toString();
+        }
+      } else {
+        statusMessage = 'Connection Error';
+      }
+    } catch (e) {
+      print(e);
+    }
+    //  }
+
+    return false;
   }
 }
