@@ -1,5 +1,6 @@
 import 'package:chat/chat/chat.dart';
 import 'package:chat/chats_screen.dart';
+import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:chat/get_all_reply_messages.dart';
 import 'dart:convert';
@@ -19,9 +20,9 @@ class _ChatListState extends State<ChatList> {
   List<String> replyCounts = [];
   List<ReplyMsg> replyMsgs = [];
 
-  final String userId = "69979";
-  final double latitude = 1.0;
-  final double longitude = 1.0;
+  // final String userId = "69979";
+  // final double latitude = 1.0;
+  // final double longitude = 1.0;
 
   List<String> serverMsgIds = [];
   int statusCode = 0;
@@ -56,12 +57,16 @@ class _ChatListState extends State<ChatList> {
   }
 
   Future<void> runNow() async {
+    String? userId = SharedPrefs.getString('userId');
+    double? storedLatitude = SharedPrefs.getDouble('latitude');
+    double? storedLongitude = SharedPrefs.getDouble('longitude');
+
     Uri url =
         Uri.parse("http://smarttruckroute.com/bb/v1/get_previous_messages");
     Map<String, dynamic> requestBody = {
       "user_id": userId,
-      "latitude": latitude.toString(),
-      "longitude": longitude.toString(),
+      "latitude": storedLatitude.toString(),
+      "longitude": storedLongitude.toString(),
     };
 
     try {

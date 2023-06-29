@@ -1,4 +1,4 @@
-#Thu Jun 29 10:42:58 ADT 2023
+#Thu Jun 29 17:06:10 ADT 2023
 base.0=/Users/karandeepsingh/Downloads/Truck_Chat/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
 base.1=/Users/karandeepsingh/Downloads/Truck_Chat/build/app/intermediates/dex/debug/mergeDexDebug/classes2.dex
 base.2=/Users/karandeepsingh/Downloads/Truck_Chat/build/app/intermediates/dex/debug/mergeDexDebug/classes3.dex

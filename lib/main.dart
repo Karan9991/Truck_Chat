@@ -6,6 +6,8 @@ import 'package:chat/chat_screen.dart';
 import 'package:chat/getFcm.dart';
 import 'package:chat/get_previous_messages.dart';
 import 'package:chat/home_screen.dart';
+import 'package:chat/utils/avatar.dart';
+import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -19,6 +21,7 @@ import 'get_all_reply_messages.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  SharedPrefs.init(); // Initialize SharedPrefs
 
   runApp(const MyApp());
 }
@@ -60,24 +63,27 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _counter++;
       //registerDevice();
-       Navigator.push(
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
       );
 
+      //  showAvatarSelectionDialog(context);
 
+      //  String? vv = SharedPrefs.getString('userId');
+      //           print("shared pref userid $vv");
 
-    //      Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => ChatListScreen(
-    //       conversationTopics: serverMessageIds,
-    //       conversationTimestamps: conversation_timestamp,
-    //       replyCounts: counts,
-    //       replyMsgs: reply_msgs,
-    //     ),
-    //   ),
-    // );
+      //      Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => ChatListScreen(
+      //       conversationTopics: serverMessageIds,
+      //       conversationTimestamps: conversation_timestamp,
+      //       replyCounts: counts,
+      //       replyMsgs: reply_msgs,
+      //     ),
+      //   ),
+      // );
     });
   }
 
@@ -88,8 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     _configureFCM();
 
-          registerDevice();
-
+    registerDevice();
   }
 
   @override
@@ -266,6 +271,9 @@ class _MyHomePageState extends State<MyHomePage> {
       if (responseBody.containsKey("user_id")) {
         user_id = responseBody["user_id"];
         print("User ID: $user_id");
+        SharedPrefs.setString('userId', user_id);
+        SharedPrefs.setDouble('latitude', currentLocation.latitude!);
+        SharedPrefs.setDouble('longitude', currentLocation.longitude!);
       } else {
         print("Error: User ID not found in response");
       }

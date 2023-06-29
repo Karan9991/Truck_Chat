@@ -1,5 +1,6 @@
 // import 'dart:html';
 
+import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
@@ -35,10 +36,17 @@ class _ChatState extends State<Chat> {
   int statusCode = 0;
   List<ReplyMsg> replyMsgs = [];
   bool sendingMessage = false; // Added variable to track sending state
-
+  String? shareprefuserId = SharedPrefs.getString('userId');
+  int userId = 0;
+  double? storedLatitude = 1.0;
+  double? storedLongitude = 1.0;
   @override
   void initState() {
     super.initState();
+
+    userId = int.parse(shareprefuserId!);
+     storedLatitude = SharedPrefs.getDouble('latitude');
+     storedLongitude = SharedPrefs.getDouble('longitude');
 
     print('init state');
     getAllMessages(widget.serverMsgId);
@@ -77,8 +85,8 @@ class _ChatState extends State<Chat> {
       'message': message,
       'server_msg_id': serverMsgId,
       'user_id': userId,
-      'latitude': 1.0,
-      'longitude': 1.0,
+      'latitude': storedLatitude,
+      'longitude': storedLongitude,
       'emoji_id': emojiId,
     });
 
@@ -132,10 +140,10 @@ class _ChatState extends State<Chat> {
         title: Text(widget.serverMsgId),
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 8, left: 0, right: 8),
+            padding: EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               decoration: BoxDecoration(
@@ -172,7 +180,7 @@ class _ChatState extends State<Chat> {
                   timestam = timestampp;
 
                   bool isCurrentUser = reply.uid ==
-                      69979; // Check if the user_id is equal to 69979
+                      userId; // Check if the user_id is equal to 69979
 
                   return Padding(
                     padding: EdgeInsets.all(8.0),
@@ -217,7 +225,7 @@ class _ChatState extends State<Chat> {
                   final timestamp = formattedDateTime;
 
                   bool isCurrentUser = sentMessage.uid ==
-                      69979; // Check if the user_id is equal to 69979
+                      userId; // Check if the user_id is equal to 69979
 
                   return Padding(
                     padding: EdgeInsets.all(8.0),
@@ -266,7 +274,7 @@ class _ChatState extends State<Chat> {
                   child: TextField(
                     controller: messageController,
                     decoration: InputDecoration(
-                      hintText: 'Type your message...',
+                      hintText: 'Compose message',
                       border: InputBorder.none,
                     ),
                   ),
@@ -277,7 +285,7 @@ class _ChatState extends State<Chat> {
                     bool messageSent = await sendMessage(
                       messageController.text,
                       widget.serverMsgId,
-                      69979,
+                      userId,
                       emoji_id,
                     );
                     if (messageSent) {
