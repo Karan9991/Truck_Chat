@@ -246,7 +246,7 @@ class _ChatListState extends State<ChatList> {
                 MaterialPageRoute(
                   builder: (context) => Chat(
                     topic: topic,
-                    replyMsgs: replyMsgs,
+                    // replyMsgs: replyMsgs,
                     serverMsgId: serverMsgID,
                   ),
                 ),

@@ -11,12 +11,12 @@ import 'package:chat/get_all_reply_messages.dart';
 
 class Chat extends StatefulWidget {
   final String topic;
-   final List<ReplyMsg> replyMsgs;
+  //  final List<ReplyMsg> replyMsgs;
   final String serverMsgId;
 
   Chat({
     required this.topic,
-     required this.replyMsgs,
+    //  required this.replyMsgs,
     required this.serverMsgId,
   });
 
@@ -34,6 +34,7 @@ class _ChatState extends State<Chat> {
   String status_message = '';
   int statusCode = 0;
   List<ReplyMsg> replyMsgs = [];
+  bool sendingMessage = false; // Added variable to track sending state
 
   @override
   void initState() {
@@ -58,6 +59,10 @@ class _ChatState extends State<Chat> {
     int userId,
     String emojiId,
   ) async {
+    setState(() {
+      sendingMessage = true; // Set sending state to true
+    });
+
     print('send message');
     print('message $message');
     print('sermsgid $serverMsgId');
@@ -84,6 +89,10 @@ class _ChatState extends State<Chat> {
       print(response.body);
 
       if (response.statusCode == 200) {
+        setState(() {
+          sendingMessage = false; // Set sending state to false
+        });
+
         final jsonResult = jsonDecode(response.body);
         int statusCode = jsonResult['status'] as int;
         print('status code $statusCode');
@@ -101,10 +110,16 @@ class _ChatState extends State<Chat> {
 
         return true;
       } else {
+        setState(() {
+          sendingMessage = false; // Set sending state to false
+        });
         status_message = 'Error: ${response.statusCode}';
       }
     } catch (e) {
       status_message = e.toString();
+      setState(() {
+        sendingMessage = false; // Set sending state to false
+      });
     }
 
     return false;
@@ -277,7 +292,12 @@ class _ChatState extends State<Chat> {
                     });
                   },
                   backgroundColor: Colors.blue,
-                  child: Icon(Icons.send),
+                  child: sendingMessage // Check sending state
+                      ? CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        ) // Show progress indicator
+                      : Icon(Icons.send),
                 ),
               ],
             ),
@@ -347,8 +367,8 @@ class _ChatState extends State<Chat> {
               print('catch $timestamp');
             }
 
-            replyMsgs.add(ReplyMsg(
-                rid, uid, replyMsg, timestamp, emojiId, widget.topic));
+            replyMsgs.add(
+                ReplyMsg(rid, uid, replyMsg, timestamp, emojiId, widget.topic));
           }
           // } else {
           //   print('elsee');
@@ -361,10 +381,8 @@ class _ChatState extends State<Chat> {
             // replyCounts.add(counts);
             this.replyMsgs = replyMsgs;
 
-                filterReplyMsgs();
-
+            filterReplyMsgs();
           });
-
         } catch (e) {
           print('catch 2 $e');
           statusMessage = e.toString();
