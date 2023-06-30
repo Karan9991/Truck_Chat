@@ -102,58 +102,67 @@ class _NewsTabState extends State<NewsTab> {
   //   );
   // }
 
-@override
-Widget build(BuildContext context) {
-  return SingleChildScrollView(
-    child: ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: _newsItems.length,
-      itemBuilder: (context, index) {
-        final newsItem = _newsItems[index];
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: _newsItems.length,
+        itemBuilder: (context, index) {
+          final newsItem = _newsItems[index];
 
-        return Card(
-          color: Colors.blue,
-          elevation: 2,
-          margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: InkWell(
-            onTap: () {
-              navigateToURL(newsItem.link);
-            },
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.article, size: 24, color: Colors.black,),
-                      SizedBox(width: 8),
-                      Expanded( // Wrap the Text widget with Expanded
-                        child: Text(
-                          newsItem.title,
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          return Card(
+            color: Colors.blue,
+            elevation: 2,
+            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: InkWell(
+              onTap: () {
+                navigateToURL(newsItem.link);
+              },
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Image.asset(
+                          'assets/news.png',
+                          width: 24,
+                          height: 24,
+                          color: Colors.black,
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 8),
+                        Expanded(
+                          // Wrap the Text widget with Expanded
+                          child: Text(
+                            newsItem.title,
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                Padding(
+                    padding: EdgeInsets.only(left: 32), // Adjust the left padding
+                    child: Text(
+                      newsItem.postedDate,
+                      style: TextStyle(fontSize: 14, color: Colors.black),
+                    ),
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    newsItem.postedDate,
-                    style: TextStyle(fontSize: 14, color: Colors.black),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
-    ),
-  );
-}
-
-
-
+          );
+        },
+      ),
+    );
+  }
 
   void navigateToURL(String url) async {
     launchUrl(Uri.parse(url));

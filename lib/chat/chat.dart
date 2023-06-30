@@ -1,5 +1,8 @@
 // import 'dart:html';
 
+import 'package:chat/chat/new_conversation.dart';
+import 'package:chat/home_screen.dart';
+import 'package:chat/settings/settings.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
@@ -9,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:chat/get_all_reply_messages.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Chat extends StatefulWidget {
   final String topic;
@@ -138,6 +142,78 @@ class _ChatState extends State<Chat> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.topic),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.chat),
+            onPressed: () {
+              // Perform action when chat icon is pressed
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NewConversationScreen()),
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.grid_on),
+            onPressed: () {
+              // Perform action when grid box icon is pressed
+            },
+          ),
+          PopupMenuButton(
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem(
+                  child: Text('Settings'),
+                  value: 'settings',
+                ),
+                PopupMenuItem(
+                  child: Text('Tell a Friend'),
+                  value: 'tell a friend',
+                ),
+                PopupMenuItem(
+                  child: Text('Help'),
+                  value: 'help',
+                ),
+                PopupMenuItem(
+                  child: Text('Report Abuse'),
+                  value: 'report abuse',
+                ),
+              ];
+            },
+            onSelected: (value) {
+              // Perform action when a pop-up menu item is selected
+              switch (value) {
+                case 'settings':
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SettingsScreen()),
+                  );
+                  break;
+                case 'tell a friend':
+                  String email = Uri.encodeComponent("");
+                  String subject = Uri.encodeComponent("Check out TruckChat");
+                  String body = Uri.encodeComponent(
+                      "I am using TruckChat right now, check it out at:\n\nhttp://play.google.com/store/apps/details?id=com.teletype.truckchat\n\nhttp://truckchatapp.com");
+                  print(subject);
+                  Uri mail =
+                      Uri.parse("mailto:$email?subject=$subject&body=$body");
+                  launchUrl(mail);
+                  break;
+                case 'help':
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Help()),
+                  );
+                  break;
+                case 'report abuse':
+                  _showReportAbuseDialog(context);
+                  break;
+              }
+            },
+          ),
+        ],
+      
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -404,5 +480,26 @@ class _ChatState extends State<Chat> {
     //  }
 
     return false;
+  }
+
+      void _showReportAbuseDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Report Abuse'),
+          content: Text(
+              'To report abuse or inappropriate content, tap on a message inside a chat conversation and select an option from the popup.'),
+          actions: [
+            TextButton(
+              child: Text('Got It!'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
