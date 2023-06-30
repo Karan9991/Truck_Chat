@@ -5,12 +5,24 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:chat/utils/lat_lng.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
-class NewConversationScreen extends StatelessWidget {
+class NewConversationScreen extends StatefulWidget {
+  @override
+  _NewConversationScreenState createState() => _NewConversationScreenState();
+}
+
+class _NewConversationScreenState extends State<NewConversationScreen> {
   String status_message = '';
   int status_code = 0;
   int conversation_id = 0;
   TextEditingController _textEditingController = TextEditingController();
+
+  bool _isSending = false;
+  
+  stt.SpeechToText _speechToText = stt.SpeechToText();
+  bool _isListening = false;
+  String _typedText = '';
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +34,19 @@ class NewConversationScreen extends StatelessWidget {
         padding: EdgeInsets.all(16.0),
         child: Row(
           children: [
-            Icon(
-              Icons.chat,
-              size: 24.0,
+            IconButton(
+              icon: Icon(Icons.mic),
+              onPressed: () {
+                _toggleListening();
+              },
             ),
             SizedBox(width: 8.0),
             Expanded(
               child: TextField(
                 controller: _textEditingController,
+                onChanged: (value) {
+                  _typedText = value;
+                },
                 decoration: InputDecoration(
                   hintText: 'Compose a new conversation',
                 ),
@@ -37,18 +54,12 @@ class NewConversationScreen extends StatelessWidget {
             ),
             SizedBox(width: 8.0),
             ElevatedButton(
-                         onPressed: () async {
-                bool sent = await send();
-                if (sent) {
-                  // Navigation to chat screen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                  );
-                }
+              onPressed: () async {
+                await _sendConversation();
               },
-
-              child: Text('Send'),
+              child: _isSending
+                  ? CircularProgressIndicator() 
+                  : Icon(Icons.send),
             ),
           ],
         ),
@@ -99,8 +110,8 @@ class NewConversationScreen extends StatelessWidget {
         }
 
         if (jsonResult.containsKey('server_msg_id')) {
-             conversation_id = jsonResult['server_msg_id'];
-           print('new conversation id $conversation_id');
+          conversation_id = jsonResult['server_msg_id'];
+          print('new conversation id $conversation_id');
         }
 
         return true;
@@ -113,5 +124,55 @@ class NewConversationScreen extends StatelessWidget {
     }
 
     return false;
+  }
+
+  Future<void> _sendConversation() async {
+    setState(() {
+      _isSending = true; // Start sending, show progress indicator
+    });
+
+    bool sent = await send();
+
+    if (sent) {
+      // Navigation to chat screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    }
+
+    setState(() {
+      _isSending = false; 
+    });
+  }
+
+  void _toggleListening() {
+    _startListening();
+  }
+
+  void _startListening() async {
+    bool available = await _speechToText.initialize();
+    if (available) {
+      _speechToText.listen(
+        onResult: (result) {
+          setState(() {
+            _textEditingController.text = result.recognizedWords;
+            _typedText = result.recognizedWords;
+          });
+        },
+        listenMode: stt.ListenMode.dictation,
+        pauseFor: Duration(seconds: 2),
+      );
+      setState(() {
+        _isListening = true;
+      });
+    }
+  }
+
+  void _stopListening() {
+    _speechToText.stop();
+    setState(() {
+      _isListening = false;
+    });
   }
 }

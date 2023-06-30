@@ -13,11 +13,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:chat/get_all_reply_messages.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class Chat extends StatefulWidget {
   final String topic;
   //  final List<ReplyMsg> replyMsgs;
   final String serverMsgId;
+
+
 
   Chat({
     required this.topic,
@@ -30,6 +33,10 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
+    stt.SpeechToText _speechToText = stt.SpeechToText();
+  bool _isListening = false;
+  String _typedText = '';
+
   TextEditingController messageController = TextEditingController();
   List<ReplyMsg> filteredReplyMsgs = [];
   List<ReplyMsgg> sentMessages = [];
@@ -346,6 +353,12 @@ class _ChatState extends State<Chat> {
             ),
             child: Row(
               children: [
+                   IconButton(
+              icon: Icon(Icons.mic),
+              onPressed: () {
+                _toggleListening();
+              },
+            ),
                 Expanded(
                   child: TextField(
                     controller: messageController,
@@ -501,5 +514,35 @@ class _ChatState extends State<Chat> {
         );
       },
     );
+  }
+
+  void _toggleListening() {
+    _startListening();
+  }
+
+  void _startListening() async {
+    bool available = await _speechToText.initialize();
+    if (available) {
+      _speechToText.listen(
+        onResult: (result) {
+          setState(() {
+            messageController.text = result.recognizedWords;
+            _typedText = result.recognizedWords;
+          });
+        },
+        listenMode: stt.ListenMode.dictation,
+        pauseFor: Duration(seconds: 2),
+      );
+      setState(() {
+        _isListening = true;
+      });
+    }
+  }
+
+  void _stopListening() {
+    _speechToText.stop();
+    setState(() {
+      _isListening = false;
+    });
   }
 }
