@@ -1,4 +1,5 @@
 import 'package:chat/chat/chatlist.dart';
+import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/chat_list_screen.dart';
 import 'package:chat/news_tab.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
   List<Widget> _widgetOptions = [
     NewsTab(),
     ChatList(),
@@ -39,6 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(Icons.chat),
               onPressed: () {
                 // Perform action when chat icon is pressed
+                 Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => NewConversationScreen()),
+      );
               },
             ),
             IconButton(

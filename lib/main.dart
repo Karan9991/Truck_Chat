@@ -7,6 +7,7 @@ import 'package:chat/getFcm.dart';
 import 'package:chat/get_previous_messages.dart';
 import 'package:chat/home_screen.dart';
 import 'package:chat/utils/avatar.dart';
+import 'package:chat/utils/chat_handle.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -67,11 +68,12 @@ class _MyHomePageState extends State<MyHomePage> {
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
       );
+           //   ChatHandle.showChatHandle(context); // Call the showChatHandle function
 
       //  showAvatarSelectionDialog(context);
 
-      //  String? vv = SharedPrefs.getString('userId');
-      //           print("shared pref userid $vv");
+      //  String? vv = SharedPrefs.getString('serialNumber');
+      //           print("shared pref serialNumber $vv");
 
       //      Navigator.push(
       //   context,
@@ -223,8 +225,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     // Device registration data
-    // Fetch device serial number
+    // Fetch device serial number and store in SharedPrefs
     String? serialNumber = await getDeviceSerialNumber();
+
+    SharedPrefs.setString('serialNumber', serialNumber!);
+
     if (serialNumber == null) {
       // Handle error getting serial number
       print('Error getting device serial number');
@@ -327,96 +332,96 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //get conversations
 
-  Future<bool> getAllMessages(List<String> serverMessageIds) async {
-    int status_code = 0;
-    String counts = '';
-    int conversation_timestamp = 0;
-    //String conversation_timestamp = '';
-    List<ReplyMsg> reply_msgs = [];
+  // Future<bool> getAllMessages(List<String> serverMessageIds) async {
+  //   int status_code = 0;
+  //   String counts = '';
+  //   int conversation_timestamp = 0;
+  //   //String conversation_timestamp = '';
+  //   List<ReplyMsg> reply_msgs = [];
 
-    String status_message = '';
-    String conversation_topic = '';
+  //   String status_message = '';
+  //   String conversation_topic = '';
 
-    final url =
-        Uri.parse("http://smarttruckroute.com/bb/v1/get_all_reply_message");
+  //   final url =
+  //       Uri.parse("http://smarttruckroute.com/bb/v1/get_all_reply_message");
 
-    for (var serverMessageId in serverMessageIds) {
-      Map<String, dynamic> requestBody = {
-        "server_message_id": serverMessageId,
-      };
+  //   for (var serverMessageId in serverMessageIds) {
+  //     Map<String, dynamic> requestBody = {
+  //       "server_message_id": serverMessageId,
+  //     };
 
-      // Map<String, dynamic> requestBody = {
-      //   "server_message_id": "48702",
-      // };
+  //     // Map<String, dynamic> requestBody = {
+  //     //   "server_message_id": "48702",
+  //     // };
 
-      try {
-        http.Response response = await http.post(
-          url,
-          headers: {"Content-Type": "application/json"},
-          body: jsonEncode(requestBody),
-        );
-        if (response.statusCode == 200) {
-          final result = response.body;
+  //     try {
+  //       http.Response response = await http.post(
+  //         url,
+  //         headers: {"Content-Type": "application/json"},
+  //         body: jsonEncode(requestBody),
+  //       );
+  //       if (response.statusCode == 200) {
+  //         final result = response.body;
 
-          try {
-            final jsonResult = jsonDecode(result);
-            // status_code = jsonResult[PARAM_STATUS];
+  //         try {
+  //           final jsonResult = jsonDecode(result);
+  //           // status_code = jsonResult[PARAM_STATUS];
 
-            if (jsonResult.containsKey('message')) {
-              status_message = jsonResult['message'];
-            } else {
-              status_message = '';
-            }
+  //           if (jsonResult.containsKey('message')) {
+  //             status_message = jsonResult['message'];
+  //           } else {
+  //             status_message = '';
+  //           }
 
-            counts = jsonResult['counts'];
+  //           counts = jsonResult['counts'];
 
-            conversation_topic = jsonResult['original'];
-            print("conversation topic $conversation_topic");
-            print('counts $counts');
-            try {
-              conversation_timestamp =
-                  int.tryParse(jsonResult['timestamp']) ?? 0;
-            } catch (e) {
-              conversation_timestamp = 0;
-            }
+  //           conversation_topic = jsonResult['original'];
+  //           print("conversation topic $conversation_topic");
+  //           print('counts $counts');
+  //           try {
+  //             conversation_timestamp =
+  //                 int.tryParse(jsonResult['timestamp']) ?? 0;
+  //           } catch (e) {
+  //             conversation_timestamp = 0;
+  //           }
 
-            final jsonReplyList = jsonResult['messsage_reply_list'];
-            int countValue = int.parse(counts);
+  //           final jsonReplyList = jsonResult['messsage_reply_list'];
+  //           int countValue = int.parse(counts);
 
-            if (counts == jsonReplyList.length) {
-              for (var i = 0; i < countValue; ++i) {
-                final jsonReply = jsonReplyList[i];
-                final rid = jsonReply['server_msg_reply_id'];
-                final replyMsg = jsonReply['reply_msg'];
-                final uid = jsonReply['user_id'];
-                final emojiId = jsonReply['emoji_id'];
-                int timestamp;
-                try {
-                  timestamp = int.tryParse(jsonReply['timestamp']) ?? 0;
-                } catch (e) {
-                  timestamp = 0;
-                }
+  //           if (counts == jsonReplyList.length) {
+  //             for (var i = 0; i < countValue; ++i) {
+  //               final jsonReply = jsonReplyList[i];
+  //               final rid = jsonReply['server_msg_reply_id'];
+  //               final replyMsg = jsonReply['reply_msg'];
+  //               final uid = jsonReply['user_id'];
+  //               final emojiId = jsonReply['emoji_id'];
+  //               int timestamp;
+  //               try {
+  //                 timestamp = int.tryParse(jsonReply['timestamp']) ?? 0;
+  //               } catch (e) {
+  //                 timestamp = 0;
+  //               }
 
-                reply_msgs
-                    .add(ReplyMsg(rid, uid, replyMsg, timestamp, emojiId));
-              }
-            }
+  //               reply_msgs
+  //                   .add(ReplyMsg(rid, uid, replyMsg, timestamp, emojiId));
+  //             }
+  //           }
 
-            return true;
-          } catch (e) {
-            print(e);
-            status_message = e.toString();
-          }
-        } else {
-          status_message = 'Connection Error';
-        }
-      } catch (e) {
-        print(e);
-      }
-    }
+  //           return true;
+  //         } catch (e) {
+  //           print(e);
+  //           status_message = e.toString();
+  //         }
+  //       } else {
+  //         status_message = 'Connection Error';
+  //       }
+  //     } catch (e) {
+  //       print(e);
+  //     }
+  //   }
 
-    return false;
-  }
+  //   return false;
+  // }
 }
 
 class ReplyMsg {

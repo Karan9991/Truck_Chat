@@ -137,7 +137,7 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.serverMsgId),
+        title: Text(widget.topic),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

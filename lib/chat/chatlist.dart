@@ -237,7 +237,7 @@ class _ChatListState extends State<ChatList> {
           final count = replyCounts[index];
           final serverMsgID = serverMsgIds[index];
 
-          print('sssserver message id  $serverMsgID');
+         // print('sssserver message id  $serverMsgID');
 
           DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestampp);
           String formattedDateTime =
@@ -282,7 +282,7 @@ class _ChatListState extends State<ChatList> {
                     Padding(
                       padding: EdgeInsets.only(bottom: 5),
                       child: Text(
-                        'Replies: $serverMsgID',
+                        'Replies: $count',
                         style: TextStyle(fontSize: 14),
                       ),
                     ),
