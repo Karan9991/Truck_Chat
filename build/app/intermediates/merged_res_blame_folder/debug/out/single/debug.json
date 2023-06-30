@@ -1,134 +1,134 @@
 [
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable-mdpi_app_icon_background.png.flat",
-        "source": "com.example.chat.app-pngs-14:/drawable-mdpi/app_icon_background.png"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-mdpi/ic_launcher.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable-xhdpi_app_icon_background.png.flat",
-        "source": "com.example.chat.app-pngs-14:/drawable-xhdpi/app_icon_background.png"
+        "merged": "com.example.chat.app-merged_res-35:/drawable-anydpi-v21_app_icon_foreground.xml.flat",
+        "source": "com.example.chat.app-pngs-30:/drawable-anydpi-v21/app_icon_foreground.xml"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-anydpi-v26_app_icon.xml.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-anydpi-v26/app_icon.xml"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-hdpi_app_icon.png.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-hdpi/app_icon.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable-anydpi-v21_app_icon_foreground.xml.flat",
-        "source": "com.example.chat.app-pngs-14:/drawable-anydpi-v21/app_icon_foreground.xml"
+        "merged": "com.example.chat.app-merged_res-35:/drawable-xxxhdpi_app_icon_background.png.flat",
+        "source": "com.example.chat.app-pngs-30:/drawable-xxxhdpi/app_icon_background.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-mdpi_app_icon.png.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-mdpi/app_icon.png"
+        "merged": "com.example.chat.app-merged_res-35:/drawable-xhdpi_app_icon_foreground.png.flat",
+        "source": "com.example.chat.app-pngs-30:/drawable-xhdpi/app_icon_foreground.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable_launch_background.xml.flat",
-        "source": "com.example.chat.app-main-12:/drawable/launch_background.xml"
+        "merged": "com.example.chat.app-merged_res-35:/drawable-v21_launch_background.xml.flat",
+        "source": "com.example.chat.app-main-28:/drawable-v21/launch_background.xml"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-hdpi_ic_launcher.png.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-hdpi/ic_launcher.png"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-xhdpi_app_icon_round.png.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-xhdpi/app_icon_round.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable-xhdpi_app_icon_foreground.png.flat",
-        "source": "com.example.chat.app-pngs-14:/drawable-xhdpi/app_icon_foreground.png"
+        "merged": "com.example.chat.app-merged_res-35:/drawable-xxhdpi_app_icon_foreground.png.flat",
+        "source": "com.example.chat.app-pngs-30:/drawable-xxhdpi/app_icon_foreground.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-mdpi_app_icon_round.png.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-mdpi/app_icon_round.png"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-mdpi_app_icon_round.png.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-mdpi/app_icon_round.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable-anydpi-v21_app_icon_background.xml.flat",
-        "source": "com.example.chat.app-pngs-14:/drawable-anydpi-v21/app_icon_background.xml"
+        "merged": "com.example.chat.app-merged_res-35:/drawable-mdpi_app_icon_background.png.flat",
+        "source": "com.example.chat.app-pngs-30:/drawable-mdpi/app_icon_background.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-xxxhdpi_ic_launcher.png.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-xxxhdpi/ic_launcher.png"
+        "merged": "com.example.chat.app-merged_res-35:/drawable-ldpi_app_icon_background.png.flat",
+        "source": "com.example.chat.app-pngs-30:/drawable-ldpi/app_icon_background.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-xxhdpi_app_icon_round.png.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-xxhdpi/app_icon_round.png"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-mdpi_app_icon.png.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-mdpi/app_icon.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable-v21_launch_background.xml.flat",
-        "source": "com.example.chat.app-main-12:/drawable-v21/launch_background.xml"
+        "merged": "com.example.chat.app-merged_res-35:/drawable-anydpi-v21_app_icon_background.xml.flat",
+        "source": "com.example.chat.app-pngs-30:/drawable-anydpi-v21/app_icon_background.xml"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-xhdpi/ic_launcher.png"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-anydpi-v26_app_icon_round.xml.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-anydpi-v26/app_icon_round.xml"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-xhdpi_app_icon.png.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-xhdpi/app_icon.png"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-xxhdpi_app_icon.png.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-xxhdpi/app_icon.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-hdpi_app_icon.png.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-hdpi/app_icon.png"
+        "merged": "com.example.chat.app-merged_res-35:/drawable-hdpi_app_icon_background.png.flat",
+        "source": "com.example.chat.app-pngs-30:/drawable-hdpi/app_icon_background.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable-hdpi_app_icon_foreground.png.flat",
-        "source": "com.example.chat.app-pngs-14:/drawable-hdpi/app_icon_foreground.png"
+        "merged": "com.example.chat.app-merged_res-35:/drawable-hdpi_app_icon_foreground.png.flat",
+        "source": "com.example.chat.app-pngs-30:/drawable-hdpi/app_icon_foreground.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-hdpi_app_icon_round.png.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-hdpi/app_icon_round.png"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-hdpi/ic_launcher.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-xxhdpi_app_icon.png.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-xxhdpi/app_icon.png"
+        "merged": "com.example.chat.app-merged_res-35:/drawable-ldpi_app_icon_foreground.png.flat",
+        "source": "com.example.chat.app-pngs-30:/drawable-ldpi/app_icon_foreground.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable-mdpi_app_icon_foreground.png.flat",
-        "source": "com.example.chat.app-pngs-14:/drawable-mdpi/app_icon_foreground.png"
+        "merged": "com.example.chat.app-merged_res-35:/drawable-xxxhdpi_app_icon_foreground.png.flat",
+        "source": "com.example.chat.app-pngs-30:/drawable-xxxhdpi/app_icon_foreground.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-xxhdpi_ic_launcher.png.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-xxhdpi/ic_launcher.png"
+        "merged": "com.example.chat.app-merged_res-35:/drawable-mdpi_app_icon_foreground.png.flat",
+        "source": "com.example.chat.app-pngs-30:/drawable-mdpi/app_icon_foreground.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-xxxhdpi_app_icon.png.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-xxxhdpi/app_icon.png"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-xxxhdpi_app_icon_round.png.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-xxxhdpi/app_icon_round.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-anydpi-v26_app_icon_round.xml.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-anydpi-v26/app_icon_round.xml"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-xxxhdpi_app_icon.png.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-xxxhdpi/app_icon.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable-xxhdpi_app_icon_background.png.flat",
-        "source": "com.example.chat.app-pngs-14:/drawable-xxhdpi/app_icon_background.png"
+        "merged": "com.example.chat.app-merged_res-35:/drawable-xxhdpi_app_icon_background.png.flat",
+        "source": "com.example.chat.app-pngs-30:/drawable-xxhdpi/app_icon_background.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable-xxxhdpi_app_icon_background.png.flat",
-        "source": "com.example.chat.app-pngs-14:/drawable-xxxhdpi/app_icon_background.png"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-xxxhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable-hdpi_app_icon_background.png.flat",
-        "source": "com.example.chat.app-pngs-14:/drawable-hdpi/app_icon_background.png"
+        "merged": "com.example.chat.app-merged_res-35:/drawable-xhdpi_app_icon_background.png.flat",
+        "source": "com.example.chat.app-pngs-30:/drawable-xhdpi/app_icon_background.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-xxxhdpi_app_icon_round.png.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-xxxhdpi/app_icon_round.png"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-xhdpi_app_icon.png.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-xhdpi/app_icon.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-xhdpi_app_icon_round.png.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-xhdpi/app_icon_round.png"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-hdpi_app_icon_round.png.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-hdpi/app_icon_round.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/mipmap-mdpi_ic_launcher.png.flat",
-        "source": "com.example.chat.app-main-12:/mipmap-mdpi/ic_launcher.png"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-xhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable-xxxhdpi_app_icon_foreground.png.flat",
-        "source": "com.example.chat.app-pngs-14:/drawable-xxxhdpi/app_icon_foreground.png"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-xxhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable-ldpi_app_icon_foreground.png.flat",
-        "source": "com.example.chat.app-pngs-14:/drawable-ldpi/app_icon_foreground.png"
+        "merged": "com.example.chat.app-merged_res-35:/drawable_launch_background.xml.flat",
+        "source": "com.example.chat.app-main-28:/drawable/launch_background.xml"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable-xxhdpi_app_icon_foreground.png.flat",
-        "source": "com.example.chat.app-pngs-14:/drawable-xxhdpi/app_icon_foreground.png"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-anydpi-v26_app_icon.xml.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-anydpi-v26/app_icon.xml"
     },
     {
-        "merged": "com.example.chat.app-merged_res-19:/drawable-ldpi_app_icon_background.png.flat",
-        "source": "com.example.chat.app-pngs-14:/drawable-ldpi/app_icon_background.png"
+        "merged": "com.example.chat.app-merged_res-35:/mipmap-xxhdpi_app_icon_round.png.flat",
+        "source": "com.example.chat.app-main-28:/mipmap-xxhdpi/app_icon_round.png"
     }
 ]

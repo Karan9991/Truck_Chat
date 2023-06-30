@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>TruckChat app uses your location to provide accurate latitude and longitude coordinates, enabling you to discover nearby users to chat and enhance your overall experience.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
@@ -57,5 +59,18 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+
+	<key>NSAppTransportSecurity</key>
+<dict>
+  <key>NSAllowsArbitraryLoads</key>
+  <true/>
+</dict>
+
+<key>NSAppUsesWebKitWebViews</key>
+<true/>
+<key>NSWebKitWebContentUsageDescription</key>
+<string>TruckChat requires permission access to web content for view the Sponsors and Reviews</string>
+
+
 </dict>
 </plist>

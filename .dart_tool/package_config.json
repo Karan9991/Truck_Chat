@@ -170,6 +170,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_inappwebview",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/flutter_inappwebview-5.7.2+3",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
       "name": "flutter_lints",
       "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/flutter_lints-2.0.1",
       "packageUri": "lib/",
@@ -488,6 +494,30 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "webview_flutter",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/webview_flutter-4.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "webview_flutter_android",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/webview_flutter_android-3.8.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "webview_flutter_platform_interface",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/webview_flutter_platform_interface-2.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "webview_flutter_wkwebview",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/webview_flutter_wkwebview-3.6.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "win32",
       "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/win32-5.0.5",
       "packageUri": "lib/",
@@ -512,7 +542,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-06-29T17:54:57.079456Z",
+  "generated": "2023-06-30T01:14:44.752567Z",
   "generator": "pub",
   "generatorVersion": "3.0.1"
 }

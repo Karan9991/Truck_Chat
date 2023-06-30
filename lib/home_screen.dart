@@ -3,6 +3,8 @@ import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/chat_list_screen.dart';
 import 'package:chat/news_tab.dart';
 import 'package:flutter/material.dart';
+// import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -114,15 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// class NewsTab extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Text('News Tab'),
-//     );
-//   }
-// }
-
 class ChatsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -131,23 +124,46 @@ class ChatsTab extends StatelessWidget {
     );
   }
 }
-
 class SponsorsTab extends StatelessWidget {
+  final String sponsorUrl = 'http://truckchatapp.com/sponsors.html';
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Sponsors Tab'),
+    return Container(
+      child: InAppWebView(
+        initialUrlRequest: URLRequest(url: Uri.parse(sponsorUrl)),
+      ),
     );
   }
 }
 
+
+// class SponsorsTab extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: Text('Sponsors Tab'),
+//     );
+//   }
+// }
+
 class ReviewsTab extends StatelessWidget {
+   final String sponsorUrl = 'http://truckchatapp.com/reviews/mobile';
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Reviews Tab'),
+    return Container(
+      child: InAppWebView(
+        initialUrlRequest: URLRequest(url: Uri.parse(sponsorUrl)),
+      ),
     );
   }
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Center(
+  //     child: Text('Reviews Tab'),
+  //   );
+  // }
 }
 
 class PrivateChatTab extends StatelessWidget {
@@ -158,7 +174,3 @@ class PrivateChatTab extends StatelessWidget {
     );
   }
 }
-
-// void main() {
-//   runApp(MyApp());
-// }
