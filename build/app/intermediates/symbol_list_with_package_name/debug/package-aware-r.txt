@@ -408,6 +408,7 @@ color foreground_material_dark
 color foreground_material_light
 color highlighted_text_material_dark
 color highlighted_text_material_light
+color ic_launcher_background
 color material_blue_grey_800
 color material_blue_grey_900
 color material_blue_grey_950
@@ -682,6 +683,7 @@ drawable common_google_signin_btn_text_light_normal_background
 drawable floating_action_mode_shape
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
+drawable ic_launcher_background
 drawable launch_background
 drawable navigation_empty_icon
 drawable notification_action_background
@@ -979,6 +981,8 @@ menu menu_main
 mipmap app_icon
 mipmap app_icon_round
 mipmap ic_launcher
+mipmap ic_launcher_foreground
+mipmap ic_launcher_round
 raw firebase_common_keep
 string abc_action_bar_home_description
 string abc_action_bar_up_description

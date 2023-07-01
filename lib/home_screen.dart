@@ -69,10 +69,19 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       home: Scaffold(
         appBar: AppBar(
+          leading: Image.asset(
+            'assets/ic_launcher.png', // Replace 'icon.png' with the actual path to your icon asset
+            width: 34,
+            height: 34,
+          ),
           title: Text('TruckChat'),
           actions: [
             IconButton(
-              icon: Icon(Icons.chat),
+              icon: Image.asset(
+                'assets/add_blog.png', // Replace 'icon.png' with the actual path to your icon asset
+                width: 30,
+                height: 30,
+              ),
               onPressed: () {
                 // Perform action when chat icon is pressed
                 Navigator.push(
@@ -83,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             IconButton(
-              icon: Icon(Icons.grid_on),
+              icon: Icon(Icons.grid_view_rounded),
               onPressed: () {
                 // Perform action when grid box icon is pressed
               },
@@ -166,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
               label: 'News',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.chat_bubble),
+              icon: Icon(Icons.chat),
               label: 'Chats',
             ),
             BottomNavigationBarItem(
@@ -221,7 +230,6 @@ class SponsorsTab extends StatelessWidget {
     );
   }
 }
-
 
 class ReviewsTab extends StatelessWidget {
   final String sponsorUrl = 'http://truckchatapp.com/reviews/mobile';

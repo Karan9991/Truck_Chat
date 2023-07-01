@@ -42,7 +42,7 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="chat"
+        android:label="Truck Chat"
         android:usesCleartextTraffic="true" >
         <activity
             android:name="com.example.chat.MainActivity"

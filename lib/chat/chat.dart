@@ -20,8 +20,6 @@ class Chat extends StatefulWidget {
   //  final List<ReplyMsg> replyMsgs;
   final String serverMsgId;
 
-
-
   Chat({
     required this.topic,
     //  required this.replyMsgs,
@@ -33,7 +31,7 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
-    stt.SpeechToText _speechToText = stt.SpeechToText();
+  stt.SpeechToText _speechToText = stt.SpeechToText();
   bool _isListening = false;
   String _typedText = '';
 
@@ -56,8 +54,8 @@ class _ChatState extends State<Chat> {
     super.initState();
 
     userId = int.parse(shareprefuserId!);
-     storedLatitude = SharedPrefs.getDouble('latitude');
-     storedLongitude = SharedPrefs.getDouble('longitude');
+    storedLatitude = SharedPrefs.getDouble('latitude');
+    storedLongitude = SharedPrefs.getDouble('longitude');
 
     print('init state');
     getAllMessages(widget.serverMsgId);
@@ -151,7 +149,7 @@ class _ChatState extends State<Chat> {
         title: Text(widget.topic),
         actions: [
           IconButton(
-            icon: Icon(Icons.chat),
+            icon: Icon(Icons.star_border),
             onPressed: () {
               // Perform action when chat icon is pressed
               Navigator.push(
@@ -162,7 +160,11 @@ class _ChatState extends State<Chat> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.grid_on),
+            icon: Image.asset(
+              'assets/doublechat.png', // Replace 'icon.png' with the actual path to your icon asset
+              width: 30,
+              height: 30,
+            ),
             onPressed: () {
               // Perform action when grid box icon is pressed
             },
@@ -220,7 +222,6 @@ class _ChatState extends State<Chat> {
             },
           ),
         ],
-      
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -353,12 +354,12 @@ class _ChatState extends State<Chat> {
             ),
             child: Row(
               children: [
-                   IconButton(
-              icon: Icon(Icons.mic),
-              onPressed: () {
-                _toggleListening();
-              },
-            ),
+                IconButton(
+                  icon: Icon(Icons.mic),
+                  onPressed: () {
+                    _toggleListening();
+                  },
+                ),
                 Expanded(
                   child: TextField(
                     controller: messageController,
@@ -495,7 +496,7 @@ class _ChatState extends State<Chat> {
     return false;
   }
 
-      void _showReportAbuseDialog(BuildContext context) {
+  void _showReportAbuseDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

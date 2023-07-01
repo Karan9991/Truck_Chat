@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 class NewsTab extends StatefulWidget {
   @override
@@ -40,68 +41,6 @@ class _NewsTabState extends State<NewsTab> {
     }
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return ListView.builder(
-  //     itemCount: _newsItems.length,
-  //     itemBuilder: (context, index) {
-  //       final newsItem = _newsItems[index];
-
-  //       return ListTile(
-  //         leading: Icon(Icons.article), // Replace with your desired news icon
-  //         title: Text(newsItem.title),
-  //         subtitle: Text(newsItem.postedDate),
-  //         onTap: () {
-  //           // Perform navigation to the news item URL
-  //           navigateToURL(newsItem.link);
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
-  // @override
-  // Widget build(BuildContext context) {
-  //   return ListView.builder(
-  //     itemCount: _newsItems.length,
-  //     itemBuilder: (context, index) {
-  //       final newsItem = _newsItems[index];
-
-  //       return Card(
-  //         elevation: 2, // Set the elevation for the card
-  //         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-  //         child: InkWell(
-  //           onTap: () {
-  //             navigateToURL(newsItem.link);
-  //           },
-  //           child: Padding(
-  //             padding: EdgeInsets.all(16),
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 Row(
-  //                   children: [
-  //                     Icon(Icons.article, size: 24), // Replace with your desired news icon
-  //                     SizedBox(width: 8),
-  //                     Text(
-  //                       newsItem.title,
-  //                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 SizedBox(height: 8),
-  //                 Text(
-  //                   newsItem.postedDate,
-  //                   style: TextStyle(fontSize: 14, color: Colors.grey),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -111,6 +50,10 @@ class _NewsTabState extends State<NewsTab> {
         itemCount: _newsItems.length,
         itemBuilder: (context, index) {
           final newsItem = _newsItems[index];
+
+          DateTime postedDate = DateTime.parse(newsItem.postedDate);
+
+          String formattedDate = DateFormat('yyyy/MM/dd').format(postedDate);
 
           return Card(
             color: Colors.blue,
@@ -147,13 +90,19 @@ class _NewsTabState extends State<NewsTab> {
                       ],
                     ),
                     SizedBox(height: 8),
-                Padding(
-                    padding: EdgeInsets.only(left: 32), // Adjust the left padding
-                    child: Text(
-                      newsItem.postedDate,
-                      style: TextStyle(fontSize: 14, color: Colors.black),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(left: 32), // Adjust the left padding
+
+                      child: Text(
+                        'Posted on ${formattedDate}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
                   ],
                 ),
               ),
