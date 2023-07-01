@@ -1,182 +1,134 @@
 [
     {
-        "merged": "com.example.chat.app-merged_res-35:/mipmap-xxhdpi_ic_launcher_round.png.flat",
-        "source": "com.example.chat.app-main-28:/mipmap-xxhdpi/ic_launcher_round.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-anydpi-v26/ic_launcher_round.xml"
     },
     {
-        "merged": "com.example.chat.app-merged_res-35:/mipmap-mdpi_ic_launcher.png.flat",
-        "source": "com.example.chat.app-main-28:/mipmap-mdpi/ic_launcher.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-anydpi-v26_app_icon.xml.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-anydpi-v26/app_icon.xml"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-xxxhdpi_app_icon.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-xxxhdpi/app_icon.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-xxhdpi_app_icon_round.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-xxhdpi/app_icon_round.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-35:/mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "com.example.chat.app-main-28:/mipmap-anydpi-v26/ic_launcher.xml"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-xxxhdpi_app_icon.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-xxxhdpi/app_icon.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/drawable-v21_launch_background.xml.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/drawable-v21/launch_background.xml"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-mdpi/ic_launcher_round.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-xxhdpi_ic_launcher.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-xxhdpi/ic_launcher.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-xxhdpi/ic_launcher_foreground.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-mdpi_ic_launcher_round.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-mdpi/ic_launcher_round.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/drawable_app_icon_background.xml.flat",
+        "source": "com.teletype.truckchat.app-main-28:/drawable/app_icon_background.xml"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-xhdpi_ic_launcher_foreground.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-xhdpi/ic_launcher_foreground.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-anydpi-v26_app_icon_round.xml.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-anydpi-v26/app_icon_round.xml"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-xhdpi/ic_launcher.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.teletype.truckchat.app-main-28:/drawable/ic_launcher_background.xml"
     },
     {
-        "merged": "com.example.chat.app-merged_res-35:/mipmap-hdpi_ic_launcher_round.png.flat",
-        "source": "com.example.chat.app-main-28:/mipmap-hdpi/ic_launcher_round.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/drawable-v21_launch_background.xml.flat",
+        "source": "com.teletype.truckchat.app-main-28:/drawable-v21/launch_background.xml"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-mdpi_app_icon_round.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-mdpi/app_icon_round.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-xxhdpi_app_icon.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-xxhdpi/app_icon.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/drawable_app_icon_foreground.xml.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/drawable/app_icon_foreground.xml"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/drawable_app_icon_foreground.xml.flat",
+        "source": "com.teletype.truckchat.app-main-28:/drawable/app_icon_foreground.xml"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/drawable_app_icon_background.xml.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/drawable/app_icon_background.xml"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-mdpi_app_icon_round.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-mdpi/app_icon_round.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-anydpi-v26_app_icon_round.xml.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-anydpi-v26/app_icon_round.xml"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-mdpi/ic_launcher.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-hdpi_ic_launcher.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-hdpi/ic_launcher.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-anydpi-v26/ic_launcher.xml"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-xxhdpi_app_icon.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-xxhdpi/app_icon.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-xxhdpi/ic_launcher.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-hdpi_app_icon_round.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-hdpi/app_icon_round.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-xhdpi_app_icon.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-xhdpi/app_icon.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-35:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
-        "source": "com.example.chat.app-main-28:/mipmap-xxxhdpi/ic_launcher_round.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-xxhdpi/ic_launcher_round.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-mdpi_ic_launcher.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-mdpi/ic_launcher.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-xhdpi/ic_launcher_foreground.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-xxhdpi_app_icon_round.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-xxhdpi/app_icon_round.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-xxxhdpi/ic_launcher_round.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-anydpi-v26_app_icon.xml.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-anydpi-v26/app_icon.xml"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-hdpi_app_icon.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-hdpi/app_icon.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-xxhdpi_ic_launcher_round.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-xxhdpi/ic_launcher_round.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-xhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-35:/mipmap-xhdpi_ic_launcher_round.png.flat",
-        "source": "com.example.chat.app-main-28:/mipmap-xhdpi/ic_launcher_round.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-xxxhdpi_app_icon_round.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-xxxhdpi/app_icon_round.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-anydpi-v26/ic_launcher.xml"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-mdpi_app_icon.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-mdpi/app_icon.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-hdpi_ic_launcher_foreground.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-hdpi/ic_launcher_foreground.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-hdpi_app_icon_round.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-hdpi/app_icon_round.png"
     },
     {
-        "merged": "com.example.chat.app-merged_res-35:/mipmap-hdpi_ic_launcher.png.flat",
-        "source": "com.example.chat.app-main-28:/mipmap-hdpi/ic_launcher.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-xhdpi/ic_launcher_round.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-xxxhdpi_ic_launcher.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-xxxhdpi/ic_launcher.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-mdpi/ic_launcher_foreground.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-xxxhdpi/ic_launcher_round.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-xhdpi_app_icon_round.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-xhdpi/app_icon_round.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-mdpi_app_icon.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-mdpi/app_icon.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-xxxhdpi/ic_launcher.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/drawable_ic_launcher_background.xml.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/drawable/ic_launcher_background.xml"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-hdpi/ic_launcher_round.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-hdpi_ic_launcher_round.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-hdpi/ic_launcher_round.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-hdpi/ic_launcher_foreground.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-xhdpi_ic_launcher_round.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-xhdpi/ic_launcher_round.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-hdpi/ic_launcher.png"
     },
     {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-hdpi_app_icon.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-hdpi/app_icon.png"
-    },
-    {
-        "merged": "com.example.chat.app-merged_res-35:/mipmap-xxxhdpi_ic_launcher.png.flat",
-        "source": "com.example.chat.app-main-28:/mipmap-xxxhdpi/ic_launcher.png"
-    },
-    {
-        "merged": "com.example.chat.app-merged_res-35:/mipmap-mdpi_ic_launcher_round.png.flat",
-        "source": "com.example.chat.app-main-28:/mipmap-mdpi/ic_launcher_round.png"
-    },
-    {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-xxxhdpi_app_icon_round.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-xxxhdpi/app_icon_round.png"
-    },
-    {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-xxhdpi/ic_launcher_foreground.png"
-    },
-    {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-xxxhdpi/ic_launcher_foreground.png"
-    },
-    {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-xhdpi_app_icon.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-xhdpi/app_icon.png"
-    },
-    {
-        "merged": "com.example.chat.app-merged_res-35:/mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "com.example.chat.app-main-28:/mipmap-xhdpi/ic_launcher.png"
-    },
-    {
-        "merged": "com.example.chat.app-merged_res-35:/mipmap-xxhdpi_ic_launcher.png.flat",
-        "source": "com.example.chat.app-main-28:/mipmap-xxhdpi/ic_launcher.png"
-    },
-    {
-        "merged": "com.example.chat.app-merged_res-35:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "com.example.chat.app-main-28:/mipmap-anydpi-v26/ic_launcher_round.xml"
-    },
-    {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-mdpi_ic_launcher_foreground.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-mdpi/ic_launcher_foreground.png"
-    },
-    {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-anydpi-v26/ic_launcher_round.xml"
-    },
-    {
-        "merged": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-merged_res-35:/mipmap-xhdpi_app_icon_round.png.flat",
-        "source": "/Users/karandeepsingh/.gradle/daemon/7.5/com.example.chat.app-main-28:/mipmap-xhdpi/app_icon_round.png"
+        "merged": "com.teletype.truckchat.app-merged_res-35:/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.teletype.truckchat.app-main-28:/mipmap-xxxhdpi/ic_launcher_foreground.png"
     }
 ]

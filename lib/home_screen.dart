@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 1;
   List<Widget> _widgetOptions = [
     NewsTab(),
-    ChatList(key: UniqueKey()),
+     ChatList(key: UniqueKey()),
     SponsorsTab(),
     ReviewsTab(),
     PrivateChatTab(),

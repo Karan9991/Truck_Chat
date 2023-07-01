@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.chat"
+    package="com.teletype.truckchat"
     android:versionCode="1"
     android:versionName="1.0.0" >
 
@@ -45,7 +45,7 @@
         android:label="Truck Chat"
         android:usesCleartextTraffic="true" >
         <activity
-            android:name="com.example.chat.MainActivity"
+            android:name="com.teletype.truckchat.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
             android:hardwareAccelerated="true"
@@ -152,7 +152,7 @@
 
         <provider
             android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingInitProvider"
-            android:authorities="com.example.chat.flutterfirebasemessaginginitprovider"
+            android:authorities="com.teletype.truckchat.flutterfirebasemessaginginitprovider"
             android:exported="false"
             android:initOrder="99" />
 
@@ -284,7 +284,7 @@
 
         <provider
             android:name="com.google.firebase.provider.FirebaseInitProvider"
-            android:authorities="com.example.chat.firebaseinitprovider"
+            android:authorities="com.teletype.truckchat.firebaseinitprovider"
             android:directBootAware="true"
             android:exported="false"
             android:initOrder="100" />
@@ -333,7 +333,7 @@
 
         <provider
             android:name="androidx.startup.InitializationProvider"
-            android:authorities="com.example.chat.androidx-startup"
+            android:authorities="com.teletype.truckchat.androidx-startup"
             android:exported="false" >
             <meta-data
                 android:name="androidx.emoji2.text.EmojiCompatInitializer"

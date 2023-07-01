@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.chat.app-mergeDebugResources-33:/values-ar/values-ar.xml",
+            "outputFile": "com.teletype.truckchat.app-mergeDebugResources-33:/values-ar/values-ar.xml",
             "map": [
                 {
                     "source": "/Users/karandeepsingh/.gradle/caches/transforms-3/3df77d3f0e42ee5d73cdfadb8bcdc01c/transformed/browser-1.4.0/res/values-ar/values-ar.xml",

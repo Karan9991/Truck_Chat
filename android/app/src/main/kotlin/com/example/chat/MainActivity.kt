@@ -1,4 +1,4 @@
-package com.example.chat
+package com.teletype.truckchat
 
 import io.flutter.embedding.android.FlutterActivity
 

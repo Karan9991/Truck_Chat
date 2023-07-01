@@ -1,4 +1,4 @@
-com.example.chat
+com.teletype.truckchat
 anim abc_fade_in
 anim abc_fade_out
 anim abc_grow_fade_in_from_bottom
@@ -1046,7 +1046,6 @@ string gcm_defaultSenderId
 string google_api_key
 string google_app_id
 string google_crash_reporting_api_key
-string google_storage_bucket
 string menu_search
 string project_id
 string search_menu_title

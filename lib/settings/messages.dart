@@ -33,15 +33,11 @@ class MessagesScreen extends StatelessWidget {
     return ListTile(
       title: Text(
         title,
-         style: TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 18
-    ),
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
       ),
       subtitle: Text(
         description,
         style: TextStyle(
-          
           color: Colors.grey, // Replace with your desired text color
           fontWeight: FontWeight.bold,
         ),
@@ -65,7 +61,12 @@ class MessagesScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                    color:
+                        Colors.blue), // Set the desired color for Cancel button
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -73,7 +74,12 @@ class MessagesScreen extends StatelessWidget {
                 print('Chat Handle: $chatHandle');
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: Text(
+                'OK',
+                style: TextStyle(
+                    color:
+                        Colors.blue), // Set the desired color for Cancel button
+              ),
             ),
           ],
         );

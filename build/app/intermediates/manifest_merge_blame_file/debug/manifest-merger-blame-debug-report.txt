@@ -1,6 +1,6 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-3    package="com.example.chat"
+3    package="com.teletype.truckchat"
 4    android:versionCode="1"
 5    android:versionName="1.0.0" >
 6
@@ -84,7 +84,7 @@
 45        android:label="Truck Chat"
 46        android:usesCleartextTraffic="true" >
 47        <activity
-48            android:name="com.example.chat.MainActivity"
+48            android:name="com.teletype.truckchat.MainActivity"
 49            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
 50            android:exported="true"
 51            android:hardwareAccelerated="true"
@@ -255,7 +255,7 @@
 153-->[:firebase_messaging] /Users/karandeepsingh/Downloads/Truck_Chat/build/firebase_messaging/intermediates/merged_manifest/debug/AndroidManifest.xml:43:9-47:38
 154            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingInitProvider"
 154-->[:firebase_messaging] /Users/karandeepsingh/Downloads/Truck_Chat/build/firebase_messaging/intermediates/merged_manifest/debug/AndroidManifest.xml:44:13-102
-155            android:authorities="com.example.chat.flutterfirebasemessaginginitprovider"
+155            android:authorities="com.teletype.truckchat.flutterfirebasemessaginginitprovider"
 155-->[:firebase_messaging] /Users/karandeepsingh/Downloads/Truck_Chat/build/firebase_messaging/intermediates/merged_manifest/debug/AndroidManifest.xml:45:13-88
 156            android:exported="false"
 156-->[:firebase_messaging] /Users/karandeepsingh/Downloads/Truck_Chat/build/firebase_messaging/intermediates/merged_manifest/debug/AndroidManifest.xml:46:13-37
@@ -503,7 +503,7 @@
 285-->[com.google.firebase:firebase-common:20.3.2] /Users/karandeepsingh/.gradle/caches/transforms-3/284fd5eeca4a29a0814ba444369e2acf/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:25:9-30:39
 286            android:name="com.google.firebase.provider.FirebaseInitProvider"
 286-->[com.google.firebase:firebase-common:20.3.2] /Users/karandeepsingh/.gradle/caches/transforms-3/284fd5eeca4a29a0814ba444369e2acf/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:26:13-77
-287            android:authorities="com.example.chat.firebaseinitprovider"
+287            android:authorities="com.teletype.truckchat.firebaseinitprovider"
 287-->[com.google.firebase:firebase-common:20.3.2] /Users/karandeepsingh/.gradle/caches/transforms-3/284fd5eeca4a29a0814ba444369e2acf/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:27:13-72
 288            android:directBootAware="true"
 288-->[com.google.firebase:firebase-common:20.3.2] /Users/karandeepsingh/.gradle/caches/transforms-3/284fd5eeca4a29a0814ba444369e2acf/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:28:13-43
@@ -591,7 +591,7 @@
 334-->[androidx.emoji2:emoji2:1.2.0] /Users/karandeepsingh/.gradle/caches/transforms-3/da24b2c9b78ceeb51433bb8918b899ac/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
 335            android:name="androidx.startup.InitializationProvider"
 335-->[androidx.emoji2:emoji2:1.2.0] /Users/karandeepsingh/.gradle/caches/transforms-3/da24b2c9b78ceeb51433bb8918b899ac/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:25:13-67
-336            android:authorities="com.example.chat.androidx-startup"
+336            android:authorities="com.teletype.truckchat.androidx-startup"
 336-->[androidx.emoji2:emoji2:1.2.0] /Users/karandeepsingh/.gradle/caches/transforms-3/da24b2c9b78ceeb51433bb8918b899ac/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:26:13-68
 337            android:exported="false" >
 337-->[androidx.emoji2:emoji2:1.2.0] /Users/karandeepsingh/.gradle/caches/transforms-3/da24b2c9b78ceeb51433bb8918b899ac/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:27:13-37

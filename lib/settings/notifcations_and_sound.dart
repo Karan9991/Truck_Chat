@@ -107,6 +107,8 @@ class _NotificationsAndSoundScreenState
         trailing: Checkbox(
           value: value,
           onChanged: onChanged,
+            activeColor: Colors.blue, // Set the desired color here
+
         ),
       ),
     );

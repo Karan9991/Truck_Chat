@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.chat.ios</string>
+	<string>com.teletype.truckchat.ios</string>
 	<key>PROJECT_ID</key>
 	<string>my-project2-1630342752427</string>
 	<key>STORAGE_BUCKET</key>
