@@ -108,7 +108,37 @@ class ReplyMsg {
 
   ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId, this.topic);
 
+  
+
 }
+
+// class ReplyMsgr {
+//   final int rid;
+//   final int uid;
+//   final String replyMsg;
+//   final int timestamp;
+//   final String emojiId;
+//   final String topic;
+
+//   ReplyMsgr(
+//       {required this.rid,
+//       required this.uid,
+//       required this.replyMsg,
+//       required this.timestamp,
+//       required this.emojiId,
+//       required this.topic});
+
+//   factory ReplyMsgr.fromJson(Map<String, dynamic> json) {
+//     return ReplyMsgr(
+//       rid: json['rid'],
+//       uid: json['uid'],
+//       replyMsg: json['replyMsg'],
+//       timestamp: json['timestamp'],
+//       emojiId: json['emojiId'],
+//       topic: json['topic'],
+//     );
+//   }
+// }
 
 class ReplyMsgg {
   final String rid;

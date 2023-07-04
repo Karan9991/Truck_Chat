@@ -290,6 +290,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "nested",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/nested-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "path",
       "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/path-1.8.3",
       "packageUri": "lib/",
@@ -342,6 +348,12 @@
       "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/process-4.2.4",
       "packageUri": "lib/",
       "languageVersion": "2.14"
+    },
+    {
+      "name": "provider",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/provider-6.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "rflutter_alert",
@@ -548,7 +560,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-06-30T18:40:02.199999Z",
+  "generated": "2023-07-02T22:23:29.650806Z",
   "generator": "pub",
   "generatorVersion": "3.0.1"
 }

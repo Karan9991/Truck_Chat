@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:chat/home_screen.dart';
+import 'dart:async';
 
 class ChatList extends StatefulWidget {
   final Key key;
@@ -20,25 +21,24 @@ class ChatList extends StatefulWidget {
 }
 
 class _ChatListState extends State<ChatList> {
+
   List<String> conversationTopics = [];
-  // List<int> conversationTimestamps = [];
   List<int> conversationTimestamps = [];
 
   List<String> replyCounts = [];
   List<ReplyMsg> replyMsgs = [];
 
-  // final String userId = "69979";
-  // final double latitude = 1.0;
-  // final double longitude = 1.0;
-
   List<String> serverMsgIds = [];
   int statusCode = 0;
   String statusMessage = '';
+
+  
 
   @override
   void initState() {
     super.initState();
     runNow();
+
   }
 
   void onGetPreviousMessagesResult(
@@ -53,6 +53,7 @@ class _ChatListState extends State<ChatList> {
         this.serverMsgIds = serverMsgIds;
       });
       getAllMessages(serverMsgIds);
+
       // print("Messages: $serverMsgIds");
       // print("Status Code: $statusCode");
       // print("Status Message: $statusMessage");
@@ -269,12 +270,28 @@ class _ChatListState extends State<ChatList> {
               color: Colors.blue[300],
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: ListTile(
-                title: Text(
-                  topic,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.chat,
+                          size: 17,
+                        ), // Replace with your chat icon
+                        SizedBox(
+                            width: 8), // Add spacing between icon and title
+                        // Replace with your chat title
+                      ],
+                    ),
+                    Text(
+                      topic,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

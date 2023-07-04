@@ -1,15 +1,19 @@
-import 'package:chat/chat/chatlist.dart';
+// import 'package:chat/chat/chatlist.dart';
+// import 'package:chat/chat/chatlistreactive.dart';
 import 'package:chat/chat/new_conversation.dart';
-import 'package:chat/chat_list_screen.dart';
+// import 'package:chat/chat_list_screen.dart';
 import 'package:chat/news_tab.dart';
+import 'package:chat/reactivechat/chatlistreact.dart';
 import 'package:chat/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' show Platform;
 import 'chat/chatlist.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
+// import 'package:chat/reactivechat/chatlistreact.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -20,7 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 1;
   List<Widget> _widgetOptions = [
     NewsTab(),
-     ChatList(key: UniqueKey()),
+        ChatListr(key: UniqueKey()),
+
+    // ChatList(key: UniqueKey()),
     SponsorsTab(),
     ReviewsTab(),
     PrivateChatTab(),
@@ -70,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
       home: Scaffold(
         appBar: AppBar(
           leading: Image.asset(
-            'assets/ic_launcher.png', // Replace 'icon.png' with the actual path to your icon asset
+            'assets/ic_launcher.png',
             width: 34,
             height: 34,
           ),
@@ -78,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             IconButton(
               icon: Image.asset(
-                'assets/add_blog.png', // Replace 'icon.png' with the actual path to your icon asset
+                'assets/add_blog.png',
                 width: 30,
                 height: 30,
               ),

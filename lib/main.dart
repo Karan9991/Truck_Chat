@@ -22,7 +22,7 @@ import 'get_all_reply_messages.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await SharedPrefs.init(); // Initialize SharedPrefs
+  await SharedPrefs.init(); 
   await registerDevice();
 
   runApp(const MyApp());

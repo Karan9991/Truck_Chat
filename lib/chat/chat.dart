@@ -49,6 +49,8 @@ class _ChatState extends State<Chat> {
   int userId = 0;
   double? storedLatitude = 1.0;
   double? storedLongitude = 1.0;
+
+
   @override
   void initState() {
     super.initState();
@@ -60,8 +62,10 @@ class _ChatState extends State<Chat> {
     print('init state');
     getAllMessages(widget.serverMsgId);
 
+
     // filterReplyMsgs();
   }
+
 
   void filterReplyMsgs() {
     print('reply messges in fliter replymsf');
@@ -113,6 +117,8 @@ class _ChatState extends State<Chat> {
         final jsonResult = jsonDecode(response.body);
         int statusCode = jsonResult['status'] as int;
         print('status code $statusCode');
+
+
 
         if (jsonResult.containsKey('message')) {
           String status_message = jsonResult['message'] as String;
