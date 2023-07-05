@@ -13,6 +13,10 @@ import 'dart:io' show Platform;
 import 'chat/chatlist.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'package:chat/utils/shared_pref.dart';
+import 'dart:convert';
+
 // import 'package:chat/reactivechat/chatlistreact.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,9 +26,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 1;
-  List<Widget> _widgetOptions = [
+  final List<Widget> _widgetOptions = [
     NewsTab(),
-        ChatListr(key: UniqueKey()),
+    ChatListr(
+      key: UniqueKey(),
+    ),
 
     // ChatList(key: UniqueKey()),
     SponsorsTab(),
@@ -41,9 +47,14 @@ class _HomeScreenState extends State<HomeScreen> {
   void _refreshChatList() {
     setState(() {
       // Update the key of ChatList widget to force a rebuild
-      _widgetOptions[1] = ChatList(key: UniqueKey());
+      // _widgetOptions[1] = ChatList(key: UniqueKey(), );
+      _widgetOptions[1] = ChatListr(
+        key: UniqueKey(),
+        
+      );
     });
   }
+
 
   void _showReportAbuseDialog(BuildContext context) {
     showDialog(

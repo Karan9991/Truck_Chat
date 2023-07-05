@@ -16,7 +16,10 @@ class _NewsTabState extends State<NewsTab> {
   void initState() {
     super.initState();
     fetchDataFromServer();
+
   }
+
+
 
   Future<void> fetchDataFromServer() async {
     final url = 'http://smarttruckroute.com/bb/v1/get_news';
