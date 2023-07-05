@@ -22,7 +22,7 @@ import 'get_all_reply_messages.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await SharedPrefs.init(); 
+  await SharedPrefs.init();
   await registerDevice();
 
   runApp(const MyApp());
@@ -318,7 +318,6 @@ Future<String?> getFirebaseToken() async {
 //     flutterLocalNotificationsPlugin.initialize(initializationSettings);
 //   }
 
- 
 // }
 
 class ReplyMsg {
