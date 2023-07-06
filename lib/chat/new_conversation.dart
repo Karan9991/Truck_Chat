@@ -1,5 +1,6 @@
 import 'package:chat/chat/chatlist.dart';
 import 'package:chat/home_screen.dart';
+import 'package:chat/utils/device_type.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -17,12 +18,13 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
   int status_code = 0;
   int conversation_id = 0;
   TextEditingController _textEditingController = TextEditingController();
-
+  String? emojiId;
   bool _isSending = false;
-  
+
   stt.SpeechToText _speechToText = stt.SpeechToText();
   bool _isListening = false;
   String _typedText = '';
+  String deviceType = getDeviceType();
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +59,8 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
               onPressed: () async {
                 await _sendConversation();
               },
-              child: _isSending
-                  ? CircularProgressIndicator() 
-                  : Icon(Icons.send),
+              child:
+                  _isSending ? CircularProgressIndicator() : Icon(Icons.send),
             ),
           ],
         ),
@@ -73,6 +74,20 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
     Map<String, double> locationData = await getLocation();
     double latitude = locationData['latitude']!;
     double longitude = locationData['longitude']!;
+    if (SharedPrefs.getInt('currentUserAvatarId') != null) {
+      emojiId = SharedPrefs.getInt('currentUserAvatarId').toString();
+      print('new conversation emoji id $emojiId');
+    } else {
+      emojiId = '0';
+      print('new conversation emoji id $emojiId');
+    }
+
+    print('device id $serialNumber');
+    print('message_device_type  $deviceType');
+    print('message  $newConversation');
+    print('message_latitude  $latitude');
+    print('message_longitude  $longitude');
+    print('emoji_id  $emojiId');
 
     final Uri url =
         Uri.parse("http://smarttruckroute.com/bb/v1/device_message");
@@ -80,11 +95,11 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
     try {
       Map<String, dynamic> entity = {
         "device_id": serialNumber,
-        "message_device_type": "Android",
+        "message_device_type": deviceType,
         "message": newConversation,
         "message_latitude": latitude.toString(),
         "message_longitude": longitude.toString(),
-        "emoji_id": "0",
+        "emoji_id": emojiId,
       };
 
       http.Response response = await http.post(
@@ -142,7 +157,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
     }
 
     setState(() {
-      _isSending = false; 
+      _isSending = false;
     });
   }
 

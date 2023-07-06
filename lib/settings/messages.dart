@@ -1,3 +1,4 @@
+import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import '/utils/avatar.dart';
 
@@ -71,6 +72,9 @@ class MessagesScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 String chatHandle = _chatHandleController.text;
+                SharedPrefs.setString(
+                    'currentUserChatHandle', chatHandle);
+
                 print('Chat Handle: $chatHandle');
                 Navigator.of(context).pop();
               },

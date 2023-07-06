@@ -50,11 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
       // _widgetOptions[1] = ChatList(key: UniqueKey(), );
       _widgetOptions[1] = ChatListr(
         key: UniqueKey(),
-        
       );
     });
   }
-
 
   void _showReportAbuseDialog(BuildContext context) {
     showDialog(
@@ -79,8 +77,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String? currentUserChatHandle =
+        SharedPrefs.getString('currentUserChatHandle');
+    String appBarTitle = currentUserChatHandle != null
+        ? 'TruckChat $currentUserChatHandle'
+        : 'TruckChat';
+
     return MaterialApp(
-      title: 'TruckChat',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -91,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 34,
             height: 34,
           ),
-          title: Text('TruckChat'),
+           title: Text(appBarTitle),
           actions: [
             IconButton(
               icon: Image.asset(

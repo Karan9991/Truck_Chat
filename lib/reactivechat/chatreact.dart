@@ -3,6 +3,8 @@
 import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/home_screen.dart';
 import 'package:chat/settings/settings.dart';
+import 'package:chat/utils/avatar.dart';
+import 'package:chat/utils/lat_lng.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
@@ -48,18 +50,24 @@ class _ChatState extends State<Chat> {
   bool sendingMessage = false; // Added variable to track sending state
   String? shareprefuserId = SharedPrefs.getString('userId');
   int userId = 0;
-  double? storedLatitude = 1.0;
-  double? storedLongitude = 1.0;
+ // double? storedLatitude = 1.0;
+ // double? storedLongitude = 1.0;
   late Timer refreshTimer;
   ScrollController _scrollController = ScrollController();
+  String? currentUserHandle;
+  String? emojiId;
 
+  double? latitude;
+  double? longitude;
   @override
   void initState() {
     super.initState();
 
     userId = int.parse(shareprefuserId!);
-    storedLatitude = SharedPrefs.getDouble('latitude');
-    storedLongitude = SharedPrefs.getDouble('longitude');
+    // storedLatitude = SharedPrefs.getDouble('latitude');
+    // storedLongitude = SharedPrefs.getDouble('longitude');
+
+    currentUserHandle = SharedPrefs.getString('currentUserChatHandle');
 
     print('init state');
     mm(widget.serverMsgId);
@@ -71,9 +79,9 @@ class _ChatState extends State<Chat> {
     // });
     // _scrollToBottom();
 
-    refreshTimer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
-      getAllMessages(widget.serverMsgId);
-    });
+    // refreshTimer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
+    //   getAllMessages(widget.serverMsgId);
+    // });
 
     // WidgetsBinding.instance?.addPostFrameCallback((_) =>
     //     scrollToBottom()); // Call scrollToBottom() after the first frame is rendered
@@ -100,13 +108,16 @@ class _ChatState extends State<Chat> {
   }
 
   void filterReplyMsgs() {
-    print('reply messges in fliter replymsf');
-    print(replyMsgs);
+    // print('reply messges in fliter replymsf');
+    // print(replyMsgs);
     filteredReplyMsgs =
         replyMsgs.where((reply) => reply.topic == widget.topic).toList();
   }
 
   Future<void> mm(dynamic conversationId) async {
+    Map<String, double> locationData = await getLocation();
+     latitude = locationData['latitude']!;
+     longitude = locationData['longitude']!;
     await getAllMessages(conversationId);
 
     WidgetsBinding.instance?.addPostFrameCallback((_) =>
@@ -142,8 +153,10 @@ class _ChatState extends State<Chat> {
         body: jsonEncode(requestBody),
       );
       if (response.statusCode == 200) {
-        print('200');
+        // print('200');
         final result = response.body;
+
+        print('response body $result');
 
         try {
           final jsonResult = jsonDecode(result);
@@ -157,7 +170,7 @@ class _ChatState extends State<Chat> {
 
           int countValue = int.parse(counts);
 
-          print(jsonReplyList.length);
+          // print(jsonReplyList.length);
           // Clear the replyMsgs list before adding new messages
           replyMsgs.clear();
 
@@ -173,14 +186,15 @@ class _ChatState extends State<Chat> {
             print("reply_msg $replyMsg");
             print("user id  $uid");
             print("emoji_id $emojiId");
+            print('--------------------------');
             int timestamp;
             try {
               //  timestamp = int.tryParse(jsonReply['timestamp']) ?? 0;
               timestamp = jsonReply['timestamp'] ?? 0;
-              print('try in for $timestamp');
+              // print('try in for $timestamp');
             } catch (e) {
               timestamp = 0;
-              print('catch $timestamp');
+              //print('catch $timestamp');
             }
 
             replyMsgs.add(
@@ -200,8 +214,7 @@ class _ChatState extends State<Chat> {
             filterReplyMsgs();
           });
 
-                        scrollToBottom();
-
+          scrollToBottom();
         } catch (e) {
           print('catch 2 $e');
           statusMessage = e.toString();
@@ -221,17 +234,29 @@ class _ChatState extends State<Chat> {
     String message,
     String serverMsgId,
     int userId,
-    String emojiId,
   ) async {
     setState(() {
       sendingMessage = true; // Set sending state to true
     });
 
+       if (SharedPrefs.getInt('currentUserAvatarId') != null) {
+      emojiId = SharedPrefs.getInt('currentUserAvatarId').toString();
+      print('new conversation emoji id $emojiId');
+    } else {
+      emojiId = '0';
+      print('new conversation emoji id $emojiId');
+    }
+
     print('send message');
     print('message $message');
     print('sermsgid $serverMsgId');
     print('userid $userId');
-    print('emojiid $emoji_id');
+    print('emojiid $emojiId');
+
+//concat username/chathandle with message
+    // if (currentUserHandle != null) {
+    //   message = '$currentUserHandle $message';
+    // }
 
     //  int servermsgid = int.parse(serverMsgId);
     final url =
@@ -241,8 +266,8 @@ class _ChatState extends State<Chat> {
       'message': message,
       'server_msg_id': serverMsgId,
       'user_id': userId,
-      'latitude': storedLatitude,
-      'longitude': storedLongitude,
+      'latitude': latitude.toString(),
+      'longitude': longitude.toString(),
       'emoji_id': emojiId,
     });
 
@@ -256,7 +281,6 @@ class _ChatState extends State<Chat> {
         setState(() {
           sendingMessage = false; // Set sending state to false
         });
-
 
         final jsonResult = jsonDecode(response.body);
         int statusCode = jsonResult['status'] as int;
@@ -285,8 +309,6 @@ class _ChatState extends State<Chat> {
       setState(() {
         sendingMessage = false; // Set sending state to false
       });
-
-
     }
 
     return false;
@@ -415,7 +437,15 @@ class _ChatState extends State<Chat> {
                   timestam = timestampp;
 
                   bool isCurrentUser = reply.uid ==
-                      userId; // Check if the user_id is equal to 69979
+                      userId; // Check if the user_id is equal to currentUserId
+
+                  // Find the corresponding Avatar for the emoji_id
+                  Avatar? matchingAvatar = avatars.firstWhere(
+                    (avatar) => avatar.id == int.parse(reply.emojiId),
+                    orElse: () => Avatar(id: 0, imagePath: ''),
+                  );
+                  print('emoji id $emoji_id');
+                  print('matching avatar id ${matchingAvatar.id}');
 
                   return Padding(
                     padding: EdgeInsets.all(8.0),
@@ -429,23 +459,88 @@ class _ChatState extends State<Chat> {
                           : Alignment.topLeft,
                       margin: EdgeInsets.only(bottom: 16.0),
                       backGroundColor: Colors.blue[300],
-                      child: Container(
-                        constraints: BoxConstraints(maxWidth: 250.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              replyMsg,
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 20),
+                      child: isCurrentUser
+                          ? Container(
+                              constraints: BoxConstraints(maxWidth: 250.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      if (SharedPrefs.getString(
+                                              'currentUserAvatarImagePath') !=
+                                          null)
+                                        Image.asset(
+                                          SharedPrefs.getString(
+                                              'currentUserAvatarImagePath')!,
+                                          width: 30,
+                                          height: 30,
+                                        ),
+                                      SizedBox(width: 8.0),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              replyMsg,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 20),
+                                            ),
+                                            SizedBox(height: 4.0),
+                                            Text(
+                                              timestamp,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Container(
+                              constraints: BoxConstraints(maxWidth: 250.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      if (matchingAvatar.id != 0)
+                                        Image.asset(
+                                          matchingAvatar.imagePath,
+                                          width: 30,
+                                          height: 30,
+                                        ),
+                                      SizedBox(width: 8.0),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              replyMsg,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 20),
+                                            ),
+                                            SizedBox(height: 4.0),
+                                            Text(
+                                              timestamp,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                            SizedBox(height: 4.0),
-                            Text(
-                              timestamp,
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
                   );
                 } else {
@@ -527,7 +622,6 @@ class _ChatState extends State<Chat> {
                       messageController.text,
                       widget.serverMsgId,
                       userId,
-                      emoji_id,
                     );
                     if (messageSent) {
                       print('message send');

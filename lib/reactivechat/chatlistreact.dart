@@ -579,20 +579,23 @@ class _ChatListrState extends State<ChatListr> {
   List<String> serverMsgIds = [];
 
   Timer? conversationTimer;
+  bool isLoading = false; 
 
   @override
   void initState() {
     super.initState();
 
+
+
     getData();
 
-   // storedList();
+    // storedList();
   }
 
   @override
   void dispose() {
     super.dispose();
-    conversationTimer?.cancel();
+   // conversationTimer?.cancel();
   }
 
   Future<void> storedList() async {
@@ -608,18 +611,21 @@ class _ChatListrState extends State<ChatListr> {
   Future<void> getData() async {
     await getConversationsData();
 
-    conversationTimer = Timer.periodic(Duration(seconds: 10), (_) async {
-      print('Timer');
-      // Clear the previous conversation data
-      conversationTopics.clear();
-      conversationTimestamps.clear();
-      replyCounts.clear();
+    // conversationTimer = Timer.periodic(Duration(seconds: 5), (_) async {
+    //   print('Timer');
+    //   // Clear the previous conversation data
+    //   conversationTopics.clear();
+    //   conversationTimestamps.clear();
+    //   replyCounts.clear();
 
-      await getConversationsData();
-    });
+    //   await getConversationsData();
+    // });
   }
 
   Future<void> getConversationsData() async {
+     setState(() {
+      isLoading = true; 
+    });
     String? userId = SharedPrefs.getString('userId');
     double? storedLatitude = SharedPrefs.getDouble('latitude');
     double? storedLongitude = SharedPrefs.getDouble('longitude');
@@ -707,9 +713,9 @@ class _ChatListrState extends State<ChatListr> {
                 if (existingConversation.replyCount != counts) {
                   // If reply count doesn't match, mark as read
                   conversation.isRead = false;
-                  print('Marked as unread: $serverMessageId');
-                  print(
-                      'Conversation: $serverMessageId - Stored Reply Count: ${existingConversation.replyCount}, Fetched Reply Count: $counts');
+                //  print('Marked as unread: $serverMessageId');
+                 // print(
+                  //    'Conversation: $serverMessageId - Stored Reply Count: ${existingConversation.replyCount}, Fetched Reply Count: $counts');
                 } else {
                   // Otherwise, preserve the existing isRead status
                   conversation.isRead = existingConversation.isRead;
@@ -728,8 +734,10 @@ class _ChatListrState extends State<ChatListr> {
         }
         // Store conversations in shared preferences
         await storeConversations(conversations);
-
-        setState(() {});
+ setState(() {
+          isLoading = false; // Set isLoading to false after fetching data
+        });
+        // setState(() {});
       } else {
         // Handle connection error
       }
@@ -859,129 +867,135 @@ class _ChatListrState extends State<ChatListr> {
   //   );
   // }
 
-
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: null,
-    body: FutureBuilder<List<Conversation>>(
-      future: getStoredConversations(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasData) {
-          List<Conversation> storedConversations = snapshot.data!;
-
-          if (storedConversations.isEmpty) {
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: null,
+      body: FutureBuilder<List<Conversation>>(
+        future: getStoredConversations(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting || isLoading) {
             return Center(
-              child: Text('No conversations found'),
+              child: CircularProgressIndicator(),
             );
-          }
+          } else if (snapshot.hasData) {
+            List<Conversation> storedConversations = snapshot.data!;
 
-          return ListView.builder(
-            itemCount: conversationTopics.length,
-            itemBuilder: (context, index) {
-              final conversation = storedConversations[index];
-              final topic = conversationTopics[index];
-              final timestampp = conversationTimestamps[index];
-              final count = replyCounts[index];
-              final serverMsgID = serverMsgIds[index];
+            if (storedConversations.isEmpty) {
+              return Center(
+                child: Text('No conversations found'),
+              );
+            }
 
-              DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestampp);
-              String formattedDateTime = DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
-              final timestamp = formattedDateTime;
+            return ListView.builder(
+              itemCount: conversationTopics.length,
+              itemBuilder: (context, index) {
+                final conversation = storedConversations[index];
+                final topic = conversationTopics[index];
+                final timestampp = conversationTimestamps[index];
+                final count = replyCounts[index];
+                final serverMsgID = serverMsgIds[index];
 
-              final isRead = conversation.isRead;
+                DateTime dateTime =
+                    DateTime.fromMillisecondsSinceEpoch(timestampp);
+                String formattedDateTime =
+                    DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
+                final timestamp = formattedDateTime;
 
-              print('List item read status $isRead');
+                final isRead = conversation.isRead;
 
-              return GestureDetector(
-                onTap: () async {
-                  if (!isRead) {
-                    // Mark conversation as read
-                    conversation.isRead = true;
-                    await storeConversations(storedConversations);
-                    setState(() {}); // Trigger a rebuild of the widget
-                  }
+               // print('List item read status $isRead');
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Chat(
-                        topic: topic,
-                        serverMsgId: serverMsgID,
+                return GestureDetector(
+                  onTap: () async {
+                    if (!isRead) {
+                      // Mark conversation as read
+                      conversation.isRead = true;
+                      await storeConversations(storedConversations);
+                      setState(() {}); // Trigger a rebuild of the widget
+                    }
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Chat(
+                          topic: topic,
+                          serverMsgId: serverMsgID,
+                        ),
+                      ),
+                    ).then((_) {
+                      // Called when returning from the chat screen
+                      setState(() {}); // Trigger a rebuild of the widget
+                    });
+                  },
+                  child: Card(
+                    elevation: 2,
+                    color:  Colors.blue[300],
+                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: ListTile(
+
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                         isRead ?  SizedBox() : Row(
+                            children:  [
+                              Icon(
+                                Icons.chat,
+                                size: 17,
+                              ),
+                              SizedBox(width: 8),
+                            ] ,
+                          ) ,
+                          Text(
+                            topic,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 5, top: 8),
+                            child: Text(
+                              'Last Active: $timestamp',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 5),
+                            child: Text(
+                              'Replies: $count',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                        ],
+                      ),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.white,
                       ),
                     ),
-                  ).then((_) {
-                    // Called when returning from the chat screen
-                    setState(() {}); // Trigger a rebuild of the widget
-                  });
-                },
-                child: Card(
-                  elevation: 2,
-                  color: isRead ? Colors.blue[300] : Colors.blue[800],
-                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: ListTile(
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.chat,
-                              size: 17,
-                            ),
-                            SizedBox(width: 8),
-                          ],
-                        ),
-                        Text(
-                          topic,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 5, top: 8),
-                          child: Text(
-                            'Last Active: $timestamp',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 5),
-                          child: Text(
-                            'Replies: $count',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      ],
-                    ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.white,
-                    ),
                   ),
-                ),
-              );
-            },
-          );
-        } else {
-          // Handle error case
-          return Center(
-            child: Text('Error occurred'),
-          );
-        }
-      },
-    ),
-  );
-}
+                );
+              },
+            );
+          } else {
+            // Handle error case
+            return Center(
+              child: Text('Error occurred'),
+            );
+          }
+        },
+      ),
+    );
+  }
 
+   
+
+
+  
 }
