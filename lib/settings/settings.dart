@@ -13,6 +13,8 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
+                  Divider(), // Add a divider after the first list item
+
           ListTile(
             title: Text('Messages'),
             onTap: () {
@@ -21,6 +23,8 @@ class SettingsScreen extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => MessagesScreen()),
               );            },
           ),
+                  Divider(), // Add a divider after the first list item
+
           ListTile(
             title: Text('Notifications & Sound'),
             onTap: () {
@@ -29,6 +33,8 @@ class SettingsScreen extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => NotificationsAndSoundScreen()),
               );            },
           ),
+                  Divider(), // Add a divider after the first list item
+
           ListTile(
             title: Text('About'),
             onTap: () {
@@ -38,6 +44,8 @@ class SettingsScreen extends StatelessWidget {
               );
             },
           ),
+                  Divider(), // Add a divider after the first list item
+
           ListTile(
             title: Text('Terms and Conditions'),
             onTap: () {
@@ -47,6 +55,8 @@ class SettingsScreen extends StatelessWidget {
               );
             },
           ),
+                  Divider(), // Add a divider after the first list item
+
         ],
       ),
     );

@@ -458,7 +458,7 @@ class _ChatState extends State<Chat> {
                           ? Alignment.topRight
                           : Alignment.topLeft,
                       margin: EdgeInsets.only(bottom: 16.0),
-                      backGroundColor: Colors.blue[300],
+                      backGroundColor: isCurrentUser ? Colors.blue[100] : Colors.blue[300],
                       child: isCurrentUser
                           ? Container(
                               constraints: BoxConstraints(maxWidth: 250.0),
@@ -487,7 +487,7 @@ class _ChatState extends State<Chat> {
                                             Text(
                                               replyMsg,
                                               style: TextStyle(
-                                                  color: Colors.black,
+                                                  color:  Colors.black,
                                                   fontSize: 20),
                                             ),
                                             SizedBox(height: 4.0),

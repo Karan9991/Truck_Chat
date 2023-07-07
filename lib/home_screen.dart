@@ -5,6 +5,7 @@ import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/news_tab.dart';
 import 'package:chat/reactivechat/chatlistreact.dart';
 import 'package:chat/settings/settings.dart';
+import 'package:chat/utils/alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -16,6 +17,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:chat/utils/shared_pref.dart';
 import 'dart:convert';
+import 'dart:io';
 
 // import 'package:chat/reactivechat/chatlistreact.dart';
 
@@ -83,6 +85,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ? 'TruckChat $currentUserChatHandle'
         : 'TruckChat';
 
+    //  SharedPrefs.setBool('termsAgreed', false);
+
+    bool hasAgreed = SharedPrefs.getBool('termsAgreed') ?? false;
+
+    if (!hasAgreed) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        showTermsOfServiceDialog(context);
+      });
+    }
+
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -94,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 34,
             height: 34,
           ),
-           title: Text(appBarTitle),
+          title: Text(appBarTitle),
           actions: [
             IconButton(
               icon: Image.asset(
@@ -113,7 +125,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             IconButton(
               icon: Icon(Icons.grid_view_rounded),
-              onPressed: () {
+              onPressed: () async {
+                showMarkAsReadUnreadDialog(context);
+                // _refreshChatList();
                 // Perform action when grid box icon is pressed
               },
             ),
@@ -140,11 +154,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text('Refresh'),
                     value: 'refresh',
                   ),
-                  if (!Platform.isIOS)
-                    PopupMenuItem(
-                      child: Text('Exit'),
-                      value: 'exit',
-                    ),
+                  // if (!Platform.isIOS)
+                  PopupMenuItem(
+                    child: Text('Exit'),
+                    value: 'exit',
+                  ),
                 ];
               },
               onSelected: (value) {
@@ -180,7 +194,33 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     break;
                   case 'exit':
-                    SystemNavigator.pop();
+                    if (Platform.isIOS) {
+                      // Handle iOS-specific exit behavior (e.g., display an alert)
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Exit'),
+                          content:
+                              Text('Are you sure you want to exit the app?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(true),
+                              child: Text('Exit'),
+                            ),
+                          ],
+                        ),
+                      ).then((exitConfirmed) {
+                        if (exitConfirmed ?? false) {
+                          exit(0); // Exit the app
+                        }
+                      });
+                    } else if (Platform.isAndroid) {
+                      SystemNavigator.pop();
+                    }
                     break;
                 }
               },

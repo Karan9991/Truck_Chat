@@ -13,11 +13,15 @@ class MessagesScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
+                  Divider(), // Add a divider after the first list item
+
           _buildListTile(
             'Chat Handle',
             'Prepend your messages with',
             () => _showChatHandleDialog(context),
           ),
+                  Divider(), // Add a divider after the first list item
+
           _buildListTile(
             'Choose Avatar',
             'Avatar',
@@ -25,6 +29,8 @@ class MessagesScreen extends StatelessWidget {
               showAvatarSelectionDialog(context);
             },
           ),
+                  Divider(), // Add a divider after the first list item
+
         ],
       ),
     );

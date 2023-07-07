@@ -579,13 +579,11 @@ class _ChatListrState extends State<ChatListr> {
   List<String> serverMsgIds = [];
 
   Timer? conversationTimer;
-  bool isLoading = false; 
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-
-
 
     getData();
 
@@ -595,7 +593,7 @@ class _ChatListrState extends State<ChatListr> {
   @override
   void dispose() {
     super.dispose();
-   // conversationTimer?.cancel();
+    // conversationTimer?.cancel();
   }
 
   Future<void> storedList() async {
@@ -623,8 +621,8 @@ class _ChatListrState extends State<ChatListr> {
   }
 
   Future<void> getConversationsData() async {
-     setState(() {
-      isLoading = true; 
+    setState(() {
+      isLoading = true;
     });
     String? userId = SharedPrefs.getString('userId');
     double? storedLatitude = SharedPrefs.getDouble('latitude');
@@ -713,8 +711,8 @@ class _ChatListrState extends State<ChatListr> {
                 if (existingConversation.replyCount != counts) {
                   // If reply count doesn't match, mark as read
                   conversation.isRead = false;
-                //  print('Marked as unread: $serverMessageId');
-                 // print(
+                  //  print('Marked as unread: $serverMessageId');
+                  // print(
                   //    'Conversation: $serverMessageId - Stored Reply Count: ${existingConversation.replyCount}, Fetched Reply Count: $counts');
                 } else {
                   // Otherwise, preserve the existing isRead status
@@ -734,7 +732,7 @@ class _ChatListrState extends State<ChatListr> {
         }
         // Store conversations in shared preferences
         await storeConversations(conversations);
- setState(() {
+        setState(() {
           isLoading = false; // Set isLoading to false after fetching data
         });
         // setState(() {});
@@ -745,8 +743,6 @@ class _ChatListrState extends State<ChatListr> {
       // Handle exception
     }
   }
-
-  
 
   // @override
   // Widget build(BuildContext context) {
@@ -874,7 +870,8 @@ class _ChatListrState extends State<ChatListr> {
       body: FutureBuilder<List<Conversation>>(
         future: getStoredConversations(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting || isLoading) {
+          if (snapshot.connectionState == ConnectionState.waiting ||
+              isLoading) {
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -904,7 +901,7 @@ class _ChatListrState extends State<ChatListr> {
 
                 final isRead = conversation.isRead;
 
-               // print('List item read status $isRead');
+                // print('List item read status $isRead');
 
                 return GestureDetector(
                   onTap: () async {
@@ -928,29 +925,89 @@ class _ChatListrState extends State<ChatListr> {
                       setState(() {}); // Trigger a rebuild of the widget
                     });
                   },
+                  onLongPress: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildDialogOption('Star this chat',
+                                  "Chats that are starred will no be removed after 1 day of inactivity.",
+                                  () async {
+                                print('Chat Starred');
+
+                                // await markAllRead();
+
+                                Navigator.of(context).pop();
+                              }),
+                              isRead
+                                  ? _buildDialogOption(
+                                      'Mark this chat as unread',
+                                      "The 'New Message' icon will be removed.",
+                                      () async {
+                                      print('Chat UnRead');
+                                      conversation.isRead = false;
+                                      await storeConversations(
+                                          storedConversations);
+                                      setState(() {});
+
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog if needed
+                                    })
+                                  : _buildDialogOption('Mark this chat as read',
+                                      "The 'New Message' icon will be removed.",
+                                      () async {
+                                      print('Chat Read');
+                                      conversation.isRead = true;
+                                      await storeConversations(
+                                          storedConversations);
+                                      setState(() {});
+
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog if needed
+                                    }),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              child: Text('Cancel'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                   child: Card(
                     elevation: 2,
-                    color:  Colors.blue[300],
+                    color: Colors.blue[300],
                     margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: ListTile(
-
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                         isRead ?  SizedBox() : Row(
-                            children:  [
-                              Icon(
-                                Icons.chat,
-                                size: 17,
-                              ),
-                              SizedBox(width: 8),
-                            ] ,
-                          ) ,
+                          isRead
+                              ? SizedBox()
+                              : Row(
+                                  children: [
+                                    Icon(
+                                      Icons.chat,
+                                      size: 17,
+                                    ),
+                                    SizedBox(width: 8),
+                                  ],
+                                ),
                           Text(
                             topic,
                             style: TextStyle(
                               fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                              fontWeight:
+                                  isRead ? FontWeight.normal : FontWeight.bold,
                             ),
                           ),
                         ],
@@ -969,7 +1026,12 @@ class _ChatListrState extends State<ChatListr> {
                             padding: EdgeInsets.only(bottom: 5),
                             child: Text(
                               'Replies: $count',
-                              style: TextStyle(fontSize: 14),
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: isRead
+                                    ? FontWeight.normal
+                                    : FontWeight.bold,
+                              ),
                             ),
                           ),
                         ],
@@ -994,8 +1056,29 @@ class _ChatListrState extends State<ChatListr> {
     );
   }
 
-   
-
-
-  
+  Widget _buildDialogOption(String title, String subtitle, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              subtitle,
+              style: TextStyle(color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
