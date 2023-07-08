@@ -1,3 +1,4 @@
+import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import '/utils/avatar.dart';
@@ -9,22 +10,22 @@ class MessagesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Messages'),
+        title: Text(Constants.MESSAGES),
       ),
       body: ListView(
         children: [
                   Divider(), // Add a divider after the first list item
 
           _buildListTile(
-            'Chat Handle',
-            'Prepend your messages with',
+            Constants.CHAT_HANDLE,
+            Constants.PREPEND_YOUR_MESSAGES,
             () => _showChatHandleDialog(context),
           ),
                   Divider(), // Add a divider after the first list item
 
           _buildListTile(
-            'Choose Avatar',
-            'Avatar',
+            Constants.CHOOSE_AVATAR,
+           Constants.AVATAR,
             () {
               showAvatarSelectionDialog(context);
             },
@@ -58,10 +59,10 @@ class MessagesScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Chat Handle'),
+          title: Text(DialogStrings.CHAT_HANDLE),
           content: TextField(
             controller: _chatHandleController,
-            decoration: InputDecoration(hintText: 'Enter chat handle'),
+            decoration: InputDecoration(hintText: DialogStrings.ENTER_CHAT_HANDLE),
           ),
           actions: [
             TextButton(
@@ -69,7 +70,7 @@ class MessagesScreen extends StatelessWidget {
                 Navigator.of(context).pop();
               },
               child: Text(
-                'Cancel',
+                DialogStrings.CANCEL,
                 style: TextStyle(
                     color:
                         Colors.blue), // Set the desired color for Cancel button
@@ -79,13 +80,13 @@ class MessagesScreen extends StatelessWidget {
               onPressed: () {
                 String chatHandle = _chatHandleController.text;
                 SharedPrefs.setString(
-                    'currentUserChatHandle', chatHandle);
+                   SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE, chatHandle);
 
                 print('Chat Handle: $chatHandle');
                 Navigator.of(context).pop();
               },
               child: Text(
-                'OK',
+                DialogStrings.OK,
                 style: TextStyle(
                     color:
                         Colors.blue), // Set the desired color for Cancel button

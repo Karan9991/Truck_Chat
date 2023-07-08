@@ -1,3 +1,4 @@
+import 'package:chat/utils/constants.dart';
 import 'package:location/location.dart';
 
 Future<Map<String, double>> getLocation() async {
@@ -17,7 +18,7 @@ Future<Map<String, double>> getLocation() async {
     currentLocation = await location.getLocation();
     double latitude = currentLocation.latitude!;
     double longitude = currentLocation.longitude!;
-    return {'latitude': latitude, 'longitude': longitude};
+    return {Constants.LATITUDE: latitude, Constants.LONGITUDE: longitude};
   } catch (e) {
     // Handle location fetch error
     throw Exception('Error fetching location: $e');

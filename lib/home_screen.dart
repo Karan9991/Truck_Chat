@@ -6,6 +6,7 @@ import 'package:chat/news_tab.dart';
 import 'package:chat/reactivechat/chatlistreact.dart';
 import 'package:chat/settings/settings.dart';
 import 'package:chat/utils/alert_dialog.dart';
+import 'package:chat/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -61,12 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Report Abuse'),
-          content: Text(
-              'To report abuse or inappropriate content, tap on a message inside a chat conversation and select an option from the popup.'),
+          title: Text(DialogStrings.REPORT_ABUSE),
+          content: Text(DialogStrings.TO_REPORT_ABUSE),
           actions: [
             TextButton(
-              child: Text('Got It!'),
+              child: Text(DialogStrings.GOT_IT),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -80,14 +80,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     String? currentUserChatHandle =
-        SharedPrefs.getString('currentUserChatHandle');
+        SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
     String appBarTitle = currentUserChatHandle != null
-        ? 'TruckChat $currentUserChatHandle'
-        : 'TruckChat';
+        ? '${Constants.APP_BAR_TITLE} ($currentUserChatHandle)'
+        : Constants.APP_BAR_TITLE;
 
     //  SharedPrefs.setBool('termsAgreed', false);
 
-    bool hasAgreed = SharedPrefs.getBool('termsAgreed') ?? false;
+    bool hasAgreed = SharedPrefs.getBool(SharedPrefsKeys.TERMS_AGREED) ?? false;
 
     if (!hasAgreed) {
       WidgetsBinding.instance!.addPostFrameCallback((_) {
@@ -135,28 +135,28 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (BuildContext context) {
                 return [
                   PopupMenuItem(
-                    child: Text('Settings'),
+                    child: Text(Constants.SETTINGS),
                     value: 'settings',
                   ),
                   PopupMenuItem(
-                    child: Text('Tell a Friend'),
+                    child: Text(Constants.TELL_A_FRIEND),
                     value: 'tell a friend',
                   ),
                   PopupMenuItem(
-                    child: Text('Help'),
+                    child: Text(Constants.HELP),
                     value: 'help',
                   ),
                   PopupMenuItem(
-                    child: Text('Report Abuse'),
+                    child: Text(Constants.REPORT_ABUSE),
                     value: 'report abuse',
                   ),
                   PopupMenuItem(
-                    child: Text('Refresh'),
+                    child: Text(Constants.REFRESH),
                     value: 'refresh',
                   ),
                   // if (!Platform.isIOS)
                   PopupMenuItem(
-                    child: Text('Exit'),
+                    child: Text(Constants.EXIT),
                     value: 'exit',
                   ),
                 ];
@@ -172,9 +172,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     break;
                   case 'tell a friend':
                     String email = Uri.encodeComponent("");
-                    String subject = Uri.encodeComponent("Check out TruckChat");
+                    String subject = Uri.encodeComponent(Constants.CHECK_OUT_TRUCKCHAT);
                     String body = Uri.encodeComponent(
-                        "I am using TruckChat right now, check it out at:\n\nhttp://play.google.com/store/apps/details?id=com.teletype.truckchat\n\nhttp://truckchatapp.com");
+                       Constants.I_AM_USING_TRUCKCHAT);
                     print(subject);
                     Uri mail =
                         Uri.parse("mailto:$email?subject=$subject&body=$body");
@@ -199,17 +199,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: Text('Exit'),
+                          title: Text(DialogStrings.EXIT),
                           content:
-                              Text('Are you sure you want to exit the app?'),
+                              Text(DialogStrings.ARE_YOU_SURE),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.of(context).pop(),
-                              child: Text('Cancel'),
+                              child: Text(DialogStrings.CANCEL),
                             ),
                             TextButton(
                               onPressed: () => Navigator.of(context).pop(true),
-                              child: Text('Exit'),
+                              child: Text(DialogStrings.EXIT),
                             ),
                           ],
                         ),
@@ -232,23 +232,23 @@ class _HomeScreenState extends State<HomeScreen> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.article),
-              label: 'News',
+              label: Constants.NEWS,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.chat),
-              label: 'Chats',
+              label: Constants.CHATS,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.star),
-              label: 'Sponsors',
+              label: Constants.SPONSORS,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.rate_review),
-              label: 'Reviews',
+              label: Constants.REVIEWS,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              label: 'Private Chat',
+              label: Constants.PRIVATE_CHAT,
             ),
           ],
           currentIndex: _selectedIndex,
@@ -279,7 +279,7 @@ class ChatsTab extends StatelessWidget {
 }
 
 class SponsorsTab extends StatelessWidget {
-  final String sponsorUrl = 'http://truckchatapp.com/sponsors.html';
+  final String sponsorUrl = API.SPONSORS;
 
   @override
   Widget build(BuildContext context) {
@@ -292,7 +292,7 @@ class SponsorsTab extends StatelessWidget {
 }
 
 class ReviewsTab extends StatelessWidget {
-  final String sponsorUrl = 'http://truckchatapp.com/reviews/mobile';
+  final String sponsorUrl = API.REVIEWS;
 
   @override
   Widget build(BuildContext context) {
@@ -305,7 +305,7 @@ class ReviewsTab extends StatelessWidget {
 }
 
 class Help extends StatelessWidget {
-  final String sponsorUrl = 'http://truckchatapp.com/index.html#FAQ';
+  final String sponsorUrl = API.HELP;
 
   @override
   Widget build(BuildContext context) {

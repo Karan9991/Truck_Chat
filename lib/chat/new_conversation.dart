@@ -1,5 +1,6 @@
 import 'package:chat/chat/chatlist.dart';
 import 'package:chat/home_screen.dart';
+import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/device_type.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Conversation'),
+        title: Text(Constants.CONVERSATION),
       ),
       body: Container(
         padding: EdgeInsets.all(16.0),
@@ -50,7 +51,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
                   _typedText = value;
                 },
                 decoration: InputDecoration(
-                  hintText: 'Compose a new conversation',
+                  hintText: Constants.COMPOSE_CONVERSATION,
                 ),
               ),
             ),
@@ -70,12 +71,12 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
 
   Future<bool> send() async {
     String newConversation = _textEditingController.text;
-    String? serialNumber = SharedPrefs.getString('serialNumber');
+    String? serialNumber = SharedPrefs.getString(SharedPrefsKeys.SERIAL_NUMBER);
     Map<String, double> locationData = await getLocation();
-    double latitude = locationData['latitude']!;
-    double longitude = locationData['longitude']!;
-    if (SharedPrefs.getInt('currentUserAvatarId') != null) {
-      emojiId = SharedPrefs.getInt('currentUserAvatarId').toString();
+    double latitude = locationData[Constants.LATITUDE]!;
+    double longitude = locationData[Constants.LONGITUDE]!;
+    if (SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID) != null) {
+      emojiId = SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID).toString();
       print('new conversation emoji id $emojiId');
     } else {
       emojiId = '0';
@@ -90,22 +91,22 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
     print('emoji_id  $emojiId');
 
     final Uri url =
-        Uri.parse("http://smarttruckroute.com/bb/v1/device_message");
+        Uri.parse(API.NEW_CONVERSATION);
 
     try {
       Map<String, dynamic> entity = {
-        "device_id": serialNumber,
-        "message_device_type": deviceType,
-        "message": newConversation,
-        "message_latitude": latitude.toString(),
-        "message_longitude": longitude.toString(),
-        "emoji_id": emojiId,
+        API.DEVICE_ID: serialNumber,
+        API.MESSAGE_DEVICE_TYPE: deviceType,
+        API.MESSAGE: newConversation,
+        API.MESSAGE_LATITUDE: latitude.toString(),
+        API.MESSAGE_LONGITUDE: longitude.toString(),
+        API.EMOJI_ID: emojiId,
       };
 
       http.Response response = await http.post(
         url,
         body: json.encode(entity),
-        headers: {'Content-Type': 'application/json'},
+        headers: {API.CONTENT_TYPE: API.APPLICATION_JSON},
       );
 
       if (response.statusCode == 200) {
@@ -114,18 +115,18 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
         // print('[REPLY] $result');
 
         Map<String, dynamic> jsonResult = json.decode(result);
-        status_code = jsonResult['status'];
+        status_code = jsonResult[API.STATUS];
         print('new conversation status_code $status_code');
 
-        if (jsonResult.containsKey('message')) {
-          status_message = jsonResult['message'];
+        if (jsonResult.containsKey(API.MESSAGE)) {
+          status_message = jsonResult[API.MESSAGE];
           print('new conversation status_message $status_message');
         } else {
           status_message = '';
         }
 
-        if (jsonResult.containsKey('server_msg_id')) {
-          conversation_id = jsonResult['server_msg_id'];
+        if (jsonResult.containsKey(API.SERVER_MESSAGE_ID)) {
+          conversation_id = jsonResult[API.SERVER_MESSAGE_ID];
           print('new conversation id $conversation_id');
         }
 

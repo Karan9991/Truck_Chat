@@ -2,6 +2,7 @@ import 'package:chat/settings/about.dart';
 import 'package:chat/settings/messages.dart';
 import 'package:chat/settings/notifcations_and_sound.dart';
 import 'package:chat/settings/terms_of_services.dart';
+import 'package:chat/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'about.dart';
 class SettingsScreen extends StatelessWidget {
@@ -9,14 +10,14 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: Text(Constants.SETTINGS),
       ),
       body: ListView(
         children: [
                   Divider(), // Add a divider after the first list item
 
           ListTile(
-            title: Text('Messages'),
+            title: Text(Constants.MESSAGES),
             onTap: () {
  Navigator.push(
                 context,
@@ -26,7 +27,7 @@ class SettingsScreen extends StatelessWidget {
                   Divider(), // Add a divider after the first list item
 
           ListTile(
-            title: Text('Notifications & Sound'),
+            title: Text(Constants.NOTIFICATIONS_AND_SOUND),
             onTap: () {
    Navigator.push(
                 context,
@@ -36,7 +37,7 @@ class SettingsScreen extends StatelessWidget {
                   Divider(), // Add a divider after the first list item
 
           ListTile(
-            title: Text('About'),
+            title: Text(Constants.ABOUT),
             onTap: () {
               Navigator.push(
                 context,
@@ -47,7 +48,7 @@ class SettingsScreen extends StatelessWidget {
                   Divider(), // Add a divider after the first list item
 
           ListTile(
-            title: Text('Terms and Conditions'),
+            title: Text(Constants.TERMS_AND_CONDITIONS),
             onTap: () {
                 Navigator.push(
                 context,

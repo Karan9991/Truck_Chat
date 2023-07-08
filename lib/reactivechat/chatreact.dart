@@ -4,6 +4,7 @@ import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/home_screen.dart';
 import 'package:chat/settings/settings.dart';
 import 'package:chat/utils/avatar.dart';
+import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/lat_lng.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
@@ -50,8 +51,8 @@ class _ChatState extends State<Chat> {
   bool sendingMessage = false; // Added variable to track sending state
   String? shareprefuserId = SharedPrefs.getString('userId');
   int userId = 0;
- // double? storedLatitude = 1.0;
- // double? storedLongitude = 1.0;
+  // double? storedLatitude = 1.0;
+  // double? storedLongitude = 1.0;
   late Timer refreshTimer;
   ScrollController _scrollController = ScrollController();
   String? currentUserHandle;
@@ -67,7 +68,8 @@ class _ChatState extends State<Chat> {
     // storedLatitude = SharedPrefs.getDouble('latitude');
     // storedLongitude = SharedPrefs.getDouble('longitude');
 
-    currentUserHandle = SharedPrefs.getString('currentUserChatHandle');
+    currentUserHandle =
+        SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
 
     print('init state');
     mm(widget.serverMsgId);
@@ -116,8 +118,8 @@ class _ChatState extends State<Chat> {
 
   Future<void> mm(dynamic conversationId) async {
     Map<String, double> locationData = await getLocation();
-     latitude = locationData['latitude']!;
-     longitude = locationData['longitude']!;
+    latitude = locationData[Constants.LATITUDE]!;
+    longitude = locationData[Constants.LONGITUDE]!;
     await getAllMessages(conversationId);
 
     WidgetsBinding.instance?.addPostFrameCallback((_) =>
@@ -139,17 +141,16 @@ class _ChatState extends State<Chat> {
 
     String statusMessage = '';
 
-    final url =
-        Uri.parse("http://smarttruckroute.com/bb/v1/get_all_reply_message");
+    final url = Uri.parse(API.CHAT);
 
     Map<String, dynamic> requestBody = {
-      "server_message_id": conversationId,
+      API.SERVER_MESSAGE_ID: conversationId,
     };
 
     try {
       http.Response response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
+        headers: {API.CONTENT_TYPE: API.APPLICATION_JSON},
         body: jsonEncode(requestBody),
       );
       if (response.statusCode == 200) {
@@ -161,9 +162,9 @@ class _ChatState extends State<Chat> {
         try {
           final jsonResult = jsonDecode(result);
 
-          counts = jsonResult['counts'];
+          counts = jsonResult[API.COUNTS];
 
-          final jsonReplyList = jsonResult['messsage_reply_list'];
+          final jsonReplyList = jsonResult[API.MESSAGE_REPLY_LIST];
 
           print('jsonreplylist');
           print(jsonReplyList);
@@ -177,10 +178,10 @@ class _ChatState extends State<Chat> {
           //if (counts == jsonReplyList.length) {
           for (var i = 0; i < countValue; ++i) {
             final jsonReply = jsonReplyList[i];
-            final rid = jsonReply['server_msg_reply_id'];
-            final replyMsg = jsonReply['reply_msg'];
-            final uid = jsonReply['user_id'];
-            final emojiId = jsonReply['emoji_id'];
+            final rid = jsonReply[API.SERVER_MSG_REPLY_ID];
+            final replyMsg = jsonReply[API.REPLY_MSG];
+            final uid = jsonReply[API.USER_ID];
+            final emojiId = jsonReply[API.EMOJI_ID];
 
             print("server_msg_reply_id  $rid");
             print("reply_msg $replyMsg");
@@ -190,7 +191,7 @@ class _ChatState extends State<Chat> {
             int timestamp;
             try {
               //  timestamp = int.tryParse(jsonReply['timestamp']) ?? 0;
-              timestamp = jsonReply['timestamp'] ?? 0;
+              timestamp = jsonReply[API.TIMESTAMP] ?? 0;
               // print('try in for $timestamp');
             } catch (e) {
               timestamp = 0;
@@ -223,7 +224,7 @@ class _ChatState extends State<Chat> {
         statusMessage = 'Connection Error';
       }
     } catch (e) {
-      print('catch 1 $e');
+      print('${Constants.ERROR} $e');
     }
     //  }
 
@@ -239,8 +240,9 @@ class _ChatState extends State<Chat> {
       sendingMessage = true; // Set sending state to true
     });
 
-       if (SharedPrefs.getInt('currentUserAvatarId') != null) {
-      emojiId = SharedPrefs.getInt('currentUserAvatarId').toString();
+    if (SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID) != null) {
+      emojiId =
+          SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID).toString();
       print('new conversation emoji id $emojiId');
     } else {
       emojiId = '0';
@@ -259,16 +261,15 @@ class _ChatState extends State<Chat> {
     // }
 
     //  int servermsgid = int.parse(serverMsgId);
-    final url =
-        'http://smarttruckroute.com/bb/v1/device_post_message'; // Replace with your API endpoint
-    final headers = {'Content-Type': 'application/json'};
+    final url = API.SEND_MESSAGE; // Replace with your API endpoint
+    final headers = {API.CONTENT_TYPE: API.APPLICATION_JSON};
     final body = jsonEncode({
-      'message': message,
-      'server_msg_id': serverMsgId,
-      'user_id': userId,
-      'latitude': latitude.toString(),
-      'longitude': longitude.toString(),
-      'emoji_id': emojiId,
+      API.MESSAGE: message,
+      API.SERVER_MSG_ID: serverMsgId,
+      API.USER_ID: userId,
+      API.LATITUDE: latitude.toString(),
+      API.LONGITUDE: longitude.toString(),
+      API.EMOJI_ID: emojiId,
     });
 
     try {
@@ -283,11 +284,11 @@ class _ChatState extends State<Chat> {
         });
 
         final jsonResult = jsonDecode(response.body);
-        int statusCode = jsonResult['status'] as int;
+        int statusCode = jsonResult[API.STATUS] as int;
         print('status code $statusCode');
 
-        if (jsonResult.containsKey('message')) {
-          String status_message = jsonResult['message'] as String;
+        if (jsonResult.containsKey(API.MESSAGE)) {
+          String status_message = jsonResult[API.MESSAGE] as String;
           print('status_message $status_message');
 
           // Add the sent message to the list
@@ -324,11 +325,11 @@ class _ChatState extends State<Chat> {
             icon: Icon(Icons.star_border),
             onPressed: () {
               // Perform action when chat icon is pressed
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NewConversationScreen()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //       builder: (context) => NewConversationScreen()),
+              // );
             },
           ),
           IconButton(
@@ -345,19 +346,19 @@ class _ChatState extends State<Chat> {
             itemBuilder: (BuildContext context) {
               return [
                 PopupMenuItem(
-                  child: Text('Settings'),
+                  child: Text(Constants.SETTINGS),
                   value: 'settings',
                 ),
                 PopupMenuItem(
-                  child: Text('Tell a Friend'),
+                  child: Text(Constants.TELL_A_FRIEND),
                   value: 'tell a friend',
                 ),
                 PopupMenuItem(
-                  child: Text('Help'),
+                  child: Text(Constants.HELP),
                   value: 'help',
                 ),
                 PopupMenuItem(
-                  child: Text('Report Abuse'),
+                  child: Text(Constants.REPORT_ABUSE),
                   value: 'report abuse',
                 ),
               ];
@@ -373,9 +374,10 @@ class _ChatState extends State<Chat> {
                   break;
                 case 'tell a friend':
                   String email = Uri.encodeComponent("");
-                  String subject = Uri.encodeComponent("Check out TruckChat");
-                  String body = Uri.encodeComponent(
-                      "I am using TruckChat right now, check it out at:\n\nhttp://play.google.com/store/apps/details?id=com.teletype.truckchat\n\nhttp://truckchatapp.com");
+                  String subject =
+                      Uri.encodeComponent(Constants.CHECK_OUT_TRUCKCHAT);
+                  String body =
+                      Uri.encodeComponent(Constants.I_AM_USING_TRUCKCHAT);
                   print(subject);
                   Uri mail =
                       Uri.parse("mailto:$email?subject=$subject&body=$body");
@@ -458,7 +460,8 @@ class _ChatState extends State<Chat> {
                           ? Alignment.topRight
                           : Alignment.topLeft,
                       margin: EdgeInsets.only(bottom: 16.0),
-                      backGroundColor: isCurrentUser ? Colors.blue[100] : Colors.blue[300],
+                      backGroundColor:
+                          isCurrentUser ? Colors.blue[100] : Colors.blue[300],
                       child: isCurrentUser
                           ? Container(
                               constraints: BoxConstraints(maxWidth: 250.0),
@@ -469,12 +472,12 @@ class _ChatState extends State<Chat> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      if (SharedPrefs.getString(
-                                              'currentUserAvatarImagePath') !=
+                                      if (SharedPrefs.getString(SharedPrefsKeys
+                                              .CURRENT_USER_AVATAR_IMAGE_PATH) !=
                                           null)
                                         Image.asset(
-                                          SharedPrefs.getString(
-                                              'currentUserAvatarImagePath')!,
+                                          SharedPrefs.getString(SharedPrefsKeys
+                                              .CURRENT_USER_AVATAR_IMAGE_PATH)!,
                                           width: 30,
                                           height: 30,
                                         ),
@@ -487,7 +490,7 @@ class _ChatState extends State<Chat> {
                                             Text(
                                               replyMsg,
                                               style: TextStyle(
-                                                  color:  Colors.black,
+                                                  color: Colors.black,
                                                   fontSize: 20),
                                             ),
                                             SizedBox(height: 4.0),
@@ -610,7 +613,7 @@ class _ChatState extends State<Chat> {
                   child: TextField(
                     controller: messageController,
                     decoration: InputDecoration(
-                      hintText: 'Compose message',
+                      hintText: Constants.COMPOSE_MESSAGE,
                       border: InputBorder.none,
                     ),
                   ),
@@ -655,12 +658,11 @@ class _ChatState extends State<Chat> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Report Abuse'),
-          content: Text(
-              'To report abuse or inappropriate content, tap on a message inside a chat conversation and select an option from the popup.'),
+          title: Text(Constants.REPORT_ABUSE),
+          content: Text(DialogStrings.TO_REPORT_ABUSE),
           actions: [
             TextButton(
-              child: Text('Got It!'),
+              child: Text(DialogStrings.GOT_IT),
               onPressed: () {
                 Navigator.of(context).pop();
               },

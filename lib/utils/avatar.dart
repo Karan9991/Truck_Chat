@@ -1,3 +1,4 @@
+import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,8 +46,7 @@ List<Avatar> avatars = [
   Avatar(id: 2131230924, imagePath: 'assets/if_receptionist_45441.png'),
   Avatar(id: 2131230925, imagePath: 'assets/if_rocket_406798.png'),
   Avatar(id: 2131230926, imagePath: 'assets/if_school_bus_44999.png'),
-  Avatar(
-      id: 2131230928, imagePath: 'assets/if_transportation_service_45471.png'),
+  Avatar(id: 2131230928, imagePath: 'assets/if_transportation_service_45471.png'),
   Avatar(id: 2131230932, imagePath: 'assets/if_truck_back_03_2140057.png'),
   Avatar(id: 2131230933, imagePath: 'assets/if_truck_front_01_1988878.png'),
   Avatar(id: 2131230929, imagePath: 'assets/if_truck_37865.png'),
@@ -83,10 +83,13 @@ void showAvatarSelectionDialog(BuildContext context) {
 
                   int currentUserAvatarId = avatar.id;
                   String currentUserAvatarImagePath = avatar.imagePath;
-                  print('Selected currentUserAvatarImagePath $currentUserAvatarImagePath');
+                  print(
+                      'Selected currentUserAvatarImagePath $currentUserAvatarImagePath');
                   // Store the selected avatar ID in SharedPreferences
-                  SharedPrefs.setInt('currentUserAvatarId', currentUserAvatarId);
-                  SharedPrefs.setString('currentUserAvatarImagePath', currentUserAvatarImagePath);
+                  SharedPrefs.setInt(
+                      SharedPrefsKeys.CURRENT_USER_AVATAR_ID, currentUserAvatarId);
+                  SharedPrefs.setString(
+                      SharedPrefsKeys.CURRENT_USER_AVATAR_IMAGE_PATH, currentUserAvatarImagePath);
 
                   // Call your backend API to update the avatar ID for the user
                   Navigator.pop(context); // Close the dialog
@@ -119,5 +122,5 @@ void _handleAvatarSelection(BuildContext context, int selectedAvatarId) async {
 
 Future<void> storeSelectedAvatarId(int selectedAvatarId) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setInt('selectedAvatarId', selectedAvatarId);
+  await prefs.setInt(SharedPrefsKeys.SELECTED_AVATAR_ID, selectedAvatarId);
 }

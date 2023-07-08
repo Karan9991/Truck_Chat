@@ -1,4 +1,5 @@
 import 'package:chat/home_screen.dart';
+import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:chat/reactivechat/chatlistreact.dart';
@@ -15,8 +16,8 @@ void showMarkAsReadUnreadDialog(BuildContext context) async {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDialogOption('Mark as read',
-                "The 'New Message' icon will be removed for all current chats",
+            _buildDialogOption(DialogStrings.MARK_AS_READ,
+               DialogStrings.THE_NEW_MESSAGE_ICON,
                 () async {
               print('Mark as read');
 
@@ -31,8 +32,8 @@ void showMarkAsReadUnreadDialog(BuildContext context) async {
                 ),
               );
             }),
-            _buildDialogOption('Mark as unread',
-                'Unread chats will appear in bold with a "New Message" icon',
+            _buildDialogOption(DialogStrings.MARK_AS_UNREAD,
+               DialogStrings.UNREAD_CHATS_WILL,
                 () async {
               print('Mark as unread');
 
@@ -50,7 +51,7 @@ void showMarkAsReadUnreadDialog(BuildContext context) async {
         ),
         actions: [
           TextButton(
-            child: Text('Cancel'),
+            child: Text(DialogStrings.CANCEL),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -70,8 +71,8 @@ void showMarkAsReadUnreadStarDialog(BuildContext context) async {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDialogOption('Star this chat',
-                "Chats that are starred will no be removed after 1 day of inactivity.",
+            _buildDialogOption(DialogStrings.STAR_CHAT,
+               DialogStrings.CHATS_THAT_ARE_STARRED_WILL,
                 () async {
               print('Chat Starred');
 
@@ -81,8 +82,8 @@ void showMarkAsReadUnreadStarDialog(BuildContext context) async {
 
          
             }),
-            _buildDialogOption('Mark this chat as read',
-                "The 'New Message' icon will be removed.",
+            _buildDialogOption(DialogStrings.MARK_CHAT_READ,
+               DialogStrings.THE_NEW_MESSAGE_ICON_WILL,
                 () async {
               print('Chat Read');
 
@@ -95,7 +96,7 @@ void showMarkAsReadUnreadStarDialog(BuildContext context) async {
         ),
         actions: [
           TextButton(
-            child: Text('Cancel'),
+            child: Text(DialogStrings.CANCEL),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -197,19 +198,19 @@ void showTermsOfServiceDialog(BuildContext context) {
     context: context,
     barrierDismissible: false, // Set barrierDismissible to false
     builder: (context) => AlertDialog(
-      title: Text('Terms of Service'),
+      title: Text(DialogStrings.TERMS_OF_SERVICE),
       content: Text(
-        'This app is provided as a free service for trucking professionals.\n\nWe want the commercial truck driving community to have a pleasant and useful experience using the free TruckChat app, so that means no posting of explicit or offensive content. More specifically: no porn, no racism, no homophobia, no threats, no abuse, no bullying, no profanity, no sexual advances, no solicitation or personal services. No advertising of your business (unless you are a paying Sponsor of the app with written permission from the developer).\n\nIf we feel you are violating these terms, we can remove your content and/or delete your profile without question. We encourage checking with drivers about weather, traffic, parking, company reviews, delivery discussions between drivers and dispatchers.\n\nBy pressing the "I Agree" button you agree to these terms.',
+       DialogStrings.THIS_APP_IS_PROVIDED_I_AGREED,
       ),
       actions: [
         TextButton(
           onPressed: () {
             // Perform action for "I Agree"
-            SharedPrefs.setBool('termsAgreed', true);
+            SharedPrefs.setBool(SharedPrefsKeys.TERMS_AGREED, true);
             print('Terms Agreed');
             Navigator.of(context).pop();
           },
-          child: Text('I Agree'),
+          child: Text(DialogStrings.I_AGREE),
         ),
         TextButton(
           onPressed: () {
@@ -220,16 +221,16 @@ void showTermsOfServiceDialog(BuildContext context) {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text('Exit'),
-                  content: Text('Are you sure you want to exit the app?'),
+                  title: Text(DialogStrings.EXIT),
+                  content: Text(DialogStrings.ARE_YOU_SURE),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      child: Text('Cancel'),
+                      child: Text(DialogStrings.CANCEL),
                     ),
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(true),
-                      child: Text('Exit'),
+                      child: Text(DialogStrings.EXIT),
                     ),
                   ],
                 ),
@@ -242,7 +243,7 @@ void showTermsOfServiceDialog(BuildContext context) {
               exit(0); // Exit the app directly for platforms other than iOS
             }
           },
-          child: Text('Exit'),
+          child: Text(DialogStrings.EXIT),
         ),
       ],
     ),

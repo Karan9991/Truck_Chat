@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:chat/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -22,7 +23,7 @@ class _NewsTabState extends State<NewsTab> {
 
 
   Future<void> fetchDataFromServer() async {
-    final url = 'http://smarttruckroute.com/bb/v1/get_news';
+    final url = API.NEWS;
     final headers = {'Content-Type': 'application/json'};
     final body = {};
 

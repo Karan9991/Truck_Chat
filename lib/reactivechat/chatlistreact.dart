@@ -543,6 +543,7 @@ import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/chats_screen.dart';
 import 'package:chat/reactivechat/chatreact.dart';
 import 'package:chat/settings/settings.dart';
+import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:chat/get_all_reply_messages.dart';
 import 'dart:convert';
@@ -624,29 +625,29 @@ class _ChatListrState extends State<ChatListr> {
     setState(() {
       isLoading = true;
     });
-    String? userId = SharedPrefs.getString('userId');
-    double? storedLatitude = SharedPrefs.getDouble('latitude');
-    double? storedLongitude = SharedPrefs.getDouble('longitude');
+    String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+    double? storedLatitude = SharedPrefs.getDouble(SharedPrefsKeys.LATITUDE);
+    double? storedLongitude = SharedPrefs.getDouble(SharedPrefsKeys.LONGITUDE);
 
     Uri url =
-        Uri.parse("http://smarttruckroute.com/bb/v1/get_previous_messages");
+        Uri.parse(API.CONVERSATION_LIST);
     Map<String, dynamic> requestBody = {
-      "user_id": userId,
-      "latitude": storedLatitude.toString(),
-      "longitude": storedLongitude.toString(),
+      API.USER_ID: userId,
+      API.LATITUDE: storedLatitude.toString(),
+      API.LONGITUDE: storedLongitude.toString(),
     };
 
     try {
       http.Response response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
+        headers: {API.CONTENT_TYPE: API.APPLICATION_JSON},
         body: jsonEncode(requestBody),
       );
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = jsonDecode(response.body);
 
-        List<dynamic> serverMsgIds = jsonResponse['server_msg_id'];
+        List<dynamic> serverMsgIds = jsonResponse[API.SERVER_MSG_ID];
         List<String> serverMsgIdsList =
             List<String>.from(serverMsgIds.map((e) => e.toString()));
 
@@ -663,19 +664,19 @@ class _ChatListrState extends State<ChatListr> {
         List<Conversation> storedConversations = await getStoredConversations();
 
         final url =
-            Uri.parse("http://smarttruckroute.com/bb/v1/get_all_reply_message");
+            Uri.parse(API.CHAT);
 
         // print('Stored Conversations: $storedConversations');
 
         for (var serverMessageId in serverMsgIdsList) {
           Map<String, dynamic> requestBody = {
-            "server_message_id": serverMessageId,
+            API.SERVER_MESSAGE_ID: serverMessageId,
           };
 
           try {
             http.Response response = await http.post(
               url,
-              headers: {"Content-Type": "application/json"},
+              headers: {API.CONTENT_TYPE: API.APPLICATION_JSON},
               body: jsonEncode(requestBody),
             );
 
@@ -685,9 +686,9 @@ class _ChatListrState extends State<ChatListr> {
               try {
                 final jsonResult = jsonDecode(result);
 
-                counts = jsonResult['counts'];
-                conversationTopic = jsonResult['original'];
-                conversationTimestamp = jsonResult['timestamp'] ?? 0;
+                counts = jsonResult[API.COUNTS];
+                conversationTopic = jsonResult[API.ORIGINAL];
+                conversationTimestamp = jsonResult[API.TIMESTAMP] ?? 0;
 
                 conversationTopics.add(conversationTopic);
                 conversationTimestamps.add(conversationTimestamp);
@@ -880,7 +881,7 @@ class _ChatListrState extends State<ChatListr> {
 
             if (storedConversations.isEmpty) {
               return Center(
-                child: Text('No conversations found'),
+                child: Text(Constants.NO_CONVERSATION_FOUND),
               );
             }
 
@@ -934,8 +935,8 @@ class _ChatListrState extends State<ChatListr> {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _buildDialogOption('Star this chat',
-                                  "Chats that are starred will no be removed after 1 day of inactivity.",
+                              _buildDialogOption(DialogStrings.STAR_CHAT,
+                                  DialogStrings.CHATS_THAT_ARE_STARRED_WILL,
                                   () async {
                                 print('Chat Starred');
 
@@ -945,8 +946,8 @@ class _ChatListrState extends State<ChatListr> {
                               }),
                               isRead
                                   ? _buildDialogOption(
-                                      'Mark this chat as unread',
-                                      "The 'New Message' icon will be removed.",
+                                     DialogStrings.MARK_CHAT_THIS_UNREAD,
+                                      DialogStrings.MARK_CHAT_UNREAD,
                                       () async {
                                       print('Chat UnRead');
                                       conversation.isRead = false;
@@ -957,8 +958,8 @@ class _ChatListrState extends State<ChatListr> {
                                       Navigator.of(context)
                                           .pop(); // Close the dialog if needed
                                     })
-                                  : _buildDialogOption('Mark this chat as read',
-                                      "The 'New Message' icon will be removed.",
+                                  : _buildDialogOption(DialogStrings.MARK_CHAT_READ,
+                                     DialogStrings.MESSAGE_ICON_WILL,
                                       () async {
                                       print('Chat Read');
                                       conversation.isRead = true;
@@ -973,7 +974,7 @@ class _ChatListrState extends State<ChatListr> {
                           ),
                           actions: [
                             TextButton(
-                              child: Text('Cancel'),
+                              child: Text(DialogStrings.CANCEL),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
@@ -1018,14 +1019,14 @@ class _ChatListrState extends State<ChatListr> {
                           Padding(
                             padding: EdgeInsets.only(bottom: 5, top: 8),
                             child: Text(
-                              'Last Active: $timestamp',
+                             '${Constants.LAST_ACTIVE}$timestamp',
                               style: TextStyle(fontSize: 14),
                             ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(bottom: 5),
                             child: Text(
-                              'Replies: $count',
+                              '${Constants.REPLIES}$count',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: isRead
@@ -1048,7 +1049,7 @@ class _ChatListrState extends State<ChatListr> {
           } else {
             // Handle error case
             return Center(
-              child: Text('Error occurred'),
+              child: Text(Constants.ERROR),
             );
           }
         },

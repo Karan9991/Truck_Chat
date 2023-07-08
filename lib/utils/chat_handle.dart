@@ -1,3 +1,4 @@
+import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 
@@ -9,14 +10,14 @@ class ChatHandle {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Chat Handle'),
+          title: Text(DialogStrings.CHAT_HANDLE),
           content: TextField(
             controller: _textEditingController,
-            decoration: InputDecoration(hintText: 'Enter your chat handle'),
+            decoration: InputDecoration(hintText: DialogStrings.ENTER_CHAT_HANDLE),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: Text(DialogStrings.CANCEL),
               onPressed: () {
                 Navigator.pop(context); // Close the dialog
               },
@@ -25,7 +26,7 @@ class ChatHandle {
               child: Text('OK'),
               onPressed: () async {
                 String chatHandle = _textEditingController.text;
-                await SharedPrefs.setString('chatHandle', chatHandle);
+                await SharedPrefs.setString(SharedPrefsKeys.CHAT_HANDLE, chatHandle);
                 Navigator.pop(context); // Close the dialog
               },
             ),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chat/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +11,7 @@ class About extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('About'),
+        title: Text(Constants.ABOUT),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -22,7 +23,7 @@ class About extends StatelessWidget {
               width: 200,
             ),
             Text(
-              'LIVE CHAT WITH FELLOW COMMERCIAL DRIVERS IN YOUR AREA.\nIT\'S LIKE HAVING A DIGITAL CB AT NO COST.',
+              Constants.LIVE_CHAT_WITH,
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -32,7 +33,7 @@ class About extends StatelessWidget {
             ),
             SizedBox(height: 8.0),
             Text(
-              'Totally FREE app, no hidden fees.\nPlease support our Sponsors.',
+              Constants.TOTALLY_FREE_APP,
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 16.0,
@@ -41,7 +42,7 @@ class About extends StatelessWidget {
             ),
             SizedBox(height: 8.0),
             Text(
-              '© TeleType Co. All Rights Reserved',
+              Constants.ALL_RIGHTS_RESERVED,
               style: TextStyle(
                 color: Colors.blue,
               ),
@@ -53,9 +54,9 @@ class About extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: () => _launchURL(Uri.parse('http://truckchatapp.com')),
+                  onTap: () => _launchURL(Uri.parse(API.VISIT_WEBSITE)),
                   child: Text(
-                    'Visit the website',
+                Constants.VISIT_THE_WEBSITE,
                     style: TextStyle(
                       color: Colors.blue,
                       fontSize: 16.0,
@@ -66,9 +67,9 @@ class About extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () => _launchURL(Uri.parse(
-                      'http://truckchatapp.com/index.html#Contact')), // Replace with your contact URL
+                      API.CONTACT)), // Replace with your contact URL
                   child: Text(
-                    'Contact us',
+                    Constants.CONTACT_US,
                     style: TextStyle(
                       color: Colors.blue,
                       fontSize: 16.0,
@@ -83,16 +84,16 @@ class About extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 String email = Uri.encodeComponent("");
-                String subject = Uri.encodeComponent("Check out TruckChat");
+                String subject = Uri.encodeComponent(Constants.CHECK_OUT_TRUCKCHAT);
                 String body = Uri.encodeComponent(
-                    "I am using TruckChat right now, check it out at:\n\nhttp://play.google.com/store/apps/details?id=com.teletype.truckchat\n\nhttp://truckchatapp.com");
+                   Constants.I_AM_USING_TRUCKCHAT);
                 print(subject);
                 Uri mail =
                     Uri.parse("mailto:$email?subject=$subject&body=$body");
                 launchUrl(mail);
               },
               child: Text(
-                'Tell a Friend',
+                Constants.TELL_A_FRIEND,
                 style: TextStyle(
                   color: Colors.blue,
                   fontSize: 16.0,
@@ -102,7 +103,7 @@ class About extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16.0),
-            Text('Version 2.0.11.44'),
+            Text(Constants.VERSION),
             Text(
               'Serial# ',
               style: TextStyle(fontSize: 16),
@@ -127,7 +128,7 @@ class About extends StatelessWidget {
                   onTap: () => showTermsOfServiceDialog(
                       context), // Replace with your terms of service URL
                   child: Text(
-                    'Terms of Service',
+                   Constants.TERMS_OF_SERVICE,
                     style: TextStyle(
                       color: Colors.blue,
                       fontSize: 16.0,
@@ -157,14 +158,14 @@ class About extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Terms of Service'),
+        title: Text(DialogStrings.TERMS_OF_SERVICE),
         content: Text(
-          'This app is provided as a free service for trucking professionals.\n\nWe want the commercial truck driving community to have a pleasant and useful experience using the free TruckChat app, so that means no posting of explicit or offensive content. More specifically: no porn, no racism, no homophobia, no threats, no abuse, no bullying, no profanity, no sexual advances, no solicitation or personal services. No advertising of your business (unless you are a paying Sponsor of the app with written permission from the developer).\n\nIf we feel you are violating these terms, we can remove your content and/or delete your profile without question. We encourage checking with drivers about weather, traffic, parking, company reviews, delivery discussions between drivers and dispatchers.',
+         DialogStrings.THIS_APP_IS_PROVIDED,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text('Got It!'),
+            child: Text(DialogStrings.GOT_IT),
           ),
         ],
       ),

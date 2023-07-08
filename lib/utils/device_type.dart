@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:chat/utils/constants.dart';
+
 String getDeviceType() {
   if (Platform.isAndroid) {
-    return 'Android';
+    return Constants.ANDROID;
   } else if (Platform.isIOS) {
-    return 'iOS';
+    return Constants.IOS;
   } else {
     return 'Unknown';
   }

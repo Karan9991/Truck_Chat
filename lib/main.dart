@@ -8,6 +8,8 @@ import 'package:chat/get_previous_messages.dart';
 import 'package:chat/home_screen.dart';
 import 'package:chat/utils/avatar.dart';
 import 'package:chat/utils/chat_handle.dart';
+import 'package:chat/utils/constants.dart';
+import 'package:chat/utils/device_type.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -48,6 +50,7 @@ class MyApp extends StatelessWidget {
 
 Future<void> registerDevice() async {
   String user_id = '';
+  String deviceType = getDeviceType();
 
   print("register device");
   Location location = Location();
@@ -76,7 +79,7 @@ Future<void> registerDevice() async {
   // Fetch device serial number and store in SharedPrefs
   String? serialNumber = await getDeviceSerialNumber();
 
-  SharedPrefs.setString('serialNumber', serialNumber!);
+  SharedPrefs.setString(SharedPrefsKeys.SERIAL_NUMBER, serialNumber!);
 
   if (serialNumber == null) {
     // Handle error getting serial number
@@ -93,21 +96,21 @@ Future<void> registerDevice() async {
 
   // Prepare request body
   Map<String, dynamic> requestBody = {
-    "device_id": serialNumber,
-    "device_gcm_id": registrationId,
-    "device_type": "Android",
-    "latitude": currentLocation.latitude,
-    "longitude": currentLocation.longitude,
+    API.DEVICE_ID: serialNumber,
+    API.DEVICE_GCM_ID: registrationId,
+    API.DEVICE_TYPE: deviceType,
+    API.LATITUDE: currentLocation.latitude,
+    API.LONGITUDE: currentLocation.longitude,
   };
 
   String requestBodyJson = jsonEncode(requestBody);
 
   // Send POST request to server
-  Uri url = Uri.parse("http://smarttruckroute.com/bb/v1/device_register");
+  Uri url = Uri.parse(API.DEVICE_REGISTER);
   http.Response response = await http.post(
     url,
     body: requestBodyJson,
-    headers: {"Content-Type": "application/json"},
+    headers: {API.CONTENT_TYPE: API.APPLICATION_JSON},
   );
 
   // Handle server response
@@ -118,12 +121,12 @@ Future<void> registerDevice() async {
     Map<String, dynamic> responseBody = jsonDecode(response.body);
 
     // Check if the user_id exists in the response
-    if (responseBody.containsKey("user_id")) {
-      user_id = responseBody["user_id"];
+    if (responseBody.containsKey(API.USER_ID)) {
+      user_id = responseBody[API.USER_ID];
       print("User ID: $user_id");
-      SharedPrefs.setString('userId', user_id);
-      SharedPrefs.setDouble('latitude', currentLocation.latitude!);
-      SharedPrefs.setDouble('longitude', currentLocation.longitude!);
+      SharedPrefs.setString(SharedPrefsKeys.USER_ID, user_id);
+      SharedPrefs.setDouble(SharedPrefsKeys.LATITUDE, currentLocation.latitude!);
+      SharedPrefs.setDouble(SharedPrefsKeys.LONGITUDE, currentLocation.longitude!);
     } else {
       print("Error: User ID not found in response");
     }
