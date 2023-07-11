@@ -83,6 +83,10 @@ class DialogStrings {
   static const String OK = 'OK';
   static const String I_AGREE = 'I Agree';
   static const String EXIT = 'Exit';
+  static const String ALERT = 'ALERT';
+  static const String DO_YOU_WANT_EXIT_CONVERSATION =
+      'Do you want to exit from this conversation?';
+
   static const String ARE_YOU_SURE = 'Are you sure you want to exit the app?';
 }
 
@@ -102,7 +106,6 @@ class SharedPrefsKeys {
 }
 
 class Constants {
-
   static const String CONVERSATION = 'New Conversation';
   static const String COMPOSE_CONVERSATION = 'Compose a new conversation';
   static const String COMPOSE_MESSAGE = 'Compose message';
@@ -167,9 +170,8 @@ class Constants {
   static const String ALLOW_USERS_TO =
       'Allow users to send invitations for private chat enabled.';
 
-        static const String NEWS = 'News';
+  static const String NEWS = 'News';
   static const String CHATS = 'Chats';
   static const String SPONSORS = 'Sponsors';
   static const String REVIEWS = 'Reviews';
-
 }

@@ -77,18 +77,18 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
     double longitude = locationData[Constants.LONGITUDE]!;
     if (SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID) != null) {
       emojiId = SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID).toString();
-      print('new conversation emoji id $emojiId');
+     // print('new conversation emoji id $emojiId');
     } else {
       emojiId = '0';
-      print('new conversation emoji id $emojiId');
+     // print('new conversation emoji id $emojiId');
     }
 
-    print('device id $serialNumber');
-    print('message_device_type  $deviceType');
-    print('message  $newConversation');
-    print('message_latitude  $latitude');
-    print('message_longitude  $longitude');
-    print('emoji_id  $emojiId');
+    // print('device id $serialNumber');
+    // print('message_device_type  $deviceType');
+    // print('message  $newConversation');
+    // print('message_latitude  $latitude');
+    // print('message_longitude  $longitude');
+    // print('emoji_id  $emojiId');
 
     final Uri url =
         Uri.parse(API.NEW_CONVERSATION);
@@ -111,23 +111,25 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
 
       if (response.statusCode == 200) {
         String result = response.body;
-        print('new conversation response body $result');
+                print('---------------New Conversation Response---------------');
+
+        print(result);
         // print('[REPLY] $result');
 
         Map<String, dynamic> jsonResult = json.decode(result);
         status_code = jsonResult[API.STATUS];
-        print('new conversation status_code $status_code');
+      //  print('new conversation status_code $status_code');
 
         if (jsonResult.containsKey(API.MESSAGE)) {
           status_message = jsonResult[API.MESSAGE];
-          print('new conversation status_message $status_message');
+         // print('new conversation status_message $status_message');
         } else {
           status_message = '';
         }
 
         if (jsonResult.containsKey(API.SERVER_MESSAGE_ID)) {
           conversation_id = jsonResult[API.SERVER_MESSAGE_ID];
-          print('new conversation id $conversation_id');
+        //  print('new conversation id $conversation_id');
         }
 
         return true;
@@ -135,7 +137,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
         status_message = 'Connection Error';
       }
     } catch (e) {
-      print('new conversation catch $e');
+     // print('new conversation catch $e');
       status_message = e.toString();
     }
 

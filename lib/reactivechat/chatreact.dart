@@ -3,6 +3,7 @@
 import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/home_screen.dart';
 import 'package:chat/settings/settings.dart';
+import 'package:chat/utils/ads.dart';
 import 'package:chat/utils/avatar.dart';
 import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/lat_lng.dart';
@@ -18,6 +19,8 @@ import 'package:chat/get_all_reply_messages.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'dart:async';
+import 'package:admob_flutter/admob_flutter.dart';
+import 'package:chat/utils/alert_dialog.dart';
 
 class Chat extends StatefulWidget {
   final String topic;
@@ -53,7 +56,7 @@ class _ChatState extends State<Chat> {
   int userId = 0;
   // double? storedLatitude = 1.0;
   // double? storedLongitude = 1.0;
-  late Timer refreshTimer;
+  // late Timer refreshTimer;
   ScrollController _scrollController = ScrollController();
   String? currentUserHandle;
   String? emojiId;
@@ -63,6 +66,8 @@ class _ChatState extends State<Chat> {
   @override
   void initState() {
     super.initState();
+
+    InterstitialAdManager.initialize();
 
     userId = int.parse(shareprefuserId!);
     // storedLatitude = SharedPrefs.getDouble('latitude');
@@ -95,7 +100,8 @@ class _ChatState extends State<Chat> {
   void dispose() {
     _scrollController.dispose();
 
-    refreshTimer.cancel();
+    // refreshTimer.cancel();
+    InterstitialAdManager.dispose();
     super.dispose();
   }
 
@@ -108,6 +114,7 @@ class _ChatState extends State<Chat> {
       );
     }
   }
+
 
   void filterReplyMsgs() {
     // print('reply messges in fliter replymsf');
@@ -157,7 +164,10 @@ class _ChatState extends State<Chat> {
         // print('200');
         final result = response.body;
 
-        print('response body $result');
+        print('---------------Chat Response---------------');
+        print(result);
+
+        //print('response body $result');
 
         try {
           final jsonResult = jsonDecode(result);
@@ -166,8 +176,8 @@ class _ChatState extends State<Chat> {
 
           final jsonReplyList = jsonResult[API.MESSAGE_REPLY_LIST];
 
-          print('jsonreplylist');
-          print(jsonReplyList);
+          // print('jsonreplylist');
+          // print(jsonReplyList);
 
           int countValue = int.parse(counts);
 
@@ -182,7 +192,6 @@ class _ChatState extends State<Chat> {
             final replyMsg = jsonReply[API.REPLY_MSG];
             final uid = jsonReply[API.USER_ID];
             final emojiId = jsonReply[API.EMOJI_ID];
-
             print("server_msg_reply_id  $rid");
             print("reply_msg $replyMsg");
             print("user id  $uid");
@@ -243,17 +252,17 @@ class _ChatState extends State<Chat> {
     if (SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID) != null) {
       emojiId =
           SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID).toString();
-      print('new conversation emoji id $emojiId');
+      // print('new conversation emoji id $emojiId');
     } else {
       emojiId = '0';
-      print('new conversation emoji id $emojiId');
+      // print('new conversation emoji id $emojiId');
     }
 
-    print('send message');
-    print('message $message');
-    print('sermsgid $serverMsgId');
-    print('userid $userId');
-    print('emojiid $emojiId');
+    // print('send message');
+    // print('message $message');
+    // print('sermsgid $serverMsgId');
+    // print('userid $userId');
+    // print('emojiid $emojiId');
 
 //concat username/chathandle with message
     // if (currentUserHandle != null) {
@@ -279,17 +288,22 @@ class _ChatState extends State<Chat> {
       print(response.body);
 
       if (response.statusCode == 200) {
+        print('Message Sent');
         setState(() {
           sendingMessage = false; // Set sending state to false
         });
 
         final jsonResult = jsonDecode(response.body);
+        print('---------------Send Message Response---------------');
+
+        print(response.body);
         int statusCode = jsonResult[API.STATUS] as int;
-        print('status code $statusCode');
+
+        /// print('status code $statusCode');
 
         if (jsonResult.containsKey(API.MESSAGE)) {
           String status_message = jsonResult[API.MESSAGE] as String;
-          print('status_message $status_message');
+          // print('status_message $status_message');
 
           // Add the sent message to the list
           // sentMessages.add(ReplyMsgg(serverMsgId, userId, message,
@@ -317,7 +331,12 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+    onWillPop: () async {
+      //showExitConversationDialog(context);
+      return true; // Prevent the default back button behavior
+    },
+    child: Scaffold(
       appBar: AppBar(
         title: Text(widget.topic),
         actions: [
@@ -367,6 +386,7 @@ class _ChatState extends State<Chat> {
               // Perform action when a pop-up menu item is selected
               switch (value) {
                 case 'settings':
+                  InterstitialAdManager.showInterstitialAd();
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => SettingsScreen()),
@@ -446,8 +466,8 @@ class _ChatState extends State<Chat> {
                     (avatar) => avatar.id == int.parse(reply.emojiId),
                     orElse: () => Avatar(id: 0, imagePath: ''),
                   );
-                  print('emoji id $emoji_id');
-                  print('matching avatar id ${matchingAvatar.id}');
+                  // print('emoji id $emoji_id');
+                  // print('matching avatar id ${matchingAvatar.id}');
 
                   return Padding(
                     padding: EdgeInsets.all(8.0),
@@ -627,10 +647,10 @@ class _ChatState extends State<Chat> {
                       userId,
                     );
                     if (messageSent) {
-                      print('message send');
+                      //  print('message send');
                       // Message sent successfully, handle any UI updates if needed
                     } else {
-                      print('message failed not sent');
+                      print('message failed');
                       // Failed to send the message, handle any UI updates if needed
                     }
                     setState(() {
@@ -648,8 +668,16 @@ class _ChatState extends State<Chat> {
               ],
             ),
           ),
+          Container(
+            height: 50, // Adjust the height of the ad container as needed
+            child: AdmobBanner(
+              adUnitId: AdHelper.bannerAdUnitId,
+              adSize: AdmobBannerSize.BANNER,
+            ),
+          ),
         ],
       ),
+    ),
     );
   }
 

@@ -20,10 +20,14 @@ import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 import 'package:device_info/device_info.dart';
 import 'get_all_reply_messages.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await Admob.initialize();
+  // Run this before displaying any ad.
+  await Admob.requestTrackingAuthorization();
   await SharedPrefs.init();
   await registerDevice();
 
@@ -52,7 +56,7 @@ Future<void> registerDevice() async {
   String user_id = '';
   String deviceType = getDeviceType();
 
-  print("register device");
+  //print("register device");
   Location location = Location();
   LocationData? currentLocation;
 
@@ -88,6 +92,7 @@ Future<void> registerDevice() async {
   }
 
   String? registrationId = await getFirebaseToken();
+  print('Firebase token $registrationId');
   if (registrationId == null) {
     // Handle error getting Firebase token
     print('Error getting Firebase token');
@@ -115,6 +120,8 @@ Future<void> registerDevice() async {
 
   // Handle server response
   if (response.statusCode == 200) {
+    print('---------------Device Register Response---------------');
+
     // Registration successful
     print("Device registered successfully!");
 
@@ -125,8 +132,10 @@ Future<void> registerDevice() async {
       user_id = responseBody[API.USER_ID];
       print("User ID: $user_id");
       SharedPrefs.setString(SharedPrefsKeys.USER_ID, user_id);
-      SharedPrefs.setDouble(SharedPrefsKeys.LATITUDE, currentLocation.latitude!);
-      SharedPrefs.setDouble(SharedPrefsKeys.LONGITUDE, currentLocation.longitude!);
+      SharedPrefs.setDouble(
+          SharedPrefsKeys.LATITUDE, currentLocation.latitude!);
+      SharedPrefs.setDouble(
+          SharedPrefsKeys.LONGITUDE, currentLocation.longitude!);
     } else {
       print("Error: User ID not found in response");
     }
@@ -145,7 +154,7 @@ Future<String?> getDeviceSerialNumber() async {
   if (Platform.isAndroid) {
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     serialNumber = androidInfo.androidId;
-    print("sssserial number $serialNumber");
+    print("Serial number $serialNumber");
   } else if (Platform.isIOS) {
     // For iOS, you can use androidId as an alternative if needed
     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;

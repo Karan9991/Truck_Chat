@@ -73,5 +73,12 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>GADApplicationIdentifier</key>
+<string>ca-app-pub-7181343877669077~9600908541</string>
+<key>io.flutter.embedded_views_preview</key>
+<true/>
+
+<key>NSUserTrackingUsageDescription</key>
+<string>This identifier will be used to deliver personalized ads to you.</string>
 </dict>
 </plist>

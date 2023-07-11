@@ -5,6 +5,7 @@ import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/news_tab.dart';
 import 'package:chat/reactivechat/chatlistreact.dart';
 import 'package:chat/settings/settings.dart';
+import 'package:chat/utils/ads.dart';
 import 'package:chat/utils/alert_dialog.dart';
 import 'package:chat/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ import 'package:http/http.dart' as http;
 import 'package:chat/utils/shared_pref.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'package:admob_flutter/admob_flutter.dart';
 
 // import 'package:chat/reactivechat/chatlistreact.dart';
 
@@ -44,7 +46,27 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+
+
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    InterstitialAdManager.initialize();
+
+    //    Future.delayed(Duration(seconds: 5), () {
+    // InterstitialAdManager.showInterstitialAd();
+    // });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    InterstitialAdManager.dispose();
   }
 
   void _refreshChatList() {
@@ -96,6 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -165,6 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Perform action when a pop-up menu item is selected
                 switch (value) {
                   case 'settings':
+                    InterstitialAdManager.showInterstitialAd();
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SettingsScreen()),
@@ -172,9 +196,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     break;
                   case 'tell a friend':
                     String email = Uri.encodeComponent("");
-                    String subject = Uri.encodeComponent(Constants.CHECK_OUT_TRUCKCHAT);
-                    String body = Uri.encodeComponent(
-                       Constants.I_AM_USING_TRUCKCHAT);
+                    String subject =
+                        Uri.encodeComponent(Constants.CHECK_OUT_TRUCKCHAT);
+                    String body =
+                        Uri.encodeComponent(Constants.I_AM_USING_TRUCKCHAT);
                     print(subject);
                     Uri mail =
                         Uri.parse("mailto:$email?subject=$subject&body=$body");
@@ -200,8 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         context: context,
                         builder: (context) => AlertDialog(
                           title: Text(DialogStrings.EXIT),
-                          content:
-                              Text(DialogStrings.ARE_YOU_SURE),
+                          content: Text(DialogStrings.ARE_YOU_SURE),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.of(context).pop(),
@@ -227,7 +251,22 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        body: _widgetOptions.elementAt(_selectedIndex),
+        // body: _widgetOptions.elementAt(_selectedIndex),
+
+        body: Column(
+          children: [
+            Expanded(
+              child: _widgetOptions.elementAt(_selectedIndex),
+            ),
+            Container(
+              height: 50, // Adjust the height of the ad container as needed
+              child: AdmobBanner(
+                adUnitId: AdHelper.bannerAdUnitId,
+                adSize: AdmobBannerSize.BANNER,
+              ),
+            ),
+          ],
+        ),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(

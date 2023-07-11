@@ -49,6 +49,13 @@
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"লিংক প্ৰতিলিপি কৰক"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"ব্ৰাউজাৰত খোলক"</string>
     <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"লিংক শ্বেয়াৰ কৰক"</string>
+    <string msgid="368094699078615544" name="s1">"ছবি ছেভ কৰক"</string>
+    <string msgid="4550830452390689489" name="s2">"বিজ্ঞাপনক চিত্ৰৰ গেলাৰীত ছবি সঞ্চয় কৰিবলৈ অনুমতি দিবনে?"</string>
+    <string msgid="2435407834265420668" name="s3">"স্বীকাৰ কৰক"</string>
+    <string msgid="9167523597401839819" name="s4">"প্ৰত্যাখ্যান কৰক"</string>
+    <string msgid="1566682516266724847" name="s5">"কেলেণ্ডাৰৰ কাৰ্যক্ৰম সৃষ্টি কৰক"</string>
+    <string msgid="5996672174517137271" name="s6">"বিজ্ঞাপনক কোনো কেলেণ্ডাৰৰ কাৰ্যক্ৰম সৃষ্টি কৰিবলৈ অনুমতি দিবনে?"</string>
+    <string msgid="7163549807207034258" name="s7">"পৰীক্ষণ বিজ্ঞাপন"</string>
     <string msgid="6264217191555673260" name="search_menu_title">"সন্ধান"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"৯৯৯+"</string>
 </resources>

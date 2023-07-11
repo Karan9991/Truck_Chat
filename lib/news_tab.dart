@@ -17,14 +17,11 @@ class _NewsTabState extends State<NewsTab> {
   void initState() {
     super.initState();
     fetchDataFromServer();
-
   }
-
-
 
   Future<void> fetchDataFromServer() async {
     final url = API.NEWS;
-    final headers = {'Content-Type': 'application/json'};
+    final headers = {API.CONTENT_TYPE: API.APPLICATION_JSON};
     final body = {};
 
     final response = await http.post(Uri.parse(url),
@@ -32,9 +29,12 @@ class _NewsTabState extends State<NewsTab> {
 
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
+      print('---------------News---------------');
+      print('News response body $jsonData');
+      print('------------------------------');
 
-      if (jsonData['status'] == 200) {
-        final newsList = jsonData['news_list'] as List<dynamic>;
+      if (jsonData[API.STATUS] == 200) {
+        final newsList = jsonData[API.NEWS_LIST] as List<dynamic>;
 
         setState(() {
           _newsItems = newsList.map((item) => NewsItem.fromJson(item)).toList();
@@ -140,9 +140,9 @@ class NewsItem {
 
   factory NewsItem.fromJson(Map<String, dynamic> json) {
     return NewsItem(
-      title: json['title'],
-      postedDate: json['posted_date'],
-      link: json['link'],
+      title: json[API.TITLE],
+      postedDate: json[API.POSTED_DATE],
+      link: json[API.LINK],
     );
   }
 }

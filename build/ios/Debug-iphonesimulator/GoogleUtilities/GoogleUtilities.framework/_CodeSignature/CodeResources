@@ -76,6 +76,10 @@
 		<data>
 		zakav2dnnHEg+jKlDffWx35g+4E=
 		</data>
+		<key>Headers/GULOriginalIMPConvenienceMacros.h</key>
+		<data>
+		ioFNLvVtBav6ChtkDGBfImNqRJg=
+		</data>
 		<key>Headers/GULReachabilityChecker.h</key>
 		<data>
 		UHZxn2/zMhUivGD/BRSg0Tiuez4=
@@ -88,6 +92,10 @@
 		<data>
 		t/fXV0x5vnY3wbVku4mOWIkSf9o=
 		</data>
+		<key>Headers/GULSwizzler.h</key>
+		<data>
+		kqRN0S855mcEoeddcbC6llfp/j0=
+		</data>
 		<key>Headers/GULURLSessionDataResponse.h</key>
 		<data>
 		C7k2DFJRl4sOYxgFqiOpnGh1Xho=
@@ -98,7 +106,7 @@
 		</data>
 		<key>Headers/GoogleUtilities-umbrella.h</key>
 		<data>
-		rZ94/icTbEMH2EKHayvvXzq7WRE=
+		Xv5QfNW6hN1FlU1D6NKneQEeXW0=
 		</data>
 		<key>Headers/NSURLSession+GULPromises.h</key>
 		<data>
@@ -313,6 +321,17 @@
 			v1KWie2xQxLa73blnQdgSwWNYSFbijx3l7mixX1BAsw=
 			</data>
 		</dict>
+		<key>Headers/GULOriginalIMPConvenienceMacros.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			ioFNLvVtBav6ChtkDGBfImNqRJg=
+			</data>
+			<key>hash2</key>
+			<data>
+			fNvM52Y4+ks99B81gcFB9L3SghXwZrd5S2dBJEKW5mw=
+			</data>
+		</dict>
 		<key>Headers/GULReachabilityChecker.h</key>
 		<dict>
 			<key>hash</key>
@@ -346,6 +365,17 @@
 			kWT1ykqi+tOoUFBDwqhOPx7axNyeUYgduCruJb7EaTQ=
 			</data>
 		</dict>
+		<key>Headers/GULSwizzler.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			kqRN0S855mcEoeddcbC6llfp/j0=
+			</data>
+			<key>hash2</key>
+			<data>
+			nHEVLRZiAlaBzWwIgNfNZ9l61OpmGZSCbpSaKf3yIqs=
+			</data>
+		</dict>
 		<key>Headers/GULURLSessionDataResponse.h</key>
 		<dict>
 			<key>hash</key>
@@ -372,11 +402,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			rZ94/icTbEMH2EKHayvvXzq7WRE=
+			Xv5QfNW6hN1FlU1D6NKneQEeXW0=
 			</data>
 			<key>hash2</key>
 			<data>
-			OlD/sUl0fs4jg1dQbTXGWaoQ3eb1tzCKFDxOm//FIjI=
+			X2K/fa3vprNE1V3W+WeDjDwD8mXmRM0DX85McoPYPpg=
 			</data>
 		</dict>
 		<key>Headers/NSURLSession+GULPromises.h</key>

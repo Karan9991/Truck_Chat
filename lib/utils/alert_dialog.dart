@@ -16,8 +16,8 @@ void showMarkAsReadUnreadDialog(BuildContext context) async {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDialogOption(DialogStrings.MARK_AS_READ,
-               DialogStrings.THE_NEW_MESSAGE_ICON,
+            _buildDialogOption(
+                DialogStrings.MARK_AS_READ, DialogStrings.THE_NEW_MESSAGE_ICON,
                 () async {
               print('Mark as read');
 
@@ -32,8 +32,8 @@ void showMarkAsReadUnreadDialog(BuildContext context) async {
                 ),
               );
             }),
-            _buildDialogOption(DialogStrings.MARK_AS_UNREAD,
-               DialogStrings.UNREAD_CHATS_WILL,
+            _buildDialogOption(
+                DialogStrings.MARK_AS_UNREAD, DialogStrings.UNREAD_CHATS_WILL,
                 () async {
               print('Mark as unread');
 
@@ -72,25 +72,20 @@ void showMarkAsReadUnreadStarDialog(BuildContext context) async {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildDialogOption(DialogStrings.STAR_CHAT,
-               DialogStrings.CHATS_THAT_ARE_STARRED_WILL,
-                () async {
+                DialogStrings.CHATS_THAT_ARE_STARRED_WILL, () async {
               print('Chat Starred');
 
-             // await markAllRead();
+              // await markAllRead();
 
               Navigator.of(context).pop();
-
-         
             }),
             _buildDialogOption(DialogStrings.MARK_CHAT_READ,
-               DialogStrings.THE_NEW_MESSAGE_ICON_WILL,
-                () async {
+                DialogStrings.THE_NEW_MESSAGE_ICON_WILL, () async {
               print('Chat Read');
 
-             // await markAllUnread();
+              // await markAllUnread();
 
               Navigator.of(context).pop(); // Close the dialog if needed
-          
             }),
           ],
         ),
@@ -161,7 +156,7 @@ Future<void> markAllUnread() async {
 
 //   showDialog(
 //     context: context,
-//         barrierDismissible: false, 
+//         barrierDismissible: false,
 
 //     builder: (context) => AlertDialog(
 //       title: Text('Terms of Service'),
@@ -200,7 +195,7 @@ void showTermsOfServiceDialog(BuildContext context) {
     builder: (context) => AlertDialog(
       title: Text(DialogStrings.TERMS_OF_SERVICE),
       content: Text(
-       DialogStrings.THIS_APP_IS_PROVIDED_I_AGREED,
+        DialogStrings.THIS_APP_IS_PROVIDED_I_AGREED,
       ),
       actions: [
         TextButton(
@@ -248,4 +243,34 @@ void showTermsOfServiceDialog(BuildContext context) {
       ],
     ),
   );
+}
+
+void showExitConversationDialog(BuildContext context) async {
+  bool exitConfirmed = await showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => AlertDialog(
+      title: Text(DialogStrings.ALERT),
+      content: Text(DialogStrings.DO_YOU_WANT_EXIT_CONVERSATION),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(true); // Exit button pressed, return true
+          },
+          child: Text(DialogStrings.EXIT),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(false); // Cancel button pressed, return false
+          },
+          child: Text(DialogStrings.CANCEL),
+        ),
+      ],
+    ),
+  );
+
+  if (exitConfirmed == true) {
+    // Perform the exit action or navigate to the previous screen
+    Navigator.of(context).pop(); // Go back to the previous screen
+  }
 }
