@@ -2,37 +2,37 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-7181343877669077/5345359476</string>
 	<key>CLIENT_ID</key>
-	<string>993494627077-1h4bd7n16acvcrvaft0f66se7jpiqbi5.apps.googleusercontent.com</string>
+	<string>609337871587-q41l6lncislnojdi383qa0fvquto3tfi.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.993494627077-1h4bd7n16acvcrvaft0f66se7jpiqbi5</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>993494627077-lcnrte5q0pb8lm2ig62bq7796cj1ind3.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.609337871587-q41l6lncislnojdi383qa0fvquto3tfi</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCUgeN9ej9Ptym2da8BGqmZ8Gu8ua9FUxk</string>
+	<string>AIzaSyAiPkjOS-FTLrlyJhQI7JYOkNBismg_QTI</string>
 	<key>GCM_SENDER_ID</key>
-	<string>993494627077</string>
+	<string>609337871587</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.teletype.truckchat.ios</string>
+	<string>com.truckchat.app</string>
 	<key>PROJECT_ID</key>
-	<string>my-project2-1630342752427</string>
-	<key>STORAGE_BUCKET</key>
-	<string>my-project2-1630342752427.appspot.com</string>
+	<string>truckchat-2aaaf</string>
 	<key>IS_ADS_ENABLED</key>
-	<false></false>
+	<true/>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_GCM_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:993494627077:ios:ae8f63e43939efc69d3d6c</string>
+	<string>1:609337871587:ios:7cabccbe42a87b1d</string>
 	<key>DATABASE_URL</key>
-	<string>https://my-project2-1630342752427-default-rtdb.firebaseio.com</string>
+	<string>https://truckchat-2aaaf.firebaseio.com</string>
 </dict>
 </plist>

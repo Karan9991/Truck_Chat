@@ -161,7 +161,7 @@ class Constants {
 
   static const String ANDROID = 'Android';
   static const String IOS = 'iOS';
-  static const String APP_BAR_TITLE = 'Truckchat';
+  static const String APP_BAR_TITLE = 'TruckChat';
   static const String CHAT_HANDLE = 'Chat Handle';
   static const String PREPEND_YOUR_MESSAGES =
       'Prepend your messages with a handle (Handles are not unique for each other)';
@@ -174,4 +174,8 @@ class Constants {
   static const String CHATS = 'Chats';
   static const String SPONSORS = 'Sponsors';
   static const String REVIEWS = 'Reviews';
+
+    static const String FCM_NOTIFICATION_TITLE = 'There are new messages!';
+    static const String FCM_NOTIFICATION_BODY = 'Tap here to open TruckChat';
+
 }

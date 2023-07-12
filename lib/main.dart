@@ -1,10 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:chat/chat_list_screen.dart';
-import 'package:chat/chat_screen.dart';
-import 'package:chat/getFcm.dart';
-import 'package:chat/get_previous_messages.dart';
 import 'package:chat/home_screen.dart';
 import 'package:chat/utils/avatar.dart';
 import 'package:chat/utils/chat_handle.dart';
@@ -22,12 +17,24 @@ import 'package:device_info/device_info.dart';
 import 'get_all_reply_messages.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.notification}");
+  // Handle the background message here
+      handleFCMMessage(message.data);
+
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await Admob.initialize();
-  // Run this before displaying any ad.
   await Admob.requestTrackingAuthorization();
+
+  configLocalNotification();
+  _configureFCM();
+
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+
   await SharedPrefs.init();
   await registerDevice();
 
@@ -38,6 +45,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -136,6 +144,7 @@ Future<void> registerDevice() async {
           SharedPrefsKeys.LATITUDE, currentLocation.latitude!);
       SharedPrefs.setDouble(
           SharedPrefsKeys.LONGITUDE, currentLocation.longitude!);
+      print('testing ${SharedPrefs.getString(SharedPrefsKeys.USER_ID)}');
     } else {
       print("Error: User ID not found in response");
     }
@@ -177,160 +186,103 @@ Future<String?> getFirebaseToken() async {
   return token;
 }
 
-// class MyHomePage extends StatefulWidget {
-//   const MyHomePage({super.key, required this.title});
+final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
-//   final String title;
+void _configureFCM() {
+  _firebaseMessaging.requestPermission();
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Foreground notification received ${message.data}');
 
-//   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
-// }
+    handleFCMMessage(message.data);
 
-// class _MyHomePageState extends State<MyHomePage> {
-//   int _counter = 0;
-//   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-//   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-//       FlutterLocalNotificationsPlugin();
 
-//   void _incrementCounter() async {
-//     setState(() {
-//       _counter++;
-//       //registerDevice();
-//       Navigator.push(
-//         context,
-//         MaterialPageRoute(builder: (context) => HomeScreen()),
-//       );
-//       //   ChatHandle.showChatHandle(context); // Call the showChatHandle function
+    if (message.notification != null) {
+      //  showNotification(message.notification!);
+      // showNotification('title', 'body');
+      // print('Notification data ');
+      // print(message.notification?.title);
+      // print(message.notification?.body);
 
-//       //  showAvatarSelectionDialog(context);
+      // _showLocalNotification(message.data);
+    }
+    // Handle foreground notifications here
+    // Example: Show a local notification using flutter_local_notifications package
+    // _showLocalNotification(message.data);
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print('Background notification received $message');
+    handleFCMMessage(message.data);
 
-//       //  String? vv = SharedPrefs.getString('serialNumber');
-//       //           print("shared pref serialNumber $vv");
+    if (message.notification != null) {
+      // showNotification(message.notification!);
+      //_showLocalNotification(message.data);
+    }
 
-//       //      Navigator.push(
-//       //   context,
-//       //   MaterialPageRoute(
-//       //     builder: (context) => ChatListScreen(
-//       //       conversationTopics: serverMessageIds,
-//       //       conversationTimestamps: conversation_timestamp,
-//       //       replyCounts: counts,
-//       //       replyMsgs: reply_msgs,
-//       //     ),
-//       //   ),
-//       // );
-//     });
-//   }
+    // Handle background notifications here
+  });
+}
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     configLocalNotification();
+void handleFCMMessage(Map<String, dynamic> message) {
+  // final data = message['data'];
+  // final senderId = data['senderId'] as int;
+  final senderId = message['user_id'];
 
-//     _configureFCM();
+  String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+  print('current user id notif $currentUserId');
 
-//     // registerDevice();
-//   }
+  print('fcm sender id notif $senderId');
+  print(
+      'testing current user id ${SharedPrefs.getString(SharedPrefsKeys.USER_ID)}');
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-//         title: Text(widget.title),
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//             const Text(
-//               'You have pushed the button this many times:',
-//             ),
-//             Text(
-//               '$_counter',
-//               style: Theme.of(context).textTheme.headlineMedium,
-//             ),
-//           ],
-//         ),
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: _incrementCounter,
-//         tooltip: 'Increment',
-//         child: const Icon(Icons.add),
-//       ), // This trailing comma makes auto-formatting nicer for build methods.
-//     );
-//   }
+// Ignore the notification if the sender is the current user
+  if (currentUserId != senderId) {
+    showNotification(
+        Constants.FCM_NOTIFICATION_TITLE, Constants.FCM_NOTIFICATION_BODY);
+  }
+}
 
-// //original
-//   void _configureFCM() {
-//     _firebaseMessaging.requestPermission();
-//     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-//       print('fffffffffForeground notification received $message');
+void showNotification(String? title, String? body) async {
+  print('showNotification method called');
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+    'com.teletype.truckchat', // Replace with your Android package name
+    'Flutter chat demo',
+    playSound: true,
+    enableVibration: true,
+    importance: Importance.max,
+    priority: Priority.high,
+  );
+  DarwinNotificationDetails iOSPlatformChannelSpecifics =
+      DarwinNotificationDetails();
 
-//       if (message.notification != null) {
-//         //  showNotification(message.notification!);
-//         showNotification('title', 'body');
-//         print('nnnnnnotification data ');
-//         print(message.notification?.title);
-//         print(message.notification?.body);
+  NotificationDetails platformChannelSpecifics = NotificationDetails(
+    android: androidPlatformChannelSpecifics,
+    iOS: iOSPlatformChannelSpecifics,
+  );
 
-//         // _showLocalNotification(message.data);
-//       }
-//       // Handle foreground notifications here
-//       // Example: Show a local notification using flutter_local_notifications package
-//       // _showLocalNotification(message.data);
-//     });
-//     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-//       print('bbbbbbbbbbbBackground notification received $message');
-//       if (message.notification != null) {
-//         // showNotification(message.notification!);
-//         //_showLocalNotification(message.data);
-//       }
+  await flutterLocalNotificationsPlugin.show(
+    0,
+    title,
+    body,
+    platformChannelSpecifics,
+    payload: null,
+  );
+}
 
-//       // Handle background notifications here
-//     });
-//   }
-
-//   void showNotification(String? title, String? body) async {
-//     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-//         AndroidNotificationDetails(
-//       'com.dfa.flutterchatdemo', // Replace with your Android package name
-//       'Flutter chat demo',
-//       playSound: true,
-//       enableVibration: true,
-//       importance: Importance.max,
-//       priority: Priority.high,
-//     );
-//     DarwinNotificationDetails iOSPlatformChannelSpecifics =
-//         DarwinNotificationDetails();
-
-//     NotificationDetails platformChannelSpecifics = NotificationDetails(
-//       android: androidPlatformChannelSpecifics,
-//       iOS: iOSPlatformChannelSpecifics,
-//     );
-
-//     await flutterLocalNotificationsPlugin.show(
-//       0,
-//       title,
-//       body,
-//       platformChannelSpecifics,
-//       payload: null,
-//     );
-//   }
-
-// //original
-//   void configLocalNotification() {
-//     AndroidInitializationSettings initializationSettingsAndroid =
-//         AndroidInitializationSettings('@mipmap/ic_launcher');
-//     DarwinInitializationSettings initializationSettingsIOS =
-//         DarwinInitializationSettings();
-//     InitializationSettings initializationSettings = InitializationSettings(
-//       android: initializationSettingsAndroid,
-//       iOS: initializationSettingsIOS,
-//     );
-//     flutterLocalNotificationsPlugin.initialize(initializationSettings);
-//   }
-
-// }
+//original
+void configLocalNotification() {
+  AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  DarwinInitializationSettings initializationSettingsIOS =
+      DarwinInitializationSettings();
+  InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
+  );
+  flutterLocalNotificationsPlugin.initialize(initializationSettings);
+}
 
 class ReplyMsg {
   final String rid;

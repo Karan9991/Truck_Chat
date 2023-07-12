@@ -3,7 +3,7 @@
 import 'package:chat/chat/new_conversation.dart';
 // import 'package:chat/chat_list_screen.dart';
 import 'package:chat/news_tab.dart';
-import 'package:chat/reactivechat/chatlistreact.dart';
+import 'package:chat/chat/chat_list.dart';
 import 'package:chat/settings/settings.dart';
 import 'package:chat/utils/ads.dart';
 import 'package:chat/utils/alert_dialog.dart';
@@ -13,7 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' show Platform;
-import 'chat/chatlist.dart';
+// import 'chat/chatlist.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
 
-    InterstitialAdManager.initialize();
+    //InterstitialAdManager.initialize();
 
     //    Future.delayed(Duration(seconds: 5), () {
     // InterstitialAdManager.showInterstitialAd();
@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     super.dispose();
-    InterstitialAdManager.dispose();
+    //InterstitialAdManager.dispose();
   }
 
   void _refreshChatList() {
@@ -188,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Perform action when a pop-up menu item is selected
                 switch (value) {
                   case 'settings':
-                    InterstitialAdManager.showInterstitialAd();
+                   // InterstitialAdManager.showInterstitialAd();
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SettingsScreen()),
@@ -258,13 +258,13 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: _widgetOptions.elementAt(_selectedIndex),
             ),
-            Container(
-              height: 50, // Adjust the height of the ad container as needed
-              child: AdmobBanner(
-                adUnitId: AdHelper.bannerAdUnitId,
-                adSize: AdmobBannerSize.BANNER,
-              ),
-            ),
+            // Container(
+            //   height: 50, // Adjust the height of the ad container as needed
+            //   child: AdmobBanner(
+            //     adUnitId: AdHelper.bannerAdUnitId,
+            //     adSize: AdmobBannerSize.BANNER,
+            //   ),
+            // ),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(

@@ -150,7 +150,7 @@ class ChatController extends GetxController {
     print('receiver token $receiverFCMToken');
     // Replace 'YOUR_SERVER_KEY' with your FCM server key
     String serverKey =
-        'AAAA51Dk8wU:APA91bH16JrFM6yg3w014AeQ77SmXCjaTCiT8XlRy3CKPhv79XZx7xVV1_SpzLMsGaG1Zal9Cjr9gBhdMVDwz7Ka4-nnKMRyCLx2hWwoec3VahSQ5aEWxDJkqPbLkebovTWdCgkdSFTB';
+        'AAAAeR6Pnuo:APA91bHiasD4BKzgcY04ZiQ8oNi0L3HdOBeLBtUrxPfemCHHlxY0SGRP9VQ4kowDqRtOacdN8HUjmDTTMOgV1IzActxqGbKCT2W6dRm3Om5baCfJjDlBWnOm5vNqO-goLJRJV0UG1XgL';
     String url = 'https://fcm.googleapis.com/fcm/send';
 
     // Replace 'YOUR_NOTIFICATION_TITLE' and 'YOUR_NOTIFICATION_BODY' with your desired notification title and body

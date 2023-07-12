@@ -97,6 +97,22 @@
 //testing
 
 
+// class ReplyMsg {
+//   final int rid;
+//   final int uid;
+//   final String replyMsg;
+//   final int timestamp;
+//   final String emojiId;
+//     final String topic;
+
+
+//   ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId, this.topic);
+
+  
+
+// }
+
+
 class ReplyMsg {
   final int rid;
   final int uid;
@@ -104,9 +120,10 @@ class ReplyMsg {
   final int timestamp;
   final String emojiId;
     final String topic;
+    final String driverName;
 
 
-  ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId, this.topic);
+  ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId, this.topic, this.driverName);
 
   
 

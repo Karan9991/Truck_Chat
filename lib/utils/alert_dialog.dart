@@ -2,8 +2,8 @@ import 'package:chat/home_screen.dart';
 import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
-import 'package:chat/reactivechat/chatlistreact.dart';
-import 'package:chat/reactivechat/conversation_data.dart';
+import 'package:chat/chat/chat_list.dart';
+import 'package:chat/chat/conversation_data.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 

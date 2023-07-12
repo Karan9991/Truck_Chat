@@ -3,6 +3,10 @@
 import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/home_screen.dart';
 import 'package:chat/settings/settings.dart';
+import 'package:chat/utils/ads.dart';
+import 'package:chat/utils/avatar.dart';
+import 'package:chat/utils/constants.dart';
+import 'package:chat/utils/lat_lng.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
@@ -14,6 +18,10 @@ import 'package:http/http.dart' as http;
 import 'package:chat/get_all_reply_messages.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'dart:async';
+import 'package:admob_flutter/admob_flutter.dart';
+import 'package:chat/utils/alert_dialog.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Chat extends StatefulWidget {
   final String topic;
@@ -47,60 +55,311 @@ class _ChatState extends State<Chat> {
   bool sendingMessage = false; // Added variable to track sending state
   String? shareprefuserId = SharedPrefs.getString('userId');
   int userId = 0;
-  double? storedLatitude = 1.0;
-  double? storedLongitude = 1.0;
-
+  // double? storedLatitude = 1.0;
+  // double? storedLongitude = 1.0;
+  // late Timer refreshTimer;
+  ScrollController _scrollController = ScrollController();
+  String? currentUserHandle;
+  String? emojiId;
+  String? driverName;
+  double? latitude;
+  double? longitude;
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
     super.initState();
 
+    _firebaseMessaging.subscribeToTopic('all');
+
+    //InterstitialAdManager.initialize();
+
     userId = int.parse(shareprefuserId!);
-    storedLatitude = SharedPrefs.getDouble('latitude');
-    storedLongitude = SharedPrefs.getDouble('longitude');
+    // storedLatitude = SharedPrefs.getDouble('latitude');
+    // storedLongitude = SharedPrefs.getDouble('longitude');
+
+    currentUserHandle =
+        SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
 
     print('init state');
-    getAllMessages(widget.serverMsgId);
+    mm(widget.serverMsgId);
+    // await getAllMessages(widget.serverMsgId);
 
+    // Scroll to the bottom when messages are loaded initially
+    // WidgetsBinding.instance!.addPostFrameCallback((_) {
+    //   _scrollToBottom();
+    // });
+    // _scrollToBottom();
+
+    // refreshTimer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
+    //   getAllMessages(widget.serverMsgId);
+    // });
+
+    // WidgetsBinding.instance?.addPostFrameCallback((_) =>
+    //     scrollToBottom()); // Call scrollToBottom() after the first frame is rendered
 
     // filterReplyMsgs();
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+
+    // refreshTimer.cancel();
+    //InterstitialAdManager.dispose();
+    super.dispose();
+  }
+
+  void scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
 
   void filterReplyMsgs() {
-    print('reply messges in fliter replymsf');
-    print(replyMsgs);
+    // print('reply messges in fliter replymsf');
+    // print(replyMsgs);
     filteredReplyMsgs =
         replyMsgs.where((reply) => reply.topic == widget.topic).toList();
+  }
+
+  Future<void> mm(dynamic conversationId) async {
+    Map<String, double> locationData = await getLocation();
+    latitude = locationData[Constants.LATITUDE]!;
+    longitude = locationData[Constants.LONGITUDE]!;
+    await getAllMessages(conversationId);
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) =>
+        scrollToBottom()); // Call scrollToBottom() after the first frame is rendered
+
+    //   WidgetsBinding.instance!.addPostFrameCallback((_) {
+    //   _scrollController.animateTo(
+    //     _scrollController.position.maxScrollExtent,
+    //     duration: Duration(milliseconds: 500),
+    //     curve: Curves.ease,
+    //   );
+    // });
+  }
+
+  Future<void> sendFCMNotification(String topic, String message) async {
+    final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+    final serverKey =
+        'AAAAeR6Pnuo:APA91bHiasD4BKzgcY04ZiQ8oNi0L3HdOBeLBtUrxPfemCHHlxY0SGRP9VQ4kowDqRtOacdN8HUjmDTTMOgV1IzActxqGbKCT2W6dRm3Om5baCfJjDlBWnOm5vNqO-goLJRJV0UG1XgL'; // Replace with your FCM server key
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'key=$serverKey',
+    };
+
+    final body = {
+      'to': '/topics/$topic',
+      'notification': {
+        'body': 'message',
+        'title': 'New Message',
+      },
+      'data': {
+        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+        'senderId': '1111', // Include the senderId in the data payload
+      },
+    };
+
+    try {
+      final response =
+          await http.post(url, headers: headers, body: jsonEncode(body));
+      if (response.statusCode == 200) {
+        print('FCM notification sent successfully');
+      } else {
+        print('Failed to send FCM notification');
+      }
+    } catch (e) {
+      print('Error sending FCM notification: $e');
+    }
+  }
+
+
+  //   Future<void> sendFCMNotification(String topic, String message) async {
+  //   String serverKey =
+  //       'AAAAeR6Pnuo:APA91bHiasD4BKzgcY04ZiQ8oNi0L3HdOBeLBtUrxPfemCHHlxY0SGRP9VQ4kowDqRtOacdN8HUjmDTTMOgV1IzActxqGbKCT2W6dRm3Om5baCfJjDlBWnOm5vNqO-goLJRJV0UG1XgL';
+  //   String url = 'https://fcm.googleapis.com/fcm/send';
+
+  //   String notificationTitle = 'New Message $message';
+  //   String notificationBody = 'You have received a new message from';
+
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse(url),
+  //       headers: <String, String>{
+  //         'Content-Type': 'application/json',
+  //         'Authorization': 'key=$serverKey',
+  //       },
+  //       body: jsonEncode(<String, dynamic>{
+  //         'notification':'noti',
+  //         'priority': 'high',
+  //         'data': 'datttta',
+  //     'to': '/topics/$topic',
+  //       }),
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       print('Notification sent successfully');
+  //     } else {
+  //       print(
+  //           'Failed to send notification. StatusCode: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     print('Failed to send notification. Error: $e');
+  //   }
+  // }
+
+  Future<bool> getAllMessages(dynamic conversationId) async {
+    print('Conversation Id  $conversationId');
+    int statusCode = 0;
+    String counts = '';
+
+    String statusMessage = '';
+
+    final url = Uri.parse(API.CHAT);
+
+    Map<String, dynamic> requestBody = {
+      API.SERVER_MESSAGE_ID: conversationId,
+    };
+
+    try {
+      http.Response response = await http.post(
+        url,
+        headers: {API.CONTENT_TYPE: API.APPLICATION_JSON},
+        body: jsonEncode(requestBody),
+      );
+      if (response.statusCode == 200) {
+        // print('200');
+        final result = response.body;
+
+        print('---------------Chat Response---------------');
+        print(result);
+
+        //print('response body $result');
+
+        try {
+          final jsonResult = jsonDecode(result);
+
+          counts = jsonResult[API.COUNTS];
+
+          final jsonReplyList = jsonResult[API.MESSAGE_REPLY_LIST];
+
+          // print('jsonreplylist');
+          // print(jsonReplyList);
+
+          int countValue = int.parse(counts);
+
+          // print(jsonReplyList.length);
+          // Clear the replyMsgs list before adding new messages
+          replyMsgs.clear();
+
+          //if (counts == jsonReplyList.length) {
+          for (var i = 0; i < countValue; ++i) {
+            final jsonReply = jsonReplyList[i];
+            final rid = jsonReply[API.SERVER_MSG_REPLY_ID];
+            final replyMsg = jsonReply[API.REPLY_MSG];
+            final uid = jsonReply[API.USER_ID];
+            final emojiId = jsonReply[API.EMOJI_ID];
+            final driverName = jsonReply['driver_name'];
+            print("server_msg_reply_id  $rid");
+            print("reply_msg $replyMsg");
+            print("user id  $uid");
+            print("emoji_id $emojiId");
+            print("driver_name $driverName");
+
+            print('--------------------------');
+            int timestamp;
+            try {
+              //  timestamp = int.tryParse(jsonReply['timestamp']) ?? 0;
+              timestamp = jsonReply[API.TIMESTAMP] ?? 0;
+              // print('try in for $timestamp');
+            } catch (e) {
+              timestamp = 0;
+              //print('catch $timestamp');
+            }
+
+            replyMsgs.add(ReplyMsg(rid, uid, replyMsg, timestamp, emojiId,
+                widget.topic, driverName));
+          }
+          // } else {
+          //   print('elsee');
+          // }
+
+          setState(() {
+            // Update the conversation data
+            // conversationTopics.add(conversationTopic);
+            // conversationTimestamps.add(conversationTimestamp);
+            // replyCounts.add(counts);
+            this.replyMsgs = replyMsgs;
+
+            filterReplyMsgs();
+          });
+
+          scrollToBottom();
+        } catch (e) {
+          print('catch 2 $e');
+          statusMessage = e.toString();
+        }
+      } else {
+        statusMessage = 'Connection Error';
+      }
+    } catch (e) {
+      print('${Constants.ERROR} $e');
+    }
+    //  }
+
+    return false;
   }
 
   Future<bool> sendMessage(
     String message,
     String serverMsgId,
     int userId,
-    String emojiId,
   ) async {
     setState(() {
       sendingMessage = true; // Set sending state to true
     });
 
-    print('send message');
-    print('message $message');
-    print('sermsgid $serverMsgId');
-    print('userid $userId');
-    print('emojiid $emoji_id');
+    if (SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID) != null) {
+      emojiId =
+          SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID).toString();
+      // print('new conversation emoji id $emojiId');
+    } else {
+      emojiId = '0';
+      // print('new conversation emoji id $emojiId');
+    }
+
+    driverName =
+        SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE) ?? '';
+
+    // print('send message');
+    // print('message $message');
+    // print('sermsgid $serverMsgId');
+    // print('userid $userId');
+    // print('emojiid $emojiId');
+
+//concat username/chathandle with message
+    // if (currentUserHandle != null) {
+    //   message = '$currentUserHandle $message';
+    // }
 
     //  int servermsgid = int.parse(serverMsgId);
-    final url =
-        'http://smarttruckroute.com/bb/v1/device_post_message'; // Replace with your API endpoint
-    final headers = {'Content-Type': 'application/json'};
+    final url = API.SEND_MESSAGE; // Replace with your API endpoint
+    final headers = {API.CONTENT_TYPE: API.APPLICATION_JSON};
     final body = jsonEncode({
-      'message': message,
-      'server_msg_id': serverMsgId,
-      'user_id': userId,
-      'latitude': storedLatitude,
-      'longitude': storedLongitude,
-      'emoji_id': emojiId,
+      API.MESSAGE: message,
+      API.SERVER_MSG_ID: serverMsgId,
+      API.USER_ID: userId,
+      API.LATITUDE: latitude.toString(),
+      API.LONGITUDE: longitude.toString(),
+      API.EMOJI_ID: emojiId,
+      'driver_name': driverName,
     });
 
     try {
@@ -110,23 +369,26 @@ class _ChatState extends State<Chat> {
       print(response.body);
 
       if (response.statusCode == 200) {
+        print('Message Sent');
         setState(() {
           sendingMessage = false; // Set sending state to false
         });
 
         final jsonResult = jsonDecode(response.body);
-        int statusCode = jsonResult['status'] as int;
-        print('status code $statusCode');
+        print('---------------Send Message Response---------------');
 
+        print(response.body);
+        int statusCode = jsonResult[API.STATUS] as int;
 
+        /// print('status code $statusCode');
 
-        if (jsonResult.containsKey('message')) {
-          String status_message = jsonResult['message'] as String;
-          print('status_message $status_message');
+        if (jsonResult.containsKey(API.MESSAGE)) {
+          String status_message = jsonResult[API.MESSAGE] as String;
+          // print('status_message $status_message');
 
           // Add the sent message to the list
-          sentMessages.add(ReplyMsgg(serverMsgId, userId, message,
-              DateTime.now().millisecondsSinceEpoch));
+          // sentMessages.add(ReplyMsgg(serverMsgId, userId, message,
+          //     DateTime.now().millisecondsSinceEpoch));
         } else {
           String status_message = '';
         }
@@ -150,356 +412,361 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.topic),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.star_border),
-            onPressed: () {
-              // Perform action when chat icon is pressed
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NewConversationScreen()),
-              );
-            },
-          ),
-          IconButton(
-            icon: Image.asset(
-              'assets/doublechat.png', // Replace 'icon.png' with the actual path to your icon asset
-              width: 30,
-              height: 30,
+    return WillPopScope(
+      onWillPop: () async {
+        //showExitConversationDialog(context);
+        return true; // Prevent the default back button behavior
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.topic),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.star_border),
+              onPressed: () {
+                // Perform action when chat icon is pressed
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => NewConversationScreen()),
+                // );
+              },
             ),
-            onPressed: () {
-              // Perform action when grid box icon is pressed
-            },
-          ),
-          PopupMenuButton(
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem(
-                  child: Text('Settings'),
-                  value: 'settings',
-                ),
-                PopupMenuItem(
-                  child: Text('Tell a Friend'),
-                  value: 'tell a friend',
-                ),
-                PopupMenuItem(
-                  child: Text('Help'),
-                  value: 'help',
-                ),
-                PopupMenuItem(
-                  child: Text('Report Abuse'),
-                  value: 'report abuse',
-                ),
-              ];
-            },
-            onSelected: (value) {
-              // Perform action when a pop-up menu item is selected
-              switch (value) {
-                case 'settings':
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SettingsScreen()),
-                  );
-                  break;
-                case 'tell a friend':
-                  String email = Uri.encodeComponent("");
-                  String subject = Uri.encodeComponent("Check out TruckChat");
-                  String body = Uri.encodeComponent(
-                      "I am using TruckChat right now, check it out at:\n\nhttp://play.google.com/store/apps/details?id=com.teletype.truckchat\n\nhttp://truckchatapp.com");
-                  print(subject);
-                  Uri mail =
-                      Uri.parse("mailto:$email?subject=$subject&body=$body");
-                  launchUrl(mail);
-                  break;
-                case 'help':
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Help()),
-                  );
-                  break;
-                case 'report abuse':
-                  _showReportAbuseDialog(context);
-                  break;
-              }
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-              decoration: BoxDecoration(
-                color: Colors.blue[300],
-                borderRadius: BorderRadius.circular(8.0),
+            IconButton(
+              icon: Image.asset(
+                'assets/doublechat.png', // Replace 'icon.png' with the actual path to your icon asset
+                width: 30,
+                height: 30,
               ),
-              child: Text(
-                widget.topic,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
+              onPressed: () {
+                // Perform action when grid box icon is pressed
+              },
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredReplyMsgs.length + sentMessages.length,
-              itemBuilder: (context, index) {
-                if (index < filteredReplyMsgs.length) {
-                  final reply = filteredReplyMsgs[index];
-                  final replyMsg = reply.replyMsg;
-                  final timestampp = reply.timestamp;
-
-                  DateTime dateTime =
-                      DateTime.fromMillisecondsSinceEpoch(timestampp);
-                  String formattedDateTime =
-                      DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
-                  final timestamp = formattedDateTime;
-
-                  rid = reply.rid;
-                  emoji_id = reply.emojiId;
-                  timestam = timestampp;
-
-                  bool isCurrentUser = reply.uid ==
-                      userId; // Check if the user_id is equal to 69979
-
-                  return Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: ChatBubble(
-                      clipper: ChatBubbleClipper6(
-                          type: isCurrentUser
-                              ? BubbleType.sendBubble
-                              : BubbleType.receiverBubble),
-                      alignment: isCurrentUser
-                          ? Alignment.topRight
-                          : Alignment.topLeft,
-                      margin: EdgeInsets.only(bottom: 16.0),
-                      backGroundColor: Colors.blue[300],
-                      child: Container(
-                        constraints: BoxConstraints(maxWidth: 250.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              replyMsg,
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 20),
-                            ),
-                            SizedBox(height: 4.0),
-                            Text(
-                              timestamp,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                } else {
-                  final sentIndex = index - filteredReplyMsgs.length;
-                  final sentMessage = sentMessages[sentIndex];
-                  final timestampp = sentMessage.timestamp;
-
-                  DateTime dateTime =
-                      DateTime.fromMillisecondsSinceEpoch(timestampp);
-                  String formattedDateTime =
-                      DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
-                  final timestamp = formattedDateTime;
-
-                  bool isCurrentUser = sentMessage.uid ==
-                      userId; // Check if the user_id is equal to 69979
-
-                  return Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: ChatBubble(
-                      clipper: ChatBubbleClipper6(
-                          type: isCurrentUser
-                              ? BubbleType.sendBubble
-                              : BubbleType.receiverBubble),
-                      alignment: isCurrentUser
-                          ? Alignment.topRight
-                          : Alignment.topLeft,
-                      margin: EdgeInsets.only(bottom: 16.0),
-                      backGroundColor: Colors.blue[300],
-                      child: Container(
-                        constraints: BoxConstraints(maxWidth: 250.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              sentMessage.replyMsg,
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 20),
-                            ),
-                            SizedBox(height: 4.0),
-                            Text(
-                              timestamp,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
+            PopupMenuButton(
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem(
+                    child: Text(Constants.SETTINGS),
+                    value: 'settings',
+                  ),
+                  PopupMenuItem(
+                    child: Text(Constants.TELL_A_FRIEND),
+                    value: 'tell a friend',
+                  ),
+                  PopupMenuItem(
+                    child: Text(Constants.HELP),
+                    value: 'help',
+                  ),
+                  PopupMenuItem(
+                    child: Text(Constants.REPORT_ABUSE),
+                    value: 'report abuse',
+                  ),
+                ];
+              },
+              onSelected: (value) {
+                // Perform action when a pop-up menu item is selected
+                switch (value) {
+                  case 'settings':
+                    //InterstitialAdManager.showInterstitialAd();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SettingsScreen()),
+                    );
+                    break;
+                  case 'tell a friend':
+                    String email = Uri.encodeComponent("");
+                    String subject =
+                        Uri.encodeComponent(Constants.CHECK_OUT_TRUCKCHAT);
+                    String body =
+                        Uri.encodeComponent(Constants.I_AM_USING_TRUCKCHAT);
+                    print(subject);
+                    Uri mail =
+                        Uri.parse("mailto:$email?subject=$subject&body=$body");
+                    launchUrl(mail);
+                    break;
+                  case 'help':
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Help()),
+                    );
+                    break;
+                  case 'report abuse':
+                    _showReportAbuseDialog(context);
+                    break;
                 }
               },
             ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(24.0),
-            ),
-            child: Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.mic),
-                  onPressed: () {
-                    _toggleListening();
-                  },
+          ],
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                decoration: BoxDecoration(
+                  color: Colors.blue[300],
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                Expanded(
-                  child: TextField(
-                    controller: messageController,
-                    decoration: InputDecoration(
-                      hintText: 'Compose message',
-                      border: InputBorder.none,
-                    ),
+                child: Text(
+                  widget.topic,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
-                SizedBox(width: 8.0),
-                FloatingActionButton(
-                  onPressed: () async {
-                    bool messageSent = await sendMessage(
-                      messageController.text,
-                      widget.serverMsgId,
-                      userId,
-                      emoji_id,
-                    );
-                    if (messageSent) {
-                      print('message send');
-                      // Message sent successfully, handle any UI updates if needed
-                    } else {
-                      print('message failed not sent');
-                      // Failed to send the message, handle any UI updates if needed
-                    }
-                    setState(() {
-                      messageController.clear();
-                    });
-                  },
-                  backgroundColor: Colors.blue,
-                  child: sendingMessage // Check sending state
-                      ? CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
-                        ) // Show progress indicator
-                      : Icon(Icons.send),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: filteredReplyMsgs.length + sentMessages.length,
+                itemBuilder: (context, index) {
+                  if (index < filteredReplyMsgs.length) {
+                    final reply = filteredReplyMsgs[index];
+                    final replyMsg = reply.replyMsg;
+                    final timestampp = reply.timestamp;
+                    final driverName = reply.driverName;
+
+                    DateTime dateTime =
+                        DateTime.fromMillisecondsSinceEpoch(timestampp);
+                    String formattedDateTime =
+                        DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
+                    final timestamp = formattedDateTime;
+
+                    rid = reply.rid;
+                    emoji_id = reply.emojiId;
+                    timestam = timestampp;
+
+                    bool isCurrentUser = reply.uid ==
+                        userId; // Check if the user_id is equal to currentUserId
+
+                    // Find the corresponding Avatar for the emoji_id
+                    Avatar? matchingAvatar = avatars.firstWhere(
+                      (avatar) => avatar.id == int.parse(reply.emojiId),
+                      orElse: () => Avatar(id: 0, imagePath: ''),
+                    );
+                    // print('emoji id $emoji_id');
+                    // print('matching avatar id ${matchingAvatar.id}');
+
+                    return Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: ChatBubble(
+                        clipper: ChatBubbleClipper6(
+                            type: isCurrentUser
+                                ? BubbleType.sendBubble
+                                : BubbleType.receiverBubble),
+                        alignment: isCurrentUser
+                            ? Alignment.topRight
+                            : Alignment.topLeft,
+                        margin: EdgeInsets.only(bottom: 16.0),
+                        backGroundColor:
+                            isCurrentUser ? Colors.blue[100] : Colors.blue[300],
+                        child: isCurrentUser
+                            ? Container(
+                                constraints: BoxConstraints(maxWidth: 250.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        if (SharedPrefs.getString(SharedPrefsKeys
+                                                .CURRENT_USER_AVATAR_IMAGE_PATH) !=
+                                            null)
+                                          Image.asset(
+                                            SharedPrefs.getString(SharedPrefsKeys
+                                                .CURRENT_USER_AVATAR_IMAGE_PATH)!,
+                                            width: 30,
+                                            height: 30,
+                                          ),
+                                        SizedBox(width: 8.0),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                driverName + replyMsg,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 20),
+                                              ),
+                                              SizedBox(height: 4.0),
+                                              Text(
+                                                timestamp,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Container(
+                                constraints: BoxConstraints(maxWidth: 250.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        if (matchingAvatar.id != 0)
+                                          Image.asset(
+                                            matchingAvatar.imagePath,
+                                            width: 30,
+                                            height: 30,
+                                          ),
+                                        SizedBox(width: 8.0),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                replyMsg,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 20),
+                                              ),
+                                              SizedBox(height: 4.0),
+                                              Text(
+                                                timestamp,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                      ),
+                    );
+                  } else {
+                    final sentIndex = index - filteredReplyMsgs.length;
+                    final sentMessage = sentMessages[sentIndex];
+                    final timestampp = sentMessage.timestamp;
+
+                    DateTime dateTime =
+                        DateTime.fromMillisecondsSinceEpoch(timestampp);
+                    String formattedDateTime =
+                        DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
+                    final timestamp = formattedDateTime;
+
+                    bool isCurrentUser = sentMessage.uid ==
+                        userId; // Check if the user_id is equal to 69979
+
+                    return Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: ChatBubble(
+                        clipper: ChatBubbleClipper6(
+                            type: isCurrentUser
+                                ? BubbleType.sendBubble
+                                : BubbleType.receiverBubble),
+                        alignment: isCurrentUser
+                            ? Alignment.topRight
+                            : Alignment.topLeft,
+                        margin: EdgeInsets.only(bottom: 16.0),
+                        backGroundColor: Colors.blue[300],
+                        child: Container(
+                          constraints: BoxConstraints(maxWidth: 250.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                sentMessage.replyMsg,
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                              ),
+                              SizedBox(height: 4.0),
+                              Text(
+                                timestamp,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(24.0),
+              ),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.mic),
+                    onPressed: () {
+                      _toggleListening();
+                    },
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: messageController,
+                      decoration: InputDecoration(
+                        hintText: Constants.COMPOSE_MESSAGE,
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8.0),
+                  FloatingActionButton(
+                    onPressed: () async {
+                      String message = messageController.text.trim();
+                      if (!message.isEmpty) {
+                        bool messageSent = await sendMessage(
+                          messageController.text,
+                          widget.serverMsgId,
+                          userId,
+                        );
+                        if (messageSent) {
+                          print('message sent');
+
+                          sendFCMNotification('all', 'message');
+
+                          // Message sent successfully, handle any UI updates if needed
+                        } else {
+                          print('message failed');
+                          // Failed to send the message, handle any UI updates if needed
+                        }
+                        setState(() {
+                          messageController.clear();
+                        });
+                      }
+                    },
+                    backgroundColor: Colors.blue,
+                    child: sendingMessage // Check sending state
+                        ? CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ) // Show progress indicator
+                        : Icon(Icons.send),
+                  ),
+                ],
+              ),
+            ),
+            // Container(
+            //   height: 50, // Adjust the height of the ad container as needed
+            //   child: AdmobBanner(
+            //     adUnitId: AdHelper.bannerAdUnitId,
+            //     adSize: AdmobBannerSize.BANNER,
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
-  }
-
-  Future<bool> getAllMessages(dynamic conversationId) async {
-    print('Conversation Id  $conversationId');
-    int statusCode = 0;
-    String counts = '';
-
-    String statusMessage = '';
-
-    final url =
-        Uri.parse("http://smarttruckroute.com/bb/v1/get_all_reply_message");
-
-    Map<String, dynamic> requestBody = {
-      "server_message_id": conversationId,
-    };
-
-    try {
-      http.Response response = await http.post(
-        url,
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(requestBody),
-      );
-      if (response.statusCode == 200) {
-        print('200');
-        final result = response.body;
-
-        try {
-          final jsonResult = jsonDecode(result);
-
-          counts = jsonResult['counts'];
-
-          final jsonReplyList = jsonResult['messsage_reply_list'];
-
-          print('jsonreplylist');
-          print(jsonReplyList);
-
-          int countValue = int.parse(counts);
-
-          print(jsonReplyList.length);
-
-          //if (counts == jsonReplyList.length) {
-          for (var i = 0; i < countValue; ++i) {
-            final jsonReply = jsonReplyList[i];
-            final rid = jsonReply['server_msg_reply_id'];
-            final replyMsg = jsonReply['reply_msg'];
-            final uid = jsonReply['user_id'];
-            final emojiId = jsonReply['emoji_id'];
-
-            print("server_msg_reply_id  $rid");
-            print("reply_msg $replyMsg");
-            print("user id  $uid");
-            print("emoji_id $emojiId");
-            int timestamp;
-            try {
-              //  timestamp = int.tryParse(jsonReply['timestamp']) ?? 0;
-              timestamp = jsonReply['timestamp'] ?? 0;
-              print('try in for $timestamp');
-            } catch (e) {
-              timestamp = 0;
-              print('catch $timestamp');
-            }
-
-            replyMsgs.add(
-                ReplyMsg(rid, uid, replyMsg, timestamp, emojiId, widget.topic));
-          }
-          // } else {
-          //   print('elsee');
-          // }
-
-          setState(() {
-            // Update the conversation data
-            // conversationTopics.add(conversationTopic);
-            // conversationTimestamps.add(conversationTimestamp);
-            // replyCounts.add(counts);
-            this.replyMsgs = replyMsgs;
-
-            filterReplyMsgs();
-          });
-        } catch (e) {
-          print('catch 2 $e');
-          statusMessage = e.toString();
-        }
-      } else {
-        statusMessage = 'Connection Error';
-      }
-    } catch (e) {
-      print('catch 1 $e');
-    }
-    //  }
-
-    return false;
   }
 
   void _showReportAbuseDialog(BuildContext context) {
@@ -507,12 +774,11 @@ class _ChatState extends State<Chat> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Report Abuse'),
-          content: Text(
-              'To report abuse or inappropriate content, tap on a message inside a chat conversation and select an option from the popup.'),
+          title: Text(Constants.REPORT_ABUSE),
+          content: Text(DialogStrings.TO_REPORT_ABUSE),
           actions: [
             TextButton(
-              child: Text('Got It!'),
+              child: Text(DialogStrings.GOT_IT),
               onPressed: () {
                 Navigator.of(context).pop();
               },
