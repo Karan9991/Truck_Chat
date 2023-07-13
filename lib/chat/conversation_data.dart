@@ -51,6 +51,7 @@ Future<List<Conversation>> getStoredConversations() async {
   return conversations;
 }
 
+
 Future<void> storeConversations(List<Conversation> conversations) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 

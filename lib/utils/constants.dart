@@ -98,6 +98,8 @@ class SharedPrefsKeys {
   static const String CURRENT_USER_AVATAR_IMAGE_PATH =
       'currentUserAvatarImagePath';
   static const String CONVERSATIONS = 'conversations';
+    static const String STORE_STARRED_CONVERSATIONS = 'starredConversations';
+
   static const String TERMS_AGREED = 'termsAgreed';
   static const String SELECTED_AVATAR_ID = 'selectedAvatarId';
   static const String CHAT_HANDLE = 'chatHandle';
@@ -120,6 +122,8 @@ class Constants {
   static const String TELL_A_FRIEND = 'Tell a Friend';
   static const String HELP = 'Help';
   static const String REPORT_ABUSE = 'Report Abuse';
+    static const String STARRED_CHAT = 'Starred Chats';
+
   static const String EXIT = 'Exit';
   static const String REFRESH = 'Refresh';
   static const String CHECK_OUT_TRUCKCHAT = 'Check out TruckChat';

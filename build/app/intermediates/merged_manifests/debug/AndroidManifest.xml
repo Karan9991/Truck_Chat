@@ -86,7 +86,9 @@
             android:value="2" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-7181343877669077~1517092948" />
+            android:value="ca-app-pub-7181343877669077~7476370948" />
+
+        <!-- working app id ca-app-pub-7181343877669077~1517092948 -->
 
         <service
             android:name="com.google.firebase.components.ComponentDiscoveryService"

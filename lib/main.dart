@@ -195,7 +195,7 @@ void _configureFCM() {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('Foreground notification received ${message.data}');
 
-    handleFCMMessage(message.data);
+   // handleFCMMessage(message.data);
 
 
     if (message.notification != null) {
@@ -213,7 +213,7 @@ void _configureFCM() {
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     print('Background notification received $message');
-    handleFCMMessage(message.data);
+   // handleFCMMessage(message.data);
 
     if (message.notification != null) {
       // showNotification(message.notification!);

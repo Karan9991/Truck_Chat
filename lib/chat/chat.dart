@@ -1,6 +1,7 @@
 // import 'dart:html';
 
 import 'package:chat/chat/new_conversation.dart';
+import 'package:chat/chat/starred_chat_list.dart';
 import 'package:chat/home_screen.dart';
 import 'package:chat/settings/settings.dart';
 import 'package:chat/utils/ads.dart';
@@ -22,6 +23,7 @@ import 'dart:async';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:chat/utils/alert_dialog.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Chat extends StatefulWidget {
   final String topic;
@@ -42,6 +44,7 @@ class _ChatState extends State<Chat> {
   stt.SpeechToText _speechToText = stt.SpeechToText();
   bool _isListening = false;
   String _typedText = '';
+  bool isStar = false;
 
   TextEditingController messageController = TextEditingController();
   List<ReplyMsg> filteredReplyMsgs = [];
@@ -65,6 +68,7 @@ class _ChatState extends State<Chat> {
   double? latitude;
   double? longitude;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  List<String> starredConversationList = [];
 
   @override
   void initState() {
@@ -83,6 +87,10 @@ class _ChatState extends State<Chat> {
 
     print('init state');
     mm(widget.serverMsgId);
+    _refreshChat();
+
+    checkChatStarredStatus();
+
     // await getAllMessages(widget.serverMsgId);
 
     // Scroll to the bottom when messages are loaded initially
@@ -108,6 +116,14 @@ class _ChatState extends State<Chat> {
     // refreshTimer.cancel();
     //InterstitialAdManager.dispose();
     super.dispose();
+  }
+
+  void _refreshChat() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Refresh ChatList');
+
+      getAllMessages(widget.serverMsgId);
+    });
   }
 
   void scrollToBottom() {
@@ -180,42 +196,8 @@ class _ChatState extends State<Chat> {
     }
   }
 
-
-  //   Future<void> sendFCMNotification(String topic, String message) async {
-  //   String serverKey =
-  //       'AAAAeR6Pnuo:APA91bHiasD4BKzgcY04ZiQ8oNi0L3HdOBeLBtUrxPfemCHHlxY0SGRP9VQ4kowDqRtOacdN8HUjmDTTMOgV1IzActxqGbKCT2W6dRm3Om5baCfJjDlBWnOm5vNqO-goLJRJV0UG1XgL';
-  //   String url = 'https://fcm.googleapis.com/fcm/send';
-
-  //   String notificationTitle = 'New Message $message';
-  //   String notificationBody = 'You have received a new message from';
-
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse(url),
-  //       headers: <String, String>{
-  //         'Content-Type': 'application/json',
-  //         'Authorization': 'key=$serverKey',
-  //       },
-  //       body: jsonEncode(<String, dynamic>{
-  //         'notification':'noti',
-  //         'priority': 'high',
-  //         'data': 'datttta',
-  //     'to': '/topics/$topic',
-  //       }),
-  //     );
-
-  //     if (response.statusCode == 200) {
-  //       print('Notification sent successfully');
-  //     } else {
-  //       print(
-  //           'Failed to send notification. StatusCode: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     print('Failed to send notification. Error: $e');
-  //   }
-  // }
-
   Future<bool> getAllMessages(dynamic conversationId) async {
+    print('getAllMessages method called');
     print('Conversation Id  $conversationId');
     int statusCode = 0;
     String counts = '';
@@ -299,9 +281,10 @@ class _ChatState extends State<Chat> {
             this.replyMsgs = replyMsgs;
 
             filterReplyMsgs();
+            // scrollToBottom();
+            WidgetsBinding.instance
+                ?.addPostFrameCallback((_) => scrollToBottom());
           });
-
-          scrollToBottom();
         } catch (e) {
           print('catch 2 $e');
           statusMessage = e.toString();
@@ -372,6 +355,8 @@ class _ChatState extends State<Chat> {
         print('Message Sent');
         setState(() {
           sendingMessage = false; // Set sending state to false
+          WidgetsBinding.instance
+              ?.addPostFrameCallback((_) => scrollToBottom());
         });
 
         final jsonResult = jsonDecode(response.body);
@@ -410,6 +395,95 @@ class _ChatState extends State<Chat> {
     return false;
   }
 
+// Future<void> saveStarredConversations(List<String> starredConversationList) async {
+//   try {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     List<String>? storedStarredConversations = prefs.getStringList('starredConversationList');
+
+//     if (storedStarredConversations != null) {
+//               print('if');
+
+//       if (storedStarredConversations.contains(widget.serverMsgId)) {
+//                   print('sub if');
+
+//         // Conversation is already starred, remove it
+//         starredConversationList.remove(widget.serverMsgId);
+//       } else {
+//                   print('sub else');
+
+//         // Conversation is not starred, add it
+//         starredConversationList.add(widget.serverMsgId);
+//       }
+//     } else {
+//               print('else');
+
+//       // No stored starred conversations, initialize the list
+//       starredConversationList = [widget.serverMsgId];
+//     }
+
+//     await prefs.setStringList(
+//       'starredConversationList',
+//       starredConversationList.map((id) => id.toString()).toList(),
+//     );
+
+//     print('Starred conversations saved successfully');
+//   } catch (e) {
+//     print('Failed to save starred conversations: $e');
+//   }
+// }
+  Future<void> saveStarredConversations(
+      List<String> starredConversationList) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String>? storedStarredConversations =
+          prefs.getStringList('starredConversationList');
+
+      if (storedStarredConversations != null) {
+        if (storedStarredConversations.contains(widget.serverMsgId)) {
+          // Conversation is already starred, remove it
+          storedStarredConversations.remove(widget.serverMsgId);
+        } else {
+          // Conversation is not starred, add it
+          storedStarredConversations.add(widget.serverMsgId);
+        }
+      } else {
+        // No stored starred conversations, initialize the list
+        storedStarredConversations = [widget.serverMsgId];
+      }
+
+      await prefs.setStringList(
+        'starredConversationList',
+        storedStarredConversations,
+      );
+
+      print('Starred conversations saved successfully');
+    } catch (e) {
+      print('Failed to save starred conversations: $e');
+    }
+  }
+
+  // Retrieve starred conversations from SharedPreferences and check if the current chat is starred
+  void checkChatStarredStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? starredConversationList =
+        prefs.getStringList('starredConversationList');
+    if (starredConversationList != null) {
+      if (starredConversationList.contains(widget.serverMsgId)) {
+        setState(() {
+          isStar = true;
+        });
+      } else {
+        setState(() {
+          isStar = false;
+        });
+      }
+    } else {
+      setState(() {
+        isStar = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -419,17 +493,22 @@ class _ChatState extends State<Chat> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.topic),
+          backgroundColor: Colors.blue,
+             iconTheme: IconThemeData(
+        color: Colors.white, // Set the color of the back arrow here
+      ),
+          title: Text(widget.topic, style: TextStyle(color: Colors.white),),
           actions: [
             IconButton(
-              icon: Icon(Icons.star_border),
+              icon: isStar
+                  ? Icon(Icons.star, color: Colors.yellow,)
+                  : Icon(Icons.star_border), // Toggle between the star icons
               onPressed: () {
-                // Perform action when chat icon is pressed
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (context) => NewConversationScreen()),
-                // );
+                setState(() {
+                  isStar = !isStar; // Toggle the starred status
+                });
+                saveStarredConversations(
+                    starredConversationList); // Implement a method to save the starred conversations to SharedPrefs
               },
             ),
             IconButton(
@@ -456,6 +535,10 @@ class _ChatState extends State<Chat> {
                   PopupMenuItem(
                     child: Text(Constants.HELP),
                     value: 'help',
+                  ),
+                     PopupMenuItem(
+                    child: Text(Constants.STARRED_CHAT),
+                    value: 'starred chat',
                   ),
                   PopupMenuItem(
                     child: Text(Constants.REPORT_ABUSE),
@@ -488,6 +571,14 @@ class _ChatState extends State<Chat> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Help()),
+                    );
+                    break;
+                       case 'starred chat':
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => StarredChatList(key: UniqueKey()),
+                      ),
                     );
                     break;
                   case 'report abuse':
@@ -735,6 +826,11 @@ class _ChatState extends State<Chat> {
 
                           sendFCMNotification('all', 'message');
 
+                          setState(() {
+                            WidgetsBinding.instance
+                                ?.addPostFrameCallback((_) => scrollToBottom());
+                          });
+
                           // Message sent successfully, handle any UI updates if needed
                         } else {
                           print('message failed');
@@ -756,13 +852,13 @@ class _ChatState extends State<Chat> {
                 ],
               ),
             ),
-            // Container(
-            //   height: 50, // Adjust the height of the ad container as needed
-            //   child: AdmobBanner(
-            //     adUnitId: AdHelper.bannerAdUnitId,
-            //     adSize: AdmobBannerSize.BANNER,
-            //   ),
-            // ),
+            Container(
+              height: 50, // Adjust the height of the ad container as needed
+              child: AdmobBanner(
+                adUnitId: AdHelper.bannerAdUnitId,
+                adSize: AdmobBannerSize.BANNER,
+              ),
+            ),
           ],
         ),
       ),

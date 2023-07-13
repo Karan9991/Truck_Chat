@@ -28,7 +28,6 @@ class ChatListr extends StatefulWidget {
 }
 
 class _ChatListrState extends State<ChatListr> {
-
   final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
   List<String> conversationTopics = [];
@@ -49,17 +48,27 @@ class _ChatListrState extends State<ChatListr> {
     super.initState();
 
     getData();
+   // _refreshChat();
 
-  //InterstitialAdManager.initialize();
+   // InterstitialAdManager.initialize();
 
     // storedList();
   }
 
+  // void _refreshChat() {
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //     print('Refresh Chat');
+
+  //     getData();
+
+  //   });
+
+  // }
 
   @override
   void dispose() {
     super.dispose();
- //InterstitialAdManager.dispose();
+//InterstitialAdManager.dispose();
 
     // conversationTimer?.cancel();
   }
@@ -268,7 +277,7 @@ class _ChatListrState extends State<ChatListr> {
                       setState(() {}); // Trigger a rebuild of the widget
                     }
 
-    //InterstitialAdManager.showInterstitialAd();
+                   // InterstitialAdManager.showInterstitialAd();
 
                     Navigator.push(
                       context,

@@ -1,6 +1,7 @@
 // import 'package:chat/chat/chatlist.dart';
 // import 'package:chat/chat/chatlistreactive.dart';
 import 'package:chat/chat/new_conversation.dart';
+import 'package:chat/chat/starred_chat_list.dart';
 // import 'package:chat/chat_list_screen.dart';
 import 'package:chat/news_tab.dart';
 import 'package:chat/chat/chat_list.dart';
@@ -21,6 +22,7 @@ import 'package:chat/utils/shared_pref.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:admob_flutter/admob_flutter.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 // import 'package:chat/reactivechat/chatlistreact.dart';
 
@@ -46,8 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-
-
     });
   }
 
@@ -55,6 +55,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _refreshChatListWithFCM();
 
     //InterstitialAdManager.initialize();
 
@@ -67,6 +69,14 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     super.dispose();
     //InterstitialAdManager.dispose();
+  }
+
+  void _refreshChatListWithFCM() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Refresh ChatList');
+
+      _refreshChatList();
+    });
   }
 
   void _refreshChatList() {
@@ -170,6 +180,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     value: 'help',
                   ),
                   PopupMenuItem(
+                    child: Text(Constants.STARRED_CHAT),
+                    value: 'starred chat',
+                  ),
+                  PopupMenuItem(
                     child: Text(Constants.REPORT_ABUSE),
                     value: 'report abuse',
                   ),
@@ -184,11 +198,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ];
               },
-              onSelected: (value) {
+              onSelected: (value) async {
                 // Perform action when a pop-up menu item is selected
                 switch (value) {
                   case 'settings':
-                   // InterstitialAdManager.showInterstitialAd();
+                    // InterstitialAdManager.showInterstitialAd();
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SettingsScreen()),
@@ -209,6 +223,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Help()),
+                    );
+                    break;
+                  case 'starred chat':
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => StarredChatList(key: UniqueKey()),
+                      ),
                     );
                     break;
                   case 'report abuse':
@@ -258,13 +280,13 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: _widgetOptions.elementAt(_selectedIndex),
             ),
-            // Container(
-            //   height: 50, // Adjust the height of the ad container as needed
-            //   child: AdmobBanner(
-            //     adUnitId: AdHelper.bannerAdUnitId,
-            //     adSize: AdmobBannerSize.BANNER,
-            //   ),
-            // ),
+            Container(
+              height: 50, // Adjust the height of the ad container as needed
+              child: AdmobBanner(
+                adUnitId: AdHelper.bannerAdUnitId,
+                adSize: AdmobBannerSize.BANNER,
+              ),
+            ),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
