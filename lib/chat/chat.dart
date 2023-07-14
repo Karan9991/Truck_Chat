@@ -852,13 +852,13 @@ class _ChatState extends State<Chat> {
                 ],
               ),
             ),
-            Container(
-              height: 50, // Adjust the height of the ad container as needed
-              child: AdmobBanner(
-                adUnitId: AdHelper.bannerAdUnitId,
-                adSize: AdmobBannerSize.BANNER,
-              ),
-            ),
+            // Container(
+            //   height: 50, // Adjust the height of the ad container as needed
+            //   child: AdmobBanner(
+            //     adUnitId: AdHelper.bannerAdUnitId,
+            //     adSize: AdmobBannerSize.BANNER,
+            //   ),
+            // ),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+// import 'dart:html';
 import 'dart:io';
 import 'package:chat/home_screen.dart';
 import 'package:chat/utils/avatar.dart';
@@ -16,12 +17,17 @@ import 'package:location/location.dart';
 import 'package:device_info/device_info.dart';
 import 'get_all_reply_messages.dart';
 import 'package:admob_flutter/admob_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.notification}");
   // Handle the background message here
-      handleFCMMessage(message.data);
-
+  await SharedPrefs.init();
+  bool? notifications = SharedPrefs.getBool(SharedPrefsKeys.NOTIFICATIONS);
+  if (notifications!) {
+    handleFCMMessage(message.data);
+  }
 }
 
 void main() async {
@@ -33,10 +39,18 @@ void main() async {
   configLocalNotification();
   _configureFCM();
 
-  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-
   await SharedPrefs.init();
   await registerDevice();
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool isAppInstalled = prefs.getBool('isAppInstalled') ?? false;
+
+  if (!isAppInstalled) {
+    await initPrefs();
+    await prefs.setBool('isAppInstalled', true);
+  }
+
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
   runApp(const MyApp());
 }
@@ -58,6 +72,12 @@ class MyApp extends StatelessWidget {
       home: HomeScreen(),
     );
   }
+}
+
+Future<void> initPrefs() async {
+  SharedPrefs.setBool(SharedPrefsKeys.CHAT_TONES, true);
+  SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS, true);
+  SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS_TONE, true);
 }
 
 Future<void> registerDevice() async {
@@ -195,8 +215,7 @@ void _configureFCM() {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('Foreground notification received ${message.data}');
 
-   // handleFCMMessage(message.data);
-
+     handleFCMMessage(message.data);
 
     if (message.notification != null) {
       //  showNotification(message.notification!);
@@ -213,7 +232,7 @@ void _configureFCM() {
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     print('Background notification received $message');
-   // handleFCMMessage(message.data);
+    // handleFCMMessage(message.data);
 
     if (message.notification != null) {
       // showNotification(message.notification!);
@@ -244,12 +263,19 @@ void handleFCMMessage(Map<String, dynamic> message) {
 }
 
 void showNotification(String? title, String? body) async {
+  HapticFeedback.vibrate();
+
+  bool androidNotificationTone =
+      SharedPrefs.getBool(SharedPrefsKeys.NOTIFICATIONS_TONE) ?? false;
+
+  print('notification tone testing $androidNotificationTone');
+
   print('showNotification method called');
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+  AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
     'com.teletype.truckchat', // Replace with your Android package name
     'Flutter chat demo',
-    playSound: true,
+    playSound: androidNotificationTone,
     enableVibration: true,
     importance: Importance.max,
     priority: Priority.high,

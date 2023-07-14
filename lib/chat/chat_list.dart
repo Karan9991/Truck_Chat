@@ -48,9 +48,9 @@ class _ChatListrState extends State<ChatListr> {
     super.initState();
 
     getData();
-   // _refreshChat();
+    // _refreshChat();
 
-   // InterstitialAdManager.initialize();
+    // InterstitialAdManager.initialize();
 
     // storedList();
   }
@@ -277,7 +277,7 @@ class _ChatListrState extends State<ChatListr> {
                       setState(() {}); // Trigger a rebuild of the widget
                     }
 
-                   // InterstitialAdManager.showInterstitialAd();
+                    // InterstitialAdManager.showInterstitialAd();
 
                     Navigator.push(
                       context,

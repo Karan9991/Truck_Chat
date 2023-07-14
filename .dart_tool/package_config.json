@@ -170,6 +170,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "flutter_beep",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/flutter_beep-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_chat_bubble",
       "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/flutter_chat_bubble-2.0.2",
       "packageUri": "lib/",
@@ -566,7 +572,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-07-10T16:09:55.059502Z",
+  "generated": "2023-07-14T01:05:11.830989Z",
   "generator": "pub",
   "generatorVersion": "3.0.1"
 }

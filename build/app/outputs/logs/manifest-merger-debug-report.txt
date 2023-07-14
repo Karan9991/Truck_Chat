@@ -116,6 +116,7 @@ MERGED from [:url_launcher_android] /Users/karandeepsingh/Downloads/Truck_Chat/b
 MERGED from [:shared_preferences_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/shared_preferences_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:flutter_inappwebview] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-50:12
 MERGED from [:device_info] /Users/karandeepsingh/Downloads/Truck_Chat/build/device_info/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:flutter_beep] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_beep/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:location] /Users/karandeepsingh/Downloads/Truck_Chat/build/location/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-20:12
 MERGED from [com.google.firebase:firebase-analytics-ktx:21.3.0] /Users/karandeepsingh/.gradle/caches/transforms-3/0ea85b99a798b95213d2ffb4988fd4b4/transformed/jetified-firebase-analytics-ktx-21.3.0/AndroidManifest.xml:2:1-17:12
 MERGED from [com.google.firebase:firebase-common-ktx:20.3.2] /Users/karandeepsingh/.gradle/caches/transforms-3/334030f47ee1e952265cc85542926557/transformed/jetified-firebase-common-ktx-20.3.2/AndroidManifest.xml:2:1-20:12
@@ -296,6 +297,8 @@ MERGED from [:flutter_inappwebview] /Users/karandeepsingh/Downloads/Truck_Chat/b
 MERGED from [:flutter_inappwebview] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:device_info] /Users/karandeepsingh/Downloads/Truck_Chat/build/device_info/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:device_info] /Users/karandeepsingh/Downloads/Truck_Chat/build/device_info/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_beep] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_beep/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_beep] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_beep/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:location] /Users/karandeepsingh/Downloads/Truck_Chat/build/location/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:location] /Users/karandeepsingh/Downloads/Truck_Chat/build/location/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [com.google.firebase:firebase-analytics-ktx:21.3.0] /Users/karandeepsingh/.gradle/caches/transforms-3/0ea85b99a798b95213d2ffb4988fd4b4/transformed/jetified-firebase-analytics-ktx-21.3.0/AndroidManifest.xml:5:5-44

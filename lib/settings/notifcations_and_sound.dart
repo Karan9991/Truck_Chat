@@ -1,4 +1,5 @@
 import 'package:chat/utils/constants.dart';
+import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 
 class NotificationsAndSoundScreen extends StatefulWidget {
@@ -9,11 +10,24 @@ class NotificationsAndSoundScreen extends StatefulWidget {
 
 class _NotificationsAndSoundScreenState
     extends State<NotificationsAndSoundScreen> {
-  bool? chatTonesEnabled = true;
-  bool? notificationsEnabled = true;
-  bool? notificationToneEnabled = true;
-  bool? vibrateEnabled = false;
-  bool? privateChatEnabled = false;
+  bool? chatTonesEnabled;
+  bool? notificationsEnabled;
+  bool? notificationToneEnabled;
+  bool? vibrateEnabled;
+  bool? privateChatEnabled;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    // Retrieve the initial values from SharedPreferences
+    chatTonesEnabled = SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES);
+    notificationsEnabled = SharedPrefs.getBool(SharedPrefsKeys.NOTIFICATIONS);
+    notificationToneEnabled =
+        SharedPrefs.getBool(SharedPrefsKeys.NOTIFICATIONS_TONE);
+    vibrateEnabled = SharedPrefs.getBool(SharedPrefsKeys.VIBRATE);
+    privateChatEnabled = SharedPrefs.getBool(SharedPrefsKeys.PRIVATE_CHAT);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,53 +39,63 @@ class _NotificationsAndSoundScreenState
         padding: EdgeInsets.all(16.0),
         children: [
           _buildListTile(
-           Constants.CHAT_TONES,
-           Constants.PLAY_A_SOUND,
+            Constants.CHAT_TONES,
+            Constants.PLAY_A_SOUND,
+            SharedPrefsKeys.CHAT_TONES,
             chatTonesEnabled,
             (bool? value) {
               setState(() {
                 chatTonesEnabled = value;
               });
+              SharedPrefs.setBool(SharedPrefsKeys.CHAT_TONES, value!);
             },
           ),
           _buildListTile(
-           Constants.NOTIFICATIONS,
-           Constants.NOTIFICATIONS_ARE_SHOWN,
+            Constants.NOTIFICATIONS,
+            Constants.NOTIFICATIONS_ARE_SHOWN,
+            SharedPrefsKeys.NOTIFICATIONS,
             notificationsEnabled,
             (bool? value) {
               setState(() {
                 notificationsEnabled = value;
               });
+              SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS, value!);
             },
           ),
           _buildListTile(
-           Constants.NOTIFICATION_TONE,
+            Constants.NOTIFICATION_TONE,
             Constants.NOTIFICATION_MESSAGES_WILL_PLAY,
+            SharedPrefsKeys.NOTIFICATIONS_TONE,
             notificationToneEnabled,
             (bool? value) {
               setState(() {
                 notificationToneEnabled = value;
               });
+              SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS_TONE, value!);
             },
           ),
           _buildListTile(
-           Constants.VIBRATE,
+            Constants.VIBRATE,
             Constants.NOTIFICATION_MESSAGES_WILL_VIBRATE,
+            SharedPrefsKeys.VIBRATE,
             vibrateEnabled,
             (bool? value) {
               setState(() {
                 vibrateEnabled = value;
               });
+              SharedPrefs.setBool(SharedPrefsKeys.VIBRATE, value!);
             },
           ),
           _buildListTile(
             Constants.PRIVATE_CHAT,
             Constants.ALLOW_USERS_TO,
+            SharedPrefsKeys.PRIVATE_CHAT,
             privateChatEnabled,
             (bool? value) {
               setState(() {
                 privateChatEnabled = value;
               });
+              SharedPrefs.setBool(SharedPrefsKeys.PRIVATE_CHAT, value!);
             },
           ),
         ],
@@ -82,34 +106,43 @@ class _NotificationsAndSoundScreenState
   Widget _buildListTile(
     String title,
     String description,
+    String key,
     bool? value,
     ValueChanged<bool?> onChanged,
   ) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          value = !value!;
+          value = !(value ?? false);
         });
         onChanged(value);
+        print('actual value $value');
+        SharedPrefs.setBool(key, value!);
+        print('gesture click $key ${SharedPrefs.getBool(key)}');
       },
       child: ListTile(
-        title: Text(title,  style: TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 18
-    ),),
+        title: Text(
+          title,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
         subtitle: Text(
           description,
           style: TextStyle(
             color: Colors.grey,
             fontWeight: FontWeight.bold,
-            
           ),
         ),
         trailing: Checkbox(
-          value: value,
-          onChanged: onChanged,
-            activeColor: Colors.blue, // Set the desired color here
-
+          value: value ?? false,
+          onChanged: (newValue) {
+            setState(() {
+              value = newValue;
+            });
+            onChanged(value);
+            SharedPrefs.setBool(key, value!);
+            print('check box $key ${SharedPrefs.getBool(key)}');
+          },
+          activeColor: Colors.blue,
         ),
       ),
     );

@@ -98,13 +98,19 @@ class SharedPrefsKeys {
   static const String CURRENT_USER_AVATAR_IMAGE_PATH =
       'currentUserAvatarImagePath';
   static const String CONVERSATIONS = 'conversations';
-    static const String STORE_STARRED_CONVERSATIONS = 'starredConversations';
+  static const String STORE_STARRED_CONVERSATIONS = 'starredConversations';
 
   static const String TERMS_AGREED = 'termsAgreed';
   static const String SELECTED_AVATAR_ID = 'selectedAvatarId';
   static const String CHAT_HANDLE = 'chatHandle';
   static const String LATITUDE = 'latitude';
   static const String LONGITUDE = 'longitude';
+
+  static const String CHAT_TONES = 'chatTones';
+  static const String NOTIFICATIONS = 'notifications';
+  static const String NOTIFICATIONS_TONE = 'notificationsTone';
+  static const String VIBRATE = 'vibrate';
+  static const String PRIVATE_CHAT = 'privateChat';
 }
 
 class Constants {
@@ -122,7 +128,7 @@ class Constants {
   static const String TELL_A_FRIEND = 'Tell a Friend';
   static const String HELP = 'Help';
   static const String REPORT_ABUSE = 'Report Abuse';
-    static const String STARRED_CHAT = 'Starred Chats';
+  static const String STARRED_CHAT = 'Starred Chats';
 
   static const String EXIT = 'Exit';
   static const String REFRESH = 'Refresh';
@@ -179,7 +185,6 @@ class Constants {
   static const String SPONSORS = 'Sponsors';
   static const String REVIEWS = 'Reviews';
 
-    static const String FCM_NOTIFICATION_TITLE = 'There are new messages!';
-    static const String FCM_NOTIFICATION_BODY = 'Tap here to open TruckChat';
-
+  static const String FCM_NOTIFICATION_TITLE = 'There are new messages!';
+  static const String FCM_NOTIFICATION_BODY = 'Tap here to open TruckChat';
 }

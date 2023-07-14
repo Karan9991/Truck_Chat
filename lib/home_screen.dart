@@ -23,6 +23,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_beep/flutter_beep.dart';
 
 // import 'package:chat/reactivechat/chatlistreact.dart';
 
@@ -76,6 +77,10 @@ class _HomeScreenState extends State<HomeScreen> {
       print('Refresh ChatList');
 
       _refreshChatList();
+
+      if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
+        FlutterBeep.beep();
+      }
     });
   }
 
@@ -280,13 +285,13 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: _widgetOptions.elementAt(_selectedIndex),
             ),
-            Container(
-              height: 50, // Adjust the height of the ad container as needed
-              child: AdmobBanner(
-                adUnitId: AdHelper.bannerAdUnitId,
-                adSize: AdmobBannerSize.BANNER,
-              ),
-            ),
+            // Container(
+            //   height: 50, // Adjust the height of the ad container as needed
+            //   child: AdmobBanner(
+            //     adUnitId: AdHelper.bannerAdUnitId,
+            //     adSize: AdmobBannerSize.BANNER,
+            //   ),
+            // ),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(

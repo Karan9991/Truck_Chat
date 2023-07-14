@@ -200,15 +200,6 @@ void showTermsOfServiceDialog(BuildContext context) {
       actions: [
         TextButton(
           onPressed: () {
-            // Perform action for "I Agree"
-            SharedPrefs.setBool(SharedPrefsKeys.TERMS_AGREED, true);
-            print('Terms Agreed');
-            Navigator.of(context).pop();
-          },
-          child: Text(DialogStrings.I_AGREE),
-        ),
-        TextButton(
-          onPressed: () {
             // Perform action for "Exit"
             // Use exit(0) for platforms other than iOS
             if (Platform.isIOS) {
@@ -240,6 +231,15 @@ void showTermsOfServiceDialog(BuildContext context) {
           },
           child: Text(DialogStrings.EXIT),
         ),
+        TextButton(
+          onPressed: () {
+            // Perform action for "I Agree"
+            SharedPrefs.setBool(SharedPrefsKeys.TERMS_AGREED, true);
+            print('Terms Agreed');
+            Navigator.of(context).pop();
+          },
+          child: Text(DialogStrings.I_AGREE),
+        ),
       ],
     ),
   );
@@ -261,7 +261,8 @@ void showExitConversationDialog(BuildContext context) async {
         ),
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(false); // Cancel button pressed, return false
+            Navigator.of(context)
+                .pop(false); // Cancel button pressed, return false
           },
           child: Text(DialogStrings.CANCEL),
         ),
