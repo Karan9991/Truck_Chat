@@ -9,6 +9,7 @@ import 'package:chat/get_all_reply_messages.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:chat/home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -301,15 +302,15 @@ class _ChatListrState extends State<ChatListr> {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _buildDialogOption(DialogStrings.STAR_CHAT,
-                                  DialogStrings.CHATS_THAT_ARE_STARRED_WILL,
-                                  () async {
-                                print('Chat Starred');
+                              // _buildDialogOption(DialogStrings.STAR_CHAT,
+                              //     DialogStrings.CHATS_THAT_ARE_STARRED_WILL,
+                              //     () async {
+                              //   print('Chat Starred');
 
-                                // await markAllRead();
+                              //   // await markAllRead();
 
-                                Navigator.of(context).pop();
-                              }),
+                              //   Navigator.of(context).pop();
+                              // }),
                               isRead
                                   ? _buildDialogOption(
                                       DialogStrings.MARK_CHAT_THIS_UNREAD,
@@ -376,6 +377,9 @@ class _ChatListrState extends State<ChatListr> {
                               fontWeight:
                                   isRead ? FontWeight.normal : FontWeight.bold,
                             ),
+                            overflow: TextOverflow
+                                .ellipsis, // Show ellipsis if the text overflows
+                            maxLines: 3, // Show only one line of text
                           ),
                         ],
                       ),

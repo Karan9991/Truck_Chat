@@ -24,6 +24,7 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:chat/utils/alert_dialog.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class Chat extends StatefulWidget {
   final String topic;
@@ -395,42 +396,6 @@ class _ChatState extends State<Chat> {
     return false;
   }
 
-// Future<void> saveStarredConversations(List<String> starredConversationList) async {
-//   try {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     List<String>? storedStarredConversations = prefs.getStringList('starredConversationList');
-
-//     if (storedStarredConversations != null) {
-//               print('if');
-
-//       if (storedStarredConversations.contains(widget.serverMsgId)) {
-//                   print('sub if');
-
-//         // Conversation is already starred, remove it
-//         starredConversationList.remove(widget.serverMsgId);
-//       } else {
-//                   print('sub else');
-
-//         // Conversation is not starred, add it
-//         starredConversationList.add(widget.serverMsgId);
-//       }
-//     } else {
-//               print('else');
-
-//       // No stored starred conversations, initialize the list
-//       starredConversationList = [widget.serverMsgId];
-//     }
-
-//     await prefs.setStringList(
-//       'starredConversationList',
-//       starredConversationList.map((id) => id.toString()).toList(),
-//     );
-
-//     print('Starred conversations saved successfully');
-//   } catch (e) {
-//     print('Failed to save starred conversations: $e');
-//   }
-// }
   Future<void> saveStarredConversations(
       List<String> starredConversationList) async {
     try {
@@ -494,21 +459,26 @@ class _ChatState extends State<Chat> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue,
-             iconTheme: IconThemeData(
-        color: Colors.white, // Set the color of the back arrow here
-      ),
-          title: Text(widget.topic, style: TextStyle(color: Colors.white),),
+          iconTheme: IconThemeData(
+            color: Colors.white, // Set the color of the back arrow here
+          ),
+          title: Text(
+            Constants.APP_BAR_TITLE,
+            style: TextStyle(color: Colors.white),
+          ),
           actions: [
             IconButton(
               icon: isStar
-                  ? Icon(Icons.star, color: Colors.yellow,)
+                  ? Icon(
+                      Icons.star,
+                      color: Colors.yellow,
+                    )
                   : Icon(Icons.star_border), // Toggle between the star icons
               onPressed: () {
                 setState(() {
                   isStar = !isStar; // Toggle the starred status
                 });
-                saveStarredConversations(
-                    starredConversationList); // Implement a method to save the starred conversations to SharedPrefs
+                saveStarredConversations(starredConversationList);
               },
             ),
             IconButton(
@@ -536,7 +506,7 @@ class _ChatState extends State<Chat> {
                     child: Text(Constants.HELP),
                     value: 'help',
                   ),
-                     PopupMenuItem(
+                  PopupMenuItem(
                     child: Text(Constants.STARRED_CHAT),
                     value: 'starred chat',
                   ),
@@ -573,7 +543,7 @@ class _ChatState extends State<Chat> {
                       MaterialPageRoute(builder: (context) => Help()),
                     );
                     break;
-                       case 'starred chat':
+                  case 'starred chat':
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -603,7 +573,7 @@ class _ChatState extends State<Chat> {
                 child: Text(
                   widget.topic,
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -852,13 +822,11 @@ class _ChatState extends State<Chat> {
                 ],
               ),
             ),
-            // Container(
-            //   height: 50, // Adjust the height of the ad container as needed
-            //   child: AdmobBanner(
-            //     adUnitId: AdHelper.bannerAdUnitId,
-            //     adSize: AdmobBannerSize.BANNER,
-            //   ),
-            // ),
+            AdmobBanner(
+              adUnitId: AdHelper.bannerAdUnitId,
+              adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+                  width: MediaQuery.of(context).size.width.toInt()),
+            )
           ],
         ),
       ),

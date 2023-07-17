@@ -68,8 +68,8 @@ class InterstitialAdManager {
 
 class AdHelper {
   static String get bannerAdUnitId {
-    if (Platform.isAndroid) {//working banner id ca-app-pub-7181343877669077/1377492143
-      return 'ca-app-pub-7181343877669077/1377492143';
+    if (Platform.isAndroid) {//working banner id ca-app-pub-7181343877669077/1377492143   ca-app-pub-7181343877669077/1377492143
+      return 'ca-app-pub-3940256099942544/6300978111';
     } else if (Platform.isIOS) {
       return 'ca-app-pub-7181343877669077/5410197832';
     } else {

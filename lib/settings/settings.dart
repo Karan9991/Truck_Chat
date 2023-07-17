@@ -23,24 +23,10 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          Divider(), // Add a divider after the first list item
 
           ListTile(
             title: Text(Constants.MESSAGES),
             onTap: () {
-              print('------------------------------------');
-              print('sharedprefs settings testing');
-              print(
-                  'chat tones ${SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)}');
-              print(
-                  'notifications ${SharedPrefs.getBool(SharedPrefsKeys.NOTIFICATIONS)}');
-              print(
-                  'notification tone ${SharedPrefs.getBool(SharedPrefsKeys.NOTIFICATIONS_TONE)}');
-              print('vibrate ${SharedPrefs.getBool(SharedPrefsKeys.VIBRATE)}');
-              print(
-                  'private chat ${SharedPrefs.getBool(SharedPrefsKeys.PRIVATE_CHAT)}');
-              print('------------------------------------');
-
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => MessagesScreen()),

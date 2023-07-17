@@ -707,6 +707,8 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - Flutter (1.0.0)
+  - flutter_beep (0.0.1):
+    - Flutter
   - flutter_inappwebview (0.0.1):
     - Flutter
     - flutter_inappwebview/Core (= 0.0.1)
@@ -846,6 +848,7 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
+  - flutter_beep (from `.symlinks/plugins/flutter_beep/ios`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - location (from `.symlinks/plugins/location/ios`)
@@ -894,6 +897,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
+  flutter_beep:
+    :path: ".symlinks/plugins/flutter_beep/ios"
   flutter_inappwebview:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
   flutter_local_notifications:
@@ -925,6 +930,7 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 2a2c6859354cbec0a228a863d4daf6de7c74ced4
   FirebaseMessaging: 8a3b9a8b98ce72a42d22e69865cf662e38d2d6f5
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_beep: 54fb393b22dfa0f0e4573c81b1c74dd71c4e5af8
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   Google-Mobile-Ads-SDK: 2f288748a42920d1c744946a460896a95b0e9110

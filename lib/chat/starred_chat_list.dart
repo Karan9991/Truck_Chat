@@ -1,6 +1,6 @@
 import 'package:chat/chat/new_conversation.dart';
+import 'package:chat/chat/starred_chat.dart';
 // import 'package:chat/chats_screen.dart';
-import 'package:chat/chat/chat.dart';
 import 'package:chat/chat/starred_conversation_data.dart';
 import 'package:chat/settings/settings.dart';
 import 'package:chat/utils/ads.dart';
@@ -10,6 +10,7 @@ import 'package:chat/get_all_reply_messages.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:chat/home_screen.dart';
+import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -82,6 +83,10 @@ class _StarredChatListState extends State<StarredChatList> {
       print('Is Read: ${conversation.isRead}');
       print('---------------------');
     }
+  }
+
+  void refreshScreen() {
+    getData();
   }
 
   Future<void> getData() async {
@@ -264,207 +269,229 @@ class _StarredChatListState extends State<StarredChatList> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: FutureBuilder<List<Conversation>>(
-        future: getStoredConversations(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting ||
-              isLoading) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasData) {
-            List<Conversation> storedConversations = snapshot.data!;
+      body: Column(
+        children: [
+          Expanded(
+            child: FutureBuilder<List<Conversation>>(
+              future: getStoredConversations(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting ||
+                    isLoading) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasData) {
+                  List<Conversation> storedConversations = snapshot.data!;
 
-            if (storedConversations.isEmpty) {
-              return Center(
-                child: Text(Constants.NO_CONVERSATION_FOUND),
-              );
-            }
-
-            return ListView.builder(
-              itemCount: conversationTopics.length,
-              itemBuilder: (context, index) {
-                final conversation = storedConversations[index];
-                final topic = conversationTopics[index];
-                final timestampp = conversationTimestamps[index];
-                final count = replyCounts[index];
-                final serverMsgID = serverMsgIds[index];
-
-                DateTime dateTime =
-                    DateTime.fromMillisecondsSinceEpoch(timestampp);
-                String formattedDateTime =
-                    DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
-                final timestamp = formattedDateTime;
-
-                final isRead = conversation.isRead;
-
-                // print('List item read status $isRead');
-
-                return GestureDetector(
-                  onTap: () async {
-                    if (!isRead) {
-                      // Mark conversation as read
-                      conversation.isRead = true;
-                      await storeConversations(storedConversations);
-                      setState(() {}); // Trigger a rebuild of the widget
-                    }
-
-                    // InterstitialAdManager.showInterstitialAd();
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Chat(
-                          topic: topic,
-                          serverMsgId: serverMsgID,
-                        ),
-                      ),
-                    ).then((_) {
-                      // Called when returning from the chat screen
-                      setState(() {}); // Trigger a rebuild of the widget
-                    });
-                  },
-                  onLongPress: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildDialogOption(DialogStrings.STAR_CHAT,
-                                  DialogStrings.CHATS_THAT_ARE_STARRED_WILL,
-                                  () async {
-                                print('Chat Starred');
-
-                                // await markAllRead();
-
-                                Navigator.of(context).pop();
-                              }),
-                              isRead
-                                  ? _buildDialogOption(
-                                      DialogStrings.MARK_CHAT_THIS_UNREAD,
-                                      DialogStrings.MARK_CHAT_UNREAD, () async {
-                                      print('Chat UnRead');
-                                      conversation.isRead = false;
-                                      await storeConversations(
-                                          storedConversations);
-                                      setState(() {});
-
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog if needed
-                                    })
-                                  : _buildDialogOption(
-                                      DialogStrings.MARK_CHAT_READ,
-                                      DialogStrings.MESSAGE_ICON_WILL,
-                                      () async {
-                                      print('Chat Read');
-                                      conversation.isRead = true;
-                                      await storeConversations(
-                                          storedConversations);
-                                      setState(() {});
-
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog if needed
-                                    }),
-                            ],
-                          ),
-                          actions: [
-                            TextButton(
-                              child: Text(DialogStrings.CANCEL),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      },
+                  if (storedConversations.isEmpty) {
+                    return Center(
+                      child: Text(Constants.NO_CONVERSATION_FOUND),
                     );
-                  },
-                  child: Card(
-                    elevation: 2,
-                    color: Colors.blue[300],
-                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: ListTile(
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          isRead
-                              ? Row(
-                                  children: [
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.yellow,
-                                    ),
-                                    SizedBox(width: 8),
-                                  ],
-                                )
-                              : Row(
-                                  children: [
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.yellow,
-                                    ),
-                                    SizedBox(width: 8),
-                                    Icon(
-                                      Icons.chat,
-                                      size: 17,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(width: 8),
-                                  ],
-                                ),
-                          Text(
-                            topic,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight:
-                                  isRead ? FontWeight.normal : FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 5, top: 8),
-                            child: Text(
-                              '${Constants.LAST_ACTIVE}$timestamp',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 5),
-                            child: Text(
-                              '${Constants.REPLIES}$count',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: isRead
-                                    ? FontWeight.normal
-                                    : FontWeight.bold,
+                  }
+
+                  return ListView.builder(
+                    itemCount: conversationTopics.length,
+                    itemBuilder: (context, index) {
+                      final conversation = storedConversations[index];
+                      final topic = conversationTopics[index];
+                      final timestampp = conversationTimestamps[index];
+                      final count = replyCounts[index];
+                      final serverMsgID = serverMsgIds[index];
+
+                      DateTime dateTime =
+                          DateTime.fromMillisecondsSinceEpoch(timestampp);
+                      String formattedDateTime =
+                          DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
+                      final timestamp = formattedDateTime;
+
+                      final isRead = conversation.isRead;
+
+                      // print('List item read status $isRead');
+
+                      return GestureDetector(
+                        onTap: () async {
+                          if (!isRead) {
+                            // Mark conversation as read
+                            conversation.isRead = true;
+                            await storeConversations(storedConversations);
+                            setState(() {}); // Trigger a rebuild of the widget
+                          }
+
+                          // InterstitialAdManager.showInterstitialAd();
+                          Navigator.pop(
+                              context); // Remove the last screen from the stack
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => StarredChat(
+                                topic: topic,
+                                serverMsgId: serverMsgID,
                               ),
                             ),
+                          ).then((_) {
+                            // Called when returning from the chat screen
+                            setState(() {}); // Trigger a rebuild of the widget
+                          });
+                        },
+                        onLongPress: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _buildDialogOption(
+                                        DialogStrings.STAR_CHAT,
+                                        DialogStrings
+                                            .CHATS_THAT_ARE_STARRED_WILL,
+                                        () async {
+                                      print('Chat Starred');
+
+                                      // await markAllRead();
+
+                                      Navigator.of(context).pop();
+                                    }),
+                                    isRead
+                                        ? _buildDialogOption(
+                                            DialogStrings.MARK_CHAT_THIS_UNREAD,
+                                            DialogStrings.MARK_CHAT_UNREAD,
+                                            () async {
+                                            print('Chat UnRead');
+                                            conversation.isRead = false;
+                                            await storeConversations(
+                                                storedConversations);
+                                            setState(() {});
+
+                                            Navigator.of(context)
+                                                .pop(); // Close the dialog if needed
+                                          })
+                                        : _buildDialogOption(
+                                            DialogStrings.MARK_CHAT_READ,
+                                            DialogStrings.MESSAGE_ICON_WILL,
+                                            () async {
+                                            print('Chat Read');
+                                            conversation.isRead = true;
+                                            await storeConversations(
+                                                storedConversations);
+                                            setState(() {});
+
+                                            Navigator.of(context)
+                                                .pop(); // Close the dialog if needed
+                                          }),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: Text(DialogStrings.CANCEL),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Card(
+                          elevation: 2,
+                          color: Colors.blue[300],
+                          margin:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: ListTile(
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                isRead
+                                    ? Row(
+                                        children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.yellow,
+                                          ),
+                                          SizedBox(width: 8),
+                                        ],
+                                      )
+                                    : Row(
+                                        children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.yellow,
+                                          ),
+                                          SizedBox(width: 8),
+                                          Icon(
+                                            Icons.chat,
+                                            size: 17,
+                                            color: Colors.white,
+                                          ),
+                                          SizedBox(width: 8),
+                                        ],
+                                      ),
+                                Text(
+                                  topic,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: isRead
+                                        ? FontWeight.normal
+                                        : FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow
+                                      .ellipsis, // Show ellipsis if the text overflows
+                                  maxLines: 3, // Show only one line of text
+                                ),
+                              ],
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 5, top: 8),
+                                  child: Text(
+                                    '${Constants.LAST_ACTIVE}$timestamp',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 5),
+                                  child: Text(
+                                    '${Constants.REPLIES}$count',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: isRead
+                                          ? FontWeight.normal
+                                          : FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.white,
+                            ),
                           ),
-                        ],
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                );
+                        ),
+                      );
+                    },
+                  );
+                } else {
+                  // Handle error case
+                  return Center(
+                    child: Text(Constants.ERROR),
+                  );
+                }
               },
-            );
-          } else {
-            // Handle error case
-            return Center(
-              child: Text(Constants.ERROR),
-            );
-          }
-        },
+            ),
+          ),
+          AdmobBanner(
+            adUnitId: AdHelper.bannerAdUnitId,
+            adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+              width: MediaQuery.of(context).size.width.toInt(),
+            ),
+          ),
+        ],
       ),
     );
   }

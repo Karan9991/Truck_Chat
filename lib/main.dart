@@ -33,7 +33,7 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await Admob.initialize();
+  await Admob.initialize(testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],);//testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
   await Admob.requestTrackingAuthorization();
 
   configLocalNotification();
@@ -46,7 +46,7 @@ void main() async {
   bool isAppInstalled = prefs.getBool('isAppInstalled') ?? false;
 
   if (!isAppInstalled) {
-    await initPrefs();
+    await initNotificationsAndSoundPrefs();
     await prefs.setBool('isAppInstalled', true);
   }
 
@@ -64,6 +64,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Truck Chat',
+      routes: {
+        '/home': (context) => HomeScreen(),
+        // ...
+      },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -74,10 +78,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
-Future<void> initPrefs() async {
+Future<void> initNotificationsAndSoundPrefs() async {
   SharedPrefs.setBool(SharedPrefsKeys.CHAT_TONES, true);
   SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS, true);
   SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS_TONE, true);
+  SharedPrefs.setBool(SharedPrefsKeys.VIBRATE, true);
+  SharedPrefs.setBool(SharedPrefsKeys.PRIVATE_CHAT, true);
 }
 
 Future<void> registerDevice() async {
@@ -157,7 +163,7 @@ Future<void> registerDevice() async {
 
     // Check if the user_id exists in the response
     if (responseBody.containsKey(API.USER_ID)) {
-      user_id = responseBody[API.USER_ID];
+      user_id = responseBody[API.USER_ID].toString();
       print("User ID: $user_id");
       SharedPrefs.setString(SharedPrefsKeys.USER_ID, user_id);
       SharedPrefs.setDouble(
@@ -215,7 +221,7 @@ void _configureFCM() {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('Foreground notification received ${message.data}');
 
-     handleFCMMessage(message.data);
+    handleFCMMessage(message.data);
 
     if (message.notification != null) {
       //  showNotification(message.notification!);

@@ -6,6 +6,12 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
 class NewsTab extends StatefulWidget {
+    final Key key;
+
+  NewsTab({
+    required this.key,
+  });
+  
   @override
   _NewsTabState createState() => _NewsTabState();
 }
