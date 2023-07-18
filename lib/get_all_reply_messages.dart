@@ -92,10 +92,7 @@
 //   ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId);
 // }
 
-
-
 //testing
-
 
 // class ReplyMsg {
 //   final int rid;
@@ -105,13 +102,9 @@
 //   final String emojiId;
 //     final String topic;
 
-
 //   ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId, this.topic);
 
-  
-
 // }
-
 
 class ReplyMsg {
   final int rid;
@@ -119,15 +112,25 @@ class ReplyMsg {
   final String replyMsg;
   final int timestamp;
   final String emojiId;
-    final String topic;
-    final String driverName;
+  final String topic;
+  final String driverName;
+  final String privateChat;
 
-
-  ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId, this.topic, this.driverName);
-
-  
-
+  ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId,
+      this.topic, this.driverName, this.privateChat);
 }
+// class ReplyMsg {
+//   final int rid;
+//   final int uid;
+//   final String replyMsg;
+//   final int timestamp;
+//   final String emojiId;
+//     final String topic;
+//     final String driverName;
+
+//   ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId, this.topic, this.driverName);
+
+// }
 
 // class ReplyMsgr {
 //   final int rid;
@@ -160,11 +163,10 @@ class ReplyMsg {
 class ReplyMsgg {
   final String rid;
   final int uid;
-   final String replyMsg;
-   final int timestamp;
+  final String replyMsg;
+  final int timestamp;
   // final String emojiId;
 
- // ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId);
-    ReplyMsgg(this.rid, this.uid, this.replyMsg, this.timestamp);
-
+  // ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId);
+  ReplyMsgg(this.rid, this.uid, this.replyMsg, this.timestamp);
 }

@@ -88,6 +88,12 @@ class DialogStrings {
       'Do you want to exit from this conversation?';
 
   static const String ARE_YOU_SURE = 'Are you sure you want to exit the app?';
+  static const String PRIVATE_CHAT_ENABLED = 'Private Chat Enabled';
+  static const String PRIVATE_CHAT_DISABLED = 'Private Chat Disabled';
+  static const String PRIVATE_CHAT_YOU_REQUESTED =
+      'You have requested for private chat now any person in group will able to chat with you privately. A green indicator to show user is ready for private chat.';
+  static const String PRIVATE_CHAT_YOU_NO_LONGER =
+      'You no longer accepting private messages.';
 }
 
 class SharedPrefsKeys {

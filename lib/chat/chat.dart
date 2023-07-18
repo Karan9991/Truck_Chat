@@ -250,11 +250,14 @@ class _ChatState extends State<Chat> {
             final uid = jsonReply[API.USER_ID];
             final emojiId = jsonReply[API.EMOJI_ID];
             final driverName = jsonReply['driver_name'];
+            final privateChat = jsonReply['private_chat'];
+
             print("server_msg_reply_id  $rid");
             print("reply_msg $replyMsg");
             print("user id  $uid");
             print("emoji_id $emojiId");
             print("driver_name $driverName");
+            print("private_chat $privateChat");
 
             print('--------------------------');
             int timestamp;
@@ -268,7 +271,7 @@ class _ChatState extends State<Chat> {
             }
 
             replyMsgs.add(ReplyMsg(rid, uid, replyMsg, timestamp, emojiId,
-                widget.topic, driverName));
+                widget.topic, driverName, privateChat));
           }
           // } else {
           //   print('elsee');
@@ -451,6 +454,10 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
+    bool isPrivateChatEnabled =
+        SharedPrefs.getBool(SharedPrefsKeys.PRIVATE_CHAT) ?? false;
+Color brightGreen = Color.fromRGBO(0, 255, 0, 1.0); // Custom bright green color
+
     return WillPopScope(
       onWillPop: () async {
         //showExitConversationDialog(context);
@@ -483,12 +490,19 @@ class _ChatState extends State<Chat> {
             ),
             IconButton(
               icon: Image.asset(
-                'assets/doublechat.png', // Replace 'icon.png' with the actual path to your icon asset
+                'assets/doublechat.png', // Replace 'doublechat_disabled.png' with the path to your disabled icon asset
                 width: 30,
                 height: 30,
+                color: isPrivateChatEnabled ? null : Colors.grey,
               ),
               onPressed: () {
-                // Perform action when grid box icon is pressed
+                setState(() {
+                  isPrivateChatEnabled =
+                      !isPrivateChatEnabled; // Toggle the state
+                  SharedPrefs.setBool(SharedPrefsKeys.PRIVATE_CHAT,
+                      isPrivateChatEnabled); // Save the state in shared preferences
+                });
+                showPrivateChatDialog(context, isPrivateChatEnabled);
               },
             ),
             PopupMenuButton(
@@ -590,6 +604,7 @@ class _ChatState extends State<Chat> {
                     final replyMsg = reply.replyMsg;
                     final timestampp = reply.timestamp;
                     final driverName = reply.driverName;
+                    final privateChat = reply.privateChat;
 
                     DateTime dateTime =
                         DateTime.fromMillisecondsSinceEpoch(timestampp);
@@ -668,45 +683,103 @@ class _ChatState extends State<Chat> {
                                   ],
                                 ),
                               )
-                            : Container(
-                                constraints: BoxConstraints(maxWidth: 250.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        if (matchingAvatar.id != 0)
-                                          Image.asset(
-                                            matchingAvatar.imagePath,
-                                            width: 30,
-                                            height: 30,
-                                          ),
-                                        SizedBox(width: 8.0),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                replyMsg,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 20),
-                                              ),
-                                              SizedBox(height: 4.0),
-                                              Text(
-                                                timestamp,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            :
+                            //  Container(
+                            //     constraints: BoxConstraints(maxWidth: 250.0),
+                            //     child: Column(
+                            //       crossAxisAlignment: CrossAxisAlignment.start,
+                            //       children: [
+                            //         Row(
+                            //           crossAxisAlignment:
+                            //               CrossAxisAlignment.start,
+                            //           children: [
+                            //             if (matchingAvatar.id != 0)
+                            //               Image.asset(
+                            //                 matchingAvatar.imagePath,
+                            //                 width: 30,
+                            //                 height: 30,
+                            //               ),
+                            //             SizedBox(width: 8.0),
+                            //             Expanded(
+                            //               child: Column(
+                            //                 crossAxisAlignment:
+                            //                     CrossAxisAlignment.start,
+                            //                 children: [
+                            //                   Text(
+                            //                     replyMsg,
+                            //                     style: TextStyle(
+                            //                         color: Colors.black,
+                            //                         fontSize: 20),
+                            //                   ),
+                            //                   SizedBox(height: 4.0),
+                            //                   Text(
+                            //                     timestamp,
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+
+
+                            Container(
+  constraints: BoxConstraints(maxWidth: 250.0),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (matchingAvatar.id != 0)
+            Stack(
+                alignment: Alignment(2.6, -2.4), // Adjust the alignment here
+
+              children: [
+                Image.asset(
+                  matchingAvatar.imagePath,
+                  width: 30,
+                  height: 30,
+                ),
+              //  if (privateChat == 1) // Check if privateChat is 1 to show the indicator
+                       Padding(
+                    padding: EdgeInsets.only(top: 0.0, right: 0.0, left: 10, bottom: 10), // Add padding here
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: brightGreen,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          SizedBox(width: 8.0),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  replyMsg,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                SizedBox(height: 4.0),
+                Text(timestamp),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ],
+  ),
+),
+
                       ),
                     );
                   } else {
@@ -822,11 +895,11 @@ class _ChatState extends State<Chat> {
                 ],
               ),
             ),
-            AdmobBanner(
-              adUnitId: AdHelper.bannerAdUnitId,
-              adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-                  width: MediaQuery.of(context).size.width.toInt()),
-            )
+            // AdmobBanner(
+            //   adUnitId: AdHelper.bannerAdUnitId,
+            //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+            //       width: MediaQuery.of(context).size.width.toInt()),
+            // )
           ],
         ),
       ),

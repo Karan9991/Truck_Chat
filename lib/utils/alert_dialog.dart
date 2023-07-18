@@ -275,3 +275,27 @@ void showExitConversationDialog(BuildContext context) async {
     Navigator.of(context).pop(); // Go back to the previous screen
   }
 }
+
+void showPrivateChatDialog(BuildContext context, bool isPrivateChatEnabled) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text(isPrivateChatEnabled
+            ? DialogStrings.PRIVATE_CHAT_ENABLED
+            : DialogStrings.PRIVATE_CHAT_DISABLED),
+        content: Text(isPrivateChatEnabled
+            ? DialogStrings.PRIVATE_CHAT_YOU_REQUESTED
+            : DialogStrings.PRIVATE_CHAT_YOU_NO_LONGER),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: Text(DialogStrings.GOT_IT),
+          ),
+        ],
+      );
+    },
+  );
+}

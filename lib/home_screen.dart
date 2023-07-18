@@ -571,11 +571,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 type: BottomNavigationBarType
                     .fixed, // Set type to Fixed for more than 3 items
               ),
-              AdmobBanner(
-                adUnitId: AdHelper.bannerAdUnitId,
-                adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-                    width: MediaQuery.of(context).size.width.toInt()),
-              )
+              // AdmobBanner(
+              //   adUnitId: AdHelper.bannerAdUnitId,
+              //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+              //       width: MediaQuery.of(context).size.width.toInt()),
+              // )
             ],
           )),
     );

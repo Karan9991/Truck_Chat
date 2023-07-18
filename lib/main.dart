@@ -83,7 +83,7 @@ Future<void> initNotificationsAndSoundPrefs() async {
   SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS, true);
   SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS_TONE, true);
   SharedPrefs.setBool(SharedPrefsKeys.VIBRATE, true);
-  SharedPrefs.setBool(SharedPrefsKeys.PRIVATE_CHAT, true);
+  SharedPrefs.setBool(SharedPrefsKeys.PRIVATE_CHAT, false);
 }
 
 Future<void> registerDevice() async {

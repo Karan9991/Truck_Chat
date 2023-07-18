@@ -250,6 +250,8 @@ class _StarredChatState extends State<StarredChat> {
             final uid = jsonReply[API.USER_ID];
             final emojiId = jsonReply[API.EMOJI_ID];
             final driverName = jsonReply['driver_name'];
+            final privateChat = jsonReply['private_chat'];
+
             print("server_msg_reply_id  $rid");
             print("reply_msg $replyMsg");
             print("user id  $uid");
@@ -268,7 +270,7 @@ class _StarredChatState extends State<StarredChat> {
             }
 
             replyMsgs.add(ReplyMsg(rid, uid, replyMsg, timestamp, emojiId,
-                widget.topic, driverName));
+                widget.topic, driverName, privateChat));
           }
           // } else {
           //   print('elsee');
@@ -449,15 +451,16 @@ class _StarredChatState extends State<StarredChat> {
     }
   }
 
- 
-
   @override
   Widget build(BuildContext context) {
-
     return WillPopScope(
       onWillPop: () async {
-     
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => StarredChatList(key: UniqueKey(),)));
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => StarredChatList(
+                      key: UniqueKey(),
+                    )));
 
         //showExitConversationDialog(context);
         return true; // Prevent the default back button behavior
@@ -469,7 +472,7 @@ class _StarredChatState extends State<StarredChat> {
             color: Colors.white, // Set the color of the back arrow here
           ),
           title: Text(
-           Constants.APP_BAR_TITLE,
+            Constants.APP_BAR_TITLE,
             style: TextStyle(color: Colors.white),
           ),
           actions: [
@@ -485,7 +488,7 @@ class _StarredChatState extends State<StarredChat> {
                   isStar = !isStar; // Toggle the starred status
                 });
                 saveStarredConversations(starredConversationList);
-                 },
+              },
             ),
             IconButton(
               icon: Image.asset(
