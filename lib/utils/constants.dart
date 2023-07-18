@@ -94,6 +94,10 @@ class DialogStrings {
       'You have requested for private chat now any person in group will able to chat with you privately. A green indicator to show user is ready for private chat.';
   static const String PRIVATE_CHAT_YOU_NO_LONGER =
       'You no longer accepting private messages.';
+
+  static const String IGNORE_USER = 'Ignore User';
+  static const String START_PRIVATE_CHAT = 'Start Private Chat';
+
 }
 
 class SharedPrefsKeys {

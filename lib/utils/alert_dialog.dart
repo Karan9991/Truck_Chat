@@ -299,3 +299,41 @@ void showPrivateChatDialog(BuildContext context, bool isPrivateChatEnabled) {
     },
   );
 }
+
+void messageLongPressDialog(BuildContext context, Function() onReportAbuse,
+    Function() onIgnoreUser, Function() onStartPrivateChat) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+                onReportAbuse(); // Call the callback for Report Abuse action
+              },
+              child: Text(DialogStrings.REPORT_ABUSE),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+                onIgnoreUser(); // Call the callback for Ignore User action
+              },
+              child: Text(DialogStrings.IGNORE_USER),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+                onStartPrivateChat(); // Call the callback for Start Private Chat action
+              },
+              child: Text(DialogStrings.START_PRIVATE_CHAT),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}

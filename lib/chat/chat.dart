@@ -66,6 +66,8 @@ class _ChatState extends State<Chat> {
   String? currentUserHandle;
   String? emojiId;
   String? driverName;
+  String? privateChatStatus;
+  bool? privateChat;
   double? latitude;
   double? longitude;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
@@ -324,6 +326,9 @@ class _ChatState extends State<Chat> {
 
     driverName =
         SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE) ?? '';
+    privateChat = SharedPrefs.getBool(SharedPrefsKeys.PRIVATE_CHAT) ?? false;
+
+    privateChatStatus = privateChat! ? '1' : '0';
 
     // print('send message');
     // print('message $message');
@@ -347,6 +352,7 @@ class _ChatState extends State<Chat> {
       API.LONGITUDE: longitude.toString(),
       API.EMOJI_ID: emojiId,
       'driver_name': driverName,
+      'private_chat': privateChatStatus,
     });
 
     try {
@@ -456,7 +462,8 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     bool isPrivateChatEnabled =
         SharedPrefs.getBool(SharedPrefsKeys.PRIVATE_CHAT) ?? false;
-Color brightGreen = Color.fromRGBO(0, 255, 0, 1.0); // Custom bright green color
+    Color brightGreen =
+        Color.fromRGBO(0, 255, 0, 1.0); // Custom bright green color
 
     return WillPopScope(
       onWillPop: () async {
@@ -606,6 +613,8 @@ Color brightGreen = Color.fromRGBO(0, 255, 0, 1.0); // Custom bright green color
                     final driverName = reply.driverName;
                     final privateChat = reply.privateChat;
 
+                    print('ttttttt private chat $privateChat');
+
                     DateTime dateTime =
                         DateTime.fromMillisecondsSinceEpoch(timestampp);
                     String formattedDateTime =
@@ -629,158 +638,285 @@ Color brightGreen = Color.fromRGBO(0, 255, 0, 1.0); // Custom bright green color
 
                     return Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: ChatBubble(
-                        clipper: ChatBubbleClipper6(
-                            type: isCurrentUser
-                                ? BubbleType.sendBubble
-                                : BubbleType.receiverBubble),
-                        alignment: isCurrentUser
-                            ? Alignment.topRight
-                            : Alignment.topLeft,
-                        margin: EdgeInsets.only(bottom: 16.0),
-                        backGroundColor:
-                            isCurrentUser ? Colors.blue[100] : Colors.blue[300],
-                        child: isCurrentUser
-                            ? Container(
-                                constraints: BoxConstraints(maxWidth: 250.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        if (SharedPrefs.getString(SharedPrefsKeys
-                                                .CURRENT_USER_AVATAR_IMAGE_PATH) !=
-                                            null)
-                                          Image.asset(
-                                            SharedPrefs.getString(SharedPrefsKeys
-                                                .CURRENT_USER_AVATAR_IMAGE_PATH)!,
-                                            width: 30,
-                                            height: 30,
-                                          ),
-                                        SizedBox(width: 8.0),
-                                        Expanded(
-                                          child: Column(
+                      child: isCurrentUser
+                          ? ChatBubble(
+                              clipper: ChatBubbleClipper6(
+                                  type: isCurrentUser
+                                      ? BubbleType.sendBubble
+                                      : BubbleType.receiverBubble),
+                              alignment: isCurrentUser
+                                  ? Alignment.topRight
+                                  : Alignment.topLeft,
+                              margin: EdgeInsets.only(bottom: 16.0),
+                              backGroundColor: isCurrentUser
+                                  ? Colors.blue[100]
+                                  : Colors.blue[300],
+                              child: isCurrentUser
+                                  ? Container(
+                                      constraints:
+                                          BoxConstraints(maxWidth: 250.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                driverName + replyMsg,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 20),
-                                              ),
-                                              SizedBox(height: 4.0),
-                                              Text(
-                                                timestamp,
+                                              if (SharedPrefs.getString(
+                                                      SharedPrefsKeys
+                                                          .CURRENT_USER_AVATAR_IMAGE_PATH) !=
+                                                  null)
+                                                Image.asset(
+                                                  SharedPrefs.getString(
+                                                      SharedPrefsKeys
+                                                          .CURRENT_USER_AVATAR_IMAGE_PATH)!,
+                                                  width: 30,
+                                                  height: 30,
+                                                ),
+                                              SizedBox(width: 8.0),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      driverName + replyMsg,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 20),
+                                                    ),
+                                                    SizedBox(height: 4.0),
+                                                    Text(
+                                                      timestamp,
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
+                                    )
+                                  : Container(
+                                      constraints:
+                                          BoxConstraints(maxWidth: 250.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              if (matchingAvatar.id != 0)
+                                                Stack(
+                                                  alignment: Alignment(2.6,
+                                                      -2.4), // Adjust the alignment here
+
+                                                  children: [
+                                                    Image.asset(
+                                                      matchingAvatar.imagePath,
+                                                      width: 30,
+                                                      height: 30,
+                                                    ),
+                                                    if (privateChat ==
+                                                        '1') // Check if privateChat is 1 to show the indicator
+                                                      Padding(
+                                                        padding: EdgeInsets.only(
+                                                            top: 0.0,
+                                                            right: 0.0,
+                                                            left: 10,
+                                                            bottom:
+                                                                10), // Add padding here
+                                                        child: Container(
+                                                          width: 10,
+                                                          height: 10,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: brightGreen,
+                                                            shape:
+                                                                BoxShape.circle,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                  ],
+                                                ),
+                                              SizedBox(width: 8.0),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      replyMsg,
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 4.0),
+                                                    Text(timestamp),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ],
-                                ),
-                              )
-                            :
-                            //  Container(
-                            //     constraints: BoxConstraints(maxWidth: 250.0),
-                            //     child: Column(
-                            //       crossAxisAlignment: CrossAxisAlignment.start,
-                            //       children: [
-                            //         Row(
-                            //           crossAxisAlignment:
-                            //               CrossAxisAlignment.start,
-                            //           children: [
-                            //             if (matchingAvatar.id != 0)
-                            //               Image.asset(
-                            //                 matchingAvatar.imagePath,
-                            //                 width: 30,
-                            //                 height: 30,
-                            //               ),
-                            //             SizedBox(width: 8.0),
-                            //             Expanded(
-                            //               child: Column(
-                            //                 crossAxisAlignment:
-                            //                     CrossAxisAlignment.start,
-                            //                 children: [
-                            //                   Text(
-                            //                     replyMsg,
-                            //                     style: TextStyle(
-                            //                         color: Colors.black,
-                            //                         fontSize: 20),
-                            //                   ),
-                            //                   SizedBox(height: 4.0),
-                            //                   Text(
-                            //                     timestamp,
-                            //                   ),
-                            //                 ],
-                            //               ),
-                            //             ),
-                            //           ],
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   ),
+                            )
+                          : GestureDetector(
+                              onLongPress: () {
+                                // Show the custom dialog when the message is long-pressed
+                                messageLongPressDialog(
+                                  context,
+                                  () {
+                                    // Handle Report Abuse action
+                                    // Implement the logic for reporting abuse here
+                                  },
+                                  () {
+                                    // Handle Ignore User action
+                                    // Implement the logic for ignoring the user here
+                                  },
+                                  () {
+                                    // Handle Start Private Chat action
+                                    // Implement the logic for starting a private chat here
+                                  },
+                                );
+                              },
+                              child: ChatBubble(
+                                clipper: ChatBubbleClipper6(
+                                    type: isCurrentUser
+                                        ? BubbleType.sendBubble
+                                        : BubbleType.receiverBubble),
+                                alignment: isCurrentUser
+                                    ? Alignment.topRight
+                                    : Alignment.topLeft,
+                                margin: EdgeInsets.only(bottom: 16.0),
+                                backGroundColor: isCurrentUser
+                                    ? Colors.blue[100]
+                                    : Colors.blue[300],
+                                child: isCurrentUser
+                                    ? Container(
+                                        constraints:
+                                            BoxConstraints(maxWidth: 250.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                if (SharedPrefs.getString(
+                                                        SharedPrefsKeys
+                                                            .CURRENT_USER_AVATAR_IMAGE_PATH) !=
+                                                    null)
+                                                  Image.asset(
+                                                    SharedPrefs.getString(
+                                                        SharedPrefsKeys
+                                                            .CURRENT_USER_AVATAR_IMAGE_PATH)!,
+                                                    width: 30,
+                                                    height: 30,
+                                                  ),
+                                                SizedBox(width: 8.0),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        driverName + replyMsg,
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 20),
+                                                      ),
+                                                      SizedBox(height: 4.0),
+                                                      Text(
+                                                        timestamp,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : Container(
+                                        constraints:
+                                            BoxConstraints(maxWidth: 250.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                if (matchingAvatar.id != 0)
+                                                  Stack(
+                                                    alignment: Alignment(2.6,
+                                                        -2.4), // Adjust the alignment here
 
-
-                            Container(
-  constraints: BoxConstraints(maxWidth: 250.0),
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (matchingAvatar.id != 0)
-            Stack(
-                alignment: Alignment(2.6, -2.4), // Adjust the alignment here
-
-              children: [
-                Image.asset(
-                  matchingAvatar.imagePath,
-                  width: 30,
-                  height: 30,
-                ),
-              //  if (privateChat == 1) // Check if privateChat is 1 to show the indicator
-                       Padding(
-                    padding: EdgeInsets.only(top: 0.0, right: 0.0, left: 10, bottom: 10), // Add padding here
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                        color: brightGreen,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          SizedBox(width: 8.0),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  replyMsg,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
-                ),
-                SizedBox(height: 4.0),
-                Text(timestamp),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ],
-  ),
-),
-
-                      ),
+                                                    children: [
+                                                      Image.asset(
+                                                        matchingAvatar
+                                                            .imagePath,
+                                                        width: 30,
+                                                        height: 30,
+                                                      ),
+                                                      if (privateChat ==
+                                                          '1') // Check if privateChat is 1 to show the indicator
+                                                        Padding(
+                                                          padding: EdgeInsets.only(
+                                                              top: 0.0,
+                                                              right: 0.0,
+                                                              left: 10,
+                                                              bottom:
+                                                                  10), // Add padding here
+                                                          child: Container(
+                                                            width: 10,
+                                                            height: 10,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  brightGreen,
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                    ],
+                                                  ),
+                                                SizedBox(width: 8.0),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        replyMsg,
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 20,
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 4.0),
+                                                      Text(timestamp),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                              ),
+                            ),
                     );
                   } else {
                     final sentIndex = index - filteredReplyMsgs.length;
