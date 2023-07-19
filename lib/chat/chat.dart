@@ -25,6 +25,7 @@ import 'package:chat/utils/alert_dialog.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class Chat extends StatefulWidget {
   final String topic;
@@ -782,6 +783,10 @@ class _ChatState extends State<Chat> {
                                   () {
                                     // Handle Start Private Chat action
                                     // Implement the logic for starting a private chat here
+                                    print('private chat');
+
+                                    //sendPrivateChatInvite();
+                                    sendRequest('3', '2');
                                   },
                                 );
                               },
@@ -1042,6 +1047,65 @@ class _ChatState extends State<Chat> {
     );
   }
 
+  // Function to send a request to the provided user ID.
+  // void sendRequest() {
+  //   // Implement the logic to insert data into Firebase database for sending a request.
+  //   FirebaseDatabase.instance.ref().child('requests').child('2').push().set({
+  //     'fromUserId': '1',
+  //     'status': 'pending',
+  //   });
+  // }
+  void sendRequest(String senderId, String receiverId) {
+    DatabaseReference requestsRef =
+        FirebaseDatabase.instance.ref().child('requests');
+
+    Request request = Request(
+      senderId: senderId,
+      receiverId: receiverId,
+      status: 'pending',
+    );
+
+    requestsRef.push().set(request.toJson());
+  }
+
+  void sendPrivateChatInvite() {
+    String BY_USER_ID = '1'; // Replace with the actual user ID
+    String TO_USER_ID = '2'; // Replace with the actual user ID
+
+    DatabaseReference mDataRef = FirebaseDatabase.instance.ref();
+    // mDataRef
+    //       .child('truck_chat_users')
+    //       .child('byuserid')
+    //       .child(BY_USER_ID)
+    //       .child('touserid')
+    //       .child(TO_USER_ID)
+    //       .child('isChatInitiated')
+    //       .set(0);
+
+    //         mDataRef
+    //       .child('truck_chat_users')
+    //       .child('touserid')
+    //       .child(TO_USER_ID)
+    //       .child('byuserid')
+    //       .child(BY_USER_ID)
+    //       .child('isChatInitiated')
+    //       .set(0);
+
+    mDataRef
+        .child('truck_chat_users')
+        .child(BY_USER_ID)
+        .child(TO_USER_ID)
+        .child('isChatInitiated')
+        .set(0);
+
+    mDataRef
+        .child('truck_chat_users')
+        .child(TO_USER_ID)
+        .child(BY_USER_ID)
+        .child('isChatInitiated')
+        .set(0);
+  }
+
   void _showReportAbuseDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -1090,5 +1154,27 @@ class _ChatState extends State<Chat> {
     setState(() {
       _isListening = false;
     });
+  }
+}
+
+
+
+class Request {
+  final String senderId;
+  final String receiverId;
+  final String status;
+
+  Request({
+    required this.senderId,
+    required this.receiverId,
+    required this.status,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'senderId': senderId,
+      'receiverId': receiverId,
+      'status': status,
+    };
   }
 }

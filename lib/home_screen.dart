@@ -1,4 +1,5 @@
 import 'package:chat/chat/new_conversation.dart';
+import 'package:chat/chat/privateChat/private_chat_homescreen.dart';
 import 'package:chat/chat/starred_chat_list.dart';
 import 'package:chat/news_tab.dart';
 import 'package:chat/chat/chat_list.dart';
@@ -642,17 +643,17 @@ class Help extends StatelessWidget {
   }
 }
 
-class PrivateChatTab extends StatelessWidget {
-  final Key key;
+// class PrivateChatTab extends StatelessWidget {
+//   final Key key;
 
-  PrivateChatTab({
-    required this.key,
-  });
+//   PrivateChatTab({
+//     required this.key,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Private Chat Tab'),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: Text('Private Chat Tab'),
+//     );
+//   }
+// }

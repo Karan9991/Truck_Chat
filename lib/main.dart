@@ -2,6 +2,8 @@ import 'dart:convert';
 // import 'dart:html';
 import 'dart:io';
 import 'package:chat/home_screen.dart';
+import 'package:chat/play/pendingrequests.dart';
+import 'package:chat/play/send.dart';
 import 'package:chat/utils/avatar.dart';
 import 'package:chat/utils/chat_handle.dart';
 import 'package:chat/utils/constants.dart';
@@ -73,6 +75,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      // home: SendRequestScreen(senderId: '1', receiverId: '2'),
       home: HomeScreen(),
     );
   }
