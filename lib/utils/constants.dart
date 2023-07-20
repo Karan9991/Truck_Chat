@@ -10,6 +10,8 @@ class API {
   static const String SEND_MESSAGE =
       BASE_URL + VERSION + '/device_post_message';
   static const String NEWS = BASE_URL + VERSION + '/get_news';
+  static const String REPORT_ABUSE = BASE_URL + VERSION + '/add_user_flags';
+  static const String IGNORE_USER = BASE_URL + VERSION + '/update_user_ignored';
 
   static const String VISIT_WEBSITE = 'http://truckchatapp.com';
   static const String CONTACT = 'http://truckchatapp.com/index.html#Contact';
@@ -97,7 +99,6 @@ class DialogStrings {
 
   static const String IGNORE_USER = 'Ignore User';
   static const String START_PRIVATE_CHAT = 'Start Private Chat';
-
 }
 
 class SharedPrefsKeys {

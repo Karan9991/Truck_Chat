@@ -7,6 +7,7 @@ import 'package:chat/settings/settings.dart';
 import 'package:chat/utils/ads.dart';
 import 'package:chat/utils/avatar.dart';
 import 'package:chat/utils/constants.dart';
+import 'package:chat/utils/device_type.dart';
 import 'package:chat/utils/lat_lng.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
@@ -770,30 +771,49 @@ class _ChatState extends State<Chat> {
                           : GestureDetector(
                               onLongPress: () {
                                 // Show the custom dialog when the message is long-pressed
-                                //  if (privateChat == '1') {
-                                messageLongPressDialog(
-                                  context,
-                                  () {
-                                    // Handle Report Abuse action
-                                    // Implement the logic for reporting abuse here
-                                  },
-                                  () {
-                                    // Handle Ignore User action
-                                    // Implement the logic for ignoring the user here
-                                  },
-                                  () {
-                                    // Handle Start Private Chat action
-                                    // Implement the logic for starting a private chat here
+                                if (privateChat == '1') {
+                                  messageLongPressDialog(
+                                    context,
+                                    () {
+                                      // Handle Report Abuse action
 
-                                    List<String> userName = replyMsg.split(" ");
+                                      reportUser(reply.uid.toString(),
+                                          reply.rid.toString(), reply.replyMsg);
+                                    },
+                                    () {
+                                      // Handle Ignore User action
+                                      ignoreUser(getDeviceType(),
+                                          reply.uid.toString());
+                                    },
+                                    () {
+                                      // Handle Start Private Chat action
+                                      // Implement the logic for starting a private chat here
 
-                                    print('private chat ${userName[0]}');
+                                      List<String> userName =
+                                          replyMsg.split(" ");
 
-                                    //sendPrivateChatInvite();
-                                    sendRequest('1', '2', reply.emojiId, userName[0]);
-                                  },
-                                );
-                                //}
+                                      print('private chat ${userName[0]}');
+
+                                      //sendPrivateChatInvite();
+                                      sendRequest(
+                                          '1', '2', reply.emojiId, userName[0]);
+                                    },
+                                  );
+                                } else {
+                                  messageLongPressDialogWithoutPrivateChat(
+                                    context,
+                                    () {
+                                      // Handle Report Abuse action
+                                      reportUser(reply.uid.toString(),
+                                          reply.rid.toString(), reply.replyMsg);
+                                    },
+                                    () {
+                                      // Handle Ignore User action
+                                      ignoreUser(getDeviceType(),
+                                          reply.uid.toString());
+                                    },
+                                  );
+                                }
                               },
                               child: ChatBubble(
                                 clipper: ChatBubbleClipper6(
@@ -1052,14 +1072,6 @@ class _ChatState extends State<Chat> {
     );
   }
 
-  // Function to send a request to the provided user ID.
-  // void sendRequest() {
-  //   // Implement the logic to insert data into Firebase database for sending a request.
-  //   FirebaseDatabase.instance.ref().child('requests').child('2').push().set({
-  //     'fromUserId': '1',
-  //     'status': 'pending',
-  //   });
-  // }
   void sendRequest(
       String senderId, String receiverId, String emojiId, String userName) {
     DatabaseReference requestsRef =
@@ -1076,43 +1088,118 @@ class _ChatState extends State<Chat> {
     requestsRef.push().set(request.toJson());
   }
 
-  // void sendPrivateChatInvite() {
-  //   String BY_USER_ID = '1'; // Replace with the actual user ID
-  //   String TO_USER_ID = '2'; // Replace with the actual user ID
+  Future<bool> reportUser(
+    String flagger_user_id,
+    String post_id,
+    String user_notes,
+  ) async {
+    print('flagger_user_id $flagger_user_id');
+    print('post_id $post_id');
+    print('user_notes $user_notes');
 
-  //   DatabaseReference mDataRef = FirebaseDatabase.instance.ref();
-  //   // mDataRef
-  //   //       .child('truck_chat_users')
-  //   //       .child('byuserid')
-  //   //       .child(BY_USER_ID)
-  //   //       .child('touserid')
-  //   //       .child(TO_USER_ID)
-  //   //       .child('isChatInitiated')
-  //   //       .set(0);
+    int status_code = 0;
+    final url = Uri.parse(API.REPORT_ABUSE);
+    final headers = {'Content-Type': 'application/json'};
+    // final ignoredUserArray = [flagger_user_id];
 
-  //   //         mDataRef
-  //   //       .child('truck_chat_users')
-  //   //       .child('touserid')
-  //   //       .child(TO_USER_ID)
-  //   //       .child('byuserid')
-  //   //       .child(BY_USER_ID)
-  //   //       .child('isChatInitiated')
-  //   //       .set(0);
+    try {
+      final entity = {
+        'user_id': userId,
+        'post_id': post_id,
+        'flagger_user_id': flagger_user_id,
+        'user_notes': user_notes,
+      };
 
-  //   mDataRef
-  //       .child('truck_chat_users')
-  //       .child(BY_USER_ID)
-  //       .child(TO_USER_ID)
-  //       .child('isChatInitiated')
-  //       .set(0);
+      final response =
+          await http.post(url, headers: headers, body: jsonEncode(entity));
 
-  //   mDataRef
-  //       .child('truck_chat_users')
-  //       .child(TO_USER_ID)
-  //       .child(BY_USER_ID)
-  //       .child('isChatInitiated')
-  //       .set(0);
-  // }
+      if (response.statusCode == 200) {
+        final jsonResult = json.decode(response.body);
+        print('json body ${response.body}');
+        status_code = jsonResult['status'];
+        print('status_code $status_code');
+
+        if (status_code == 200) {
+          showReportAbuseSuccessDialog(
+              context, 'User Reported', 'Reported Message: ', user_notes);
+        } else if (status_code == 501) {
+          showReportAbuseSuccessDialog(context, 'User Already Reported',
+              'Reported Message: ', user_notes);
+        }
+
+        if (jsonResult.containsKey('message')) {
+          status_message = jsonResult['message'];
+          print('status_message $status_message');
+        } else {
+          status_message = '';
+        }
+
+        return true;
+      } else {
+        status_message =
+            'Server Error'; // Or handle other status codes appropriately
+      }
+    } catch (e) {
+      status_message = e.toString();
+    }
+
+    return false;
+  }
+
+  Future<bool> ignoreUser(String deviceType, String ignoredUserId) async {
+    final url = Uri.parse(API.IGNORE_USER);
+    final headers = {'Content-Type': 'application/json'};
+
+    print('deviceType $deviceType');
+    print('ignoredUserId $ignoredUserId');
+
+    int status_code = 0;
+
+    try {
+      //  final jsonArray = [ignoredUserId];
+
+      final entity = {
+        'user_id': userId,
+        'device_type': deviceType,
+        'ignore_user_id': ignoredUserId,
+      };
+
+      final response =
+          await http.post(url, headers: headers, body: jsonEncode(entity));
+
+     
+
+      if (response.statusCode == 200) {
+        final jsonResult = json.decode(response.body);
+        print('json body ${response.body}');
+
+        status_code = jsonResult['status'];
+        print('status_code $status_code');
+
+         if (status_code == 200) {
+        showIgnoreUserSuccessDialog(context, 'User added in ignored list.');
+      } else if (status_code == 500) {
+        showIgnoreUserSuccessDialog(context, 'User already ignored');
+      }
+
+        if (jsonResult.containsKey('message')) {
+          status_message = jsonResult['message'];
+          print('status_message $status_message');
+        } else {
+          status_message = '';
+        }
+
+        return true;
+      } else {
+        status_message =
+            'Server Error'; // Or handle other status codes appropriately
+      }
+    } catch (e) {
+      status_message = e.toString();
+    }
+
+    return false;
+  }
 
   void _showReportAbuseDialog(BuildContext context) {
     showDialog(
@@ -1190,23 +1277,3 @@ class Request {
     };
   }
 }
-
-// class Request {
-//   final String senderId;
-//   final String receiverId;
-//   final String status;
-
-//   Request({
-//     required this.senderId,
-//     required this.receiverId,
-//     required this.status,
-//   });
-
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'senderId': senderId,
-//       'receiverId': receiverId,
-//       'status': status,
-//     };
-//   }
-// }

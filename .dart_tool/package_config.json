@@ -45,19 +45,19 @@
     },
     {
       "name": "cloud_firestore",
-      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/cloud_firestore-4.8.1",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/cloud_firestore-4.8.3",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "cloud_firestore_platform_interface",
-      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/cloud_firestore_platform_interface-5.15.1",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/cloud_firestore_platform_interface-5.15.3",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "cloud_firestore_web",
-      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/cloud_firestore_web-3.6.1",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/cloud_firestore_web-3.6.3",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -590,7 +590,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-07-18T20:52:24.253161Z",
+  "generated": "2023-07-20T20:12:54.386703Z",
   "generator": "pub",
   "generatorVersion": "3.0.1"
 }

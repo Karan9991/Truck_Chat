@@ -54,7 +54,7 @@
 		</data>
 		<key>Headers/FIRFederatedAuthProvider.h</key>
 		<data>
-		3L5SZqG018bWFHkpCscHYay/jdU=
+		18HykDRoZbBb26kCTdJm4fEh7lM=
 		</data>
 		<key>Headers/FIRGameCenterAuthProvider.h</key>
 		<data>
@@ -70,7 +70,7 @@
 		</data>
 		<key>Headers/FIRMultiFactor.h</key>
 		<data>
-		nP9R00W+8riE4ij1yTX+n3qzijw=
+		awyc+/CtXIc7Y6v1b5MpI24XM+8=
 		</data>
 		<key>Headers/FIRMultiFactorAssertion.h</key>
 		<data>
@@ -116,6 +116,18 @@
 		<data>
 		xDM9CBaxieUDjbyes+65ss7wBuI=
 		</data>
+		<key>Headers/FIRTOTPMultiFactorAssertion.h</key>
+		<data>
+		ix5clmH/nmMnYyK1IYGFWMEonOE=
+		</data>
+		<key>Headers/FIRTOTPMultiFactorGenerator.h</key>
+		<data>
+		bCIF5HDsV+PSJ25NwUTnCGlTe9c=
+		</data>
+		<key>Headers/FIRTOTPSecret.h</key>
+		<data>
+		djcu3k2cXYIc8UEVkaNGkE5gI48=
+		</data>
 		<key>Headers/FIRTwitterAuthProvider.h</key>
 		<data>
 		HlC7kq7UgANMTuOHtkJ2lHHrirU=
@@ -134,15 +146,15 @@
 		</data>
 		<key>Headers/FirebaseAuth-umbrella.h</key>
 		<data>
-		8+s8mkgBLlwacaEnnkVvQCg4EZg=
+		QChg4id/i3tfppyj781wF1nfV9o=
 		</data>
 		<key>Headers/FirebaseAuth.h</key>
 		<data>
-		PVzyQZ0Q+t9I7gvnwbsl0v0PyZU=
+		S6NT3XFNl7U/3P8PX3EkObNkOn4=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		yM1knwnZmixPLSiQvb3LaLIdIfk=
+		g0O5h1HH7PNZvKckm5za+h49kkw=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -239,7 +251,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			GLofBHNQCtFyeGk8Ix7g7vz+UgFYb8axgucsuNWuehY=
+			JJbAURGt1R1nYGmRNoI/ftHRLxuJ633Tg7nrqE/0+Xg=
 			</data>
 		</dict>
 		<key>Headers/FIRGameCenterAuthProvider.h</key>
@@ -267,7 +279,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Q7IMJmXTZs37FIPqywejuia2IOqrVa4ow3SB6DhbfEc=
+			zbo08ZDX4WrOh66s9oXpf7L8TUyPc9TB7uV0QoJEIoA=
 			</data>
 		</dict>
 		<key>Headers/FIRMultiFactorAssertion.h</key>
@@ -347,6 +359,27 @@
 			ZQqUyNCWzglouOwIfdDiAvDzRJzvp47TiK8Exlr6MWY=
 			</data>
 		</dict>
+		<key>Headers/FIRTOTPMultiFactorAssertion.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			SyPdQ+4iyZnsj9z4iKg4mqnHaJdBlh8j+xviF0yXLd8=
+			</data>
+		</dict>
+		<key>Headers/FIRTOTPMultiFactorGenerator.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			TBEVc0Bk5hNM+3Z8nOHKsKAS1bfwAILQnhqtB7+NOYQ=
+			</data>
+		</dict>
+		<key>Headers/FIRTOTPSecret.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			VgDL9HODIZ2qDprKnKi7el/i2cjiglNT2pNFztKaqBY=
+			</data>
+		</dict>
 		<key>Headers/FIRTwitterAuthProvider.h</key>
 		<dict>
 			<key>hash2</key>
@@ -379,14 +412,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			2oYPLH7HhaUhT/z8UKDJgCAqrR5HkTyum+2gQ1XnAGs=
+			Kw2/vbUMEdowYlPYLspLFNcoifNOparPCUtysfc0Ry8=
 			</data>
 		</dict>
 		<key>Headers/FirebaseAuth.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			sbMP1n6SC8N56zYEy1Vw3yM7u2ddmkLU5o2Y7+58FaM=
+			hWVKZj7T3N60X6ygs7VCsFc9Yxegjdjy+BOEWojcrWo=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
