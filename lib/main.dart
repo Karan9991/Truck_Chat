@@ -1,6 +1,8 @@
 import 'dart:convert';
 // import 'dart:html';
 import 'dart:io';
+import 'package:chat/chatdemo/chat.dart';
+import 'package:chat/chatdemo/chatlist.dart';
 import 'package:chat/home_screen.dart';
 import 'package:chat/play/pendingrequests.dart';
 import 'package:chat/play/send.dart';
@@ -76,7 +78,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: SendRequestScreen(senderId: '1', receiverId: '2'),
-      home: HomeScreen(),
+      // home: ChatScreen(chatId: '31'),
+            home: ChatListScreen(),
+
     );
   }
 }
