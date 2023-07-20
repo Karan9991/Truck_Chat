@@ -17,7 +17,6 @@
 //     fetchPendingRequests();
 //   }
 
- 
 //   // void fetchPendingRequests() {
 //   //   String TO_USER_ID = '2';
 //   //   String BY_USER_ID = '3';
@@ -52,7 +51,6 @@
 //   //     print('Error fetching pending requests: $error');
 //   //   });
 //   // }
-
 
 // void fetchPendingRequests() {
 //     String TO_USER_ID = '2';
@@ -93,9 +91,7 @@
 //       print('Error fetching pending requests: $error');
 //     });
 //   }
-  
 
-  
 // // void onAcceptRequest(int index) {
 // //   if (index >= 0 && index < pendingRequests.length) {
 // //     PendingRequest pendingRequest = pendingRequests[index];
@@ -180,7 +176,6 @@
 //   });
 // }
 
-
 // // void fetchPendingRequests() {
 //   //   String TO_USER_ID = '2';
 
@@ -221,36 +216,53 @@
 //   //   });
 //   // }
 
-
+import 'package:chat/utils/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class PendingRequestsScreen extends StatelessWidget {
   final String currentUserId; // The ID of the current user
 
+  String emojiId = '';
+  String userName = '';
+  String senderId = '';
+  String receiverId = '';
+
   PendingRequestsScreen({required this.currentUserId});
 
   void acceptRequest(String requestId) {
+    String chatId = senderId + receiverId;
+
     DatabaseReference requestRef =
-        FirebaseDatabase.instance.reference().child('requests/$requestId');
+        FirebaseDatabase.instance.ref().child('requests/$requestId');
+
     requestRef.update({'status': 'accepted'});
+
+    DatabaseReference chatRef =
+        FirebaseDatabase.instance.ref().child('chats').child(chatId);
+
+    chatRef.push().set({
+      'senderId': senderId,
+      'receiverId': receiverId,
+      'emojiId': emojiId,
+      'userName': userName,
+      'message': '',
+      'timestamp': 0,
+    });
   }
 
   void rejectRequest(String requestId) {
     DatabaseReference requestRef =
-        FirebaseDatabase.instance.reference().child('requests/$requestId');
+        FirebaseDatabase.instance.ref().child('requests/$requestId');
     requestRef.update({'status': 'rejected'});
   }
 
   @override
   Widget build(BuildContext context) {
     DatabaseReference requestsRef =
-        FirebaseDatabase.instance.reference().child('requests');
+        FirebaseDatabase.instance.ref().child('requests');
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Pending Requests'),
-      ),
       body: StreamBuilder(
         stream: requestsRef
             .orderByChild('receiverId')
@@ -265,31 +277,76 @@ class PendingRequestsScreen extends StatelessWidget {
             );
           }
 
-    Map<dynamic, dynamic> requestsData =
-        snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+          Map<dynamic, dynamic> requestsData =
+              snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
 
           List<Widget> requestWidgets = [];
 
           requestsData.forEach((requestId, requestData) {
             if (requestData['status'] == 'pending') {
-              String senderId = requestData['senderId'];
+              senderId = requestData['senderId'];
+              receiverId = requestData['receiverId'];
+              emojiId = requestData['emojiId'];
+              userName = requestData['userName'];
+
+              // Find the corresponding Avatar for the emoji_id
+              Avatar? matchingAvatar = avatars.firstWhere(
+                (avatar) => avatar.id == int.parse(emojiId),
+                orElse: () => Avatar(id: 0, imagePath: ''),
+              );
+
+              //   if (matchingAvatar.id != 0)     Image.asset(
+              //   matchingAvatar.imagePath,
+              //   width: 30,
+              //   height: 30,
+              //  ),
+
+              // print('emoji id $emoji_id');
+              // print('matching avatar id ${matchingAvatar.id}');
               // You should fetch the sender's name based on the senderId from your user database
 
               requestWidgets.add(Card(
                 child: ListTile(
-                  title: Text('Sender: $senderId'), // Replace senderName with the actual sender's name
+                  leading: CircleAvatar(
+                    backgroundImage: AssetImage(matchingAvatar.imagePath),
+                  ),
+                  title: Text(
+                      userName), // Replace senderName with the actual sender's name
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      IconButton(
+                      // IconButton(
+                      //   onPressed: () => acceptRequest(requestId),
+                      //   icon: Icon(Icons.check),
+                      //   color: Colors.green,
+                      // ),
+                      // IconButton(
+                      //   onPressed: () => rejectRequest(requestId),
+                      //   icon: Icon(Icons.close),
+                      //   color: Colors.red,
+                      // ),
+                      ElevatedButton(
                         onPressed: () => acceptRequest(requestId),
-                        icon: Icon(Icons.check),
-                        color: Colors.green,
+                        child: Text(
+                          'Accept',
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Colors.green, // Set the background color to green
+                          foregroundColor:
+                              Colors.white, // Set the text color to white
+                        ),
                       ),
-                      IconButton(
+                      SizedBox(width: 10),
+                      ElevatedButton(
                         onPressed: () => rejectRequest(requestId),
-                        icon: Icon(Icons.close),
-                        color: Colors.red,
+                        child: Text('Reject'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Colors.red, // Set the background color to green
+                          foregroundColor:
+                              Colors.white, // Set the text color to white
+                        ),
                       ),
                     ],
                   ),
@@ -312,5 +369,3 @@ class PendingRequestsScreen extends StatelessWidget {
     );
   }
 }
-
-

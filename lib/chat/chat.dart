@@ -770,6 +770,7 @@ class _ChatState extends State<Chat> {
                           : GestureDetector(
                               onLongPress: () {
                                 // Show the custom dialog when the message is long-pressed
+                                //  if (privateChat == '1') {
                                 messageLongPressDialog(
                                   context,
                                   () {
@@ -783,12 +784,16 @@ class _ChatState extends State<Chat> {
                                   () {
                                     // Handle Start Private Chat action
                                     // Implement the logic for starting a private chat here
-                                    print('private chat');
+
+                                    List<String> userName = replyMsg.split(" ");
+
+                                    print('private chat ${userName[0]}');
 
                                     //sendPrivateChatInvite();
-                                    sendRequest('3', '2');
+                                    sendRequest('1', '2', reply.emojiId, userName[0]);
                                   },
                                 );
+                                //}
                               },
                               child: ChatBubble(
                                 clipper: ChatBubbleClipper6(
@@ -1055,7 +1060,8 @@ class _ChatState extends State<Chat> {
   //     'status': 'pending',
   //   });
   // }
-  void sendRequest(String senderId, String receiverId) {
+  void sendRequest(
+      String senderId, String receiverId, String emojiId, String userName) {
     DatabaseReference requestsRef =
         FirebaseDatabase.instance.ref().child('requests');
 
@@ -1063,48 +1069,50 @@ class _ChatState extends State<Chat> {
       senderId: senderId,
       receiverId: receiverId,
       status: 'pending',
+      emojiId: emojiId,
+      userName: userName,
     );
 
     requestsRef.push().set(request.toJson());
   }
 
-  void sendPrivateChatInvite() {
-    String BY_USER_ID = '1'; // Replace with the actual user ID
-    String TO_USER_ID = '2'; // Replace with the actual user ID
+  // void sendPrivateChatInvite() {
+  //   String BY_USER_ID = '1'; // Replace with the actual user ID
+  //   String TO_USER_ID = '2'; // Replace with the actual user ID
 
-    DatabaseReference mDataRef = FirebaseDatabase.instance.ref();
-    // mDataRef
-    //       .child('truck_chat_users')
-    //       .child('byuserid')
-    //       .child(BY_USER_ID)
-    //       .child('touserid')
-    //       .child(TO_USER_ID)
-    //       .child('isChatInitiated')
-    //       .set(0);
+  //   DatabaseReference mDataRef = FirebaseDatabase.instance.ref();
+  //   // mDataRef
+  //   //       .child('truck_chat_users')
+  //   //       .child('byuserid')
+  //   //       .child(BY_USER_ID)
+  //   //       .child('touserid')
+  //   //       .child(TO_USER_ID)
+  //   //       .child('isChatInitiated')
+  //   //       .set(0);
 
-    //         mDataRef
-    //       .child('truck_chat_users')
-    //       .child('touserid')
-    //       .child(TO_USER_ID)
-    //       .child('byuserid')
-    //       .child(BY_USER_ID)
-    //       .child('isChatInitiated')
-    //       .set(0);
+  //   //         mDataRef
+  //   //       .child('truck_chat_users')
+  //   //       .child('touserid')
+  //   //       .child(TO_USER_ID)
+  //   //       .child('byuserid')
+  //   //       .child(BY_USER_ID)
+  //   //       .child('isChatInitiated')
+  //   //       .set(0);
 
-    mDataRef
-        .child('truck_chat_users')
-        .child(BY_USER_ID)
-        .child(TO_USER_ID)
-        .child('isChatInitiated')
-        .set(0);
+  //   mDataRef
+  //       .child('truck_chat_users')
+  //       .child(BY_USER_ID)
+  //       .child(TO_USER_ID)
+  //       .child('isChatInitiated')
+  //       .set(0);
 
-    mDataRef
-        .child('truck_chat_users')
-        .child(TO_USER_ID)
-        .child(BY_USER_ID)
-        .child('isChatInitiated')
-        .set(0);
-  }
+  //   mDataRef
+  //       .child('truck_chat_users')
+  //       .child(TO_USER_ID)
+  //       .child(BY_USER_ID)
+  //       .child('isChatInitiated')
+  //       .set(0);
+  // }
 
   void _showReportAbuseDialog(BuildContext context) {
     showDialog(
@@ -1157,17 +1165,19 @@ class _ChatState extends State<Chat> {
   }
 }
 
-
-
 class Request {
   final String senderId;
   final String receiverId;
   final String status;
+  final String emojiId;
+  final String userName;
 
   Request({
     required this.senderId,
     required this.receiverId,
     required this.status,
+    required this.emojiId,
+    required this.userName,
   });
 
   Map<String, dynamic> toJson() {
@@ -1175,6 +1185,28 @@ class Request {
       'senderId': senderId,
       'receiverId': receiverId,
       'status': status,
+      'emojiId': emojiId,
+      'userName': userName,
     };
   }
 }
+
+// class Request {
+//   final String senderId;
+//   final String receiverId;
+//   final String status;
+
+//   Request({
+//     required this.senderId,
+//     required this.receiverId,
+//     required this.status,
+//   });
+
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'senderId': senderId,
+//       'receiverId': receiverId,
+//       'status': status,
+//     };
+//   }
+// }

@@ -78,8 +78,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: SendRequestScreen(senderId: '1', receiverId: '2'),
-      // home: ChatScreen(chatId: '31'),
-            home: ChatListScreen(),
+      // home: ChatScreen(chatId: '21'),
+            //home: ChatListScreen(),
+            home: HomeScreen(),
 
     );
   }
