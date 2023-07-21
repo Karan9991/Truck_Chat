@@ -99,6 +99,11 @@ class DialogStrings {
 
   static const String IGNORE_USER = 'Ignore User';
   static const String SEND_PRIVATE_CHAT_REQUEST = 'Send Private Chat Request';
+    static const String CAMERA = 'Camera';
+  static const String GALLERY = 'Galley';
+    static const String CHOOSE_AN_OPTION = 'Choose an option';
+
+
 }
 
 class SharedPrefsKeys {

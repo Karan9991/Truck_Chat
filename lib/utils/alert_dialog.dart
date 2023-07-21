@@ -421,7 +421,8 @@ void showIgnoreUserSuccessDialog(BuildContext context, String title) {
   );
 }
 
-void sendPrivateChatRequest(BuildContext context, String title, String subtitle) {
+void sendPrivateChatRequest(
+    BuildContext context, String title, String subtitle) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -440,4 +441,121 @@ void sendPrivateChatRequest(BuildContext context, String title, String subtitle)
     },
   );
 }
+
+// void sendImageDialog(
+//     BuildContext context, Function() onCamera, Function() onGallery) {
+//   showDialog(
+//     context: context,
+//     builder: (context) {
+//       return AlertDialog(
+//         title: Text(DialogStrings.CHOOSE_AN_OPTION),
+//         content: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           crossAxisAlignment: CrossAxisAlignment.stretch,
+//           children: [
+//             ElevatedButton(
+//               onPressed: () {
+//                 Navigator.pop(context); // Close the dialog
+//                 onCamera(); // Call the callback for Report Abuse action
+//               },
+//               child: Text(DialogStrings.CAMERA),
+//             ),
+//             ElevatedButton(
+//               onPressed: () {
+//                 Navigator.pop(context); // Close the dialog
+//                 onGallery(); // Call the callback for Ignore User action
+//               },
+//               child: Text(DialogStrings.GALLERY),
+//             ),
+//           ],
+//         ),
+//       );
+//     },
+//   );
+// }
+
+void sendImageDialog(
+  BuildContext context,
+  Function() onCamera,
+  Function() onGallery,
+) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center, // Center the options
+            children: [
+                            SizedBox(height: 10),
+
+              Text(
+                DialogStrings.CHOOSE_AN_OPTION,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              SizedBox(height: 16),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                  onGallery();
+                },
+                child: Row(
+                  mainAxisAlignment:
+                      MainAxisAlignment.center, // Center the icon and text
+                  children: [
+                    Icon(Icons.image),
+                    SizedBox(width: 16),
+                    Text(
+                      'Gallery',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 16),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                  onCamera();
+                },
+                child: Row(
+                  mainAxisAlignment:
+                      MainAxisAlignment.center, // Center the icon and text
+                  children: [
+                    SizedBox(width: 10),
+                    Icon(Icons.camera_alt),
+                    SizedBox(width: 16),
+                    Text(
+                      'Camera',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 8),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+
+
+
+
+
 

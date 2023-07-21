@@ -390,6 +390,8 @@ color browser_actions_text_color
 color browser_actions_title_color
 color button_material_dark
 color button_material_light
+color call_notification_answer_color
+color call_notification_decline_color
 color common_google_signin_btn_text_dark
 color common_google_signin_btn_text_dark_default
 color common_google_signin_btn_text_dark_disabled
@@ -686,6 +688,12 @@ drawable common_google_signin_btn_text_light_normal_background
 drawable floating_action_mode_shape
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
+drawable ic_call_answer
+drawable ic_call_answer_low
+drawable ic_call_answer_video
+drawable ic_call_answer_video_low
+drawable ic_call_decline
+drawable ic_call_decline_low
 drawable ic_launcher_background
 drawable launch_background
 drawable navigation_empty_icon
@@ -844,6 +852,7 @@ id progress_circular
 id progress_horizontal
 id pullToRefresh
 id radio
+id report_drawn
 id right_icon
 id right_side
 id rtl
@@ -1020,6 +1029,13 @@ string action_go_forward
 string action_reload
 string action_share
 string androidx_startup
+string call_notification_answer_action
+string call_notification_answer_video_action
+string call_notification_decline_action
+string call_notification_hang_up_action
+string call_notification_incoming_text
+string call_notification_ongoing_text
+string call_notification_screening_text
 string common_google_play_services_enable_button
 string common_google_play_services_enable_text
 string common_google_play_services_enable_title
@@ -1478,5 +1494,6 @@ styleable Toolbar android_gravity android_minHeight buttonGravity collapseConten
 styleable View android_theme android_focusable paddingEnd paddingStart theme
 styleable ViewBackgroundHelper android_background backgroundTint backgroundTintMode
 styleable ViewStubCompat android_id android_layout android_inflatedId
+xml flutter_image_picker_file_paths
 xml image_share_filepaths
 xml provider_paths

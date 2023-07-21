@@ -79,5 +79,11 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
+
+	<key>NSCameraUsageDescription</key>
+<string>Allow access to the camera to take photos</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Allow access to the photo library to pick images</string>
+
 </dict>
 </plist>

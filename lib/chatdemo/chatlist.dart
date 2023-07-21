@@ -92,8 +92,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   Map<dynamic, dynamic> messageData =
                       chat[lastMessageId] as Map<dynamic, dynamic>;
 
-                 //testing 1 start
-
                   String emojiId = '';
                   String userName = '';
                  if(currentUserId == messageData['senderId']){
@@ -105,15 +103,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                    userName = messageData['receiverUserName'];
                  }
 
-
-
-
-
-               //testing 1 end    
-
                   String lastMessage = messageData['message'] ?? '';
-                  // String emojiId = messageData['emojiId'];
-                  // String userName = messageData['userName'];
                   int timestamp = messageData['timestamp'] ?? 0;
 
                   // Format the timestamp into a human-readable date and time format
