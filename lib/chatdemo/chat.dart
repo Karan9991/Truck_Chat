@@ -1,241 +1,12 @@
 import 'package:chat/utils/avatar.dart';
+import 'package:chat/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:intl/intl.dart';
-
-// class ChatScreen extends StatefulWidget {
-//   final String chatId;
-
-//   ChatScreen({required this.chatId});
-
-//   @override
-//   _ChatScreenState createState() => _ChatScreenState();
-// }
-
-// class _ChatScreenState extends State<ChatScreen> {
-//  late DatabaseReference _chatRef;
-//   TextEditingController _messageController = TextEditingController();
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _chatRef = FirebaseDatabase.instance.reference().child('chats').child(widget.chatId);
-//   }
-
-//   void _sendMessage() {
-//     String message = _messageController.text.trim();
-//     if (message.isNotEmpty) {
-//       _chatRef.push().set({
-//         'message': message,
-//         'timestamp': ServerValue.timestamp,
-//       });
-//       _messageController.clear();
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Chat with ${widget.chatId}'),
-//       ),
-//       body: Column(
-//         children: [
-//           Expanded(
-//             child: StreamBuilder(
-//               stream: _chatRef.orderByChild('timestamp').onValue,
-//               builder: (context, snapshot) {
-//                 if (snapshot.hasData && snapshot.data != null) {
-//                   Map<dynamic, dynamic>? data =
-//                       (snapshot.data as DatabaseEvent).snapshot.value as Map<dynamic, dynamic>?;
-
-//                   if (data != null) {
-//                     List<String> messageKeys = data.keys.cast<String>().toList();
-
-//                     return ListView.builder(
-//                       reverse: true,
-//                       itemCount: messageKeys.length,
-//                       itemBuilder: (context, index) {
-//                         String messageKey = messageKeys[index];
-//                         String message = data[messageKey]['message'];
-//                         return ListTile(
-//                           title: Text(message),
-//                         );
-//                       },
-//                     );
-//                   }
-//                 }
-//                 return Center(
-//                   child: CircularProgressIndicator(),
-//                 );
-//               },
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: Row(
-//               children: [
-//                 Expanded(
-//                   child: TextField(
-//                     controller: _messageController,
-//                     decoration: InputDecoration(
-//                       hintText: 'Type a message...',
-//                     ),
-//                   ),
-//                 ),
-//                 IconButton(
-//                   icon: Icon(Icons.send),
-//                   onPressed: _sendMessage,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-//testing 1
-
-// class ChatScreen extends StatefulWidget {
-//   final String chatId;
-
-//   ChatScreen({required this.chatId});
-
-//   @override
-//   _ChatScreenState createState() => _ChatScreenState();
-// }
-
-// class _ChatScreenState extends State<ChatScreen> {
-//   late DatabaseReference _chatRef;
-//   late String currentUserId; // Assuming you have a way to get the current user ID.
-
-//   TextEditingController _messageController = TextEditingController();
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _chatRef = FirebaseDatabase.instance.reference().child('chats').child(widget.chatId);
-//     currentUserId = "1"; // Replace with your logic to get the current user ID.
-//   }
-
-//   void _sendMessage() {
-//     String message = _messageController.text.trim();
-//     if (message.isNotEmpty) {
-//       _chatRef.push().set({
-//         'senderId': currentUserId,
-//         'receiverId': '2',
-//         'message': message,
-//         'timestamp': ServerValue.timestamp,
-//       });
-//       _messageController.clear();
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Chat with ${widget.chatId}'),
-//       ),
-//       body: Column(
-//         children: [
-//           Expanded(
-//             child: StreamBuilder(
-//               stream: _chatRef.orderByChild('timestamp').onValue,
-//               builder: (context, snapshot) {
-//                 if (snapshot.hasData && snapshot.data != null) {
-//                   Map<dynamic, dynamic>? data =
-//                       (snapshot.data as DatabaseEvent).snapshot.value as Map<dynamic, dynamic>?;
-
-//                   if (data != null) {
-//                     List<String> messageKeys = data.keys.cast<String>().toList();
-
-//                     return ListView.builder(
-//                     //  reverse: true,
-//                       itemCount: messageKeys.length,
-//                       itemBuilder: (context, index) {
-//                         String messageKey = messageKeys[index];
-//                         Map<dynamic, dynamic> messageData = data[messageKey];
-//                         String senderId = messageData['senderId'];
-//                         String message = messageData['message'];
-//                         bool isCurrentUser = senderId == currentUserId;
-//                         return MessageBubble(
-//                           message: message,
-//                           isCurrentUser: isCurrentUser,
-//                         );
-//                       },
-//                         reverse: true, // Keep latest messages at the bottom
-
-//                     );
-//                   }
-//                 }
-//                 return Center(
-//                   child: CircularProgressIndicator(),
-//                 );
-//               },
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: Row(
-//               children: [
-//                 Expanded(
-//                   child: TextField(
-//                     controller: _messageController,
-//                     decoration: InputDecoration(
-//                       hintText: 'Type a message...',
-//                     ),
-//                   ),
-//                 ),
-//                 IconButton(
-//                   icon: Icon(Icons.send),
-//                   onPressed: _sendMessage,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// class MessageBubble extends StatelessWidget {
-//   final String message;
-//   final bool isCurrentUser;
-
-//   MessageBubble({required this.message, required this.isCurrentUser});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Align(
-//       alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
-//       child: Container(
-//         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-//         margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-//         decoration: BoxDecoration(
-//           color: isCurrentUser ? Colors.blue : Colors.grey,
-//           borderRadius: BorderRadius.circular(16),
-//         ),
-//         child: Text(
-//           message,
-//           style: TextStyle(color: Colors.white),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-//testing 2
+import 'package:chat/utils/shared_pref.dart';
 
 class ChatScreen extends StatefulWidget {
-  // final String chatId;
-
-  // ChatScreen({required this.chatId});
-
   final String chatId;
   final String imagePath;
   final String userName;
@@ -248,6 +19,8 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  String? currentUserHandle;
+  String? currentUserEmojiId;
   late DatabaseReference _chatRef;
   late String
       currentUserId; // Assuming you have a way to get the current user ID.
@@ -261,17 +34,34 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     _chatRef =
         FirebaseDatabase.instance.ref().child('chats').child(widget.chatId);
-    currentUserId = "1"; // Replace with your logic to get the current user ID.
+    currentUserId = "2"; // Replace with your logic to get the current user ID.
+
+    currentUserHandle =
+        SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
+
+    currentUserEmojiId =
+        SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID).toString();
   }
 
   void _sendMessage() {
     String message = _messageController.text.trim();
     if (message.isNotEmpty) {
+      // _chatRef.push().set({
+      //   'senderId': currentUserId,
+      //   'receiverId': '1',
+      //   'emojiId': emojiId,
+      //   'userName': userName,
+      //   'message': message,
+      //   'timestamp': ServerValue.timestamp,
+      // });
+
       _chatRef.push().set({
         'senderId': currentUserId,
-        'receiverId': '2',
-        'emojiId': emojiId,
-        'userName': userName,
+        'receiverId': '1',
+        'senderEmojiId': currentUserEmojiId,
+        'senderUserName': currentUserHandle,
+        'receiverEmojiId': emojiId,
+        'receiverUserName': userName,
         'message': message,
         'timestamp': ServerValue.timestamp,
       });
@@ -351,12 +141,8 @@ class _ChatScreenState extends State<ChatScreen> {
                         String messageKey = messageKeys[index];
                         Map<dynamic, dynamic> messageData = data[messageKey];
 
-                        emojiId = messageData['emojiId'];
-                        userName = messageData['userName'];
-
-    
-
-
+                        emojiId = messageData['receiverEmojiId'];
+                        userName = messageData['receiverUserName'];
 
                         // Check if the 'message' field is available and not empty
                         String message = messageData['message'] ?? '';
@@ -384,72 +170,52 @@ class _ChatScreenState extends State<ChatScreen> {
               },
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Row(
-          //     children: [
-          //       Expanded(
-          //         child: TextField(
-          //           controller: _messageController,
-          //           decoration: InputDecoration(
-          //             hintText: 'Type a message...',
-          //           ),
-          //         ),
-          //       ),
-          //       IconButton(
-          //         icon: Icon(Icons.send),
-          //         onPressed: _sendMessage,
-          //       ),
-          //     ],
-          //   ),
-          // ),
-
           Padding(
-  padding: const EdgeInsets.all(8.0),
-  child: Row(
-    children: [
-      Expanded(
-        child: TextField(
-          controller: _messageController,
-          decoration: InputDecoration(
-            hintText: 'Type a message...',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide.none,
-            ),
-            filled: true,
-            fillColor: Colors.grey[200],
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          ),
-        ),
-      ),
-      SizedBox(width: 8), // Add some space between the text field and the send button
-      GestureDetector(
-        onTap: _sendMessage,
-        child: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Theme.of(context).primaryColor,
-          ),
-          child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.send,
-              color: Colors.white,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _messageController,
+                    decoration: InputDecoration(
+                      hintText: 'Type a message...',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                    width:
+                        8), // Add some space between the text field and the send button
+                GestureDetector(
+                  onTap: _sendMessage,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.send,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-      ),
-    ],
-  ),
-),
-
         ],
       ),
     );
   }
-
-
 }
 
 class MessageBubble extends StatelessWidget {

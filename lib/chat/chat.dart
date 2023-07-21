@@ -66,6 +66,7 @@ class _ChatState extends State<Chat> {
   // late Timer refreshTimer;
   ScrollController _scrollController = ScrollController();
   String? currentUserHandle;
+  String? currentUserEmojiId;
   String? emojiId;
   String? driverName;
   String? privateChatStatus;
@@ -89,6 +90,9 @@ class _ChatState extends State<Chat> {
 
     currentUserHandle =
         SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
+
+    currentUserEmojiId =
+        SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID).toString();
 
     print('init state');
     mm(widget.serverMsgId);
@@ -795,8 +799,10 @@ class _ChatState extends State<Chat> {
                                       print('private chat ${userName[0]}');
 
                                       //sendPrivateChatInvite();
+                                      // sendRequest(
+                                      //     '1', '2', reply.emojiId, userName[0]);
                                       sendRequest(
-                                          '1', '2', reply.emojiId, userName[0]);
+                                          '1', '2', currentUserEmojiId!, currentUserHandle!);
                                     },
                                   );
                                 } else {
@@ -1086,6 +1092,9 @@ class _ChatState extends State<Chat> {
     );
 
     requestsRef.push().set(request.toJson());
+
+    sendPrivateChatRequest(context, 'Your request has been sent.',
+        'Once user accepted your request chat list will appear in private chat tab');
   }
 
   Future<bool> reportUser(
@@ -1167,8 +1176,6 @@ class _ChatState extends State<Chat> {
       final response =
           await http.post(url, headers: headers, body: jsonEncode(entity));
 
-     
-
       if (response.statusCode == 200) {
         final jsonResult = json.decode(response.body);
         print('json body ${response.body}');
@@ -1176,11 +1183,11 @@ class _ChatState extends State<Chat> {
         status_code = jsonResult['status'];
         print('status_code $status_code');
 
-         if (status_code == 200) {
-        showIgnoreUserSuccessDialog(context, 'User added in ignored list.');
-      } else if (status_code == 500) {
-        showIgnoreUserSuccessDialog(context, 'User already ignored');
-      }
+        if (status_code == 200) {
+          showIgnoreUserSuccessDialog(context, 'User added in ignored list.');
+        } else if (status_code == 500) {
+          showIgnoreUserSuccessDialog(context, 'User already ignored');
+        }
 
         if (jsonResult.containsKey('message')) {
           status_message = jsonResult['message'];

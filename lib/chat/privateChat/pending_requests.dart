@@ -217,6 +217,8 @@
 //   // }
 
 import 'package:chat/utils/avatar.dart';
+import 'package:chat/utils/constants.dart';
+import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -227,10 +229,18 @@ class PendingRequestsScreen extends StatelessWidget {
   String userName = '';
   String senderId = '';
   String receiverId = '';
+  String? currentUserHandle;
+  String? currentUserEmojiId;
 
   PendingRequestsScreen({required this.currentUserId});
 
   void acceptRequest(String requestId) {
+    currentUserHandle =
+        SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
+
+    currentUserEmojiId =
+        SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID).toString();
+
     String chatId = senderId + receiverId;
 
     DatabaseReference requestRef =
@@ -241,11 +251,25 @@ class PendingRequestsScreen extends StatelessWidget {
     DatabaseReference chatRef =
         FirebaseDatabase.instance.ref().child('chats').child(chatId);
 
+    // chatRef.push().set({
+    //   'senderId': senderId,
+    //   'receiverId': receiverId,
+    //   'emojiId': emojiId,
+    //   'userName': userName,
+    //   'message': '',
+    //   'timestamp': 0,
+    // });
+
+    print('senderusername $currentUserHandle');
+    print('senderemojiid $currentUserEmojiId');
+
     chatRef.push().set({
       'senderId': senderId,
       'receiverId': receiverId,
-      'emojiId': emojiId,
-      'userName': userName,
+      'senderEmojiId': currentUserEmojiId,
+      'senderUserName': currentUserHandle,
+      'receiverEmojiId': emojiId,
+      'receiverUserName': userName,
       'message': '',
       'timestamp': 0,
     });
@@ -295,16 +319,6 @@ class PendingRequestsScreen extends StatelessWidget {
                 orElse: () => Avatar(id: 0, imagePath: ''),
               );
 
-              //   if (matchingAvatar.id != 0)     Image.asset(
-              //   matchingAvatar.imagePath,
-              //   width: 30,
-              //   height: 30,
-              //  ),
-
-              // print('emoji id $emoji_id');
-              // print('matching avatar id ${matchingAvatar.id}');
-              // You should fetch the sender's name based on the senderId from your user database
-
               requestWidgets.add(Card(
                 child: ListTile(
                   leading: CircleAvatar(
@@ -315,16 +329,6 @@ class PendingRequestsScreen extends StatelessWidget {
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // IconButton(
-                      //   onPressed: () => acceptRequest(requestId),
-                      //   icon: Icon(Icons.check),
-                      //   color: Colors.green,
-                      // ),
-                      // IconButton(
-                      //   onPressed: () => rejectRequest(requestId),
-                      //   icon: Icon(Icons.close),
-                      //   color: Colors.red,
-                      // ),
                       ElevatedButton(
                         onPressed: () => acceptRequest(requestId),
                         child: Text(

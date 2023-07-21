@@ -329,7 +329,7 @@ void messageLongPressDialog(BuildContext context, Function() onReportAbuse,
                 Navigator.pop(context); // Close the dialog
                 onStartPrivateChat(); // Call the callback for Start Private Chat action
               },
-              child: Text(DialogStrings.START_PRIVATE_CHAT),
+              child: Text(DialogStrings.SEND_PRIVATE_CHAT_REQUEST),
             ),
           ],
         ),
@@ -420,3 +420,24 @@ void showIgnoreUserSuccessDialog(BuildContext context, String title) {
     },
   );
 }
+
+void sendPrivateChatRequest(BuildContext context, String title, String subtitle) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(title),
+        content: Text(subtitle),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close the dialog
+            },
+            child: Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+}
+

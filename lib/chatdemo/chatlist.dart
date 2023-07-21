@@ -4,67 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
 
-// class ChatListScreen extends StatefulWidget {
-//   @override
-//   _ChatListScreenState createState() => _ChatListScreenState();
-// }
-
-// class _ChatListScreenState extends State<ChatListScreen> {
-//   late DatabaseReference _chatListRef;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _chatListRef = FirebaseDatabase.instance.reference().child('chats');
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Chat List'),
-//       ),
-//       body: StreamBuilder(
-//         stream: _chatListRef.onValue,
-//         builder: (context, snapshot) {
-//           if (snapshot.hasData && snapshot.data != null) {
-//             Map<dynamic, dynamic>? chatList =
-//                 (snapshot.data as DatabaseEvent).snapshot.value as Map<dynamic, dynamic>?;
-//   print('Chat List: $chatList'); // Add this print statement to check the chatList data.
-
-//             if (chatList != null) {
-//               List<String> chatIds = chatList.keys.cast<String>().toList();
-
-//               return ListView.builder(
-//                 itemCount: chatIds.length,
-//                 itemBuilder: (context, index) {
-//                   String chatId = chatIds[index];
-//                   String lastMessage = chatList[chatId]['message'] ?? '';
-//                   return ListTile(
-//                     title: Text('Chat with $chatId'),
-//                     subtitle: Text(lastMessage),
-//                     onTap: () {
-//                       Navigator.push(
-//                         context,
-//                         MaterialPageRoute(
-//                           builder: (context) => ChatScreen(chatId: chatId),
-//                         ),
-//                       );
-//                     },
-//                   );
-//                 },
-//               );
-//             }
-//           }
-//           return Center(
-//             child: CircularProgressIndicator(),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
-
 class ChatListScreen extends StatefulWidget {
   @override
   _ChatListScreenState createState() => _ChatListScreenState();
@@ -79,7 +18,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
   void initState() {
     super.initState();
     _chatListRef = FirebaseDatabase.instance.ref().child('chats');
-    currentUserId = "1"; // Replace with your logic to get the current user ID.
+    currentUserId = "2"; // Replace with your logic to get the current user ID.
   }
 
   @override
@@ -137,12 +76,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   Map<dynamic, dynamic> chat =
                       data[chatId] as Map<dynamic, dynamic>;
 
-                  // Access message data similarly as before
-                  // String messageId = chat.keys.first as String;
-                  // Map<dynamic, dynamic> messageData =
-                  //     chat[messageId] as Map<dynamic, dynamic>;
-
-//testing 1
+    
                   // Sort the messageKeys based on timestamp
                   List<String> messageKeys = chat.keys.cast<String>().toList();
                   messageKeys.sort((a, b) {
@@ -158,10 +92,28 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   Map<dynamic, dynamic> messageData =
                       chat[lastMessageId] as Map<dynamic, dynamic>;
 
-                  String lastMessage = messageData['message'] ?? '';
-                  String emojiId = messageData['emojiId'];
-                  String userName = messageData['userName'];
+                 //testing 1 start
 
+                  String emojiId = '';
+                  String userName = '';
+                 if(currentUserId == messageData['senderId']){
+                    emojiId = messageData['senderEmojiId'];
+                   userName = messageData['senderUserName'];
+
+                 }else if(currentUserId == messageData['receiverId']){
+                    emojiId = messageData['receiverEmojiId'];
+                   userName = messageData['receiverUserName'];
+                 }
+
+
+
+
+
+               //testing 1 end    
+
+                  String lastMessage = messageData['message'] ?? '';
+                  // String emojiId = messageData['emojiId'];
+                  // String userName = messageData['userName'];
                   int timestamp = messageData['timestamp'] ?? 0;
 
                   // Format the timestamp into a human-readable date and time format

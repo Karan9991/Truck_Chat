@@ -98,7 +98,7 @@ class DialogStrings {
       'You no longer accepting private messages.';
 
   static const String IGNORE_USER = 'Ignore User';
-  static const String START_PRIVATE_CHAT = 'Start Private Chat';
+  static const String SEND_PRIVATE_CHAT_REQUEST = 'Send Private Chat Request';
 }
 
 class SharedPrefsKeys {
