@@ -270,10 +270,10 @@ void handleFCMMessage(Map<String, dynamic> message) {
       'testing current user id ${SharedPrefs.getString(SharedPrefsKeys.USER_ID)}');
 
 // Ignore the notification if the sender is the current user
-  if (currentUserId != senderId) {
+ // if (currentUserId != senderId) {
     showNotification(
         Constants.FCM_NOTIFICATION_TITLE, Constants.FCM_NOTIFICATION_BODY);
-  }
+  //}
 }
 
 void showNotification(String? title, String? body) async {

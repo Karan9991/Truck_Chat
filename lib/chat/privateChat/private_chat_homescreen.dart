@@ -32,7 +32,7 @@ class PrivateChatTab extends StatelessWidget {
                   // Center(
                   //   child: Text('Chat List Content'),
                   // ),
-                 PendingRequestsScreen(currentUserId: '2'),
+                 PendingRequestsScreen(currentUserId: '3'),
            
                 ],
               ),

@@ -266,6 +266,8 @@ class PendingRequestsScreen extends StatelessWidget {
     chatRef.push().set({
       'senderId': senderId,
       'receiverId': receiverId,
+      // 'chatlistSenderId': senderId,
+      // 'chatlistReceiverId': receiverId,
       'senderEmojiId': currentUserEmojiId,
       'senderUserName': currentUserHandle,
       'receiverEmojiId': emojiId,
@@ -273,6 +275,16 @@ class PendingRequestsScreen extends StatelessWidget {
       'message': '',
       'timestamp': 0,
     });
+    // chatRef.push().set({
+    //   'senderId': senderId,
+    //   'receiverId': receiverId,
+    //   'senderEmojiId': currentUserEmojiId,
+    //   'senderUserName': currentUserHandle,
+    //   'receiverEmojiId': emojiId,
+    //   'receiverUserName': userName,
+    //   'message': '',
+    //   'timestamp': 0,
+    // });
   }
 
   void rejectRequest(String requestId) {
