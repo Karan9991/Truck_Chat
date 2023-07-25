@@ -9,6 +9,8 @@ class PendingRequestsScreen extends StatelessWidget {
 
   String emojiId = '';
   String userName = '';
+  String receiverEmojiId = '';
+  String receiverUserName = '';
   String senderId = '';
   String receiverId = '';
   String? currentUserHandle;
@@ -31,6 +33,8 @@ class PendingRequestsScreen extends StatelessWidget {
         FirebaseDatabase.instance.ref().child('requests/$requestId');
 
     requestRef.update({'status': 'accepted'});
+
+    _initializeChat(senderId, receiverId);
 
     // DatabaseReference chatRefs =
     //     FirebaseDatabase.instance.ref().child('chats').child(chatIds);
@@ -62,7 +66,6 @@ class PendingRequestsScreen extends StatelessWidget {
     //   'message': '',
     //   'timestamp': 0,
     // });
-    _initializeChat(senderId, receiverId);
   }
 
   void rejectRequest(String requestId) {
@@ -75,39 +78,40 @@ class PendingRequestsScreen extends StatelessWidget {
     var timestamp = DateTime.now().millisecondsSinceEpoch;
 
     // Send the message to the receiver
-    _databaseReference
-        .child('messages')
-        .child(userId)
-        .child(receiverId)
-        .push()
-        .set({
-      'senderId': userId,
-      'receiverId': receiverId,
-      'message': '',
-      'timestamp': timestamp,
-    });
+    // _databaseReference
+    //     .child('messages')
+    //     .child(userId)
+    //     .child(receiverId)
+    //     .push()
+    //     .set({
+    //   'senderId': userId,
+    //   'receiverId': receiverId,
+    //   'message': '',
+    //   'timestamp': timestamp,
+    // });
 
-    _databaseReference
-        .child('messages')
-        .child(receiverId)
-        .child(userId)
-        .push()
-        .set({
-      'senderId': userId,
-      'receiverId': receiverId,
-      'message': '',
-      'timestamp': timestamp,
-    });
+    // _databaseReference
+    //     .child('messages')
+    //     .child(receiverId)
+    //     .child(userId)
+    //     .push()
+    //     .set({
+    //   'senderId': userId,
+    //   'receiverId': receiverId,
+    //   'message': '',
+    //   'timestamp': timestamp,
+    // });
 
     // Update the chat list for the sender (widget.userId)
-    _updateChatList(userId, receiverId, '', timestamp);
+    _updateChatList(userId, receiverId, '', timestamp, emojiId, userName);
 
     // Update the chat list for the receiver (widget.receiverId)
-    _updateChatList(receiverId, userId, '', timestamp);
+    _updateChatList(
+        receiverId, userId, '', timestamp, receiverEmojiId, receiverUserName);
   }
 
   void _updateChatList(String userId, String otherUserId, String lastMessage,
-      int timestamp) async {
+      int timestamp, String emojiId, String userName) async {
     try {
       DataSnapshot snapshot = await _databaseReference
           .child('chatList')
@@ -140,8 +144,8 @@ class PendingRequestsScreen extends StatelessWidget {
             .child(userId)
             .child(otherUserId)
             .set({
-          'userName': otherUserName,
-          'userImage': otherUserImage,
+          'userName': userName,
+          'emojiId': emojiId,
           'receiverId': otherUserId,
           'lastMessage': lastMessage,
           'timestamp': timestamp,
@@ -182,12 +186,13 @@ class PendingRequestsScreen extends StatelessWidget {
             if (requestData['status'] == 'pending') {
               senderId = requestData['senderId'];
               receiverId = requestData['receiverId'];
-              emojiId = requestData['emojiId'];
-              userName = requestData['userName'];
-
+              emojiId = requestData['senderEmojiId'];
+              userName = requestData['senderUserName'];
+              receiverEmojiId = requestData['receiverEmojiId'];
+              receiverUserName = requestData['receiverUserName'];
               // Find the corresponding Avatar for the emoji_id
               Avatar? matchingAvatar = avatars.firstWhere(
-                (avatar) => avatar.id == int.parse(emojiId),
+                (avatar) => avatar.id == int.parse(receiverEmojiId),
                 orElse: () => Avatar(id: 0, imagePath: ''),
               );
 
@@ -197,7 +202,7 @@ class PendingRequestsScreen extends StatelessWidget {
                     backgroundImage: AssetImage(matchingAvatar.imagePath),
                   ),
                   title: Text(
-                      userName), // Replace senderName with the actual sender's name
+                      receiverUserName), // Replace senderName with the actual sender's name
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

@@ -1,4 +1,5 @@
 import 'package:chat/chatdemo2/chat.dart';
+import 'package:chat/utils/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -11,7 +12,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
   DatabaseReference _databaseReference = FirebaseDatabase.instance.reference();
   List<Map<dynamic, dynamic>> _chatList = [];
 
-  String userId = '2';
+  String userId = '1';
 
   @override
   void initState() {
@@ -101,17 +102,20 @@ class _ChatListScreenState extends State<ChatListScreen> {
     _chatList.sort((a, b) => b['timestamp'].compareTo(a['timestamp']));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Chat List'),
-      ),
       body: ListView.builder(
         itemCount: _chatList.length,
         itemBuilder: (context, index) {
           Map<dynamic, dynamic> chatItem = _chatList[index];
+
+          Avatar? matchingAvatar = avatars.firstWhere(
+            (avatar) => avatar.id == int.tryParse(chatItem['emojiId']),
+            orElse: () => Avatar(id: 0, imagePath: ''),
+          );
+
           return ListTile(
-            // leading: CircleAvatar(
-            //   backgroundImage: NetworkImage(chatItem['userImage']),
-            // ),
+            leading: CircleAvatar(
+              backgroundImage: AssetImage(matchingAvatar.imagePath),
+            ),
             title: Text(chatItem['userName']),
             subtitle: Text(
               chatItem['lastMessage'],
@@ -136,9 +140,11 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ChatScreen(
-                    userId: userId, // Change this to the authenticated user's ID
+                    userId:
+                        userId, // Change this to the authenticated user's ID
                     receiverId: chatItem['receiverId'],
-                    receiverName: chatItem['userName'],
+                    receiverUserName: chatItem['userName'],
+                    receiverEmojiId: chatItem['emojiId'],
                   ),
                 ),
               );

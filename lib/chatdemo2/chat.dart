@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:chat/utils/alert_dialog.dart';
+import 'package:chat/utils/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,12 +11,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 class ChatScreen extends StatefulWidget {
   final String userId;
   final String receiverId;
-  final String receiverName;
+  final String receiverUserName;
+  final String receiverEmojiId;
 
   ChatScreen({
     required this.userId,
     required this.receiverId,
-    required this.receiverName,
+    required this.receiverUserName,
+    required this.receiverEmojiId,
   });
 
   @override
@@ -26,6 +29,7 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController _messageController = TextEditingController();
   DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
   List<Map<dynamic, dynamic>> _messages = [];
+  bool _isBlocked = false;
 
   @override
   void initState() {
@@ -34,6 +38,15 @@ class _ChatScreenState extends State<ChatScreen> {
     _updateNewMessage();
 
     _loadMessages();
+
+    _loadBlockStatus();
+  }
+
+  void _loadBlockStatus() async {
+    bool isBlocked = await isUserBlocked(widget.userId, widget.receiverId);
+    setState(() {
+      _isBlocked = isBlocked;
+    });
   }
 
   void _updateNewMessage() async {
@@ -85,18 +98,20 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _sendMessage() async {
-  bool isSenderBlocked = await isUserBlocked(widget.userId, widget.receiverId);
-  bool isReceiverBlocked = await isUserBlocked(widget.receiverId, widget.userId);
+    bool isSenderBlocked =
+        await isUserBlocked(widget.userId, widget.receiverId);
+    bool isReceiverBlocked =
+        await isUserBlocked(widget.receiverId, widget.userId);
 
-  if (isSenderBlocked) {
-    // Show a snackbar message indicating that the sender has blocked the receiver
-    _showBlockedMessage("You blocked this user. Cannot send a message.");
-    return;
-  } else if (isReceiverBlocked) {
-    // Show a snackbar message indicating that the receiver has blocked the sender
-    _showBlockedMessage("This user has blocked you. Cannot send a message.");
-    return;
-  }
+    if (isSenderBlocked) {
+      // Show a snackbar message indicating that the sender has blocked the receiver
+      _showBlockedMessage("You blocked this user. Cannot send a message.");
+      return;
+    } else if (isReceiverBlocked) {
+      // Show a snackbar message indicating that the receiver has blocked the sender
+      _showBlockedMessage("This user has blocked you. Cannot send a message.");
+      return;
+    }
 
     String messageText = _messageController.text.trim();
     if (messageText.isNotEmpty) {
@@ -184,18 +199,20 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _sendImage() async {
-   bool isSenderBlocked = await isUserBlocked(widget.userId, widget.receiverId);
-  bool isReceiverBlocked = await isUserBlocked(widget.receiverId, widget.userId);
+    bool isSenderBlocked =
+        await isUserBlocked(widget.userId, widget.receiverId);
+    bool isReceiverBlocked =
+        await isUserBlocked(widget.receiverId, widget.userId);
 
-  if (isSenderBlocked) {
-    // Show a snackbar message indicating that the sender has blocked the receiver
-    _showBlockedMessage("You blocked this user. Cannot send a message.");
-    return;
-  } else if (isReceiverBlocked) {
-    // Show a snackbar message indicating that the receiver has blocked the sender
-    _showBlockedMessage("This user has blocked you. Cannot send a message.");
-    return;
-  }
+    if (isSenderBlocked) {
+      // Show a snackbar message indicating that the sender has blocked the receiver
+      _showBlockedMessage("You blocked this user. Cannot send a message.");
+      return;
+    } else if (isReceiverBlocked) {
+      // Show a snackbar message indicating that the receiver has blocked the sender
+      _showBlockedMessage("This user has blocked you. Cannot send a message.");
+      return;
+    }
     sendImageDialog(context, () => _openCamera(), () => _openGallery());
   }
 
@@ -305,15 +322,14 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-void _showBlockedMessage(String message) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(message),
-      duration: Duration(seconds: 2),
-    ),
-  );
-}
-
+  void _showBlockedMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
 
   void _showSuccessMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -348,6 +364,8 @@ void _showBlockedMessage(String message) {
       // An error occurred while blocking the user, show an error message
       _showErrorMessage("Failed to block user. Please try again.");
     });
+
+    _loadBlockStatus();
   }
 
   void _unblockUser(String currentUserID, String blockedUserID) {
@@ -364,6 +382,8 @@ void _showBlockedMessage(String message) {
       // An error occurred while unblocking the user, show an error message
       _showErrorMessage("Failed to unblock user. Please try again.");
     });
+
+    _loadBlockStatus();
   }
 
   void _showOptionsMenu(BuildContext context, bool isBlocked) {
@@ -374,7 +394,7 @@ void _showBlockedMessage(String message) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Options'),
+          title: Text('Confirm'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -414,15 +434,86 @@ void _showBlockedMessage(String message) {
   Widget build(BuildContext context) {
     _messages.sort((a, b) => b['timestamp'].compareTo(a['timestamp']));
 
+    Avatar? matchingAvatar = avatars.firstWhere(
+      (avatar) => avatar.id == int.tryParse(widget.receiverEmojiId),
+      orElse: () => Avatar(id: 0, imagePath: ''),
+    );
+
     return Scaffold(
+      // appBar: AppBar(
+      //   leading: CircleAvatar(
+      //     backgroundImage: AssetImage(matchingAvatar.imagePath),
+      //   ),
+      //   title: Text(widget.receiverUserName),
+      //   actions: [
+      //     PopupMenuButton(
+      //       itemBuilder: (BuildContext context) {
+      //         return [
+      //           PopupMenuItem(
+      //             child: _isBlocked ? Text('Unblock user') : Text('Block user'),
+      //             value: 'block this user',
+      //           ),
+      //         ];
+      //       },
+      //       onSelected: (value) async {
+      //         // Perform action when a pop-up menu item is selected
+      //         switch (value) {
+      //           case 'block this user':
+      //             // Get the block status for the current user and receiver
+      //             // You can use the isUserBlocked function to get the block status
+      //             // Here, I'm assuming you have the function isUserBlocked implemented
+      //             bool isBlocked =
+      //                 await isUserBlocked(widget.userId, widget.receiverId);
+
+      //             _showOptionsMenu(context, isBlocked);
+
+      //             break;
+      //         }
+      //       },
+      //     ),
+      //   ],
+      // ),
       appBar: AppBar(
-        title: Text(widget.receiverName),
+        automaticallyImplyLeading: false, // Prevent the default back button
+        leadingWidth: kToolbarHeight + 32.0, // Adjust this value as needed
+        leading: Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                // Handle back button press here
+                Navigator.of(context).pop();
+              },
+            ),
+            // SizedBox(width: 8), // Adjust this value for spacing between arrow and image
+            SizedBox(
+              width:
+                  40, // Set the width of the image container equal to the height for a square image
+              height: kToolbarHeight,
+              child: Image.asset(
+                matchingAvatar.imagePath,
+                fit: BoxFit.contain, // Maintain the image's aspect ratio
+              ),
+            ),
+          ],
+        ),
+        title: Container(
+          alignment: Alignment.centerLeft,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              // SizedBox(width: 8), // Adjust this value for spacing between image and title
+              Text(widget.receiverUserName),
+            ],
+          ),
+        ),
+        centerTitle: false, // Make sure centerTitle is set to false
         actions: [
           PopupMenuButton(
             itemBuilder: (BuildContext context) {
               return [
                 PopupMenuItem(
-                  child: Text('Block this user'),
+                  child: _isBlocked ? Text('Unblock user') : Text('Block user'),
                   value: 'block this user',
                 ),
               ];
@@ -438,6 +529,7 @@ void _showBlockedMessage(String message) {
                       await isUserBlocked(widget.userId, widget.receiverId);
 
                   _showOptionsMenu(context, isBlocked);
+
                   break;
               }
             },
