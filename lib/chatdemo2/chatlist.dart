@@ -11,66 +11,69 @@ class _ChatListScreenState extends State<ChatListScreen> {
   DatabaseReference _databaseReference = FirebaseDatabase.instance.reference();
   List<Map<dynamic, dynamic>> _chatList = [];
 
+  String userId = '2';
+
   @override
   void initState() {
     super.initState();
 
-    _loadChatList('2');
+    _loadChatList(userId);
   }
 
-void _loadChatList(String userId) {
-  print("Fetching chat lists for user: $userId");
+  void _loadChatList(String userId) {
+    print("Fetching chat lists for user: $userId");
 
-  _databaseReference.child('chatList').child(userId).onValue.listen((event) {
-    DataSnapshot snapshot = event.snapshot;
-    print('chatList ${snapshot.value}');
-    if (snapshot.value != null) {
-      if (snapshot.value is Map) {
-        Map<dynamic, dynamic> chatListData = snapshot.value as Map<dynamic, dynamic>;
-        List<Map<dynamic, dynamic>> chatLists = [];
+    _databaseReference.child('chatList').child(userId).onValue.listen((event) {
+      DataSnapshot snapshot = event.snapshot;
+      print('chatList ${snapshot.value}');
+      if (snapshot.value != null) {
+        if (snapshot.value is Map) {
+          Map<dynamic, dynamic> chatListData =
+              snapshot.value as Map<dynamic, dynamic>;
+          List<Map<dynamic, dynamic>> chatLists = [];
 
-        chatListData.forEach((key, value) {
-          if (value != null && value is Map) {
-            chatLists.add(Map<dynamic, dynamic>.from(value));
-          }
-        });
+          chatListData.forEach((key, value) {
+            if (value != null && value is Map) {
+              chatLists.add(Map<dynamic, dynamic>.from(value));
+            }
+          });
 
-        setState(() {
-          _chatList = chatLists;
-        });
+          setState(() {
+            _chatList = chatLists;
+          });
 
-        print("Chat list loaded. Total chat lists: ${_chatList.length}");
-        print("Chat list content: $_chatList");
-      } else if (snapshot.value is List) {
-        List<dynamic> chatListData = snapshot.value as List<dynamic>;
-        List<Map<dynamic, dynamic>> chatLists = [];
+          print("Chat list loaded. Total chat lists: ${_chatList.length}");
+          print("Chat list content: $_chatList");
+        } else if (snapshot.value is List) {
+          List<dynamic> chatListData = snapshot.value as List<dynamic>;
+          List<Map<dynamic, dynamic>> chatLists = [];
 
-        chatListData.forEach((value) {
-          if (value != null && value is Map) {
-            chatLists.add(Map<dynamic, dynamic>.from(value));
-          }
-        });
+          chatListData.forEach((value) {
+            if (value != null && value is Map) {
+              chatLists.add(Map<dynamic, dynamic>.from(value));
+            }
+          });
 
-        setState(() {
-          _chatList = chatLists;
-        });
+          setState(() {
+            _chatList = chatLists;
+          });
 
-        print("Chat list loaded. Total chat lists: ${_chatList.length}");
-        print("Chat list content: $_chatList");
+          print("Chat list loaded. Total chat lists: ${_chatList.length}");
+          print("Chat list content: $_chatList");
+        } else {
+          print("Invalid chat list data format for user: $userId");
+          setState(() {
+            _chatList = [];
+          });
+        }
       } else {
-        print("Invalid chat list data format for user: $userId");
+        print("No chat lists found for user: $userId");
         setState(() {
           _chatList = [];
         });
       }
-    } else {
-      print("No chat lists found for user: $userId");
-      setState(() {
-        _chatList = [];
-      });
-    }
-  });
-}
+    });
+  }
 
   void _deleteChat(int index) {
     print('deleteChat');
@@ -95,8 +98,7 @@ void _loadChatList(String userId) {
 
   @override
   Widget build(BuildContext context) {
-
-      _chatList.sort((a, b) => b['timestamp'].compareTo(a['timestamp']));
+    _chatList.sort((a, b) => b['timestamp'].compareTo(a['timestamp']));
 
     return Scaffold(
       appBar: AppBar(
@@ -134,7 +136,7 @@ void _loadChatList(String userId) {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ChatScreen(
-                    userId: '2', // Change this to the authenticated user's ID
+                    userId: userId, // Change this to the authenticated user's ID
                     receiverId: chatItem['receiverId'],
                     receiverName: chatItem['userName'],
                   ),
