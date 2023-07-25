@@ -1,221 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:firebase_database/firebase_database.dart';
-
-// class PendingRequestsScreen extends StatefulWidget {
-//   @override
-//   _PendingRequestsScreenState createState() => _PendingRequestsScreenState();
-// }
-
-// class _PendingRequestsScreenState extends State<PendingRequestsScreen> {
-//   final databaseReference = FirebaseDatabase.instance.ref();
-
-//   List<PendingRequest> pendingRequests = [];
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     fetchPendingRequests();
-//   }
-
-//   // void fetchPendingRequests() {
-//   //   String TO_USER_ID = '2';
-//   //   String BY_USER_ID = '3';
-
-//   //   DatabaseReference reference = FirebaseDatabase.instance.ref().child('truck_chat_users');
-
-//   //   reference.onValue.listen((event) {
-//   //     DataSnapshot snapshot = event.snapshot;
-//   //     dynamic data = snapshot.value;
-
-//   //     if (data is List) {
-//   //       List<PendingRequest> pendingUsers = [];
-//   //       for (var item in data) {
-//   //         if (item is Map &&
-//   //             item.containsKey(TO_USER_ID) &&
-//   //             item[TO_USER_ID]['isChatInitiated'] == 0) {
-//   //           pendingUsers.add(PendingRequest(
-//   //             byUserId: BY_USER_ID,
-//   //             toUserId: TO_USER_ID,
-//   //           ));
-//   //         }
-//   //       }
-
-//   //       setState(() {
-//   //         pendingRequests.clear();
-//   //         pendingRequests.addAll(pendingUsers);
-//   //       });
-//   //     } else {
-//   //       print('Error: Firebase data is not in the expected format.');
-//   //     }
-//   //   }, onError: (error) {
-//   //     print('Error fetching pending requests: $error');
-//   //   });
-//   // }
-
-// void fetchPendingRequests() {
-//     String TO_USER_ID = '2';
-
-//     DatabaseReference reference =
-//         FirebaseDatabase.instance.ref().child('truck_chat_users');
-
-//     reference.onValue.listen((event) {
-//       DataSnapshot snapshot = event.snapshot;
-//       dynamic data = snapshot.value;
-
-//       if (data is List) {
-//         List<String> pendingUsers = [];
-//         for (var item in data) {
-//           if (item is Map &&
-//               item.containsKey(TO_USER_ID) &&
-//               item[TO_USER_ID]['isChatInitiated'] == 0) {
-//             pendingUsers.add(item[TO_USER_ID].toString());
-//           }
-//         }
-
-//         setState(() {
-//           // Clear existing pending requests before updating the list
-//           pendingRequests.clear();
-
-//           // Add pending requests based on the users we found
-//           pendingUsers.forEach((userId) {
-//             pendingRequests.add(PendingRequest(
-//               byUserId: userId,
-//               toUserId: TO_USER_ID,
-//             ));
-//           });
-//         });
-//       } else {
-//         print('Error: Firebase data is not in the expected format.');
-//       }
-//     }, onError: (error) {
-//       print('Error fetching pending requests: $error');
-//     });
-//   }
-
-// // void onAcceptRequest(int index) {
-// //   if (index >= 0 && index < pendingRequests.length) {
-// //     PendingRequest pendingRequest = pendingRequests[index];
-// //     print('by user id ${pendingRequest.byUserId}');
-// //     print('to user id ${pendingRequest.toUserId}');
-
-// //     // Implement the logic to handle the acceptance of the pending request.
-// //     // You can set the 'isChatInitiated' value to 1 for both users in the database.
-// //   }
-// // }
-
-//   void onAcceptRequest(PendingRequest pendingRequest) {
-//     print('by user id ${pendingRequest.byUserId}');
-//     print('to user id ${pendingRequest.toUserId}');
-
-//     // Implement the logic to handle the acceptance of the pending request.
-//     // You can set the 'isChatInitiated' value to 1 for both users in the database.
-//   }
-
-//   void onRejectRequest(PendingRequest pendingRequest) {
-//     // Implement the logic to handle the rejection of the pending request.
-//     // You can remove the pending request entry from the database.
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: ListView.builder(
-//         itemCount: pendingRequests.length,
-//         itemBuilder: (context, index) {
-//           final pendingRequest = pendingRequests[index];
-//           return ListTile(
-//             leading: CircleAvatar(
-//               backgroundImage: AssetImage('assets/user_profile.png'),
-//               // You can use actual profile images here based on user data.
-//             ),
-//             title: Text('Superhero'), // Replace with the actual username
-//             subtitle: Text(
-//                 'No message yet'), // Replace with the last message if available
-//             trailing: Row(
-//               mainAxisSize: MainAxisSize.min,
-//               children: [
-//                 ElevatedButton(
-//                   onPressed: () => onAcceptRequest(pendingRequest),
-//                   child: Text(
-//                     'Accept',
-//                   ),
-//                   style: ElevatedButton.styleFrom(
-//                     backgroundColor:
-//                         Colors.green, // Set the background color to green
-//                     foregroundColor:
-//                         Colors.white, // Set the text color to white
-//                   ),
-//                 ),
-//                 SizedBox(width: 10),
-//                 ElevatedButton(
-//                   onPressed: () => onRejectRequest(pendingRequest),
-//                   child: Text('Reject'),
-//                   style: ElevatedButton.styleFrom(
-//                     backgroundColor:
-//                         Colors.red, // Set the background color to green
-//                     foregroundColor:
-//                         Colors.white, // Set the text color to white
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
-
-// class PendingRequest {
-//   final String byUserId;
-//   final String toUserId;
-
-//   PendingRequest({
-//     required this.byUserId,
-//     required this.toUserId,
-//   });
-// }
-
-// // void fetchPendingRequests() {
-//   //   String TO_USER_ID = '2';
-
-//   //   DatabaseReference reference =
-//   //       FirebaseDatabase.instance.ref().child('truck_chat_users');
-
-//   //   reference.onValue.listen((event) {
-//   //     DataSnapshot snapshot = event.snapshot;
-//   //     dynamic data = snapshot.value;
-
-//   //     if (data is List) {
-//   //       List<String> pendingUsers = [];
-//   //       for (var item in data) {
-//   //         if (item is Map &&
-//   //             item.containsKey(TO_USER_ID) &&
-//   //             item[TO_USER_ID]['isChatInitiated'] == 0) {
-//   //           pendingUsers.add(item[TO_USER_ID].toString());
-//   //         }
-//   //       }
-
-//   //       setState(() {
-//   //         // Clear existing pending requests before updating the list
-//   //         pendingRequests.clear();
-
-//   //         // Add pending requests based on the users we found
-//   //         pendingUsers.forEach((userId) {
-//   //           pendingRequests.add(PendingRequest(
-//   //             byUserId: userId,
-//   //             toUserId: TO_USER_ID,
-//   //           ));
-//   //         });
-//   //       });
-//   //     } else {
-//   //       print('Error: Firebase data is not in the expected format.');
-//   //     }
-//   //   }, onError: (error) {
-//   //     print('Error fetching pending requests: $error');
-//   //   });
-//   // }
-
 import 'package:chat/utils/avatar.dart';
 import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
@@ -241,50 +23,44 @@ class PendingRequestsScreen extends StatelessWidget {
     currentUserEmojiId =
         SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID).toString();
 
-    String chatId = senderId + receiverId;
+    String chatIds = senderId + receiverId;
+    String chatIdr = receiverId + senderId;
 
     DatabaseReference requestRef =
         FirebaseDatabase.instance.ref().child('requests/$requestId');
 
     requestRef.update({'status': 'accepted'});
 
-    DatabaseReference chatRef =
-        FirebaseDatabase.instance.ref().child('chats').child(chatId);
+    DatabaseReference chatRefs =
+        FirebaseDatabase.instance.ref().child('chats').child(chatIds);
 
-    // chatRef.push().set({
-    //   'senderId': senderId,
-    //   'receiverId': receiverId,
-    //   'emojiId': emojiId,
-    //   'userName': userName,
-    //   'message': '',
-    //   'timestamp': 0,
-    // });
+    DatabaseReference chatRefr =
+        FirebaseDatabase.instance.ref().child('chats').child(chatIdr);
 
     print('senderusername $currentUserHandle');
     print('senderemojiid $currentUserEmojiId');
 
-    chatRef.push().set({
+    chatRefs.push().set({
       'senderId': senderId,
       'receiverId': receiverId,
-      // 'chatlistSenderId': senderId,
-      // 'chatlistReceiverId': receiverId,
       'senderEmojiId': currentUserEmojiId,
       'senderUserName': currentUserHandle,
-      'receiverEmojiId': emojiId,
-      'receiverUserName': userName,
+      // 'receiverEmojiId': emojiId,
+      // 'receiverUserName': userName,
       'message': '',
       'timestamp': 0,
     });
-    // chatRef.push().set({
-    //   'senderId': senderId,
-    //   'receiverId': receiverId,
-    //   'senderEmojiId': currentUserEmojiId,
-    //   'senderUserName': currentUserHandle,
-    //   'receiverEmojiId': emojiId,
-    //   'receiverUserName': userName,
-    //   'message': '',
-    //   'timestamp': 0,
-    // });
+
+    chatRefr.push().set({
+      'senderId': senderId,
+      'receiverId': receiverId,
+      // 'senderEmojiId': currentUserEmojiId,
+      // 'senderUserName': currentUserHandle,     to be continue here
+      'senderEmojiId': emojiId,
+      'senderUserName': userName,
+      'message': '',
+      'timestamp': 0,
+    });
   }
 
   void rejectRequest(String requestId) {
@@ -322,8 +98,8 @@ class PendingRequestsScreen extends StatelessWidget {
             if (requestData['status'] == 'pending') {
               senderId = requestData['senderId'];
               receiverId = requestData['receiverId'];
-              emojiId = requestData['emojiId'];
-              userName = requestData['userName'];
+              emojiId = requestData['senderEmojiId'];
+              userName = requestData['senderUserName'];
 
               // Find the corresponding Avatar for the emoji_id
               Avatar? matchingAvatar = avatars.firstWhere(

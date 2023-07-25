@@ -47,12 +47,18 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  firebase_core: ^2.14.0
   cloud_firestore: ^4.8.3
-  firebase_auth: ^4.6.3
   firebase_messaging: ^14.6.3
   firebase_database: ^10.2.4
+  firebase_core: ^2.14.0
+  firebase_auth: ^4.6.3
   firebase_storage: ^11.2.5
+  # firebase_database: ^10.0.2
+  # firebase_auth: ^3.3.3
+  # firebase_core: ^2.1.0
+  # firebase_storage: ^10.0.2
+  # cloud_firestore: ^2.5.4
+  # firebase_messaging: ^10.0.2
   rxdart: ^0.27.2
   get: ^4.1.4
   flutter_local_notifications: ^14.1.1

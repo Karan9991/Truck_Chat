@@ -17,17 +17,26 @@ class _ChatListScreenState extends State<ChatListScreen> {
       currentUserId; // Assuming you have a way to get the current user ID.
 
   late DatabaseReference requestsRef;
-  List<Map<dynamic, dynamic>> chatDataList = [];
+ List<Map<dynamic, dynamic>> chatDataList = [];
+
+  String chatIdsender = '';
+  String chatIdreceiver = '';
+  String s = '3';
+  String r = '1';
 
   @override
   void initState() {
     super.initState();
+
+    chatIdsender = s + r;
+    chatIdreceiver = r + s;
+
     _chatListRef = FirebaseDatabase.instance.ref().child('chats');
-    currentUserId = "1"; // Replace with your logic to get the current user ID.
+    currentUserId = "3"; // Replace with your logic to get the current user ID.
 
-    requestsRef = FirebaseDatabase.instance.ref().child('chatlist');
+    requestsRef = FirebaseDatabase.instance.ref().child('requests');
 
-    getData();
+     getData();
   }
 
   // Method to get the correct emojiId and userName for a chat item
@@ -123,6 +132,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
   //testing get data
   void getData() {
+    chatDataList.clear();
+
     print('getdata');
     requestsRef
         .orderByChild('receiverId')
@@ -135,7 +146,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
         Map<dynamic, dynamic> requestsData =
             snapshot.value as Map<dynamic, dynamic>;
 
-        chatDataList.clear();
+        // chatDataList.clear();
 
         requestsData.forEach((requestId, requestData) {
           Map<dynamic, dynamic> chatData = {};
@@ -161,10 +172,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
       DataSnapshot snapshot = event.snapshot;
 
       if (snapshot != null && snapshot.value != null) {
-     Map<dynamic, dynamic> requestsData =
+        Map<dynamic, dynamic> requestsData =
             snapshot.value as Map<dynamic, dynamic>;
 
-        chatDataList.clear();
+        //chatDataList.clear();
 
         requestsData.forEach((requestId, requestData) {
           Map<dynamic, dynamic> chatData = {};
@@ -403,9 +414,15 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 print('sender id: $senderId');
                 print('receiver id: $receiverId');
 
-                if (currentUserId == senderId || currentUserId == receiverId) {
+                print('ttttttttt $chatId');
+
+                if (chatId == '31') {
                   participatedChatIds.add(chatId);
                 }
+
+                // if (currentUserId == senderId || currentUserId == receiverId) {
+                //   participatedChatIds.add(chatId);
+                // }
               }
 
               if (participatedChatIds.isEmpty) {
@@ -420,8 +437,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   'Participated ChatIds: $participatedChatIds'); // Debug print
 
               return ListView.builder(
-                // itemCount: participatedChatIds.length,
-                itemCount: chatDataList.length,
+                itemCount: participatedChatIds.length,
+               //   itemCount: chatDataList.length,
 
                 itemBuilder: (context, index) {
                   //testing start
@@ -450,6 +467,11 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
                   String lastMessage = messageData['message'] ?? '';
                   int timestamp = messageData['timestamp'] ?? 0;
+
+               //   if (currentUserId == messageData['senderId']) {
+                    // emojiId = messageData['senderEmojiId'];
+                    // userName = messageData['senderUserName'];
+                //  }
 
                   // Format the timestamp into a human-readable date and time format
                   String formattedDateTime = _formatTimestamp(timestamp);
@@ -494,7 +516,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ChatScreen(
-                              chatId: chatId,
+                              chatIds: chatIdsender,
+                              chatIdr: chatIdreceiver,
                               imagePath: matchingAvatar.imagePath,
                               userName: userName,
                             ),

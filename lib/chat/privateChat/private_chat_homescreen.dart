@@ -1,6 +1,7 @@
 // import 'package:chat/privateChat/pendingrequests.dart';
 import 'package:chat/chat/privateChat/pending_requests.dart';
-import 'package:chat/chatdemo/chatlist.dart';
+import 'package:chat/chatdemo2/chat.dart';
+import 'package:chat/chatdemo2/chatlist.dart';
 import 'package:flutter/material.dart';
 
 class PrivateChatTab extends StatelessWidget {
@@ -29,6 +30,7 @@ class PrivateChatTab extends StatelessWidget {
               child: TabBarView(
                 children: [
                   ChatListScreen(),
+               // ChatScreen(userId: '1', receiverId: '3', receiverName: 'b',),
                   // Center(
                   //   child: Text('Chat List Content'),
                   // ),

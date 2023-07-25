@@ -15,12 +15,16 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 
 class ChatScreen extends StatefulWidget {
-  final String chatId;
+  final String chatIds;
+  final String chatIdr;
   final String imagePath;
   final String userName;
 
   ChatScreen(
-      {required this.chatId, required this.imagePath, required this.userName});
+      {required this.chatIds,
+      required this.chatIdr,
+      required this.imagePath,
+      required this.userName});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -29,7 +33,9 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   String? currentUserHandle;
   String? currentUserEmojiId;
-  late DatabaseReference _chatRef;
+  late DatabaseReference _chatRefs;
+  late DatabaseReference _chatRefr;
+
   late String
       currentUserId; // Assuming you have a way to get the current user ID.
 
@@ -40,9 +46,13 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    _chatRef =
-        FirebaseDatabase.instance.ref().child('chats').child(widget.chatId);
-    currentUserId = "1"; // Replace with your logic to get the current user ID.
+    _chatRefs =
+        FirebaseDatabase.instance.ref().child('chats').child(widget.chatIds);
+
+    _chatRefr =
+        FirebaseDatabase.instance.ref().child('chats').child(widget.chatIdr);
+
+    currentUserId = "3"; // Replace with your logic to get the current user ID.
 
     currentUserHandle =
         SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
@@ -54,26 +64,27 @@ class _ChatScreenState extends State<ChatScreen> {
   void _sendMessage() async {
     String message = _messageController.text.trim();
     if (message.isNotEmpty) {
-      _chatRef.push().set({
+      _chatRefs.push().set({
         'senderId': currentUserId,
-        'receiverId': '3',
+        'receiverId': '1',
         'senderEmojiId': currentUserEmojiId,
         'senderUserName': currentUserHandle,
-        'receiverEmojiId': emojiId,
-        'receiverUserName': userName,
+        // 'receiverEmojiId': emojiId,
+        // 'receiverUserName': userName,
         'message': message,
         'timestamp': ServerValue.timestamp,
       });
-      // _chatRef.push().set({
-      //   'senderId': currentUserId,
-      //   'receiverId': '1',
-      //   'senderEmojiId': currentUserEmojiId,
-      //   'senderUserName': currentUserHandle,
-      //   'receiverEmojiId': emojiId,
-      //   'receiverUserName': userName,
-      //   'message': message,
-      //   'timestamp': ServerValue.timestamp,
-      // });
+
+            _chatRefr.push().set({
+        'senderId': currentUserId,
+        'receiverId': '1',
+        'senderEmojiId': currentUserEmojiId,
+        'senderUserName': currentUserHandle,
+        // 'receiverEmojiId': emojiId,
+        // 'receiverUserName': userName,
+        'message': message,
+        'timestamp': ServerValue.timestamp,
+      });
       // final receiverFCMToken = await getFCMToken('2');
       // // Send notification to the receiver
       // await sendNotificationToReceiver(
@@ -102,7 +113,7 @@ class _ChatScreenState extends State<ChatScreen> {
         TaskSnapshot taskSnapshot = await uploadTask;
         String imageUrl = await taskSnapshot.ref.getDownloadURL();
 
-        _chatRef.push().set({
+        _chatRefs.push().set({
           'senderId': currentUserId,
           'receiverId': '1',
           'senderEmojiId': currentUserEmojiId,
@@ -134,7 +145,7 @@ class _ChatScreenState extends State<ChatScreen> {
         TaskSnapshot taskSnapshot = await uploadTask;
         String imageUrl = await taskSnapshot.ref.getDownloadURL();
 
-        _chatRef.push().set({
+        _chatRefs.push().set({
           'senderId': currentUserId,
           'receiverId': '1',
           'senderEmojiId': currentUserEmojiId,
@@ -302,7 +313,7 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Expanded(
             child: StreamBuilder(
-              stream: _chatRef.orderByChild('timestamp').onValue,
+              stream: _chatRefs.orderByChild('timestamp').onValue,
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data != null) {
                   Map<dynamic, dynamic>? data = (snapshot.data as DatabaseEvent)
@@ -331,8 +342,12 @@ class _ChatScreenState extends State<ChatScreen> {
                         String messageKey = messageKeys[index];
                         Map<dynamic, dynamic> messageData = data[messageKey];
 
-                        emojiId = messageData['receiverEmojiId'];
-                        userName = messageData['receiverUserName'];
+                        // emojiId = messageData['receiverEmojiId'];
+                        // userName = messageData['receiverUserName'];
+                        //testing
+
+                        emojiId = messageData['senderEmojiId'];
+                        userName = messageData['senderUserName'];
 
                         // Check if the 'message' field is available and not empty
                         String message = messageData['message'] ?? '';
