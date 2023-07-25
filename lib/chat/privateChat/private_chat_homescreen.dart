@@ -30,11 +30,11 @@ class PrivateChatTab extends StatelessWidget {
               child: TabBarView(
                 children: [
                   ChatListScreen(),
-               // ChatScreen(userId: '1', receiverId: '3', receiverName: 'b',),
+               // ChatScreen(userId: '1', receiverId: '2', receiverName: 'b',),
                   // Center(
                   //   child: Text('Chat List Content'),
                   // ),
-                 PendingRequestsScreen(currentUserId: '3'),
+                 PendingRequestsScreen(currentUserId: '2'),
            
                 ],
               ),

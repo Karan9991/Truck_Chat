@@ -75,7 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
         'timestamp': ServerValue.timestamp,
       });
 
-            _chatRefr.push().set({
+      _chatRefr.push().set({
         'senderId': currentUserId,
         'receiverId': '1',
         'senderEmojiId': currentUserEmojiId,
@@ -335,6 +335,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
 // Now the messageKeys list contains keys in the correct chronological order
 
+
+
+
                     return ListView.builder(
                       // reverse: true,
                       itemCount: messageKeys.length,
@@ -383,6 +386,10 @@ class _ChatScreenState extends State<ChatScreen> {
               },
             ),
           ),
+
+
+
+
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(

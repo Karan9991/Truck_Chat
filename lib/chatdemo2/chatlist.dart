@@ -15,7 +15,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
   void initState() {
     super.initState();
 
-    _loadChatList('1');
+    _loadChatList('2');
   }
 
 void _loadChatList(String userId) {
@@ -134,7 +134,7 @@ void _loadChatList(String userId) {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ChatScreen(
-                    userId: '1', // Change this to the authenticated user's ID
+                    userId: '2', // Change this to the authenticated user's ID
                     receiverId: chatItem['receiverId'],
                     receiverName: chatItem['userName'],
                   ),

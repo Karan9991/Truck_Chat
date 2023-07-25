@@ -803,7 +803,7 @@ class _ChatState extends State<Chat> {
                                       //     '1', '2', reply.emojiId, userName[0]);
                                       sendRequest(
                                           '1',
-                                          '3',
+                                          '2',
                                           currentUserEmojiId!,
                                           currentUserHandle!,
                                           reply.emojiId,
@@ -1088,23 +1088,23 @@ class _ChatState extends State<Chat> {
     DatabaseReference requestsRef =
         FirebaseDatabase.instance.ref().child('requests');
 
-    // Request request = Request(
-    //   senderId: senderId,
-    //   receiverId: receiverId,
-    //   status: 'pending',
-    //   emojiId: emojiId,
-    //   userName: userName,
-    // );
-   Request request = Request(
+    Request request = Request(
       senderId: senderId,
       receiverId: receiverId,
       status: 'pending',
-      senderEmojiId: emojiId,
-      senderUserName: userName,
-      receiverEmojiId: receiverEmojiId,
-      receiverUserName: receiverUserName,
+      emojiId: emojiId,
+      userName: userName,
     );
-    requestsRef.push().set(request.toJson());
+  //  Request request = Request(
+  //     senderId: senderId,
+  //     receiverId: receiverId,
+  //     status: 'pending',
+  //     senderEmojiId: emojiId,
+  //     senderUserName: userName,
+  //     receiverEmojiId: receiverEmojiId,
+  //     receiverUserName: receiverUserName,
+  //   );
+     requestsRef.push().set(request.toJson());
 
     //testing
     // DatabaseReference chatListRef =
@@ -1287,49 +1287,19 @@ class _ChatState extends State<Chat> {
   }
 }
 
-// class Request {
-//   final String senderId;
-//   final String receiverId;
-//   final String status;
-//   final String emojiId;
-//   final String userName;
-
-//   Request({
-//     required this.senderId,
-//     required this.receiverId,
-//     required this.status,
-//     required this.emojiId,
-//     required this.userName,
-//   });
-
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'senderId': senderId,
-//       'receiverId': receiverId,
-//       'status': status,
-//       'emojiId': emojiId,
-//       'userName': userName,
-//     };
-//   }
-// }
-
 class Request {
   final String senderId;
   final String receiverId;
   final String status;
-  final String senderEmojiId;
-  final String senderUserName;
-  final String receiverEmojiId;
-  final String receiverUserName;
+  final String emojiId;
+  final String userName;
 
   Request({
     required this.senderId,
     required this.receiverId,
     required this.status,
-    required this.senderEmojiId,
-    required this.senderUserName,
-    required this.receiverEmojiId,
-    required this.receiverUserName,
+    required this.emojiId,
+    required this.userName,
   });
 
   Map<String, dynamic> toJson() {
@@ -1337,13 +1307,43 @@ class Request {
       'senderId': senderId,
       'receiverId': receiverId,
       'status': status,
-      'senderEmojiId': senderEmojiId,
-      'senderUserName': senderUserName,
-      'receiverEmojiId': receiverEmojiId,
-      'receiverUserName': receiverUserName,
+      'emojiId': emojiId,
+      'userName': userName,
     };
   }
 }
+
+// class Request {
+//   final String senderId;
+//   final String receiverId;
+//   final String status;
+//   final String senderEmojiId;
+//   final String senderUserName;
+//   final String receiverEmojiId;
+//   final String receiverUserName;
+
+//   Request({
+//     required this.senderId,
+//     required this.receiverId,
+//     required this.status,
+//     required this.senderEmojiId,
+//     required this.senderUserName,
+//     required this.receiverEmojiId,
+//     required this.receiverUserName,
+//   });
+
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'senderId': senderId,
+//       'receiverId': receiverId,
+//       'status': status,
+//       'senderEmojiId': senderEmojiId,
+//       'senderUserName': senderUserName,
+//       'receiverEmojiId': receiverEmojiId,
+//       'receiverUserName': receiverUserName,
+//     };
+//   }
+// }
 
 class ChatList {
   final String senderId;
