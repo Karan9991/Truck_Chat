@@ -23,6 +23,7 @@ import 'get_all_reply_messages.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.notification}");
@@ -30,14 +31,16 @@ Future<void> backgroundHandler(RemoteMessage message) async {
   await SharedPrefs.init();
   bool? notifications = SharedPrefs.getBool(SharedPrefsKeys.NOTIFICATIONS);
   if (notifications!) {
-    handleFCMMessage(message.data);
+    handleFCMMessage(message.data, message);
   }
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await Admob.initialize(testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],);//testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
+  await Admob.initialize(
+    testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
+  ); //testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
   await Admob.requestTrackingAuthorization();
 
   configLocalNotification();
@@ -55,6 +58,8 @@ void main() async {
   }
 
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+
+  await getFCMToken('3');
 
   runApp(const MyApp());
 }
@@ -79,11 +84,37 @@ class MyApp extends StatelessWidget {
       ),
       // home: SendRequestScreen(senderId: '1', receiverId: '2'),
       // home: ChatScreen(chatId: '21'),
-            //home: ChatListScreen(),
-            home: HomeScreen(),
-
+      //home: ChatListScreen(),
+      home: HomeScreen(),
     );
   }
+}
+
+Future<String?> getFCMToken(String receiverId) async {
+  DatabaseReference fcmTokenRef = FirebaseDatabase.instance
+      .ref()
+      .child('users')
+      .child(receiverId)
+      .child('fcmToken');
+
+  // Check if the token already exists in the database
+  DatabaseEvent event = await fcmTokenRef.once();
+  DataSnapshot dataSnapshot = event.snapshot;
+
+  String? token = dataSnapshot.value as String?;
+
+  if (token == null) {
+    // If the token doesn't exist in the database, generate a new token
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    token = await messaging.getToken();
+
+    if (token != null) {
+      // Store the newly generated token in the database
+      fcmTokenRef.set(token);
+    }
+  }
+
+  return token;
 }
 
 Future<void> initNotificationsAndSoundPrefs() async {
@@ -227,9 +258,14 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 void _configureFCM() {
   _firebaseMessaging.requestPermission();
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Foreground notification received ${message.data}');
+    print('Foreground notification received');
 
-    handleFCMMessage(message.data);
+    print('data ${message.data}');
+    String title = message.notification!.title ?? '';
+
+    print('notification $title');
+
+    handleFCMMessage(message.data, message);
 
     if (message.notification != null) {
       //  showNotification(message.notification!);
@@ -257,22 +293,33 @@ void _configureFCM() {
   });
 }
 
-void handleFCMMessage(Map<String, dynamic> message) {
-  // final data = message['data'];
-  // final senderId = data['senderId'] as int;
-  final senderId = message['user_id'];
+void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) {
+  final senderId = data['senderUserId'];
+  final receiverId = data['receiverUserId'];
+  print('--------------------------Notification-----------------------------');
 
-  String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
-  print('current user id notif $currentUserId');
+  print('sender id $senderId');
+  print('receiver id $receiverId');
 
-  print('fcm sender id notif $senderId');
-  print(
-      'testing current user id ${SharedPrefs.getString(SharedPrefsKeys.USER_ID)}');
+  String title = message.notification!.title ?? 'There are new messages!';
+  String body = message.notification!.body ?? 'Tap here to open TruckChat';
 
+  //String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+  // print('current user id notif $currentUserId');
+
+  //print('fcm sender id notif $senderId');
+
+  //print(
+  //  'testing current user id ${SharedPrefs.getString(SharedPrefsKeys.USER_ID)}');
+  print('--------------------------Notification-----------------------------');
+
+  if (receiverId == '2') {
+    showNotification(title, body);
+  }
 // Ignore the notification if the sender is the current user
- // if (currentUserId != senderId) {
-    showNotification(
-        Constants.FCM_NOTIFICATION_TITLE, Constants.FCM_NOTIFICATION_BODY);
+  // if (currentUserId != senderId) {
+  // showNotification(
+  //     Constants.FCM_NOTIFICATION_TITLE, Constants.FCM_NOTIFICATION_BODY);
   //}
 }
 

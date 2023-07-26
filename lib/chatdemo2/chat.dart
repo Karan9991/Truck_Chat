@@ -1,12 +1,17 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:chat/utils/alert_dialog.dart';
 import 'package:chat/utils/avatar.dart';
+import 'package:chat/utils/constants.dart';
+import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:http/http.dart' as http;
 
 class ChatScreen extends StatefulWidget {
   final String userId;
@@ -30,10 +35,14 @@ class _ChatScreenState extends State<ChatScreen> {
   DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
   List<Map<dynamic, dynamic>> _messages = [];
   bool _isBlocked = false;
+  String? currentUserName;
 
   @override
   void initState() {
     super.initState();
+
+    currentUserName =
+        SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
 
     _updateNewMessage();
 
@@ -148,6 +157,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
       // Update the chat list for the receiver (widget.receiverId)
       _updateChatList(widget.receiverId, widget.userId, messageText, timestamp);
+
+      final receiverFCMToken = await getFCMToken(widget.receiverId);
+      // Send notification to the receiver
+      await sendNotificationToReceiver(receiverFCMToken ?? '', widget.userId,
+          widget.receiverId, messageText);
     }
   }
 
@@ -259,6 +273,11 @@ class _ChatScreenState extends State<ChatScreen> {
           'timestamp': timestamp,
         });
 
+        final receiverFCMToken = await getFCMToken('2');
+        // Send notification to the receiver
+        await sendNotificationToReceiver(
+            receiverFCMToken ?? '', widget.userId, '2', 'Image');
+
         // Update the chat list for the sender (widget.userId)
         _updateChatList(widget.userId, widget.receiverId, imageUrl, timestamp);
 
@@ -311,6 +330,10 @@ class _ChatScreenState extends State<ChatScreen> {
           'timestamp': timestamp,
         });
 
+        final receiverFCMToken = await getFCMToken('2');
+        // Send notification to the receiver
+        await sendNotificationToReceiver(
+            receiverFCMToken ?? '', widget.userId, '2', 'Image');
         // Update the chat list for the sender (widget.userId)
         _updateChatList(widget.userId, widget.receiverId, imageUrl, timestamp);
 
@@ -440,39 +463,6 @@ class _ChatScreenState extends State<ChatScreen> {
     );
 
     return Scaffold(
-      // appBar: AppBar(
-      //   leading: CircleAvatar(
-      //     backgroundImage: AssetImage(matchingAvatar.imagePath),
-      //   ),
-      //   title: Text(widget.receiverUserName),
-      //   actions: [
-      //     PopupMenuButton(
-      //       itemBuilder: (BuildContext context) {
-      //         return [
-      //           PopupMenuItem(
-      //             child: _isBlocked ? Text('Unblock user') : Text('Block user'),
-      //             value: 'block this user',
-      //           ),
-      //         ];
-      //       },
-      //       onSelected: (value) async {
-      //         // Perform action when a pop-up menu item is selected
-      //         switch (value) {
-      //           case 'block this user':
-      //             // Get the block status for the current user and receiver
-      //             // You can use the isUserBlocked function to get the block status
-      //             // Here, I'm assuming you have the function isUserBlocked implemented
-      //             bool isBlocked =
-      //                 await isUserBlocked(widget.userId, widget.receiverId);
-
-      //             _showOptionsMenu(context, isBlocked);
-
-      //             break;
-      //         }
-      //       },
-      //     ),
-      //   ],
-      // ),
       appBar: AppBar(
         automaticallyImplyLeading: false, // Prevent the default back button
         leadingWidth: kToolbarHeight + 32.0, // Adjust this value as needed
@@ -560,8 +550,8 @@ class _ChatScreenState extends State<ChatScreen> {
               },
             ),
           ),
-          Container(
-            padding: EdgeInsets.all(8.0),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
                 Expanded(
@@ -569,6 +559,14 @@ class _ChatScreenState extends State<ChatScreen> {
                     controller: _messageController,
                     decoration: InputDecoration(
                       hintText: 'Type a message...',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     ),
                   ),
                 ),
@@ -583,9 +581,21 @@ class _ChatScreenState extends State<ChatScreen> {
                     color: Colors.blue[300],
                   ), // You can use any other icon here
                 ),
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: _sendMessage,
+                GestureDetector(
+                  onTap: _sendMessage,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.send,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -593,6 +603,78 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
     );
+  }
+
+  Future<String?> getFCMToken(String receiverId) async {
+    DatabaseReference fcmTokenRef = FirebaseDatabase.instance
+        .ref()
+        .child('users')
+        .child(receiverId)
+        .child('fcmToken');
+
+    // Check if the token already exists in the database
+    DatabaseEvent event = await fcmTokenRef.once();
+    DataSnapshot dataSnapshot = event.snapshot;
+
+    String? token = dataSnapshot.value as String?;
+
+    if (token == null) {
+      // If the token doesn't exist in the database, generate a new token
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+      token = await messaging.getToken();
+
+      if (token != null) {
+        // Store the newly generated token in the database
+        fcmTokenRef.set(token);
+      }
+    }
+
+    return token;
+  }
+
+  Future<void> sendNotificationToReceiver(String receiverFCMToken,
+      String senderId, String receiverId, String message) async {
+    print('receiver token $receiverFCMToken');
+    // Replace 'YOUR_SERVER_KEY' with your FCM server key
+    String serverKey =
+        'AAAATh7WnDw:APA91bHh8z9AjM5rA-JVvE3vGYt1Opc5DteMM4nuAqAAfKsZzbSTWZNkcfaJwebVcoFb56OhCOA7yhod8u2iKoimrVYgBZMCyPBFiBhr3GdY_S_EAb6euz-l55N4hbPKH2TopZZ9ZOT3';
+    String url = 'https://fcm.googleapis.com/fcm/send';
+
+    // Replace 'YOUR_NOTIFICATION_TITLE' and 'YOUR_NOTIFICATION_BODY' with your desired notification title and body
+    String notificationTitle = currentUserName ?? 'New Message';
+    String notificationBody = message;
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'key=$serverKey',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'notification': <String, dynamic>{
+            'body': notificationBody,
+            'title': notificationTitle,
+          },
+          'priority': 'high',
+          'data': <String, dynamic>{
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'senderUserId': senderId,
+            'receiverUserId': receiverId,
+          },
+          'to': receiverFCMToken,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Notification sent successfully');
+      } else {
+        print(
+            'Failed to send notification. StatusCode: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Failed to send notification. Error: $e');
+    }
   }
 }
 

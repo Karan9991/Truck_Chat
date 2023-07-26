@@ -483,9 +483,9 @@
     },
     {
       "name": "plugin_platform_interface",
-      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.4",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.5",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.18"
     },
     {
       "name": "process",
@@ -704,7 +704,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-07-24T23:23:29.613122Z",
+  "generated": "2023-07-26T03:22:52.302433Z",
   "generator": "pub",
   "generatorVersion": "3.0.1"
 }
