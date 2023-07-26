@@ -5,6 +5,7 @@ import 'package:chat/utils/alert_dialog.dart';
 import 'package:chat/utils/avatar.dart';
 import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
+import 'package:chat/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,6 +13,8 @@ import 'package:photo_view/photo_view.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'dart:async';
 
 class ChatScreen extends StatefulWidget {
   final String userId;
@@ -36,6 +39,9 @@ class _ChatScreenState extends State<ChatScreen> {
   List<Map<dynamic, dynamic>> _messages = [];
   bool _isBlocked = false;
   String? currentUserName;
+  stt.SpeechToText _speechToText = stt.SpeechToText();
+  bool _isListening = false;
+  String _typedText = '';
 
   @override
   void initState() {
@@ -153,15 +159,15 @@ class _ChatScreenState extends State<ChatScreen> {
       });
 
       // Update the chat list for the sender (widget.userId)
-      _updateChatList(widget.userId, widget.receiverId, messageText, timestamp);
+      //   _updateChatList(widget.userId, widget.receiverId, messageText, timestamp);
 
       // Update the chat list for the receiver (widget.receiverId)
       _updateChatList(widget.receiverId, widget.userId, messageText, timestamp);
 
-      final receiverFCMToken = await getFCMToken(widget.receiverId);
-      // Send notification to the receiver
-      await sendNotificationToReceiver(receiverFCMToken ?? '', widget.userId,
-          widget.receiverId, messageText);
+      // final receiverFCMToken = await getFCMToken(widget.receiverId);
+      // // Send notification to the receiver
+      // await sendNotificationToReceiver(receiverFCMToken ?? '', widget.userId,
+      //     widget.receiverId, messageText);
     }
   }
 
@@ -182,8 +188,8 @@ class _ChatScreenState extends State<ChatScreen> {
             .update({
           'lastMessage': lastMessage,
           'timestamp': timestamp,
-          'newMessages':
-              true, // Set newMessages to true to indicate there are new messages
+          'newMessages': true,
+          // Set newMessages to true to indicate there are new messages
         });
       } else {
         // Chat does not exist, create a new chat list entry
@@ -273,13 +279,13 @@ class _ChatScreenState extends State<ChatScreen> {
           'timestamp': timestamp,
         });
 
-        final receiverFCMToken = await getFCMToken('2');
-        // Send notification to the receiver
-        await sendNotificationToReceiver(
-            receiverFCMToken ?? '', widget.userId, '2', 'Image');
+        // final receiverFCMToken = await getFCMToken(widget.receiverId);
+        // // Send notification to the receiver
+        // await sendNotificationToReceiver(
+        //     receiverFCMToken ?? '', widget.userId, widget.receiverId, 'Image');
 
         // Update the chat list for the sender (widget.userId)
-        _updateChatList(widget.userId, widget.receiverId, imageUrl, timestamp);
+        //   _updateChatList(widget.userId, widget.receiverId, imageUrl, timestamp);
 
         // Update the chat list for the receiver (widget.receiverId)
         _updateChatList(widget.receiverId, widget.userId, imageUrl, timestamp);
@@ -330,12 +336,13 @@ class _ChatScreenState extends State<ChatScreen> {
           'timestamp': timestamp,
         });
 
-        final receiverFCMToken = await getFCMToken('2');
-        // Send notification to the receiver
-        await sendNotificationToReceiver(
-            receiverFCMToken ?? '', widget.userId, '2', 'Image');
+        // final receiverFCMToken = await getFCMToken(widget.receiverId);
+        // // Send notification to the receiver
+        // await sendNotificationToReceiver(
+        //     receiverFCMToken ?? '', widget.userId, widget.receiverId, 'Image');
+
         // Update the chat list for the sender (widget.userId)
-        _updateChatList(widget.userId, widget.receiverId, imageUrl, timestamp);
+        // _updateChatList(widget.userId, widget.receiverId, imageUrl, timestamp);
 
         // Update the chat list for the receiver (widget.receiverId)
         _updateChatList(widget.receiverId, widget.userId, imageUrl, timestamp);
@@ -346,31 +353,15 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _showBlockedMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: Duration(seconds: 2),
-      ),
-    );
+    showSnackBar(context, message);
   }
 
   void _showSuccessMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: Duration(seconds: 2),
-      ),
-    );
+    showSnackBar(context, message);
   }
 
   void _showErrorMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.red,
-      ),
-    );
+    showErrorSnackBar(context, message);
   }
 
   void _blockUser(String currentUserID, String blockedUserID) {
@@ -413,31 +404,15 @@ class _ChatScreenState extends State<ChatScreen> {
     String currentUserID = widget.userId;
     String blockedUserID = widget.receiverId;
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Confirm'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: Icon(isBlocked ? Icons.block : Icons.block_outlined),
-                title: Text(isBlocked ? 'Unblock user' : 'Block user'),
-                onTap: () {
-                  Navigator.pop(context); // Close the options menu
-                  if (isBlocked) {
-                    _unblockUser(currentUserID, blockedUserID);
-                  } else {
-                    _blockUser(currentUserID, blockedUserID);
-                  }
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
+    showBlockUserDialog(
+        context,
+        isBlocked,
+        () => {
+              if (isBlocked)
+                {_unblockUser(currentUserID, blockedUserID)}
+              else
+                {_blockUser(currentUserID, blockedUserID)}
+            });
   }
 
   Future<bool> isUserBlocked(String currentUserID, String targetUserID) async {
@@ -554,6 +529,12 @@ class _ChatScreenState extends State<ChatScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
+                IconButton(
+                  icon: Icon(Icons.mic),
+                  onPressed: () {
+                    _toggleListening();
+                  },
+                ),
                 Expanded(
                   child: TextField(
                     controller: _messageController,
@@ -603,6 +584,36 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
     );
+  }
+
+  void _toggleListening() {
+    _startListening();
+  }
+
+  void _startListening() async {
+    bool available = await _speechToText.initialize();
+    if (available) {
+      _speechToText.listen(
+        onResult: (result) {
+          setState(() {
+            _messageController.text = result.recognizedWords;
+            _typedText = result.recognizedWords;
+          });
+        },
+        listenMode: stt.ListenMode.dictation,
+        pauseFor: Duration(seconds: 2),
+      );
+      setState(() {
+        _isListening = true;
+      });
+    }
+  }
+
+  void _stopListening() {
+    _speechToText.stop();
+    setState(() {
+      _isListening = false;
+    });
   }
 
   Future<String?> getFCMToken(String receiverId) async {

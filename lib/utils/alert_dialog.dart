@@ -369,6 +369,63 @@ void messageLongPressDialogWithoutPrivateChat(
   );
 }
 
+void deletePrivateChatDialog(
+    BuildContext context, Function() onDelete, Function() onCancel) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+                onDelete(); // Call the callback for Report Abuse action
+              },
+              child: Text(DialogStrings.DELETE_THIS_CHAT),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+                onCancel();
+              },
+              child: Text(DialogStrings.CANCEL),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+void showBlockUserDialog(
+    BuildContext context, bool isBlocked, Function() onBlockUnblock) {
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Confirm'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: Icon(isBlocked ? Icons.block : Icons.block_outlined),
+              title: Text(isBlocked ? 'Unblock user' : 'Block user'),
+              onTap: () {
+                Navigator.pop(context); // Close the options menu
+                onBlockUnblock();
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 void showReportAbuseSuccessDialog(
     BuildContext context, String title, String subtitle1, String subtitle2) {
   showDialog(
@@ -442,38 +499,6 @@ void sendPrivateChatRequest(
   );
 }
 
-// void sendImageDialog(
-//     BuildContext context, Function() onCamera, Function() onGallery) {
-//   showDialog(
-//     context: context,
-//     builder: (context) {
-//       return AlertDialog(
-//         title: Text(DialogStrings.CHOOSE_AN_OPTION),
-//         content: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           crossAxisAlignment: CrossAxisAlignment.stretch,
-//           children: [
-//             ElevatedButton(
-//               onPressed: () {
-//                 Navigator.pop(context); // Close the dialog
-//                 onCamera(); // Call the callback for Report Abuse action
-//               },
-//               child: Text(DialogStrings.CAMERA),
-//             ),
-//             ElevatedButton(
-//               onPressed: () {
-//                 Navigator.pop(context); // Close the dialog
-//                 onGallery(); // Call the callback for Ignore User action
-//               },
-//               child: Text(DialogStrings.GALLERY),
-//             ),
-//           ],
-//         ),
-//       );
-//     },
-//   );
-// }
-
 void sendImageDialog(
   BuildContext context,
   Function() onCamera,
@@ -492,8 +517,7 @@ void sendImageDialog(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center, // Center the options
             children: [
-                            SizedBox(height: 10),
-
+              SizedBox(height: 10),
               Text(
                 DialogStrings.CHOOSE_AN_OPTION,
                 style: TextStyle(
@@ -552,10 +576,3 @@ void sendImageDialog(
     },
   );
 }
-
-
-
-
-
-
-

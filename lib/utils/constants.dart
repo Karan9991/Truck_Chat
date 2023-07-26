@@ -86,6 +86,8 @@ class DialogStrings {
   static const String I_AGREE = 'I Agree';
   static const String EXIT = 'Exit';
   static const String ALERT = 'ALERT';
+    static const String DELETE_THIS_CHAT = 'Delete this chat';
+
   static const String DO_YOU_WANT_EXIT_CONVERSATION =
       'Do you want to exit from this conversation?';
 

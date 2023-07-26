@@ -1,4 +1,5 @@
 import 'package:chat/chatdemo2/chat.dart';
+import 'package:chat/utils/alert_dialog.dart';
 import 'package:chat/utils/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -11,8 +12,9 @@ class ChatListScreen extends StatefulWidget {
 class _ChatListScreenState extends State<ChatListScreen> {
   DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
   List<Map<dynamic, dynamic>> _chatList = [];
+  int _selectedChatIndex = -1;
 
-  String userId = '3';
+  String userId = '1';
 
   @override
   void initState() {
@@ -93,6 +95,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
         .child(receiverId)
         .remove();
 
+    setState(() {
+      _selectedChatIndex = -1;
+    });
+
     // If needed, you can also remove the chat list entry for the current user from the selected user's chat list
     // _databaseReference.child('chatList').child(receiverId).child(userId).remove();
   }
@@ -116,56 +122,67 @@ class _ChatListScreenState extends State<ChatListScreen> {
           String image = messages.startsWith('https') ? messages : '';
           bool isImageMessage = image.isNotEmpty;
 
-          return ListTile(
-            leading: CircleAvatar(
-              backgroundImage: AssetImage(matchingAvatar.imagePath),
-            ),
-            title: Text(chatItem['userName']),
-            subtitle: Text(
-              isImageMessage ? 'Image' : chatItem['lastMessage'],
-              style: TextStyle(
-                fontWeight: chatItem['newMessages']
-                    ? FontWeight.bold
-                    : FontWeight.normal,
+          return Card(
+            color: _selectedChatIndex == index ? Colors.red : Colors.white,
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundImage: AssetImage(matchingAvatar.imagePath),
               ),
-            ),
-            trailing: chatItem['newMessages']
-                ? Container(
-                    decoration: BoxDecoration(
-                      color: Colors.green[400],
-                      borderRadius: BorderRadius.circular(
-                          20), // Adjust the border radius as needed
-                    ),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8), // Adjust padding as needed
-                    child: Text(
-                      'New Messages',
-                      style: TextStyle(
-                        color: Colors.white,
+              title: Text(chatItem['userName']),
+              subtitle: Text(
+                isImageMessage ? 'Image' : chatItem['lastMessage'],
+                style: TextStyle(
+                    fontWeight: chatItem['newMessages']
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                    color: chatItem['newMessages'] ? Colors.blue : Colors.grey),
+              ),
+              trailing: chatItem['newMessages']
+                  ? Container(
+                      decoration: BoxDecoration(
+                        color: Colors.green[400],
+                        borderRadius: BorderRadius.circular(
+                            20), // Adjust the border radius as needed
                       ),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8), // Adjust padding as needed
+                      child: Text(
+                        'New Messages',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  : null,
+              onTap: () {
+                // Open the chat screen with the selected user
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatScreen(
+                      userId:
+                          userId, // Change this to the authenticated user's ID
+                      receiverId: chatItem['receiverId'],
+                      receiverUserName: chatItem['userName'],
+                      receiverEmojiId: chatItem['emojiId'],
                     ),
-                  )
-                : null,
-            onTap: () {
-              // Open the chat screen with the selected user
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChatScreen(
-                    userId:
-                        userId, // Change this to the authenticated user's ID
-                    receiverId: chatItem['receiverId'],
-                    receiverUserName: chatItem['userName'],
-                    receiverEmojiId: chatItem['emojiId'],
                   ),
-                ),
-              );
-            },
-            onLongPress: () {
-              // Delete the chat on long press
-              _deleteChat(index);
-            },
+                );
+              },
+              onLongPress: () {
+                // Delete the chat on long press
+                setState(() {
+                  _selectedChatIndex = index;
+                });
+                deletePrivateChatDialog(
+                    context,
+                    () => _deleteChat(index),
+                    () => setState(() {
+                          _selectedChatIndex = -1;
+                        }));
+              },
+            ),
           );
         },
       ),

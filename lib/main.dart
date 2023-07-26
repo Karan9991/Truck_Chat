@@ -59,7 +59,7 @@ void main() async {
 
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
-  await getFCMToken('3');
+  await getFCMToken('1');
 
   runApp(const MyApp());
 }
