@@ -1,17 +1,18 @@
 import 'dart:convert';
 import 'package:chat/utils/constants.dart';
+import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
 class NewsTab extends StatefulWidget {
-    final Key key;
+  final Key key;
 
   NewsTab({
     required this.key,
   });
-  
+
   @override
   _NewsTabState createState() => _NewsTabState();
 }
@@ -23,6 +24,9 @@ class _NewsTabState extends State<NewsTab> {
   void initState() {
     super.initState();
     fetchDataFromServer();
+
+    bool? ss = SharedPrefs.getBool('isUserOnChatScreen');
+    print('ooooooooooooooooooooooo $ss');
   }
 
   Future<void> fetchDataFromServer() async {

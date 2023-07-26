@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.teletype.truckchat.app-mergeDebugResources-39:/values-it/values-it.xml",
+            "outputFile": "com.teletype.truckchat2.android.app-mergeDebugResources-39:/values-it/values-it.xml",
             "map": [
                 {
                     "source": "/Users/karandeepsingh/.gradle/caches/transforms-3/6072f77e335b429f56353ab1d4e9c427/transformed/jetified-play-services-ads-19.1.0/res/values-it/values.xml",

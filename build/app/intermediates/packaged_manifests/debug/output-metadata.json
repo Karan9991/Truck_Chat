@@ -4,7 +4,7 @@
     "type": "PACKAGED_MANIFESTS",
     "kind": "Directory"
   },
-  "applicationId": "com.teletype.truckchat",
+  "applicationId": "com.teletype.truckchat2.android",
   "variantName": "debug",
   "elements": [
     {

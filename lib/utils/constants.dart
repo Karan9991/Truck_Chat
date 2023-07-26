@@ -86,7 +86,7 @@ class DialogStrings {
   static const String I_AGREE = 'I Agree';
   static const String EXIT = 'Exit';
   static const String ALERT = 'ALERT';
-    static const String DELETE_THIS_CHAT = 'Delete this chat';
+  static const String DELETE_THIS_CHAT = 'Delete this chat';
 
   static const String DO_YOU_WANT_EXIT_CONVERSATION =
       'Do you want to exit from this conversation?';
@@ -101,11 +101,9 @@ class DialogStrings {
 
   static const String IGNORE_USER = 'Ignore User';
   static const String SEND_PRIVATE_CHAT_REQUEST = 'Send Private Chat Request';
-    static const String CAMERA = 'Camera';
+  static const String CAMERA = 'Camera';
   static const String GALLERY = 'Galley';
-    static const String CHOOSE_AN_OPTION = 'Choose an option';
-
-
+  static const String CHOOSE_AN_OPTION = 'Choose an option';
 }
 
 class SharedPrefsKeys {
@@ -152,7 +150,7 @@ class Constants {
   static const String REFRESH = 'Refresh';
   static const String CHECK_OUT_TRUCKCHAT = 'Check out TruckChat';
   static const String I_AM_USING_TRUCKCHAT =
-      'I am using TruckChat right now, check it out at:\n\nhttp://play.google.com/store/apps/details?id=com.teletype.truckchat\n\nhttp://truckchatapp.com';
+      'I am using TruckChat right now, check it out at:\n\nhttp://play.google.com/store/apps/details?id=com.teletype.truckchat2.android\n\nhttp://truckchatapp.com';
   static const String CONVERSATION_ID = 'conversationId';
   static const String REPLY_COUNT = 'replyCount';
   static const String IS_READ = 'isRead';

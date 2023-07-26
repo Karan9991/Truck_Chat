@@ -1,4 +1,4 @@
-com.teletype.truckchat
+com.teletype.truckchat2.android
 anim abc_fade_in
 anim abc_fade_out
 anim abc_grow_fade_in_from_bottom

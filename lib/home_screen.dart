@@ -1,5 +1,6 @@
 import 'package:chat/chat/new_conversation.dart';
-import 'package:chat/chat/privateChat/private_chat_homescreen.dart';
+import 'package:chat/main.dart';
+import 'package:chat/privateChat/private_chat_homescreen.dart';
 import 'package:chat/chat/starred_chat_list.dart';
 import 'package:chat/news_tab.dart';
 import 'package:chat/chat/chat_list.dart';
@@ -21,6 +22,7 @@ import 'dart:io';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_beep/flutter_beep.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 // import 'package:chat/reactivechat/chatlistreact.dart';
 
@@ -73,15 +75,58 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _refreshChatListWithFCM() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Refresh ChatList');
+      print('Public Chat Foreground notification received');
+      Map<String, dynamic> data = message.data;
+      final notificationType = data['type'];
 
+      print('data ${message.data}');
+      print('type $notificationType');
+
+      if (notificationType == 'public') {
+        _refreshChatList();
+
+        if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
+          FlutterBeep.beep();
+        }
+      }
+
+      //handleFCMMessage(message.data, message);
+    });
+  }
+
+  void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) {
+    final senderId = data['senderUserId'];
+    final notificationType = data['type'];
+    print(
+        '--------------------------Private Chat Notification-----------------------------');
+    print('sender id $senderId');
+    print('type $notificationType');
+
+    print(
+        '--------------------------Private Chat Notification-----------------------------');
+    String title = message.notification!.title ?? 'There are new messages!';
+    String body = message.notification!.body ?? 'Tap here to open TruckChat';
+
+    if (notificationType == 'public') {
       _refreshChatList();
 
       if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
         FlutterBeep.beep();
       }
-    });
+    }
   }
+
+  // void _refreshChatListWithFCM() {
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //     print('Refresh ChatList');
+
+  //     _refreshChatList();
+
+  //     if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
+  //       FlutterBeep.beep();
+  //     }
+  //   });
+  // }
 
   // void _refreshChatList() {
   //   setState(() {

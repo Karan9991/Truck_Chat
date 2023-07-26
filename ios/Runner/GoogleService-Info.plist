@@ -2,37 +2,35 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
-	<string>ca-app-pub-3940256099942544/2934735716</string>
-	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
-	<string>ca-app-pub-7181343877669077/5345359476</string>
 	<key>CLIENT_ID</key>
-	<string>609337871587-q41l6lncislnojdi383qa0fvquto3tfi.apps.googleusercontent.com</string>
+	<string>520203771626-p4uurp45cdboknkrlnskj24qte68i3an.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.609337871587-q41l6lncislnojdi383qa0fvquto3tfi</string>
+	<string>com.googleusercontent.apps.520203771626-p4uurp45cdboknkrlnskj24qte68i3an</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAiPkjOS-FTLrlyJhQI7JYOkNBismg_QTI</string>
+	<string>AIzaSyBjJ8tqSyBE7neJT-nDnFBz47OjiHtIouA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>609337871587</string>
+	<string>520203771626</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.truckchat.app</string>
+	<string>com.teletype.truckchat2.ios</string>
 	<key>PROJECT_ID</key>
-	<string>truckchat-2aaaf</string>
+	<string>truckchat2-515da</string>
+	<key>STORAGE_BUCKET</key>
+	<string>truckchat2-515da.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<true/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:609337871587:ios:7cabccbe42a87b1d</string>
+	<string>1:520203771626:ios:c38687ce0fc0b6d80bc193</string>
 	<key>DATABASE_URL</key>
-	<string>https://truckchat-2aaaf.firebaseio.com</string>
+	<string>https://truckchat2-515da.firebaseio.com</string>
 </dict>
 </plist>

@@ -1,6 +1,6 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-3    package="com.teletype.truckchat"
+3    package="com.teletype.truckchat2.android"
 4    android:versionCode="1"
 5    android:versionName="1.0.0" >
 6
@@ -86,12 +86,12 @@
 42
 43    <permission
 43-->[androidx.core:core:1.10.1] /Users/karandeepsingh/.gradle/caches/transforms-3/17c44a9ee9728471e88635da67cac57c/transformed/core-1.10.1/AndroidManifest.xml:22:5-24:47
-44        android:name="com.teletype.truckchat.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+44        android:name="com.teletype.truckchat2.android.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
 44-->[androidx.core:core:1.10.1] /Users/karandeepsingh/.gradle/caches/transforms-3/17c44a9ee9728471e88635da67cac57c/transformed/core-1.10.1/AndroidManifest.xml:23:9-81
 45        android:protectionLevel="signature" />
 45-->[androidx.core:core:1.10.1] /Users/karandeepsingh/.gradle/caches/transforms-3/17c44a9ee9728471e88635da67cac57c/transformed/core-1.10.1/AndroidManifest.xml:24:9-44
 46
-47    <uses-permission android:name="com.teletype.truckchat.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+47    <uses-permission android:name="com.teletype.truckchat2.android.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 47-->[androidx.core:core:1.10.1] /Users/karandeepsingh/.gradle/caches/transforms-3/17c44a9ee9728471e88635da67cac57c/transformed/core-1.10.1/AndroidManifest.xml:26:5-97
 47-->[androidx.core:core:1.10.1] /Users/karandeepsingh/.gradle/caches/transforms-3/17c44a9ee9728471e88635da67cac57c/transformed/core-1.10.1/AndroidManifest.xml:26:22-94
 48
@@ -105,7 +105,7 @@
 55        android:requestLegacyExternalStorage="true"
 56        android:usesCleartextTraffic="true" >
 57        <activity
-58            android:name="com.teletype.truckchat.MainActivity"
+58            android:name="com.teletype.truckchat2.android.MainActivity"
 59            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
 60            android:exported="true"
 61            android:hardwareAccelerated="true"
@@ -308,7 +308,7 @@
 183-->[:firebase_messaging] /Users/karandeepsingh/Downloads/Truck_Chat/build/firebase_messaging/intermediates/merged_manifest/debug/AndroidManifest.xml:43:9-47:38
 184            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingInitProvider"
 184-->[:firebase_messaging] /Users/karandeepsingh/Downloads/Truck_Chat/build/firebase_messaging/intermediates/merged_manifest/debug/AndroidManifest.xml:44:13-102
-185            android:authorities="com.teletype.truckchat.flutterfirebasemessaginginitprovider"
+185            android:authorities="com.teletype.truckchat2.android.flutterfirebasemessaginginitprovider"
 185-->[:firebase_messaging] /Users/karandeepsingh/Downloads/Truck_Chat/build/firebase_messaging/intermediates/merged_manifest/debug/AndroidManifest.xml:45:13-88
 186            android:exported="false"
 186-->[:firebase_messaging] /Users/karandeepsingh/Downloads/Truck_Chat/build/firebase_messaging/intermediates/merged_manifest/debug/AndroidManifest.xml:46:13-37
@@ -318,7 +318,7 @@
 188-->[:image_picker_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
 189            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
 189-->[:image_picker_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-82
-190            android:authorities="com.teletype.truckchat.flutter.image_provider"
+190            android:authorities="com.teletype.truckchat2.android.flutter.image_provider"
 190-->[:image_picker_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-74
 191            android:exported="false"
 191-->[:image_picker_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
@@ -559,7 +559,7 @@
 316-->[com.google.firebase:firebase-common:20.3.3] /Users/karandeepsingh/.gradle/caches/transforms-3/97ba536cb97715cf3a6afeff735547bd/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:25:9-30:39
 317            android:name="com.google.firebase.provider.FirebaseInitProvider"
 317-->[com.google.firebase:firebase-common:20.3.3] /Users/karandeepsingh/.gradle/caches/transforms-3/97ba536cb97715cf3a6afeff735547bd/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:26:13-77
-318            android:authorities="com.teletype.truckchat.firebaseinitprovider"
+318            android:authorities="com.teletype.truckchat2.android.firebaseinitprovider"
 318-->[com.google.firebase:firebase-common:20.3.3] /Users/karandeepsingh/.gradle/caches/transforms-3/97ba536cb97715cf3a6afeff735547bd/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:27:13-72
 319            android:directBootAware="true"
 319-->[com.google.firebase:firebase-common:20.3.3] /Users/karandeepsingh/.gradle/caches/transforms-3/97ba536cb97715cf3a6afeff735547bd/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:28:13-43
@@ -620,7 +620,7 @@
 349-->[com.google.android.gms:play-services-ads-lite:19.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/d96aeb5ea8b4510ba3a7ae36f8ea3936/transformed/jetified-play-services-ads-lite-19.1.0/AndroidManifest.xml:35:9-39:39
 350            android:name="com.google.android.gms.ads.MobileAdsInitProvider"
 350-->[com.google.android.gms:play-services-ads-lite:19.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/d96aeb5ea8b4510ba3a7ae36f8ea3936/transformed/jetified-play-services-ads-lite-19.1.0/AndroidManifest.xml:36:13-76
-351            android:authorities="com.teletype.truckchat.mobileadsinitprovider"
+351            android:authorities="com.teletype.truckchat2.android.mobileadsinitprovider"
 351-->[com.google.android.gms:play-services-ads-lite:19.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/d96aeb5ea8b4510ba3a7ae36f8ea3936/transformed/jetified-play-services-ads-lite-19.1.0/AndroidManifest.xml:37:13-73
 352            android:exported="false"
 352-->[com.google.android.gms:play-services-ads-lite:19.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/d96aeb5ea8b4510ba3a7ae36f8ea3936/transformed/jetified-play-services-ads-lite-19.1.0/AndroidManifest.xml:38:13-37
@@ -638,7 +638,7 @@
 359-->[androidx.emoji2:emoji2:1.2.0] /Users/karandeepsingh/.gradle/caches/transforms-3/da24b2c9b78ceeb51433bb8918b899ac/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
 360            android:name="androidx.startup.InitializationProvider"
 360-->[androidx.emoji2:emoji2:1.2.0] /Users/karandeepsingh/.gradle/caches/transforms-3/da24b2c9b78ceeb51433bb8918b899ac/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:25:13-67
-361            android:authorities="com.teletype.truckchat.androidx-startup"
+361            android:authorities="com.teletype.truckchat2.android.androidx-startup"
 361-->[androidx.emoji2:emoji2:1.2.0] /Users/karandeepsingh/.gradle/caches/transforms-3/da24b2c9b78ceeb51433bb8918b899ac/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:26:13-68
 362            android:exported="false" >
 362-->[androidx.emoji2:emoji2:1.2.0] /Users/karandeepsingh/.gradle/caches/transforms-3/da24b2c9b78ceeb51433bb8918b899ac/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:27:13-37

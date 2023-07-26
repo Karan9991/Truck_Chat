@@ -67,6 +67,8 @@ class _ChatState extends State<Chat> {
   ScrollController _scrollController = ScrollController();
   String? currentUserHandle;
   String? currentUserEmojiId;
+  String? currentUserId;
+
   String? emojiId;
   String? driverName;
   String? privateChatStatus;
@@ -94,6 +96,7 @@ class _ChatState extends State<Chat> {
     currentUserEmojiId =
         SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID).toString();
 
+    currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID).toString();
     print('init state');
     mm(widget.serverMsgId);
     _refreshChat();
@@ -188,7 +191,8 @@ class _ChatState extends State<Chat> {
       },
       'data': {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-        'senderId': '1111', // Include the senderId in the data payload
+        'type': 'public',
+        'senderUserId': currentUserId, // Include the senderId in the data payload
       },
     };
 

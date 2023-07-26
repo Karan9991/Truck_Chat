@@ -1,11 +1,8 @@
 import 'dart:convert';
-// import 'dart:html';
 import 'dart:io';
 import 'package:chat/chatdemo/chat.dart';
 import 'package:chat/chatdemo/chatlist.dart';
 import 'package:chat/home_screen.dart';
-import 'package:chat/play/pendingrequests.dart';
-import 'package:chat/play/send.dart';
 import 'package:chat/utils/avatar.dart';
 import 'package:chat/utils/chat_handle.dart';
 import 'package:chat/utils/constants.dart';
@@ -26,7 +23,7 @@ import 'package:flutter/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.notification}");
+  print("backgroundHandler: ${message.notification}");
   // Handle the background message here
   await SharedPrefs.init();
   bool? notifications = SharedPrefs.getBool(SharedPrefsKeys.NOTIFICATIONS);
@@ -59,8 +56,6 @@ void main() async {
 
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
-  await getFCMToken('1');
-
   runApp(const MyApp());
 }
 
@@ -75,6 +70,7 @@ class MyApp extends StatelessWidget {
       title: 'Truck Chat',
       routes: {
         '/home': (context) => HomeScreen(),
+
         // ...
       },
       debugShowCheckedModeBanner: false,
@@ -123,6 +119,7 @@ Future<void> initNotificationsAndSoundPrefs() async {
   SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS_TONE, true);
   SharedPrefs.setBool(SharedPrefsKeys.VIBRATE, true);
   SharedPrefs.setBool(SharedPrefsKeys.PRIVATE_CHAT, false);
+  SharedPrefs.setBool('isUserOnChatScreen', false);
 }
 
 Future<void> registerDevice() async {
@@ -164,7 +161,9 @@ Future<void> registerDevice() async {
     return;
   }
 
-  String? registrationId = await getFirebaseToken();
+  // String? registrationId = await getFirebaseToken();
+  String? registrationId = await getFCMToken('2');
+
   print('Firebase token $registrationId');
   if (registrationId == null) {
     // Handle error getting Firebase token
@@ -281,8 +280,8 @@ void _configureFCM() {
     // _showLocalNotification(message.data);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print('Background notification received $message');
-    // handleFCMMessage(message.data);
+    print('onMessageOpenedApp $message');
+    // handleFCMMessage(message.data, message);
 
     if (message.notification != null) {
       // showNotification(message.notification!);
@@ -295,32 +294,26 @@ void _configureFCM() {
 
 void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) {
   final senderId = data['senderUserId'];
-  final receiverId = data['receiverUserId'];
-  print('--------------------------Notification-----------------------------');
+  final notificationType = data['type'];
 
+  print('--------------------------Notification-----------------------------');
   print('sender id $senderId');
-  print('receiver id $receiverId');
+  print('type $notificationType');
+  print('--------------------------Notification-----------------------------');
 
   String title = message.notification!.title ?? 'There are new messages!';
   String body = message.notification!.body ?? 'Tap here to open TruckChat';
+  String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 
-  //String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
-  // print('current user id notif $currentUserId');
-
-  //print('fcm sender id notif $senderId');
-
-  //print(
-  //  'testing current user id ${SharedPrefs.getString(SharedPrefsKeys.USER_ID)}');
-  print('--------------------------Notification-----------------------------');
-
-  if (receiverId == '2') {
-    showNotification(title, body);
+  if (notificationType == 'public') {
+    if (currentUserId != senderId) {
+      showNotification(
+          Constants.FCM_NOTIFICATION_TITLE, Constants.FCM_NOTIFICATION_BODY);
+    }
   }
-// Ignore the notification if the sender is the current user
-  // if (currentUserId != senderId) {
-  // showNotification(
-  //     Constants.FCM_NOTIFICATION_TITLE, Constants.FCM_NOTIFICATION_BODY);
-  //}
+  // else if (notificationType == 'private') {
+  //   showNotification(title, body);
+  // }
 }
 
 void showNotification(String? title, String? body) async {
@@ -334,7 +327,7 @@ void showNotification(String? title, String? body) async {
   print('showNotification method called');
   AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
-    'com.teletype.truckchat', // Replace with your Android package name
+    'com.teletype.truckchat2.android', // Replace with your Android package name
     'Flutter chat demo',
     playSound: androidNotificationTone,
     enableVibration: true,
@@ -371,12 +364,12 @@ void configLocalNotification() {
   flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
-class ReplyMsg {
-  final String rid;
-  final String uid;
-  final String replyMsg;
-  final int timestamp;
-  final String emojiId;
+// class ReplyMsg {
+//   final String rid;
+//   final String uid;
+//   final String replyMsg;
+//   final int timestamp;
+//   final String emojiId;
 
-  ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId);
-}
+//   ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId);
+// }
