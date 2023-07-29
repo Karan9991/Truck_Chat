@@ -1,6 +1,8 @@
 import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
+import 'package:admob_flutter/admob_flutter.dart';
+import 'package:chat/utils/ads.dart';
 
 class NotificationsAndSoundScreen extends StatefulWidget {
   @override
@@ -19,7 +21,7 @@ class _NotificationsAndSoundScreenState
   @override
   void initState() {
     super.initState();
-    
+
     // Retrieve the initial values from SharedPreferences
     chatTonesEnabled = SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES);
     notificationsEnabled = SharedPrefs.getBool(SharedPrefsKeys.NOTIFICATIONS);
@@ -35,68 +37,81 @@ class _NotificationsAndSoundScreenState
       appBar: AppBar(
         title: Text(Constants.NOTIFICATIONS_AND_SOUND),
       ),
-      body: ListView(
-        padding: EdgeInsets.all(16.0),
+      body: Column(
         children: [
-          _buildListTile(
-            Constants.CHAT_TONES,
-            Constants.PLAY_A_SOUND,
-            SharedPrefsKeys.CHAT_TONES,
-            chatTonesEnabled,
-            (bool? value) {
-              setState(() {
-                chatTonesEnabled = value;
-              });
-              SharedPrefs.setBool(SharedPrefsKeys.CHAT_TONES, value!);
-            },
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.all(16.0),
+              children: [
+                _buildListTile(
+                  Constants.CHAT_TONES,
+                  Constants.PLAY_A_SOUND,
+                  SharedPrefsKeys.CHAT_TONES,
+                  chatTonesEnabled,
+                  (bool? value) {
+                    setState(() {
+                      chatTonesEnabled = value;
+                    });
+                    SharedPrefs.setBool(SharedPrefsKeys.CHAT_TONES, value!);
+                  },
+                ),
+                _buildListTile(
+                  Constants.NOTIFICATIONS,
+                  Constants.NOTIFICATIONS_ARE_SHOWN,
+                  SharedPrefsKeys.NOTIFICATIONS,
+                  notificationsEnabled,
+                  (bool? value) {
+                    setState(() {
+                      notificationsEnabled = value;
+                    });
+                    SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS, value!);
+                  },
+                ),
+                _buildListTile(
+                  Constants.NOTIFICATION_TONE,
+                  Constants.NOTIFICATION_MESSAGES_WILL_PLAY,
+                  SharedPrefsKeys.NOTIFICATIONS_TONE,
+                  notificationToneEnabled,
+                  (bool? value) {
+                    setState(() {
+                      notificationToneEnabled = value;
+                    });
+                    SharedPrefs.setBool(
+                        SharedPrefsKeys.NOTIFICATIONS_TONE, value!);
+                  },
+                ),
+                _buildListTile(
+                  Constants.VIBRATE,
+                  Constants.NOTIFICATION_MESSAGES_WILL_VIBRATE,
+                  SharedPrefsKeys.VIBRATE,
+                  vibrateEnabled,
+                  (bool? value) {
+                    setState(() {
+                      vibrateEnabled = value;
+                    });
+                    SharedPrefs.setBool(SharedPrefsKeys.VIBRATE, value!);
+                  },
+                ),
+                _buildListTile(
+                  Constants.PRIVATE_CHAT,
+                  Constants.ALLOW_USERS_TO,
+                  SharedPrefsKeys.PRIVATE_CHAT,
+                  privateChatEnabled,
+                  (bool? value) {
+                    setState(() {
+                      privateChatEnabled = value;
+                    });
+                    SharedPrefs.setBool(SharedPrefsKeys.PRIVATE_CHAT, value!);
+                  },
+                ),
+              ],
+            ),
           ),
-          _buildListTile(
-            Constants.NOTIFICATIONS,
-            Constants.NOTIFICATIONS_ARE_SHOWN,
-            SharedPrefsKeys.NOTIFICATIONS,
-            notificationsEnabled,
-            (bool? value) {
-              setState(() {
-                notificationsEnabled = value;
-              });
-              SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS, value!);
-            },
-          ),
-          _buildListTile(
-            Constants.NOTIFICATION_TONE,
-            Constants.NOTIFICATION_MESSAGES_WILL_PLAY,
-            SharedPrefsKeys.NOTIFICATIONS_TONE,
-            notificationToneEnabled,
-            (bool? value) {
-              setState(() {
-                notificationToneEnabled = value;
-              });
-              SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS_TONE, value!);
-            },
-          ),
-          _buildListTile(
-            Constants.VIBRATE,
-            Constants.NOTIFICATION_MESSAGES_WILL_VIBRATE,
-            SharedPrefsKeys.VIBRATE,
-            vibrateEnabled,
-            (bool? value) {
-              setState(() {
-                vibrateEnabled = value;
-              });
-              SharedPrefs.setBool(SharedPrefsKeys.VIBRATE, value!);
-            },
-          ),
-          _buildListTile(
-            Constants.PRIVATE_CHAT,
-            Constants.ALLOW_USERS_TO,
-            SharedPrefsKeys.PRIVATE_CHAT,
-            privateChatEnabled,
-            (bool? value) {
-              setState(() {
-                privateChatEnabled = value;
-              });
-              SharedPrefs.setBool(SharedPrefsKeys.PRIVATE_CHAT, value!);
-            },
+          AdmobBanner(
+            adUnitId: AdHelper.bannerAdUnitId,
+            adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+              width: MediaQuery.of(context).size.width.toInt(),
+            ),
           ),
         ],
       ),

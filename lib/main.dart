@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:chat/chatdemo/chat.dart';
-import 'package:chat/chatdemo/chatlist.dart';
 import 'package:chat/home_screen.dart';
+import 'package:chat/privateChat/chat.dart';
 import 'package:chat/utils/avatar.dart';
 import 'package:chat/utils/chat_handle.dart';
 import 'package:chat/utils/constants.dart';
@@ -56,11 +55,11 @@ void main() async {
 
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
   // This widget is the root of your application.
 
@@ -68,10 +67,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Truck Chat',
+
+      initialRoute: '/',
+
       routes: {
         '/home': (context) => HomeScreen(),
-
-        // ...
+        '/chat': (context) => ChatScreen(
+              userId: 'sd',
+              receiverUserName: 'sd',
+              receiverId: 'adsf',
+              receiverEmojiId: 'ds',
+            ),
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -120,6 +126,7 @@ Future<void> initNotificationsAndSoundPrefs() async {
   SharedPrefs.setBool(SharedPrefsKeys.VIBRATE, true);
   SharedPrefs.setBool(SharedPrefsKeys.PRIVATE_CHAT, false);
   SharedPrefs.setBool('isUserOnChatScreen', false);
+  SharedPrefs.setBool('isUserOnPublicChatScreen', false);
 }
 
 Future<void> registerDevice() async {
@@ -161,8 +168,8 @@ Future<void> registerDevice() async {
     return;
   }
 
-  // String? registrationId = await getFirebaseToken();
-  String? registrationId = await getFCMToken('2');
+  String? registrationId = await getFirebaseToken();
+  //String? registrationId = await getFCMToken('2');
 
   print('Firebase token $registrationId');
   if (registrationId == null) {
@@ -208,6 +215,11 @@ Future<void> registerDevice() async {
           SharedPrefsKeys.LATITUDE, currentLocation.latitude!);
       SharedPrefs.setDouble(
           SharedPrefsKeys.LONGITUDE, currentLocation.longitude!);
+
+      // String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+
+      // getFCMToken(currentUserId!);
+
       print('testing ${SharedPrefs.getString(SharedPrefsKeys.USER_ID)}');
     } else {
       print("Error: User ID not found in response");
@@ -306,14 +318,17 @@ void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) {
   String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 
   if (notificationType == 'public') {
-    if (currentUserId != senderId) {
-      showNotification(
-          Constants.FCM_NOTIFICATION_TITLE, Constants.FCM_NOTIFICATION_BODY);
+    if (!SharedPrefs.getBool('isUserOnPublicChatScreen')!) {
+      if (currentUserId != senderId) {
+        showNotification(
+            Constants.FCM_NOTIFICATION_TITLE, Constants.FCM_NOTIFICATION_BODY);
+      }
+    }
+  } else if (notificationType == 'private') {
+    if (!SharedPrefs.getBool('isUserOnChatScreen')!) {
+      showNotification(title, body);
     }
   }
-  // else if (notificationType == 'private') {
-  //   showNotification(title, body);
-  // }
 }
 
 void showNotification(String? title, String? body) async {
@@ -351,10 +366,10 @@ void showNotification(String? title, String? body) async {
   );
 }
 
-//original
+//original AndroidInitializationSettings('@drawable/app_icon_foreground');
 void configLocalNotification() {
   AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
+      AndroidInitializationSettings('@drawable/ic_launcher');
   DarwinInitializationSettings initializationSettingsIOS =
       DarwinInitializationSettings();
   InitializationSettings initializationSettings = InitializationSettings(
@@ -363,13 +378,3 @@ void configLocalNotification() {
   );
   flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
-
-// class ReplyMsg {
-//   final String rid;
-//   final String uid;
-//   final String replyMsg;
-//   final int timestamp;
-//   final String emojiId;
-
-//   ReplyMsg(this.rid, this.uid, this.replyMsg, this.timestamp, this.emojiId);
-// }

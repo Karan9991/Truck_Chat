@@ -54,6 +54,7 @@ Future<List<Conversation>> getStoredConversations() async {
 
 Future<void> storeConversations(List<Conversation> conversations) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  
 
   List<String> encodedConversations = conversations.map((conversation) {
     Map<String, dynamic> conversationMap = {

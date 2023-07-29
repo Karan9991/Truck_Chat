@@ -2,10 +2,12 @@ import 'package:chat/settings/about.dart';
 import 'package:chat/settings/messages.dart';
 import 'package:chat/settings/notifcations_and_sound.dart';
 import 'package:chat/settings/terms_of_services.dart';
+import 'package:chat/utils/ads.dart';
 import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'about.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -21,7 +23,10 @@ class SettingsScreen extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: ListView(
+      body:Column(
+      children: [
+        Expanded(
+          child: ListView(
         children: [
 
           ListTile(
@@ -68,7 +73,21 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
           Divider(), // Add a divider after the first list item
+            // AdmobBanner(
+            //   adUnitId: AdHelper.bannerAdUnitId,
+            //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+            //       width: MediaQuery.of(context).size.width.toInt()),
+            // )
         ],
+      ),
+        ),
+          AdmobBanner(
+          adUnitId: AdHelper.bannerAdUnitId,
+          adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+            width: MediaQuery.of(context).size.width.toInt(),
+          ),
+        ),
+      ],
       ),
     );
   }

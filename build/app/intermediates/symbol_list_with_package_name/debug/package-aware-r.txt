@@ -427,6 +427,7 @@ color material_grey_800
 color material_grey_850
 color material_grey_900
 color notification_action_color_filter
+color notification_icon_background
 color notification_icon_bg_color
 color notification_material_background_media_default_color
 color primary_dark_material_dark
@@ -694,6 +695,7 @@ drawable ic_call_answer_video
 drawable ic_call_answer_video_low
 drawable ic_call_decline
 drawable ic_call_decline_low
+drawable ic_launcher
 drawable ic_launcher_background
 drawable launch_background
 drawable navigation_empty_icon
@@ -995,6 +997,9 @@ mipmap app_icon_round
 mipmap ic_launcher
 mipmap ic_launcher_foreground
 mipmap ic_launcher_round
+mipmap notification_icon
+mipmap notification_icon_foreground
+mipmap notification_icon_round
 raw firebase_common_keep
 string abc_action_bar_home_description
 string abc_action_bar_up_description

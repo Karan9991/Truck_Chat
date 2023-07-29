@@ -2,9 +2,13 @@ import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import '/utils/avatar.dart';
+import 'package:admob_flutter/admob_flutter.dart';
+import 'package:chat/utils/ads.dart';
 
 class MessagesScreen extends StatelessWidget {
-  final TextEditingController _chatHandleController = TextEditingController();
+  final TextEditingController _chatHandleController = TextEditingController(
+    text: SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE) ?? '',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -12,26 +16,37 @@ class MessagesScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(Constants.MESSAGES),
       ),
-      body: ListView(
+      body: Column(
         children: [
-                  Divider(), // Add a divider after the first list item
+          Expanded(
+            child: ListView(
+              children: [
+                Divider(), // Add a divider after the first list item
 
-          _buildListTile(
-            Constants.CHAT_HANDLE,
-            Constants.PREPEND_YOUR_MESSAGES,
-            () => _showChatHandleDialog(context),
+                _buildListTile(
+                  Constants.CHAT_HANDLE,
+                  Constants.PREPEND_YOUR_MESSAGES,
+                  () => _showChatHandleDialog(context),
+                ),
+                Divider(), // Add a divider after the first list item
+
+                _buildListTile(
+                  Constants.CHOOSE_AVATAR,
+                  Constants.AVATAR,
+                  () {
+                    showAvatarSelectionDialog(context);
+                  },
+                ),
+                Divider(), // Add a divider after the first list item
+              ],
+            ),
           ),
-                  Divider(), // Add a divider after the first list item
-
-          _buildListTile(
-            Constants.CHOOSE_AVATAR,
-           Constants.AVATAR,
-            () {
-              showAvatarSelectionDialog(context);
-            },
+          AdmobBanner(
+            adUnitId: AdHelper.bannerAdUnitId,
+            adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+              width: MediaQuery.of(context).size.width.toInt(),
+            ),
           ),
-                  Divider(), // Add a divider after the first list item
-
         ],
       ),
     );
@@ -62,7 +77,8 @@ class MessagesScreen extends StatelessWidget {
           title: Text(DialogStrings.CHAT_HANDLE),
           content: TextField(
             controller: _chatHandleController,
-            decoration: InputDecoration(hintText: DialogStrings.ENTER_CHAT_HANDLE),
+            decoration:
+                InputDecoration(hintText: DialogStrings.ENTER_CHAT_HANDLE),
           ),
           actions: [
             TextButton(
@@ -80,7 +96,7 @@ class MessagesScreen extends StatelessWidget {
               onPressed: () {
                 String chatHandle = _chatHandleController.text;
                 SharedPrefs.setString(
-                   SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE, chatHandle);
+                    SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE, chatHandle);
 
                 print('Chat Handle: $chatHandle');
                 Navigator.of(context).pop();

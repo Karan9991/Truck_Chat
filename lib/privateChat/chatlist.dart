@@ -1,8 +1,13 @@
 import 'package:chat/privateChat/chat.dart';
+import 'package:chat/utils/ads.dart';
 import 'package:chat/utils/alert_dialog.dart';
 import 'package:chat/utils/avatar.dart';
+import 'package:chat/utils/constants.dart';
+import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 
 class ChatListScreen extends StatefulWidget {
   @override
@@ -14,12 +19,23 @@ class _ChatListScreenState extends State<ChatListScreen> {
   List<Map<dynamic, dynamic>> _chatList = [];
   int _selectedChatIndex = -1;
 
-  String userId = '1';
+  String? currentUserId;
+  //String userId = '1';
 
   @override
   void initState() {
     super.initState();
-    _loadChatList(userId);
+     currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+
+    _loadChatList(currentUserId!);
+    InterstitialAdManager.initialize();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    InterstitialAdManager.dispose();
   }
 
   void _loadChatList(String userId) {
@@ -107,84 +123,129 @@ class _ChatListScreenState extends State<ChatListScreen> {
     _chatList.sort((a, b) => b['timestamp'].compareTo(a['timestamp']));
 
     return Scaffold(
-      body: ListView.builder(
-        itemCount: _chatList.length,
-        itemBuilder: (context, index) {
-          Map<dynamic, dynamic> chatItem = _chatList[index];
+      body: _chatList.isEmpty
+          ? Center(
+              child: Text("No Private chat list"),
+            )
+          : ListView.builder(
+              itemCount: _chatList.length,
+              itemBuilder: (context, index) {
+                Map<dynamic, dynamic> chatItem = _chatList[index];
 
-          Avatar? matchingAvatar = avatars.firstWhere(
-            (avatar) => avatar.id == int.tryParse(chatItem['emojiId']),
-            orElse: () => Avatar(id: 0, imagePath: ''),
-          );
+                Avatar? matchingAvatar = avatars.firstWhere(
+                  (avatar) => avatar.id == int.tryParse(chatItem['emojiId']),
+                  orElse: () => Avatar(id: 0, imagePath: ''),
+                );
 
-          String messages = chatItem['lastMessage'] ?? '';
-          String image = messages.startsWith('https') ? messages : '';
-          bool isImageMessage = image.isNotEmpty;
+                String messages = chatItem['lastMessage'] ?? '';
+                String image = messages.startsWith('https') ? messages : '';
+                bool isImageMessage = image.isNotEmpty;
+                String formattedDateTime =
+                    _formatTimestamp(chatItem['timestamp']);
 
-          return Card(
-            color: _selectedChatIndex == index ? Colors.red : Colors.white,
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundImage: AssetImage(matchingAvatar.imagePath),
-              ),
-              title: Text(chatItem['userName']),
-              subtitle: Text(
-                isImageMessage ? 'Image' : chatItem['lastMessage'],
-                style: TextStyle(
-                    fontWeight: chatItem['newMessages']
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                    color: chatItem['newMessages'] ? Colors.blue : Colors.grey),
-              ),
-              trailing: chatItem['newMessages']
-                  ? Container(
-                      decoration: BoxDecoration(
-                        color: Colors.green[400],
-                        borderRadius: BorderRadius.circular(
-                            20), // Adjust the border radius as needed
-                      ),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8), // Adjust padding as needed
-                      child: Text(
-                        'New Messages',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  : null,
-              onTap: () {
-                // Open the chat screen with the selected user
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatScreen(
-                      userId:
-                          userId, // Change this to the authenticated user's ID
-                      receiverId: chatItem['receiverId'],
-                      receiverUserName: chatItem['userName'],
-                      receiverEmojiId: chatItem['emojiId'],
+                return Card(
+                  color:
+                      _selectedChatIndex == index ? Colors.red : Colors.white,
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: AssetImage(matchingAvatar.imagePath),
                     ),
+                    title: Text(chatItem['userName']),
+                    subtitle: Text(
+                      isImageMessage ? 'Image' : chatItem['lastMessage'],
+                      style: TextStyle(
+                          fontWeight: chatItem['newMessages']
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          color: chatItem['newMessages']
+                              ? Colors.blue
+                              : Colors.grey),
+                      overflow: TextOverflow
+                          .ellipsis, // Show ellipsis if the text overflows
+                      maxLines: 2,
+                    ),
+                    trailing: chatItem['newMessages']
+                        ? Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.green[400],
+                                  borderRadius: BorderRadius.circular(
+                                      20), // Adjust the border radius as needed
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8), // Adjust padding as needed
+                                child: Text(
+                                  'New Messages',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                  height:
+                                      6), // Add space between the two Text widgets
+
+                              Text(
+                                formattedDateTime,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Text(
+                            formattedDateTime ?? '',
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                    onTap: () {
+                      // Open the chat screen with the selected user
+                      //InterstitialAdManager.showInterstitialAd();
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChatScreen(
+                            userId:
+                                currentUserId!, // Change this to the authenticated user's ID
+                            receiverId: chatItem['receiverId'],
+                            receiverUserName: chatItem['userName'],
+                            receiverEmojiId: chatItem['emojiId'],
+                          ),
+                        ),
+                      );
+                    },
+                    onLongPress: () {
+                      // Delete the chat on long press
+                      setState(() {
+                        _selectedChatIndex = index;
+                      });
+                      deletePrivateChatDialog(
+                          context,
+                          () => _deleteChat(index),
+                          () => setState(() {
+                                _selectedChatIndex = -1;
+                              }));
+                    },
                   ),
                 );
               },
-              onLongPress: () {
-                // Delete the chat on long press
-                setState(() {
-                  _selectedChatIndex = index;
-                });
-                deletePrivateChatDialog(
-                    context,
-                    () => _deleteChat(index),
-                    () => setState(() {
-                          _selectedChatIndex = -1;
-                        }));
-              },
             ),
-          );
-        },
-      ),
     );
   }
+}
+
+String _formatTimestamp(int timestamp) {
+  if (timestamp == 0) {
+    return ''; // Handle invalid or missing timestamps
+  }
+
+  DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+  String formattedDate = DateFormat('MMM dd, yyyy').format(dateTime);
+  String formattedTime = DateFormat('hh:mm a').format(dateTime);
+
+  return '$formattedDate at $formattedTime';
 }

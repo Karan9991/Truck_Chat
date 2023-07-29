@@ -6,6 +6,7 @@ import 'package:chat/chat/chat_list.dart';
 import 'package:chat/chat/conversation_data.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
+import 'package:firebase_database/firebase_database.dart';
 
 void showMarkAsReadUnreadDialog(BuildContext context) async {
   showDialog(
@@ -402,7 +403,6 @@ void deletePrivateChatDialog(
 
 void showBlockUserDialog(
     BuildContext context, bool isBlocked, Function() onBlockUnblock) {
-
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -412,7 +412,7 @@ void showBlockUserDialog(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(isBlocked ? Icons.block : Icons.block_outlined),
+              leading: Icon(Icons.block, color: Colors.red,),
               title: Text(isBlocked ? 'Unblock user' : 'Block user'),
               onTap: () {
                 Navigator.pop(context); // Close the options menu
@@ -572,6 +572,53 @@ void sendImageDialog(
             ],
           ),
         ),
+      );
+    },
+  );
+}
+
+void showChatHandleDialog(BuildContext context) {
+  final TextEditingController _chatHandleController = TextEditingController();
+
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text(DialogStrings.CHAT_HANDLE),
+        content: TextField(
+          controller: _chatHandleController,
+          decoration:
+              InputDecoration(hintText: DialogStrings.ENTER_CHAT_HANDLE),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              DialogStrings.CANCEL,
+              style: TextStyle(
+                  color:
+                      Colors.blue), // Set the desired color for Cancel button
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              String chatHandle = _chatHandleController.text;
+              SharedPrefs.setString(
+                  SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE, chatHandle);
+
+              print('Chat Handle: $chatHandle');
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              DialogStrings.OK,
+              style: TextStyle(
+                  color:
+                      Colors.blue), // Set the desired color for Cancel button
+            ),
+          ),
+        ],
       );
     },
   );

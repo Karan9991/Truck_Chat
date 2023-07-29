@@ -82,6 +82,8 @@ class _ChatState extends State<Chat> {
   void initState() {
     super.initState();
 
+    SharedPrefs.setBool('isUserOnPublicChatScreen', true);
+
     _firebaseMessaging.subscribeToTopic('all');
 
     //InterstitialAdManager.initialize();
@@ -96,7 +98,7 @@ class _ChatState extends State<Chat> {
     currentUserEmojiId =
         SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID).toString();
 
-    currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID).toString();
+    currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
     print('init state');
     mm(widget.serverMsgId);
     _refreshChat();
@@ -124,6 +126,8 @@ class _ChatState extends State<Chat> {
   @override
   void dispose() {
     _scrollController.dispose();
+
+    SharedPrefs.setBool('isUserOnPublicChatScreen', false);
 
     // refreshTimer.cancel();
     //InterstitialAdManager.dispose();
@@ -192,7 +196,8 @@ class _ChatState extends State<Chat> {
       'data': {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
         'type': 'public',
-        'senderUserId': currentUserId, // Include the senderId in the data payload
+        'senderUserId':
+            currentUserId, // Include the senderId in the data payload
       },
     };
 
@@ -759,7 +764,7 @@ class _ChatState extends State<Chat> {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      replyMsg,
+                                                      driverName + replyMsg,
                                                       style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize: 20,
@@ -796,22 +801,35 @@ class _ChatState extends State<Chat> {
                                     () {
                                       // Handle Start Private Chat action
                                       // Implement the logic for starting a private chat here
+                                      print(
+                                          '##################################################');
 
-                                      List<String> userName =
-                                          replyMsg.split(" ");
+                                      print(
+                                          'dddddddddddddddddriver name $driverName ');
 
-                                      print('private chat ${userName[0]}');
+                                      String receiverUserName = '';
+                                      if (driverName == '') {
+                                        List<String> userName =
+                                            replyMsg.split(" ");
+                                        receiverUserName = userName[0];
+                                      } else {
+                                        receiverUserName = driverName;
+                                      }
+
+
+                                      print('private chat $receiverUserName');
 
                                       //sendPrivateChatInvite();
                                       // sendRequest(
                                       //     '1', '2', reply.emojiId, userName[0]);
+
                                       sendRequest(
-                                          '1',
-                                          '3',
+                                          currentUserId!,
+                                          reply.uid.toString(),
                                           currentUserEmojiId!,
                                           currentUserHandle!,
                                           reply.emojiId,
-                                          userName[0]);
+                                          capitalizeFirstLetter(receiverUserName));
                                     },
                                   );
                                 } else {
@@ -944,7 +962,7 @@ class _ChatState extends State<Chat> {
                                                             .start,
                                                     children: [
                                                       Text(
-                                                        replyMsg,
+                                                        driverName + replyMsg,
                                                         style: TextStyle(
                                                           color: Colors.black,
                                                           fontSize: 20,
@@ -1040,29 +1058,39 @@ class _ChatState extends State<Chat> {
                     onPressed: () async {
                       String message = messageController.text.trim();
                       if (!message.isEmpty) {
-                        bool messageSent = await sendMessage(
-                          messageController.text,
-                          widget.serverMsgId,
-                          userId,
-                        );
-                        if (messageSent) {
-                          print('message sent');
-
-                          sendFCMNotification('all', 'message');
-
-                          setState(() {
-                            WidgetsBinding.instance
-                                ?.addPostFrameCallback((_) => scrollToBottom());
-                          });
-
-                          // Message sent successfully, handle any UI updates if needed
+                        String? chatHandle = SharedPrefs.getString(
+                            SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
+                        int? avatarId = SharedPrefs.getInt(
+                            SharedPrefsKeys.CURRENT_USER_AVATAR_ID);
+                        if (chatHandle == null) {
+                          showChatHandleDialog(context);
+                        } else if (avatarId == null) {
+                          showAvatarSelectionDialog(context);
                         } else {
-                          print('message failed');
-                          // Failed to send the message, handle any UI updates if needed
+                          bool messageSent = await sendMessage(
+                            messageController.text,
+                            widget.serverMsgId,
+                            userId,
+                          );
+                          if (messageSent) {
+                            print('message sent');
+
+                            sendFCMNotification('all', 'message');
+
+                            setState(() {
+                              WidgetsBinding.instance?.addPostFrameCallback(
+                                  (_) => scrollToBottom());
+                            });
+
+                            // Message sent successfully, handle any UI updates if needed
+                          } else {
+                            print('message failed');
+                            // Failed to send the message, handle any UI updates if needed
+                          }
+                          setState(() {
+                            messageController.clear();
+                          });
                         }
-                        setState(() {
-                          messageController.clear();
-                        });
                       }
                     },
                     backgroundColor: Colors.blue,
@@ -1076,11 +1104,11 @@ class _ChatState extends State<Chat> {
                 ],
               ),
             ),
-            // AdmobBanner(
-            //   adUnitId: AdHelper.bannerAdUnitId,
-            //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-            //       width: MediaQuery.of(context).size.width.toInt()),
-            // )
+            AdmobBanner(
+              adUnitId: AdHelper.bannerAdUnitId,
+              adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+                  width: MediaQuery.of(context).size.width.toInt()),
+            )
           ],
         ),
       ),
@@ -1127,6 +1155,11 @@ class _ChatState extends State<Chat> {
 
     sendPrivateChatRequest(context, 'Your request has been sent.',
         'Once user accepted your request chat list will appear in private chat tab');
+  }
+
+  String capitalizeFirstLetter(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1);
   }
 
   Future<bool> reportUser(

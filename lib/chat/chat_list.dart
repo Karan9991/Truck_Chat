@@ -51,7 +51,7 @@ class _ChatListrState extends State<ChatListr> {
     getData();
     // _refreshChat();
 
-    // InterstitialAdManager.initialize();
+     InterstitialAdManager.initialize();
 
     // storedList();
   }
@@ -69,7 +69,7 @@ class _ChatListrState extends State<ChatListr> {
   @override
   void dispose() {
     super.dispose();
-//InterstitialAdManager.dispose();
+InterstitialAdManager.dispose();
 
     // conversationTimer?.cancel();
   }
@@ -453,3 +453,5 @@ class _ChatListrState extends State<ChatListr> {
     );
   }
 }
+
+

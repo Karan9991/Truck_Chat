@@ -79,7 +79,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="$PROJECT_DIR$/../../backup/14 chat: menu items except settings/ic_logo.png" />
+                                                <entry key="imagePath" value="$PROJECT_DIR$/../../May/ic_launcher.png" />
                                                 <entry key="scalingPercent" value="52" />
                                               </map>
                                             </option>
@@ -114,6 +114,7 @@
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="ffffff" />
+                                      <entry key="outputName" value="notification_icon" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -290,6 +291,11 @@
                 </map>
               </option>
             </PersistentState>
+          </value>
+        </entry>
+        <entry key="vectorWizard">
+          <value>
+            <PersistentState />
           </value>
         </entry>
       </map>

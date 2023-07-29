@@ -24,9 +24,6 @@ class _NewsTabState extends State<NewsTab> {
   void initState() {
     super.initState();
     fetchDataFromServer();
-
-    bool? ss = SharedPrefs.getBool('isUserOnChatScreen');
-    print('ooooooooooooooooooooooo $ss');
   }
 
   Future<void> fetchDataFromServer() async {
