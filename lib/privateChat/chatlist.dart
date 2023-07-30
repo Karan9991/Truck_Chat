@@ -14,7 +14,8 @@ class ChatListScreen extends StatefulWidget {
   _ChatListScreenState createState() => _ChatListScreenState();
 }
 
-class _ChatListScreenState extends State<ChatListScreen> {
+class _ChatListScreenState extends State<ChatListScreen>
+    with AutomaticKeepAliveClientMixin {
   DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
   List<Map<dynamic, dynamic>> _chatList = [];
   int _selectedChatIndex = -1;
@@ -23,9 +24,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
   //String userId = '1';
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     super.initState();
-     currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+    currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 
     _loadChatList(currentUserId!);
     InterstitialAdManager.initialize();

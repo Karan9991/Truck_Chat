@@ -17,9 +17,12 @@ class NewsTab extends StatefulWidget {
   _NewsTabState createState() => _NewsTabState();
 }
 
-class _NewsTabState extends State<NewsTab> {
+class _NewsTabState extends State<NewsTab> with AutomaticKeepAliveClientMixin {
   List<NewsItem> _newsItems = [];
+  bool _isLoading = true;
 
+  @override
+  bool get wantKeepAlive => true;
   @override
   void initState() {
     super.initState();
@@ -45,82 +48,100 @@ class _NewsTabState extends State<NewsTab> {
 
         setState(() {
           _newsItems = newsList.map((item) => NewsItem.fromJson(item)).toList();
+          _isLoading = false;
+        });
+      } else {
+        print('Error: ${response.statusCode}');
+        setState(() {
+          _isLoading = false;
         });
       }
     } else {
       print('Error: ${response.statusCode}');
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: _newsItems.length,
-        itemBuilder: (context, index) {
-          final newsItem = _newsItems[index];
+    return Center(
+    // Center the circular progress indicator
+    child: SingleChildScrollView(
+      child: _isLoading
+          ? Center(
+              // Display circular progress indicator when loading
+              child: CircularProgressIndicator(),
+            )
+          : ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: _newsItems.length,
+              itemBuilder: (context, index) {
+                final newsItem = _newsItems[index];
 
-          DateTime postedDate = DateTime.parse(newsItem.postedDate);
+                DateTime postedDate = DateTime.parse(newsItem.postedDate);
 
-          String formattedDate = DateFormat('yyyy/MM/dd').format(postedDate);
+                String formattedDate =
+                    DateFormat('yyyy/MM/dd').format(postedDate);
 
-          return Card(
-            color: Colors.blue,
-            elevation: 2,
-            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: InkWell(
-              onTap: () {
-                navigateToURL(newsItem.link);
-              },
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset(
-                          'assets/news.png',
-                          width: 24,
-                          height: 24,
-                          color: Colors.black,
-                        ),
-                        SizedBox(width: 8),
-                        Expanded(
-                          // Wrap the Text widget with Expanded
-                          child: Text(
-                            newsItem.title,
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
+                return Card(
+                  color: Colors.blue,
+                  elevation: 2,
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: InkWell(
+                    onTap: () {
+                      navigateToURL(newsItem.link);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Image.asset(
+                                'assets/news.png',
+                                width: 24,
+                                height: 24,
+                                color: Colors.black,
+                              ),
+                              SizedBox(width: 8),
+                              Expanded(
+                                // Wrap the Text widget with Expanded
+                                child: Text(
+                                  newsItem.title,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 8),
-                    Padding(
-                      padding:
-                          EdgeInsets.only(left: 32), // Adjust the left padding
+                          SizedBox(height: 8),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 32), // Adjust the left padding
 
-                      child: Text(
-                        'Posted on ${formattedDate}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            child: Text(
+                              'Posted on ${formattedDate}',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
+    ),
     );
   }
 

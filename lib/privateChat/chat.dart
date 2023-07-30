@@ -67,7 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID).toString();
 
-    _updateNewMessage();
+    _updateNewMessage(false);
 
     _loadMessages();
 
@@ -88,7 +88,7 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  void _updateNewMessage() async {
+  void _updateNewMessage(bool newMessages) async {
     DataSnapshot snapshot = await _databaseReference
         .child('chatList')
         .child(widget.userId)
@@ -101,7 +101,7 @@ class _ChatScreenState extends State<ChatScreen> {
           .child(widget.userId)
           .child(widget.receiverId);
 
-      updateNewMessage.update({'newMessages': false});
+      updateNewMessage.update({'newMessages': newMessages});
     }
   }
 
@@ -497,6 +497,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 // setState(() {
                 //   _isUserOnChatScreen = false;
                 // });
+          _updateNewMessage(false);
 
                 Navigator.of(context).pop();
               },
@@ -559,6 +560,7 @@ class _ChatScreenState extends State<ChatScreen> {
           // setState(() {
           //  // _isUserOnChatScreen = false;
           // });
+          _updateNewMessage(false);
 
           return true; // Return true to allow the screen to be popped
         },
@@ -610,7 +612,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           // Wrap with ClipRRect to make it circular
                           borderRadius: BorderRadius.circular(8),
                           child: Container(
-                            color: Colors.blue[100],
+                            color: Colors.grey[200],
                             padding: EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 16),
                             child: Text(
@@ -618,7 +620,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black),
+                                  color: Colors.grey),
                             ),
                           ),
                         ),
@@ -954,7 +956,7 @@ class MessageBubble extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           decoration: BoxDecoration(
-            color: isCurrentUser ? Colors.blue[400] : Colors.grey[300],
+            color: isCurrentUser ? Colors.blue[400] : Colors.blue[100],
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
