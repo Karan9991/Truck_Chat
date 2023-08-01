@@ -111,6 +111,108 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
 //   );
 // }
 
+//testing 2
+// @override
+// Widget build(BuildContext context) {
+//   return Scaffold(
+//     appBar: AppBar(
+//       title: Text(Constants.CONVERSATION),
+//     ),
+//     body: Column(
+//       children: [
+//         Expanded(
+//           child: Container(
+//             padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 520.0),
+//             child: Row(
+//               children: [
+//                 IconButton(
+//                   icon: Icon(Icons.mic),
+//                   onPressed: () {
+//                     _toggleListening();
+//                   },
+//                 ),
+//                 SizedBox(width: 8.0),
+//                 Expanded(
+//                   child: TextField(
+//                     controller: _textEditingController,
+//                     onChanged: (value) {
+//                       _typedText = value;
+//                     },
+//                     maxLines: 4, // Increase the number of lines to show
+//                     decoration: InputDecoration(
+//                       hintText: Constants.COMPOSE_CONVERSATION,
+//                       border: OutlineInputBorder(
+//                         borderRadius: BorderRadius.circular(15.0),
+//                       ),
+//                       focusedBorder: OutlineInputBorder(
+//                         borderRadius: BorderRadius.circular(15.0),
+//                         borderSide: BorderSide(
+//                           color: Colors.green, // Change the selected border color here
+//                         ),
+//                       ),
+//                       filled: true,
+//                       fillColor: Colors.grey[200],
+//                       contentPadding: EdgeInsets.symmetric(
+//                         vertical: 12.0,
+//                         horizontal: 16.0,
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//                 SizedBox(width: 8.0),
+//                 Material(
+//                   borderRadius: BorderRadius.circular(24.0),
+//                   color: Colors.blue,
+//                   child: InkWell(
+//                     borderRadius: BorderRadius.circular(24.0),
+//                     onTap: () async {
+//                       String newConversation = _textEditingController.text.trim();
+//                       if (!newConversation.isEmpty) {
+//                         await _sendConversation();
+//                       }
+//                     },
+//                     child: Container(
+//                       padding: EdgeInsets.all(12.0),
+//                       child: _isSending
+//                           ? CircularProgressIndicator(
+//                               valueColor: AlwaysStoppedAnimation<Color>(
+//                                 Colors.white,
+//                               ),
+//                             )
+//                           : Icon(
+//                               Icons.send,
+//                               color: Colors.white,
+//                             ),
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//           AdmobBanner(
+//             adUnitId: AdHelper.bannerAdUnitId,
+//             adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+//               width: MediaQuery.of(context).size.width.toInt(),
+//             ),
+//           ),
+//       ],
+//     ),
+//     // floatingActionButton: Container(
+//     //   width: MediaQuery.of(context).size.width,
+//     //   alignment: Alignment.bottomCenter,
+//     //   child: AdmobBanner(
+//     //     adUnitId: AdHelper.bannerAdUnitId,
+//     //     adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+//     //       width: MediaQuery.of(context).size.width.toInt(),
+//     //     ),
+//     //   ),
+//     // ),
+//   );
+// }
+
+//testing 3
+
 @override
 Widget build(BuildContext context) {
   return Scaffold(
@@ -120,98 +222,87 @@ Widget build(BuildContext context) {
     body: Column(
       children: [
         Expanded(
-          child: Container(
-            padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 520.0),
-            child: Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.mic),
-                  onPressed: () {
-                    _toggleListening();
-                  },
-                ),
-                SizedBox(width: 8.0),
-                Expanded(
-                  child: TextField(
-                    controller: _textEditingController,
-                    onChanged: (value) {
-                      _typedText = value;
+          child: SingleChildScrollView( // Wrap this section with SingleChildScrollView
+            child: Container(
+              padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 520.0),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.mic),
+                    onPressed: () {
+                      _toggleListening();
                     },
-                    maxLines: 4, // Increase the number of lines to show
-                    decoration: InputDecoration(
-                      hintText: Constants.COMPOSE_CONVERSATION,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide(
-                          color: Colors.green, // Change the selected border color here
+                  ),
+                  SizedBox(width: 8.0),
+                  Expanded(
+                    child: TextField(
+                      controller: _textEditingController,
+                      onChanged: (value) {
+                        _typedText = value;
+                      },
+                      maxLines: 4, // Increase the number of lines to show
+                      decoration: InputDecoration(
+                        hintText: Constants.COMPOSE_CONVERSATION,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          borderSide: BorderSide(
+                            color: Colors.green, // Change the selected border color here
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 12.0,
+                          horizontal: 16.0,
                         ),
                       ),
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 12.0,
-                        horizontal: 16.0,
+                    ),
+                  ),
+                  SizedBox(width: 8.0),
+                  Material(
+                    borderRadius: BorderRadius.circular(24.0),
+                    color: Colors.blue,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(24.0),
+                      onTap: () async {
+                        String newConversation = _textEditingController.text.trim();
+                        if (!newConversation.isEmpty) {
+                          await _sendConversation();
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(12.0),
+                        child: _isSending
+                            ? CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
+                              )
+                            : Icon(
+                                Icons.send,
+                                color: Colors.white,
+                              ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(width: 8.0),
-                Material(
-                  borderRadius: BorderRadius.circular(24.0),
-                  color: Colors.blue,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(24.0),
-                    onTap: () async {
-                      String newConversation = _textEditingController.text.trim();
-                      if (!newConversation.isEmpty) {
-                        await _sendConversation();
-                      }
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(12.0),
-                      child: _isSending
-                          ? CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
-                              ),
-                            )
-                          : Icon(
-                              Icons.send,
-                              color: Colors.white,
-                            ),
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
-          AdmobBanner(
-            adUnitId: AdHelper.bannerAdUnitId,
-            adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-              width: MediaQuery.of(context).size.width.toInt(),
-            ),
+        AdmobBanner(
+          adUnitId: AdHelper.bannerAdUnitId,
+          adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+            width: MediaQuery.of(context).size.width.toInt(),
           ),
+        ),
       ],
     ),
-    // floatingActionButton: Container(
-    //   width: MediaQuery.of(context).size.width,
-    //   alignment: Alignment.bottomCenter,
-    //   child: AdmobBanner(
-    //     adUnitId: AdHelper.bannerAdUnitId,
-    //     adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-    //       width: MediaQuery.of(context).size.width.toInt(),
-    //     ),
-    //   ),
-    // ),
   );
 }
-
-
-
 
   Future<bool> send() async {
     String newConversation = _textEditingController.text;

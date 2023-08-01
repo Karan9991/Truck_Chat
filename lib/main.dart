@@ -30,12 +30,12 @@ Future<void> backgroundHandler(RemoteMessage message) async {
     handleFCMMessage(message.data, message);
   }
 }
-
+//7FADBC328BBB96431CA78C2E559B06A7
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await Admob.initialize(
-    testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
+   // testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
   ); //testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
   await Admob.requestTrackingAuthorization();
 

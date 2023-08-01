@@ -26,7 +26,7 @@ class PrivateChatTab extends StatelessWidget {
               dividerColor: Colors.blue,
               labelColor: Colors.blue,
               tabs: [
-                Tab(text: 'Chat List'),
+                Tab(text: 'Chats'),
                 Tab(text: 'Pending Requests'),
               ],
             ),

@@ -101,7 +101,7 @@ class _ChatListScreenState extends State<ChatListScreen>
     print('deleteChat');
     // Assuming the user is already authenticated with Firebase Authentication
     // Replace 'userId' with the authenticated user's ID
-    String userId = '1'; // Change this to the authenticated user's ID
+    String userId = '70240'; // Change this to the authenticated user's ID
 
     // Get the chat item corresponding to the selected index
     Map<dynamic, dynamic> chatItem = _chatList[index];
@@ -129,7 +129,7 @@ class _ChatListScreenState extends State<ChatListScreen>
     return Scaffold(
       body: _chatList.isEmpty
           ? Center(
-              child: Text("No Private chat list"),
+              child: Text("No Private Chats"),
             )
           : ListView.builder(
               itemCount: _chatList.length,
@@ -207,7 +207,7 @@ class _ChatListScreenState extends State<ChatListScreen>
                           ),
                     onTap: () {
                       // Open the chat screen with the selected user
-                      //InterstitialAdManager.showInterstitialAd();
+                      InterstitialAdManager.showInterstitialAd();
 
                       Navigator.push(
                         context,

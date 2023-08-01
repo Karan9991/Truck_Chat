@@ -875,7 +875,7 @@ class _HomeScreenState extends State<HomeScreen>
         }
       }
 
-      //handleFCMMessage(message.data, message);
+      handleFCMMessage(message.data, message);
     });
   }
 
@@ -1289,7 +1289,7 @@ class _HomeScreenState extends State<HomeScreen>
                 // Perform action when a pop-up menu item is selected
                 switch (value) {
                   case 'settings':
-                    //InterstitialAdManager.showInterstitialAd();
+                    InterstitialAdManager.showInterstitialAd();
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SettingsScreen()),
@@ -1379,7 +1379,8 @@ class _HomeScreenState extends State<HomeScreen>
           ],
         ),
 
-        bottomNavigationBar: Container(
+        bottomNavigationBar: 
+        Container(
           decoration: BoxDecoration(
             boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 2.0)],
           ),

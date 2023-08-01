@@ -41,8 +41,10 @@ class _NotificationsAndSoundScreenState
         children: [
           Expanded(
             child: ListView(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.fromLTRB(0.0,16.0,0.0,16.0),
               children: [
+                                Divider(),
+
                 _buildListTile(
                   Constants.CHAT_TONES,
                   Constants.PLAY_A_SOUND,
@@ -55,6 +57,7 @@ class _NotificationsAndSoundScreenState
                     SharedPrefs.setBool(SharedPrefsKeys.CHAT_TONES, value!);
                   },
                 ),
+                Divider(),
                 _buildListTile(
                   Constants.NOTIFICATIONS,
                   Constants.NOTIFICATIONS_ARE_SHOWN,
@@ -67,6 +70,8 @@ class _NotificationsAndSoundScreenState
                     SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS, value!);
                   },
                 ),
+                                Divider(),
+
                 _buildListTile(
                   Constants.NOTIFICATION_TONE,
                   Constants.NOTIFICATION_MESSAGES_WILL_PLAY,
@@ -80,6 +85,8 @@ class _NotificationsAndSoundScreenState
                         SharedPrefsKeys.NOTIFICATIONS_TONE, value!);
                   },
                 ),
+                                Divider(),
+
                 _buildListTile(
                   Constants.VIBRATE,
                   Constants.NOTIFICATION_MESSAGES_WILL_VIBRATE,
@@ -92,6 +99,8 @@ class _NotificationsAndSoundScreenState
                     SharedPrefs.setBool(SharedPrefsKeys.VIBRATE, value!);
                   },
                 ),
+                                Divider(),
+
                 _buildListTile(
                   Constants.PRIVATE_CHAT,
                   Constants.ALLOW_USERS_TO,
@@ -104,6 +113,8 @@ class _NotificationsAndSoundScreenState
                     SharedPrefs.setBool(SharedPrefsKeys.PRIVATE_CHAT, value!);
                   },
                 ),
+                                Divider(),
+
               ],
             ),
           ),
@@ -144,7 +155,7 @@ class _NotificationsAndSoundScreenState
           description,
           style: TextStyle(
             color: Colors.grey,
-            fontWeight: FontWeight.bold,
+            // fontWeight: FontWeight.bold,
           ),
         ),
         trailing: Checkbox(
