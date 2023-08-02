@@ -1622,15 +1622,35 @@ class _StarredChatState extends State<StarredChat> {
                                                 width: 30,
                                                 height: 30,
                                               ),
-                                              if (privateChat ==
+                                              // if (privateChat ==
+                                              //     '1') // Check if privateChat is 1 to show the indicator
+                                              //   Padding(
+                                              //     padding: EdgeInsets.only(
+                                              //         top: 0.0,
+                                              //         right: 0.0,
+                                              //         left: 10,
+                                              //         bottom:
+                                              //             10), // Add padding here
+                                              //     child: Container(
+                                              //       width: 10,
+                                              //       height: 10,
+                                              //       decoration: BoxDecoration(
+                                              //         color: brightGreen,
+                                              //         shape: BoxShape.circle,
+                                              //       ),
+                                              //     ),
+                                              //   ),
+                                            ],
+                                          ),
+                                             if (privateChat ==
                                                   '1') // Check if privateChat is 1 to show the indicator
                                                 Padding(
                                                   padding: EdgeInsets.only(
                                                       top: 0.0,
                                                       right: 0.0,
-                                                      left: 10,
+                                                      left: 0,
                                                       bottom:
-                                                          10), // Add padding here
+                                                          0), // Add padding here
                                                   child: Container(
                                                     width: 10,
                                                     height: 10,
@@ -1640,8 +1660,6 @@ class _StarredChatState extends State<StarredChat> {
                                                     ),
                                                   ),
                                                 ),
-                                            ],
-                                          ),
                                         SizedBox(width: 8.0),
                                         Expanded(
                                           child: Column(
@@ -1803,15 +1821,38 @@ class _StarredChatState extends State<StarredChat> {
                                                         width: 30,
                                                         height: 30,
                                                       ),
-                                                      if (privateChat ==
+                                                      // if (privateChat ==
+                                                      //     '1') // Check if privateChat is 1 to show the indicator
+                                                      //   Padding(
+                                                      //     padding: EdgeInsets.only(
+                                                      //         top: 0.0,
+                                                      //         right: 0.0,
+                                                      //         left: 10,
+                                                      //         bottom:
+                                                      //             10), // Add padding here
+                                                      //     child: Container(
+                                                      //       width: 10,
+                                                      //       height: 10,
+                                                      //       decoration:
+                                                      //           BoxDecoration(
+                                                      //         color:
+                                                      //             brightGreen,
+                                                      //         shape: BoxShape
+                                                      //             .circle,
+                                                      //       ),
+                                                      //     ),
+                                                      //   ),
+                                                    ],
+                                                  ),
+                                                   if (privateChat ==
                                                           '1') // Check if privateChat is 1 to show the indicator
                                                         Padding(
                                                           padding: EdgeInsets.only(
                                                               top: 0.0,
                                                               right: 0.0,
-                                                              left: 10,
+                                                              left: 0,
                                                               bottom:
-                                                                  10), // Add padding here
+                                                                  0), // Add padding here
                                                           child: Container(
                                                             width: 10,
                                                             height: 10,
@@ -1824,8 +1865,6 @@ class _StarredChatState extends State<StarredChat> {
                                                             ),
                                                           ),
                                                         ),
-                                                    ],
-                                                  ),
                                                 SizedBox(width: 8.0),
                                                 Expanded(
                                                   child: Column(

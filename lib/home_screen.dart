@@ -1289,7 +1289,7 @@ class _HomeScreenState extends State<HomeScreen>
                 // Perform action when a pop-up menu item is selected
                 switch (value) {
                   case 'settings':
-                    InterstitialAdManager.showInterstitialAd();
+                  //  InterstitialAdManager.showInterstitialAd();
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SettingsScreen()),

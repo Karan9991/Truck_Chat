@@ -77,6 +77,7 @@ class _ChatState extends State<Chat> {
   double? longitude;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   List<String> starredConversationList = [];
+  bool isLoading = true; // Step 1: Declare the isLoading variable
 
   @override
   void initState() {
@@ -99,8 +100,14 @@ class _ChatState extends State<Chat> {
         SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID).toString();
 
     currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
-    print('init state');
-    mm(widget.serverMsgId);
+
+
+  getData(widget.serverMsgId).then((_) {
+      setState(() {
+        isLoading = false; // Step 4: Set isLoading to false once data is loaded
+      });
+    });
+  
     _refreshChat();
 
     checkChatStarredStatus();
@@ -159,7 +166,7 @@ class _ChatState extends State<Chat> {
         replyMsgs.where((reply) => reply.topic == widget.topic).toList();
   }
 
-  Future<void> mm(dynamic conversationId) async {
+  Future<void> getData(dynamic conversationId) async {
     Map<String, double> locationData = await getLocation();
     latitude = locationData[Constants.LATITUDE]!;
     longitude = locationData[Constants.LONGITUDE]!;
@@ -190,8 +197,8 @@ class _ChatState extends State<Chat> {
     final body = {
       'to': '/topics/$topic',
       'notification': {
-        'body': 'message',
-        'title': 'New Message',
+        'body': 'Tap here to open TruckChat',
+        'title': 'There are new messages!',
       },
       'data': {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
@@ -473,7 +480,699 @@ class _ChatState extends State<Chat> {
     }
   }
 
-  @override
+  // @override
+  // Widget build(BuildContext context) {
+  //   bool isPrivateChatEnabled =
+  //       SharedPrefs.getBool(SharedPrefsKeys.PRIVATE_CHAT) ?? false;
+  //   Color brightGreen =
+  //       Color.fromRGBO(0, 255, 0, 1.0); // Custom bright green color
+
+  //   return WillPopScope(
+  //     onWillPop: () async {
+  //       //showExitConversationDialog(context);
+  //       return true; // Prevent the default back button behavior
+  //     },
+  //     child: Scaffold(
+  //       appBar: AppBar(
+  //         backgroundColor: Colors.blue,
+  //         iconTheme: IconThemeData(
+  //           color: Colors.white, // Set the color of the back arrow here
+  //         ),
+  //         title: Text(
+  //           Constants.APP_BAR_TITLE,
+  //           style: TextStyle(color: Colors.white),
+  //         ),
+  //         actions: [
+  //           IconButton(
+  //             icon: isStar
+  //                 ? Icon(
+  //                     Icons.star,
+  //                     color: Colors.yellow,
+  //                   )
+  //                 : Icon(Icons.star_border), // Toggle between the star icons
+  //             onPressed: () {
+  //               setState(() {
+  //                 isStar = !isStar; // Toggle the starred status
+  //               });
+  //               saveStarredConversations(starredConversationList);
+  //             },
+  //           ),
+  //           IconButton(
+  //             icon: Image.asset(
+  //               'assets/doublechat.png', // Replace 'doublechat_disabled.png' with the path to your disabled icon asset
+  //               width: 30,
+  //               height: 30,
+  //               color: isPrivateChatEnabled ? null : Colors.grey,
+  //             ),
+  //             onPressed: () {
+  //               setState(() {
+  //                 isPrivateChatEnabled =
+  //                     !isPrivateChatEnabled; // Toggle the state
+  //                 SharedPrefs.setBool(SharedPrefsKeys.PRIVATE_CHAT,
+  //                     isPrivateChatEnabled); // Save the state in shared preferences
+  //               });
+  //               showPrivateChatDialog(context, isPrivateChatEnabled);
+  //             },
+  //           ),
+  //           PopupMenuButton(
+  //             itemBuilder: (BuildContext context) {
+  //               return [
+  //                 PopupMenuItem(
+  //                   child: Text(Constants.SETTINGS),
+  //                   value: 'settings',
+  //                 ),
+  //                 PopupMenuItem(
+  //                   child: Text(Constants.TELL_A_FRIEND),
+  //                   value: 'tell a friend',
+  //                 ),
+  //                 PopupMenuItem(
+  //                   child: Text(Constants.HELP),
+  //                   value: 'help',
+  //                 ),
+  //                 PopupMenuItem(
+  //                   child: Text(Constants.STARRED_CHAT),
+  //                   value: 'starred chat',
+  //                 ),
+  //                 PopupMenuItem(
+  //                   child: Text(Constants.REPORT_ABUSE),
+  //                   value: 'report abuse',
+  //                 ),
+  //               ];
+  //             },
+  //             onSelected: (value) {
+  //               // Perform action when a pop-up menu item is selected
+  //               switch (value) {
+  //                 case 'settings':
+  //                   //InterstitialAdManager.showInterstitialAd();
+  //                   Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(builder: (context) => SettingsScreen()),
+  //                   );
+  //                   break;
+  //                 case 'tell a friend':
+  //                   String email = Uri.encodeComponent("");
+  //                   String subject =
+  //                       Uri.encodeComponent(Constants.CHECK_OUT_TRUCKCHAT);
+  //                   String body =
+  //                       Uri.encodeComponent(Constants.I_AM_USING_TRUCKCHAT);
+  //                   print(subject);
+  //                   Uri mail =
+  //                       Uri.parse("mailto:$email?subject=$subject&body=$body");
+  //                   launchUrl(mail);
+  //                   break;
+  //                 case 'help':
+  //                   Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(builder: (context) => Help()),
+  //                   );
+  //                   break;
+  //                 case 'starred chat':
+  //                   Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(
+  //                       builder: (context) => StarredChatList(key: UniqueKey()),
+  //                     ),
+  //                   );
+  //                   break;
+  //                 case 'report abuse':
+  //                   _showReportAbuseDialog(context);
+  //                   break;
+  //               }
+  //             },
+  //           ),
+  //         ],
+  //       ),
+  //       body: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.center,
+  //         children: [
+  //           Padding(
+  //             padding: EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
+  //             child: Container(
+  //               padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+  //               decoration: BoxDecoration(
+  //                 color: Colors.blue[300],
+  //                 borderRadius: BorderRadius.circular(8.0),
+  //               ),
+  //               child: Text(
+  //                 widget.topic,
+  //                 style: TextStyle(
+  //                   fontSize: 16,
+  //                   fontWeight: FontWeight.bold,
+  //                   color: Colors.white,
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //           Expanded(
+  //             child: ListView.builder(
+  //               controller: _scrollController,
+  //               itemCount: filteredReplyMsgs.length + sentMessages.length,
+  //               itemBuilder: (context, index) {
+  //                 if (index < filteredReplyMsgs.length) {
+  //                   final reply = filteredReplyMsgs[index];
+  //                   final replyMsg = reply.replyMsg;
+  //                   final timestampp = reply.timestamp;
+  //                   final driverName = reply.driverName;
+  //                   final privateChat = reply.privateChat;
+
+  //                   print('ttttttt private chat $privateChat');
+
+  //                   DateTime dateTime =
+  //                       DateTime.fromMillisecondsSinceEpoch(timestampp);
+  //                   String formattedDateTime =
+  //                       DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
+  //                   final timestamp = formattedDateTime;
+
+  //                   rid = reply.rid;
+  //                   emoji_id = reply.emojiId;
+  //                   timestam = timestampp;
+
+  //                   bool isCurrentUser = reply.uid ==
+  //                       userId; // Check if the user_id is equal to currentUserId
+
+  //                   // Find the corresponding Avatar for the emoji_id
+  //                   Avatar? matchingAvatar = avatars.firstWhere(
+  //                     (avatar) => avatar.id == int.parse(reply.emojiId),
+  //                     orElse: () => Avatar(id: 0, imagePath: ''),
+  //                   );
+  //                   // print('emoji id $emoji_id');
+  //                   // print('matching avatar id ${matchingAvatar.id}');
+
+  //                   return Padding(
+  //                     padding: EdgeInsets.all(8.0),
+  //                     child: isCurrentUser
+  //                         ? ChatBubble(
+  //                             clipper: ChatBubbleClipper6(
+  //                                 type: isCurrentUser
+  //                                     ? BubbleType.sendBubble
+  //                                     : BubbleType.receiverBubble),
+  //                             alignment: isCurrentUser
+  //                                 ? Alignment.topRight
+  //                                 : Alignment.topLeft,
+  //                             margin: EdgeInsets.only(bottom: 16.0),
+  //                             backGroundColor: isCurrentUser
+  //                                 ? Colors.blue[100]
+  //                                 : Colors.blue[300],
+  //                             child: isCurrentUser
+  //                                 ? Container(
+  //                                     constraints:
+  //                                         BoxConstraints(maxWidth: 250.0),
+  //                                     child: Column(
+  //                                       crossAxisAlignment:
+  //                                           CrossAxisAlignment.start,
+  //                                       children: [
+  //                                         Row(
+  //                                           crossAxisAlignment:
+  //                                               CrossAxisAlignment.start,
+  //                                           children: [
+  //                                             if (SharedPrefs.getString(
+  //                                                     SharedPrefsKeys
+  //                                                         .CURRENT_USER_AVATAR_IMAGE_PATH) !=
+  //                                                 null)
+  //                                               Image.asset(
+  //                                                 SharedPrefs.getString(
+  //                                                     SharedPrefsKeys
+  //                                                         .CURRENT_USER_AVATAR_IMAGE_PATH)!,
+  //                                                 width: 30,
+  //                                                 height: 30,
+  //                                               ),
+  //                                             SizedBox(width: 8.0),
+  //                                             Expanded(
+  //                                               child: Column(
+  //                                                 crossAxisAlignment:
+  //                                                     CrossAxisAlignment.start,
+  //                                                 children: [
+  //                                                   Text(
+  //                                                     driverName + replyMsg,
+  //                                                     style: TextStyle(
+  //                                                         color: Colors.black,
+  //                                                         fontSize: 20),
+  //                                                   ),
+  //                                                   SizedBox(height: 4.0),
+  //                                                   Text(
+  //                                                     timestamp,
+  //                                                   ),
+  //                                                 ],
+  //                                               ),
+  //                                             ),
+  //                                           ],
+  //                                         ),
+  //                                       ],
+  //                                     ),
+  //                                   )
+  //                                 : Container(
+  //                                     constraints:
+  //                                         BoxConstraints(maxWidth: 250.0),
+  //                                     child: Column(
+  //                                       crossAxisAlignment:
+  //                                           CrossAxisAlignment.start,
+  //                                       children: [
+  //                                         Row(
+  //                                           crossAxisAlignment:
+  //                                               CrossAxisAlignment.start,
+  //                                           children: [
+  //                                             if (matchingAvatar.id != 0)
+  //                                               Stack(
+  //                                                 alignment: Alignment(2.6,
+  //                                                     -2.4), // Adjust the alignment here
+
+  //                                                 children: [
+  //                                                   Image.asset(
+  //                                                     matchingAvatar.imagePath,
+  //                                                     width: 30,
+  //                                                     height: 30,
+  //                                                   ),
+  //                                                   // if (privateChat ==
+  //                                                   //     '1') // Check if privateChat is 1 to show the indicator
+  //                                                   //   Padding(
+  //                                                   //     padding: EdgeInsets.only(
+  //                                                   //         top: 0.0,
+  //                                                   //         right: 0.0,
+  //                                                   //         left: 10,
+  //                                                   //         bottom:
+  //                                                   //             10), // Add padding here
+  //                                                   //     child: Container(
+  //                                                   //       width: 10,
+  //                                                   //       height: 10,
+  //                                                   //       decoration:
+  //                                                   //           BoxDecoration(
+  //                                                   //         color: brightGreen,
+  //                                                   //         shape:
+  //                                                   //             BoxShape.circle,
+  //                                                   //       ),
+  //                                                   //     ),
+  //                                                   //   ),
+  //                                                 ],
+  //                                               ),
+  //                                             if (privateChat ==
+  //                                                 '1') // Check if privateChat is 1 to show the indicator
+  //                                               Padding(
+  //                                                 padding: EdgeInsets.only(
+  //                                                     top: 0.0,
+  //                                                     right: 0.0,
+  //                                                     left: 10,
+  //                                                     bottom:
+  //                                                         10), // Add padding here
+  //                                                 child: Container(
+  //                                                   width: 10,
+  //                                                   height: 10,
+  //                                                   decoration: BoxDecoration(
+  //                                                     color: brightGreen,
+  //                                                     shape: BoxShape.circle,
+  //                                                   ),
+  //                                                 ),
+  //                                               ),
+  //                                             SizedBox(width: 8.0),
+  //                                             Expanded(
+  //                                               child: Column(
+  //                                                 crossAxisAlignment:
+  //                                                     CrossAxisAlignment.start,
+  //                                                 children: [
+  //                                                   Text(
+  //                                                     driverName + replyMsg,
+  //                                                     style: TextStyle(
+  //                                                       color: Colors.black,
+  //                                                       fontSize: 20,
+  //                                                     ),
+  //                                                   ),
+  //                                                   SizedBox(height: 4.0),
+  //                                                   Text(timestamp),
+  //                                                 ],
+  //                                               ),
+  //                                             ),
+  //                                           ],
+  //                                         ),
+  //                                       ],
+  //                                     ),
+  //                                   ),
+  //                           )
+  //                         : GestureDetector(
+  //                             onLongPress: () {
+  //                               // Show the custom dialog when the message is long-pressed
+  //                               if (privateChat == '1') {
+  //                                 messageLongPressDialog(
+  //                                   context,
+  //                                   () {
+  //                                     // Handle Report Abuse action
+
+  //                                     reportUser(reply.uid.toString(),
+  //                                         reply.rid.toString(), reply.replyMsg);
+  //                                   },
+  //                                   () {
+  //                                     // Handle Ignore User action
+  //                                     ignoreUser(getDeviceType(),
+  //                                         reply.uid.toString());
+  //                                   },
+  //                                   () {
+  //                                     // Handle Start Private Chat action
+  //                                     // Implement the logic for starting a private chat here
+  //                                     print(
+  //                                         '##################################################');
+
+  //                                     print(
+  //                                         'dddddddddddddddddriver name $driverName ');
+
+  //                                     String receiverUserName = '';
+  //                                     if (driverName == '') {
+  //                                       List<String> userName =
+  //                                           replyMsg.split(" ");
+  //                                       receiverUserName = userName[0];
+  //                                     } else {
+  //                                       receiverUserName = driverName;
+  //                                     }
+
+  //                                     print('private chat $receiverUserName');
+
+  //                                     //sendPrivateChatInvite();
+  //                                     // sendRequest(
+  //                                     //     '1', '2', reply.emojiId, userName[0]);
+
+  //                                     String? chatHandle =
+  //                                         SharedPrefs.getString(SharedPrefsKeys
+  //                                             .CURRENT_USER_CHAT_HANDLE);
+  //                                     print('chat handle $chatHandle');
+  //                                     int? avatarId = SharedPrefs.getInt(
+  //                                         SharedPrefsKeys
+  //                                             .CURRENT_USER_AVATAR_ID);
+  //                                     if (chatHandle == null) {
+  //                                       showChatHandleDialog(context);
+  //                                     } else if (avatarId == null) {
+  //                                       showAvatarSelectionDialog(context);
+  //                                     } else {
+  //                                       sendRequest(
+  //                                           currentUserId!,
+  //                                           reply.uid.toString(),
+  //                                           currentUserEmojiId ?? avatarId.toString(),
+  //                                           currentUserHandle ?? chatHandle,
+  //                                           reply.emojiId,
+  //                                           capitalizeFirstLetter(
+  //                                               receiverUserName));
+  //                                     }
+  //                                   },
+  //                                 );
+  //                               } else {
+  //                                 messageLongPressDialogWithoutPrivateChat(
+  //                                   context,
+  //                                   () {
+  //                                     // Handle Report Abuse action
+  //                                     reportUser(reply.uid.toString(),
+  //                                         reply.rid.toString(), reply.replyMsg);
+  //                                   },
+  //                                   () {
+  //                                     // Handle Ignore User action
+  //                                     ignoreUser(getDeviceType(),
+  //                                         reply.uid.toString());
+  //                                   },
+  //                                 );
+  //                               }
+  //                             },
+  //                             child: ChatBubble(
+  //                               clipper: ChatBubbleClipper6(
+  //                                   type: isCurrentUser
+  //                                       ? BubbleType.sendBubble
+  //                                       : BubbleType.receiverBubble),
+  //                               alignment: isCurrentUser
+  //                                   ? Alignment.topRight
+  //                                   : Alignment.topLeft,
+  //                               margin: EdgeInsets.only(bottom: 16.0),
+  //                               backGroundColor: isCurrentUser
+  //                                   ? Colors.blue[100]
+  //                                   : Colors.blue[300],
+  //                               child: isCurrentUser
+  //                                   ? Container(
+  //                                       constraints:
+  //                                           BoxConstraints(maxWidth: 250.0),
+  //                                       child: Column(
+  //                                         crossAxisAlignment:
+  //                                             CrossAxisAlignment.start,
+  //                                         children: [
+  //                                           Row(
+  //                                             crossAxisAlignment:
+  //                                                 CrossAxisAlignment.start,
+  //                                             children: [
+  //                                               if (SharedPrefs.getString(
+  //                                                       SharedPrefsKeys
+  //                                                           .CURRENT_USER_AVATAR_IMAGE_PATH) !=
+  //                                                   null)
+  //                                                 Image.asset(
+  //                                                   SharedPrefs.getString(
+  //                                                       SharedPrefsKeys
+  //                                                           .CURRENT_USER_AVATAR_IMAGE_PATH)!,
+  //                                                   width: 30,
+  //                                                   height: 30,
+  //                                                 ),
+  //                                               SizedBox(width: 8.0),
+  //                                               Expanded(
+  //                                                 child: Column(
+  //                                                   crossAxisAlignment:
+  //                                                       CrossAxisAlignment
+  //                                                           .start,
+  //                                                   children: [
+  //                                                     Text(
+  //                                                       driverName + replyMsg,
+  //                                                       style: TextStyle(
+  //                                                           color: Colors.black,
+  //                                                           fontSize: 20),
+  //                                                     ),
+  //                                                     SizedBox(height: 4.0),
+  //                                                     Text(
+  //                                                       timestamp,
+  //                                                     ),
+  //                                                   ],
+  //                                                 ),
+  //                                               ),
+  //                                             ],
+  //                                           ),
+  //                                         ],
+  //                                       ),
+  //                                     )
+  //                                   : Container(
+  //                                       constraints:
+  //                                           BoxConstraints(maxWidth: 250.0),
+  //                                       child: Column(
+  //                                         crossAxisAlignment:
+  //                                             CrossAxisAlignment.start,
+  //                                         children: [
+  //                                           Row(
+  //                                             crossAxisAlignment:
+  //                                                 CrossAxisAlignment.start,
+  //                                             children: [
+  //                                               if (matchingAvatar.id != 0)
+  //                                                 Stack(
+  //                                                   alignment: Alignment(2.6,
+  //                                                       -2.4), // Adjust the alignment here
+
+  //                                                   children: [
+  //                                                     Image.asset(
+  //                                                       matchingAvatar
+  //                                                           .imagePath,
+  //                                                       width: 30,
+  //                                                       height: 30,
+  //                                                     ),
+  //                                                     // if (privateChat ==
+  //                                                     //     '1') // Check if privateChat is 1 to show the indicator
+  //                                                     //   Padding(
+  //                                                     //     padding: EdgeInsets.only(
+  //                                                     //         top: 0.0,
+  //                                                     //         right: 0.0,
+  //                                                     //         left: 10,
+  //                                                     //         bottom:
+  //                                                     //             10), // Add padding here
+  //                                                     //     child: Container(
+  //                                                     //       width: 10,
+  //                                                     //       height: 10,
+  //                                                     //       decoration:
+  //                                                     //           BoxDecoration(
+  //                                                     //         color:
+  //                                                     //             brightGreen,
+  //                                                     //         shape: BoxShape
+  //                                                     //             .circle,
+  //                                                     //       ),
+  //                                                     //     ),
+  //                                                     //   ),
+  //                                                   ],
+  //                                                 ),
+  //                                               if (privateChat ==
+  //                                                   '1') // Check if privateChat is 1 to show the indicator
+  //                                                 Padding(
+  //                                                   padding: EdgeInsets.only(
+  //                                                       top: 0.0,
+  //                                                       right: 0.0,
+  //                                                       left: 0,
+  //                                                       bottom:
+  //                                                           10), // Add padding here
+  //                                                   child: Container(
+  //                                                     width: 10,
+  //                                                     height: 10,
+  //                                                     decoration: BoxDecoration(
+  //                                                       color: brightGreen,
+  //                                                       shape: BoxShape.circle,
+  //                                                     ),
+  //                                                   ),
+  //                                                 ),
+  //                                               SizedBox(width: 8.0),
+  //                                               Expanded(
+  //                                                 child: Column(
+  //                                                   crossAxisAlignment:
+  //                                                       CrossAxisAlignment
+  //                                                           .start,
+  //                                                   children: [
+  //                                                     Text(
+  //                                                       driverName + replyMsg,
+  //                                                       style: TextStyle(
+  //                                                         color: Colors.black,
+  //                                                         fontSize: 20,
+  //                                                       ),
+  //                                                     ),
+  //                                                     SizedBox(height: 4.0),
+  //                                                     Text(timestamp),
+  //                                                   ],
+  //                                                 ),
+  //                                               ),
+  //                                             ],
+  //                                           ),
+  //                                         ],
+  //                                       ),
+  //                                     ),
+  //                             ),
+  //                           ),
+  //                   );
+  //                 } else {
+  //                   final sentIndex = index - filteredReplyMsgs.length;
+  //                   final sentMessage = sentMessages[sentIndex];
+  //                   final timestampp = sentMessage.timestamp;
+
+  //                   DateTime dateTime =
+  //                       DateTime.fromMillisecondsSinceEpoch(timestampp);
+  //                   String formattedDateTime =
+  //                       DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
+  //                   final timestamp = formattedDateTime;
+
+  //                   bool isCurrentUser = sentMessage.uid ==
+  //                       userId; // Check if the user_id is equal to 69979
+
+  //                   return Padding(
+  //                     padding: EdgeInsets.all(8.0),
+  //                     child: ChatBubble(
+  //                       clipper: ChatBubbleClipper6(
+  //                           type: isCurrentUser
+  //                               ? BubbleType.sendBubble
+  //                               : BubbleType.receiverBubble),
+  //                       alignment: isCurrentUser
+  //                           ? Alignment.topRight
+  //                           : Alignment.topLeft,
+  //                       margin: EdgeInsets.only(bottom: 16.0),
+  //                       backGroundColor: Colors.blue[300],
+  //                       child: Container(
+  //                         constraints: BoxConstraints(maxWidth: 250.0),
+  //                         child: Column(
+  //                           crossAxisAlignment: CrossAxisAlignment.start,
+  //                           children: [
+  //                             Text(
+  //                               sentMessage.replyMsg,
+  //                               style: TextStyle(
+  //                                   color: Colors.black, fontSize: 20),
+  //                             ),
+  //                             SizedBox(height: 4.0),
+  //                             Text(
+  //                               timestamp,
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   );
+  //                 }
+  //               },
+  //             ),
+  //           ),
+  //           Container(
+  //             padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+  //             decoration: BoxDecoration(
+  //               color: Colors.grey[200],
+  //               borderRadius: BorderRadius.circular(24.0),
+  //             ),
+  //             child: Row(
+  //               children: [
+  //                 IconButton(
+  //                   icon: Icon(Icons.mic),
+  //                   onPressed: () {
+  //                     _toggleListening();
+  //                   },
+  //                 ),
+  //                 Expanded(
+  //                   child: TextField(
+  //                     controller: messageController,
+  //                     decoration: InputDecoration(
+  //                       hintText: Constants.COMPOSE_MESSAGE,
+  //                       border: InputBorder.none,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 SizedBox(width: 8.0),
+  //                 FloatingActionButton(
+  //                   onPressed: () async {
+  //                     String message = messageController.text.trim();
+  //                     if (!message.isEmpty) {
+  //                       String? chatHandle = SharedPrefs.getString(
+  //                           SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
+  //                       int? avatarId = SharedPrefs.getInt(
+  //                           SharedPrefsKeys.CURRENT_USER_AVATAR_ID);
+  //                       if (chatHandle == null) {
+  //                         showChatHandleDialog(context);
+  //                       } else if (avatarId == null) {
+  //                         showAvatarSelectionDialog(context);
+  //                       } else {
+  //                         bool messageSent = await sendMessage(
+  //                           messageController.text,
+  //                           widget.serverMsgId,
+  //                           userId,
+  //                         );
+  //                         if (messageSent) {
+  //                           print('message sent');
+
+  //                           sendFCMNotification('all', 'message');
+
+  //                           setState(() {
+  //                             WidgetsBinding.instance?.addPostFrameCallback(
+  //                                 (_) => scrollToBottom());
+  //                           });
+
+  //                           // Message sent successfully, handle any UI updates if needed
+  //                         } else {
+  //                           print('message failed');
+  //                           // Failed to send the message, handle any UI updates if needed
+  //                         }
+  //                         setState(() {
+  //                           messageController.clear();
+  //                         });
+  //                       }
+  //                     }
+  //                   },
+  //                   backgroundColor: Colors.blue,
+  //                   child: sendingMessage // Check sending state
+  //                       ? CircularProgressIndicator(
+  //                           valueColor:
+  //                               AlwaysStoppedAnimation<Color>(Colors.white),
+  //                         ) // Show progress indicator
+  //                       : Icon(Icons.send),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           AdmobBanner(
+  //             adUnitId: AdHelper.bannerAdUnitId,
+  //             adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+  //                 width: MediaQuery.of(context).size.width.toInt()),
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  //testing 1
+   @override
   Widget build(BuildContext context) {
     bool isPrivateChatEnabled =
         SharedPrefs.getBool(SharedPrefsKeys.PRIVATE_CHAT) ?? false;
@@ -617,7 +1316,9 @@ class _ChatState extends State<Chat> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
+              child: isLoading ? Center(
+                child: CircularProgressIndicator(),
+              ): ListView.builder(
                 controller: _scrollController,
                 itemCount: filteredReplyMsgs.length + sentMessages.length,
                 itemBuilder: (context, index) {
@@ -735,27 +1436,45 @@ class _ChatState extends State<Chat> {
                                                       width: 30,
                                                       height: 30,
                                                     ),
-                                                    if (privateChat ==
-                                                        '1') // Check if privateChat is 1 to show the indicator
-                                                      Padding(
-                                                        padding: EdgeInsets.only(
-                                                            top: 0.0,
-                                                            right: 0.0,
-                                                            left: 10,
-                                                            bottom:
-                                                                10), // Add padding here
-                                                        child: Container(
-                                                          width: 10,
-                                                          height: 10,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: brightGreen,
-                                                            shape:
-                                                                BoxShape.circle,
-                                                          ),
-                                                        ),
-                                                      ),
+                                                    // if (privateChat ==
+                                                    //     '1') // Check if privateChat is 1 to show the indicator
+                                                    //   Padding(
+                                                    //     padding: EdgeInsets.only(
+                                                    //         top: 0.0,
+                                                    //         right: 0.0,
+                                                    //         left: 10,
+                                                    //         bottom:
+                                                    //             10), // Add padding here
+                                                    //     child: Container(
+                                                    //       width: 10,
+                                                    //       height: 10,
+                                                    //       decoration:
+                                                    //           BoxDecoration(
+                                                    //         color: brightGreen,
+                                                    //         shape:
+                                                    //             BoxShape.circle,
+                                                    //       ),
+                                                    //     ),
+                                                    //   ),
                                                   ],
+                                                ),
+                                              if (privateChat ==
+                                                  '1') // Check if privateChat is 1 to show the indicator
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 0.0,
+                                                      right: 0.0,
+                                                      left: 10,
+                                                      bottom:
+                                                          10), // Add padding here
+                                                  child: Container(
+                                                    width: 10,
+                                                    height: 10,
+                                                    decoration: BoxDecoration(
+                                                      color: brightGreen,
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                  ),
                                                 ),
                                               SizedBox(width: 8.0),
                                               Expanded(
@@ -816,20 +1535,33 @@ class _ChatState extends State<Chat> {
                                         receiverUserName = driverName;
                                       }
 
-
                                       print('private chat $receiverUserName');
 
                                       //sendPrivateChatInvite();
                                       // sendRequest(
                                       //     '1', '2', reply.emojiId, userName[0]);
 
-                                      sendRequest(
-                                          currentUserId!,
-                                          reply.uid.toString(),
-                                          currentUserEmojiId!,
-                                          currentUserHandle!,
-                                          reply.emojiId,
-                                          capitalizeFirstLetter(receiverUserName));
+                                      String? chatHandle =
+                                          SharedPrefs.getString(SharedPrefsKeys
+                                              .CURRENT_USER_CHAT_HANDLE);
+                                      print('chat handle $chatHandle');
+                                      int? avatarId = SharedPrefs.getInt(
+                                          SharedPrefsKeys
+                                              .CURRENT_USER_AVATAR_ID);
+                                      if (chatHandle == null) {
+                                        showChatHandleDialog(context);
+                                      } else if (avatarId == null) {
+                                        showAvatarSelectionDialog(context);
+                                      } else {
+                                        sendRequest(
+                                            currentUserId!,
+                                            reply.uid.toString(),
+                                            currentUserEmojiId ?? avatarId.toString(),
+                                            currentUserHandle ?? chatHandle,
+                                            reply.emojiId,
+                                            capitalizeFirstLetter(
+                                                receiverUserName));
+                                      }
                                     },
                                   );
                                 } else {
@@ -931,28 +1663,46 @@ class _ChatState extends State<Chat> {
                                                         width: 30,
                                                         height: 30,
                                                       ),
-                                                      if (privateChat ==
-                                                          '1') // Check if privateChat is 1 to show the indicator
-                                                        Padding(
-                                                          padding: EdgeInsets.only(
-                                                              top: 0.0,
-                                                              right: 0.0,
-                                                              left: 10,
-                                                              bottom:
-                                                                  10), // Add padding here
-                                                          child: Container(
-                                                            width: 10,
-                                                            height: 10,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color:
-                                                                  brightGreen,
-                                                              shape: BoxShape
-                                                                  .circle,
-                                                            ),
-                                                          ),
-                                                        ),
+                                                      // if (privateChat ==
+                                                      //     '1') // Check if privateChat is 1 to show the indicator
+                                                      //   Padding(
+                                                      //     padding: EdgeInsets.only(
+                                                      //         top: 0.0,
+                                                      //         right: 0.0,
+                                                      //         left: 10,
+                                                      //         bottom:
+                                                      //             10), // Add padding here
+                                                      //     child: Container(
+                                                      //       width: 10,
+                                                      //       height: 10,
+                                                      //       decoration:
+                                                      //           BoxDecoration(
+                                                      //         color:
+                                                      //             brightGreen,
+                                                      //         shape: BoxShape
+                                                      //             .circle,
+                                                      //       ),
+                                                      //     ),
+                                                      //   ),
                                                     ],
+                                                  ),
+                                                if (privateChat ==
+                                                    '1') // Check if privateChat is 1 to show the indicator
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        top: 0.0,
+                                                        right: 0.0,
+                                                        left: 0,
+                                                        bottom:
+                                                            10), // Add padding here
+                                                    child: Container(
+                                                      width: 10,
+                                                      height: 10,
+                                                      decoration: BoxDecoration(
+                                                        color: brightGreen,
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                    ),
                                                   ),
                                                 SizedBox(width: 8.0),
                                                 Expanded(
@@ -1120,13 +1870,6 @@ class _ChatState extends State<Chat> {
     DatabaseReference requestsRef =
         FirebaseDatabase.instance.ref().child('requests');
 
-    // Request request = Request(
-    //   senderId: senderId,
-    //   receiverId: receiverId,
-    //   status: 'pending',
-    //   emojiId: emojiId,
-    //   userName: userName,
-    // );
     Request request = Request(
       senderId: senderId,
       receiverId: receiverId,
@@ -1137,21 +1880,6 @@ class _ChatState extends State<Chat> {
       receiverUserName: userName,
     );
     requestsRef.push().set(request.toJson());
-
-    //testing
-    // DatabaseReference chatListRef =
-    //     FirebaseDatabase.instance.ref().child('chatlist');
-
-    // ChatList chatList = ChatList(
-    //   senderId: senderId,
-    //   receiverId: receiverId,
-    //   senderEmojiId: emojiId,
-    //   senderUserName: userName,
-    //   receiverEmojiId: receiverEmojiId,
-    //   receiverUserName: receiverUserName,
-    // );
-
-    // chatListRef.push().set(chatList.toJson());
 
     sendPrivateChatRequest(context, 'Your request has been sent.',
         'Once user accepted your request chat list will appear in private chat tab');
