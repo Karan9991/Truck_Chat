@@ -30,13 +30,14 @@ Future<void> backgroundHandler(RemoteMessage message) async {
     handleFCMMessage(message.data, message);
   }
 }
+
 //7FADBC328BBB96431CA78C2E559B06A7
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await Admob.initialize(
-   // testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
-  ); //testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
+      // testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
+      ); //testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
   await Admob.requestTrackingAuthorization();
 
   configLocalNotification();
@@ -304,7 +305,7 @@ void _configureFCM() {
   });
 }
 
-void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) {
+void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) async {
   final senderId = data['senderUserId'];
   final notificationType = data['type'];
 
@@ -331,24 +332,59 @@ void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) {
   }
 }
 
-void showNotification(String? title, String? body) async {
-  HapticFeedback.vibrate();
-
-  bool androidNotificationTone =
+Future<String> getNotificationChannelId() async {
+  bool notificationTone =
       SharedPrefs.getBool(SharedPrefsKeys.NOTIFICATIONS_TONE) ?? false;
+  bool notificationVibrate =
+      SharedPrefs.getBool(SharedPrefsKeys.VIBRATE) ?? false;
 
-  print('notification tone testing $androidNotificationTone');
+  // Default channel ID for when both notification tone and vibrate are disabled
+  String channelId = 'default_channel';
 
-  print('showNotification method called');
+  switch (notificationTone) {
+    case true:
+      switch (notificationVibrate) {
+        case true:
+          channelId = 'tone_and_vibrate_channel';
+          break;
+        case false:
+          channelId = 'tone_channel';
+          break;
+      }
+      break;
+    case false:
+      switch (notificationVibrate) {
+        case true:
+          channelId = 'vibrate_channel';
+          break;
+        case false:
+          channelId = 'silent_channel';
+          break;
+      }
+      break;
+  }
+
+  return channelId;
+}
+
+void showNotification(String? title, String? body) async {
+  //check user preferences for notification and vibrate
+  String channelId = await getNotificationChannelId();
+  bool shouldPlaySound =
+      (channelId == 'tone_channel' || channelId == 'tone_and_vibrate_channel');
+  bool shouldEnableVibration = (channelId == 'vibrate_channel' || channelId == 'tone_and_vibrate_channel');
+
+
   AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
-    'com.teletype.truckchat2.android', // Replace with your Android package name
-    'Flutter chat demo',
-    playSound: androidNotificationTone,
-    enableVibration: true,
+    channelId,
+    'Truck Chat',
+    playSound: shouldPlaySound,
+    enableVibration: shouldEnableVibration,
     importance: Importance.max,
     priority: Priority.high,
   );
+
   DarwinNotificationDetails iOSPlatformChannelSpecifics =
       DarwinNotificationDetails();
 
