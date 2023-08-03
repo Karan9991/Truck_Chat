@@ -44,14 +44,15 @@ void main() async {
   _configureFCM();
 
   await SharedPrefs.init();
-  await registerDevice();
+  // await registerDevice();
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isAppInstalled = prefs.getBool('isAppInstalled') ?? false;
 
   if (!isAppInstalled) {
     await initNotificationsAndSoundPrefs();
-    await prefs.setBool('isAppInstalled', true);
+      await registerDevice();
+    // await prefs.setBool('isAppInstalled', true);
   }
 
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
@@ -217,9 +218,9 @@ Future<void> registerDevice() async {
       SharedPrefs.setDouble(
           SharedPrefsKeys.LONGITUDE, currentLocation.longitude!);
 
-      // String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+      //  String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 
-      // getFCMToken(currentUserId!);
+      //  getFCMToken(currentUserId!);
 
       print('testing ${SharedPrefs.getString(SharedPrefsKeys.USER_ID)}');
     } else {

@@ -759,7 +759,7 @@ import 'package:flutter_beep/flutter_beep.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-// import 'package:chat/reactivechat/chatlistreact.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -813,7 +813,8 @@ class _HomeScreenState extends State<HomeScreen>
 
     currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 
-    getFCMToken(currentUserId!);
+    //getFCMToken(currentUserId!);
+    getFirebaseToken();
 
     _refreshChatListWithFCM();
 
@@ -824,31 +825,48 @@ class _HomeScreenState extends State<HomeScreen>
     // });
   }
 
-  Future<String?> getFCMToken(String currentUserId) async {
+  Future<void> getFirebaseToken() async {
+    bool isAppInstall = await isAppInstalled();
+
+    if (!isAppInstall) {
+     await getFCMToken(currentUserId!);
+    }
+  }
+
+  Future<bool> isAppInstalled() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isAppInstalled = prefs.getBool('isAppInstalled') ?? false;
+    return isAppInstalled;
+  }
+
+  Future<void> getFCMToken(String currentUserId) async {
     DatabaseReference fcmTokenRef = FirebaseDatabase.instance
         .ref()
         .child('users')
         .child(currentUserId)
         .child('fcmToken');
 
-    // Check if the token already exists in the database
-    DatabaseEvent event = await fcmTokenRef.once();
-    DataSnapshot dataSnapshot = event.snapshot;
+    // // Check if the token already exists in the database
+    // DatabaseEvent event = await fcmTokenRef.once();
+    // DataSnapshot dataSnapshot = event.snapshot;
 
-    String? token = dataSnapshot.value as String?;
+    // String? token = dataSnapshot.value as String?;
 
-    if (token == null) {
+    // if (token == null) {
       // If the token doesn't exist in the database, generate a new token
       FirebaseMessaging messaging = FirebaseMessaging.instance;
-      token = await messaging.getToken();
+     String? token = await messaging.getToken();
 
-      if (token != null) {
+      // if (token != null) {
         // Store the newly generated token in the database
         fcmTokenRef.set(token);
-      }
-    }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    return token;
+            await prefs.setBool('isAppInstalled', true);
+
+     // }
+   // }
+
   }
 
   @override
@@ -1289,7 +1307,7 @@ class _HomeScreenState extends State<HomeScreen>
                 // Perform action when a pop-up menu item is selected
                 switch (value) {
                   case 'settings':
-                  //  InterstitialAdManager.showInterstitialAd();
+                    //  InterstitialAdManager.showInterstitialAd();
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SettingsScreen()),
@@ -1379,8 +1397,7 @@ class _HomeScreenState extends State<HomeScreen>
           ],
         ),
 
-        bottomNavigationBar: 
-        Container(
+        bottomNavigationBar: Container(
           decoration: BoxDecoration(
             boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 2.0)],
           ),
@@ -1409,7 +1426,8 @@ class _HomeScreenState extends State<HomeScreen>
                   Colors.grey, // Color of unselected tab icon and text
               labelColor: Colors.blue, // Color of selected tab icon and text
               labelPadding: EdgeInsets.symmetric(
-                  horizontal: 6.0, vertical: 2.0), // Add padding around the tab labels
+                  horizontal: 6.0,
+                  vertical: 2.0), // Add padding around the tab labels
             ),
           ),
         ),

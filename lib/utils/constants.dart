@@ -203,9 +203,6 @@ class Constants {
 
   static const String FCM_NOTIFICATION_TITLE = 'There are new messages!';
   static const String FCM_NOTIFICATION_BODY = 'Tap here to open TruckChat';
-    static const String NOTIFICATION_TONE_ENABLED = 'Notification tone enabled';
-  static const String NOTIFICATION_TONE_DISABLED = 'Notification tone disabled';
-  static const String NOTIFICATION_VIBRATE_ENABLED = 'Notification vibrate enabled';
-  static const String NOTIFICATION_VIBRATE_DISABLED = 'Notification vibrate disabled';
+ 
 
 }

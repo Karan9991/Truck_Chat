@@ -968,9 +968,6 @@ class _StarredChatState extends State<StarredChat> {
   bool sendingMessage = false; // Added variable to track sending state
   String? shareprefuserId = SharedPrefs.getString('userId');
   int userId = 0;
-  // double? storedLatitude = 1.0;
-  // double? storedLongitude = 1.0;
-  // late Timer refreshTimer;
   ScrollController _scrollController = ScrollController();
   String? currentUserHandle;
   String? emojiId;
@@ -980,6 +977,10 @@ class _StarredChatState extends State<StarredChat> {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   List<String> starredConversationList = [];
   String? currentUserEmojiId;
+  bool isLoading = true; 
+  String? currentUserId;
+  String? privateChatStatus;
+  bool? privateChat;
 
   @override
   void initState() {
@@ -998,8 +999,14 @@ class _StarredChatState extends State<StarredChat> {
     currentUserHandle =
         SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
 
+    currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+
     print('init state');
-    mm(widget.serverMsgId);
+    getData(widget.serverMsgId).then((_) {
+      setState(() {
+        isLoading = false; 
+      });
+    });;
     _refreshChat();
 
     checkChatStarredStatus();
@@ -1056,7 +1063,7 @@ class _StarredChatState extends State<StarredChat> {
         replyMsgs.where((reply) => reply.topic == widget.topic).toList();
   }
 
-  Future<void> mm(dynamic conversationId) async {
+  Future<void> getData(dynamic conversationId) async {
     Map<String, double> locationData = await getLocation();
     latitude = locationData[Constants.LATITUDE]!;
     longitude = locationData[Constants.LONGITUDE]!;
@@ -1074,7 +1081,7 @@ class _StarredChatState extends State<StarredChat> {
     // });
   }
 
-  Future<void> sendFCMNotification(String topic, String message) async {
+   Future<void> sendFCMNotification(String topic, String message) async {
     final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
     final serverKey =
         'AAAAeR6Pnuo:APA91bHiasD4BKzgcY04ZiQ8oNi0L3HdOBeLBtUrxPfemCHHlxY0SGRP9VQ4kowDqRtOacdN8HUjmDTTMOgV1IzActxqGbKCT2W6dRm3Om5baCfJjDlBWnOm5vNqO-goLJRJV0UG1XgL'; // Replace with your FCM server key
@@ -1087,12 +1094,14 @@ class _StarredChatState extends State<StarredChat> {
     final body = {
       'to': '/topics/$topic',
       'notification': {
-        'body': 'message',
-        'title': 'New Message',
+        'body': 'Tap here to open TruckChat',
+        'title': 'There are new messages!',
       },
       'data': {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-        'senderId': '1111', // Include the senderId in the data payload
+        'type': 'public',
+        'senderUserId':
+            currentUserId, // Include the senderId in the data payload
       },
     };
 
@@ -1235,6 +1244,9 @@ class _StarredChatState extends State<StarredChat> {
 
     driverName =
         SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE) ?? '';
+    privateChat = SharedPrefs.getBool(SharedPrefsKeys.PRIVATE_CHAT) ?? false;
+
+    privateChatStatus = privateChat! ? '1' : '0';
 
     // print('send message');
     // print('message $message');
@@ -1258,6 +1270,7 @@ class _StarredChatState extends State<StarredChat> {
       API.LONGITUDE: longitude.toString(),
       API.EMOJI_ID: emojiId,
       'driver_name': driverName,
+      'private_chat': privateChatStatus,
     });
 
     try {
@@ -1513,7 +1526,9 @@ class _StarredChatState extends State<StarredChat> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
+              child: isLoading ? Center(
+                child: CircularProgressIndicator(),
+              ): ListView.builder(
                 controller: _scrollController,
                 itemCount: filteredReplyMsgs.length + sentMessages.length,
                 itemBuilder: (context, index) {
@@ -1702,24 +1717,67 @@ class _StarredChatState extends State<StarredChat> {
                                           reply.uid.toString());
                                     },
                                     () {
-                                      // Handle Start Private Chat action
-                                      // Implement the logic for starting a private chat here
+                                      // // Handle Start Private Chat action
+                                      // // Implement the logic for starting a private chat here
 
-                                      List<String> userName =
-                                          replyMsg.split(" ");
+                                      // List<String> userName =
+                                      //     replyMsg.split(" ");
 
-                                      print('private chat ${userName[0]}');
+                                      // print('private chat ${userName[0]}');
+
+                                      // //sendPrivateChatInvite();
+                                      // // sendRequest(
+                                      // //     '1', '2', reply.emojiId, userName[0]);
+                                      // sendRequest(
+                                      //     '1',
+                                      //     '2',
+                                      //     currentUserEmojiId!,
+                                      //     currentUserHandle!,
+                                      //     reply.emojiId,
+                                      //     userName[0]);
+
+                                          print(
+                                          '##################################################');
+
+                                      print(
+                                          'dddddddddddddddddriver name $driverName ');
+
+                                      String receiverUserName = '';
+                                      if (driverName == '') {
+                                        List<String> userName =
+                                            replyMsg.split(" ");
+                                        receiverUserName = userName[0];
+                                      } else {
+                                        receiverUserName = driverName;
+                                      }
+
+                                      print('private chat $receiverUserName');
 
                                       //sendPrivateChatInvite();
                                       // sendRequest(
                                       //     '1', '2', reply.emojiId, userName[0]);
-                                      sendRequest(
-                                          '1',
-                                          '2',
-                                          currentUserEmojiId!,
-                                          currentUserHandle!,
-                                          reply.emojiId,
-                                          userName[0]);
+
+                                      String? chatHandle =
+                                          SharedPrefs.getString(SharedPrefsKeys
+                                              .CURRENT_USER_CHAT_HANDLE);
+                                      print('chat handle $chatHandle');
+                                      int? avatarId = SharedPrefs.getInt(
+                                          SharedPrefsKeys
+                                              .CURRENT_USER_AVATAR_ID);
+                                      if (chatHandle == null) {
+                                        showChatHandleDialog(context);
+                                      } else if (avatarId == null) {
+                                        showAvatarSelectionDialog(context);
+                                      } else {
+                                        sendRequest(
+                                            currentUserId!,
+                                            reply.uid.toString(),
+                                            currentUserEmojiId ?? avatarId.toString(),
+                                            currentUserHandle ?? chatHandle,
+                                            reply.emojiId,
+                                            capitalizeFirstLetter(
+                                                receiverUserName));
+                                      }
                                     },
                                   );
                                 } else {
@@ -1967,31 +2025,41 @@ class _StarredChatState extends State<StarredChat> {
                   SizedBox(width: 8.0),
                   FloatingActionButton(
                     onPressed: () async {
-                      String message = messageController.text.trim();
+                          String message = messageController.text.trim();
                       if (!message.isEmpty) {
-                        bool messageSent = await sendMessage(
-                          messageController.text,
-                          widget.serverMsgId,
-                          userId,
-                        );
-                        if (messageSent) {
-                          print('message sent');
-
-                          sendFCMNotification('all', 'message');
-
-                          setState(() {
-                            WidgetsBinding.instance
-                                ?.addPostFrameCallback((_) => scrollToBottom());
-                          });
-
-                          // Message sent successfully, handle any UI updates if needed
+                        String? chatHandle = SharedPrefs.getString(
+                            SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
+                        int? avatarId = SharedPrefs.getInt(
+                            SharedPrefsKeys.CURRENT_USER_AVATAR_ID);
+                        if (chatHandle == null) {
+                          showChatHandleDialog(context);
+                        } else if (avatarId == null) {
+                          showAvatarSelectionDialog(context);
                         } else {
-                          print('message failed');
-                          // Failed to send the message, handle any UI updates if needed
+                          bool messageSent = await sendMessage(
+                            messageController.text,
+                            widget.serverMsgId,
+                            userId,
+                          );
+                          if (messageSent) {
+                            print('message sent');
+
+                            sendFCMNotification('all', 'message');
+
+                            setState(() {
+                              WidgetsBinding.instance?.addPostFrameCallback(
+                                  (_) => scrollToBottom());
+                            });
+
+                            // Message sent successfully, handle any UI updates if needed
+                          } else {
+                            print('message failed');
+                            // Failed to send the message, handle any UI updates if needed
+                          }
+                          setState(() {
+                            messageController.clear();
+                          });
                         }
-                        setState(() {
-                          messageController.clear();
-                        });
                       }
                     },
                     backgroundColor: Colors.blue,
@@ -2016,18 +2084,15 @@ class _StarredChatState extends State<StarredChat> {
     );
   }
 
+ String capitalizeFirstLetter(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1);
+  }
   void sendRequest(String senderId, String receiverId, String emojiId,
       String userName, String receiverEmojiId, String receiverUserName) {
     DatabaseReference requestsRef =
         FirebaseDatabase.instance.ref().child('requests');
 
-    // Request request = Request(
-    //   senderId: senderId,
-    //   receiverId: receiverId,
-    //   status: 'pending',
-    //   emojiId: emojiId,
-    //   userName: userName,
-    // );
     Request request = Request(
       senderId: senderId,
       receiverId: receiverId,
@@ -2038,21 +2103,6 @@ class _StarredChatState extends State<StarredChat> {
       receiverUserName: userName,
     );
     requestsRef.push().set(request.toJson());
-
-    //testing
-    // DatabaseReference chatListRef =
-    //     FirebaseDatabase.instance.ref().child('chatlist');
-
-    // ChatList chatList = ChatList(
-    //   senderId: senderId,
-    //   receiverId: receiverId,
-    //   senderEmojiId: emojiId,
-    //   senderUserName: userName,
-    //   receiverEmojiId: receiverEmojiId,
-    //   receiverUserName: receiverUserName,
-    // );
-
-    // chatListRef.push().set(chatList.toJson());
 
     sendPrivateChatRequest(context, 'Your request has been sent.',
         'Once user accepted your request chat list will appear in private chat tab');
