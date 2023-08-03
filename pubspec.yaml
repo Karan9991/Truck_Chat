@@ -71,7 +71,7 @@ dev_dependencies:
   flutter_beep: ^1.0.0
   image_picker: ^1.0.1
   photo_view: ^0.14.0
-
+  webview_flutter: ^4.2.2
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

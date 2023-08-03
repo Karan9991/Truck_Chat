@@ -88,8 +88,8 @@ class MyApp extends StatelessWidget {
       ),
       // home: SendRequestScreen(senderId: '1', receiverId: '2'),
       // home: ChatScreen(chatId: '21'),
-      //home: ChatListScreen(),
-      home: HomeScreen(),
+     // home: ReviewsTab(key: UniqueKey(),),
+       home: HomeScreen(),
     );
   }
 }

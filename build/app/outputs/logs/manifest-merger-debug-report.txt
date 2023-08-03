@@ -127,8 +127,9 @@ MERGED from [:speech_to_text] /Users/karandeepsingh/Downloads/Truck_Chat/build/s
 MERGED from [:image_picker_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-21:12
 MERGED from [:flutter_plugin_android_lifecycle] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_plugin_android_lifecycle/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:flutter_local_notifications] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_local_notifications/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-34:12
-MERGED from [:admob_flutter] /Users/karandeepsingh/Downloads/Truck_Chat/build/admob_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:url_launcher_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-16:12
+MERGED from [:admob_flutter] /Users/karandeepsingh/Downloads/Truck_Chat/build/admob_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:webview_flutter_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/webview_flutter_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:shared_preferences_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/shared_preferences_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:flutter_inappwebview] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-50:12
 MERGED from [:device_info] /Users/karandeepsingh/Downloads/Truck_Chat/build/device_info/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
@@ -178,7 +179,7 @@ MERGED from [com.google.android.gms:play-services-basement:18.1.0] /Users/karand
 MERGED from [androidx.fragment:fragment:1.3.6] /Users/karandeepsingh/.gradle/caches/transforms-3/f29b3728f201bed6dcd0cec88984c144/transformed/fragment-1.3.6/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.activity:activity:1.7.2] /Users/karandeepsingh/.gradle/caches/transforms-3/8f243fb3206509199e457d6fc7695a07/transformed/jetified-activity-1.7.2/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.media:media:1.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/69268b5e3785bd8f6c072469c189ef19/transformed/media-1.1.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.webkit:webkit:1.5.0] /Users/karandeepsingh/.gradle/caches/transforms-3/8d0660e5c4a18c0bb39ca13cfee34410/transformed/webkit-1.5.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.webkit:webkit:1.7.0] /Users/karandeepsingh/.gradle/caches/transforms-3/f6701cdb803a2ca6a6bf85dbd0573235/transformed/webkit-1.7.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.browser:browser:1.4.0] /Users/karandeepsingh/.gradle/caches/transforms-3/3df77d3f0e42ee5d73cdfadb8bcdc01c/transformed/browser-1.4.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/d5f3815dfe40e797f34b499819b1d7cc/transformed/swiperefreshlayout-1.1.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.window:window-java:1.0.0-beta04] /Users/karandeepsingh/.gradle/caches/transforms-3/3c0e35d493ccd3f2bb8b07f96b013b9c/transformed/jetified-window-java-1.0.0-beta04/AndroidManifest.xml:17:1-23:12
@@ -331,10 +332,12 @@ MERGED from [:flutter_plugin_android_lifecycle] /Users/karandeepsingh/Downloads/
 MERGED from [:flutter_plugin_android_lifecycle] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_plugin_android_lifecycle/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_local_notifications] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_local_notifications/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_local_notifications] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_local_notifications/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:admob_flutter] /Users/karandeepsingh/Downloads/Truck_Chat/build/admob_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:admob_flutter] /Users/karandeepsingh/Downloads/Truck_Chat/build/admob_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:url_launcher_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:url_launcher_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:admob_flutter] /Users/karandeepsingh/Downloads/Truck_Chat/build/admob_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:admob_flutter] /Users/karandeepsingh/Downloads/Truck_Chat/build/admob_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:webview_flutter_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/webview_flutter_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:webview_flutter_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/webview_flutter_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:shared_preferences_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/shared_preferences_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:shared_preferences_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/shared_preferences_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_inappwebview] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
@@ -433,8 +436,8 @@ MERGED from [androidx.activity:activity:1.7.2] /Users/karandeepsingh/.gradle/cac
 MERGED from [androidx.activity:activity:1.7.2] /Users/karandeepsingh/.gradle/caches/transforms-3/8f243fb3206509199e457d6fc7695a07/transformed/jetified-activity-1.7.2/AndroidManifest.xml:20:5-44
 MERGED from [androidx.media:media:1.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/69268b5e3785bd8f6c072469c189ef19/transformed/media-1.1.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.media:media:1.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/69268b5e3785bd8f6c072469c189ef19/transformed/media-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.webkit:webkit:1.5.0] /Users/karandeepsingh/.gradle/caches/transforms-3/8d0660e5c4a18c0bb39ca13cfee34410/transformed/webkit-1.5.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.webkit:webkit:1.5.0] /Users/karandeepsingh/.gradle/caches/transforms-3/8d0660e5c4a18c0bb39ca13cfee34410/transformed/webkit-1.5.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.webkit:webkit:1.7.0] /Users/karandeepsingh/.gradle/caches/transforms-3/f6701cdb803a2ca6a6bf85dbd0573235/transformed/webkit-1.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.webkit:webkit:1.7.0] /Users/karandeepsingh/.gradle/caches/transforms-3/f6701cdb803a2ca6a6bf85dbd0573235/transformed/webkit-1.7.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.browser:browser:1.4.0] /Users/karandeepsingh/.gradle/caches/transforms-3/3df77d3f0e42ee5d73cdfadb8bcdc01c/transformed/browser-1.4.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.browser:browser:1.4.0] /Users/karandeepsingh/.gradle/caches/transforms-3/3df77d3f0e42ee5d73cdfadb8bcdc01c/transformed/browser-1.4.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/d5f3815dfe40e797f34b499819b1d7cc/transformed/swiperefreshlayout-1.1.0/AndroidManifest.xml:20:5-22:41

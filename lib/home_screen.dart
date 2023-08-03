@@ -742,6 +742,7 @@ import 'package:chat/settings/settings.dart';
 import 'package:chat/utils/ads.dart';
 import 'package:chat/utils/alert_dialog.dart';
 import 'package:chat/utils/constants.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -760,6 +761,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -769,7 +771,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   String? currentUserId;
-  PageController _pageController = PageController();
+  PageController _pageController = PageController(initialPage: 1);
   PageStorageBucket _bucket = PageStorageBucket();
   late TabController _tabController;
 
@@ -829,7 +831,7 @@ class _HomeScreenState extends State<HomeScreen>
     bool isAppInstall = await isAppInstalled();
 
     if (!isAppInstall) {
-     await getFCMToken(currentUserId!);
+      await getFCMToken(currentUserId!);
     }
   }
 
@@ -853,20 +855,19 @@ class _HomeScreenState extends State<HomeScreen>
     // String? token = dataSnapshot.value as String?;
 
     // if (token == null) {
-      // If the token doesn't exist in the database, generate a new token
-      FirebaseMessaging messaging = FirebaseMessaging.instance;
-     String? token = await messaging.getToken();
+    // If the token doesn't exist in the database, generate a new token
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    String? token = await messaging.getToken();
 
-      // if (token != null) {
-        // Store the newly generated token in the database
-        fcmTokenRef.set(token);
+    // if (token != null) {
+    // Store the newly generated token in the database
+    fcmTokenRef.set(token);
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-            await prefs.setBool('isAppInstalled', true);
+    await prefs.setBool('isAppInstalled', true);
 
-     // }
-   // }
-
+    // }
+    // }
   }
 
   @override
@@ -1215,6 +1216,229 @@ class _HomeScreenState extends State<HomeScreen>
   // }
 
   //testing 1
+//   @override
+//   Widget build(BuildContext context) {
+//     String? currentUserChatHandle =
+//         SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
+//     String appBarTitle = currentUserChatHandle != null
+//         ? '${Constants.APP_BAR_TITLE} ($currentUserChatHandle)'
+//         : Constants.APP_BAR_TITLE;
+
+//     //  SharedPrefs.setBool('termsAgreed', false);
+
+//     bool hasAgreed = SharedPrefs.getBool(SharedPrefsKeys.TERMS_AGREED) ?? false;
+//     if (!hasAgreed) {
+//       WidgetsBinding.instance!.addPostFrameCallback((_) {
+//         showTermsOfServiceDialog(context);
+//       });
+//     }
+
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: Scaffold(
+//         appBar: AppBar(
+//           leading: Image.asset(
+//             'assets/ic_launcher.png',
+//             width: 34,
+//             height: 34,
+//           ),
+//           title: Text(appBarTitle),
+//           actions: [
+//             IconButton(
+//               icon: Image.asset(
+//                 'assets/add_blog.png',
+//                 width: 30,
+//                 height: 30,
+//               ),
+//               onPressed: () {
+//                 // Perform action when chat icon is pressed
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(
+//                       builder: (context) => NewConversationScreen()),
+//                 );
+//               },
+//             ),
+//             IconButton(
+//               icon: Icon(Icons.grid_view_rounded),
+//               onPressed: () async {
+//                 showMarkAsReadUnreadDialog(context);
+//                 // _refreshChatList();
+//                 // Perform action when grid box icon is pressed
+//               },
+//             ),
+//             PopupMenuButton(
+//               itemBuilder: (BuildContext context) {
+//                 return [
+//                   PopupMenuItem(
+//                     child: Text(Constants.SETTINGS),
+//                     value: 'settings',
+//                   ),
+//                   PopupMenuItem(
+//                     child: Text(Constants.TELL_A_FRIEND),
+//                     value: 'tell a friend',
+//                   ),
+//                   PopupMenuItem(
+//                     child: Text(Constants.HELP),
+//                     value: 'help',
+//                   ),
+//                   PopupMenuItem(
+//                     child: Text(Constants.STARRED_CHAT),
+//                     value: 'starred chat',
+//                   ),
+//                   PopupMenuItem(
+//                     child: Text(Constants.REPORT_ABUSE),
+//                     value: 'report abuse',
+//                   ),
+//                   PopupMenuItem(
+//                     child: Text(Constants.REFRESH),
+//                     value: 'refresh',
+//                   ),
+//                   // if (!Platform.isIOS)
+//                   PopupMenuItem(
+//                     child: Text(Constants.EXIT),
+//                     value: 'exit',
+//                   ),
+//                 ];
+//               },
+//               onSelected: (value) async {
+//                 // Perform action when a pop-up menu item is selected
+//                 switch (value) {
+//                   case 'settings':
+//                     //  InterstitialAdManager.showInterstitialAd();
+//                     Navigator.push(
+//                       context,
+//                       MaterialPageRoute(builder: (context) => SettingsScreen()),
+//                     );
+//                     break;
+//                   case 'tell a friend':
+//                     String email = Uri.encodeComponent("");
+//                     String subject =
+//                         Uri.encodeComponent(Constants.CHECK_OUT_TRUCKCHAT);
+//                     String body =
+//                         Uri.encodeComponent(Constants.I_AM_USING_TRUCKCHAT);
+//                     print(subject);
+//                     Uri mail =
+//                         Uri.parse("mailto:$email?subject=$subject&body=$body");
+//                     launchUrl(mail);
+//                     break;
+//                   case 'help':
+//                     Navigator.push(
+//                       context,
+//                       MaterialPageRoute(builder: (context) => Help()),
+//                     );
+//                     break;
+//                   case 'starred chat':
+//                     Navigator.push(
+//                       context,
+//                       MaterialPageRoute(
+//                         builder: (context) => StarredChatList(key: UniqueKey()),
+//                       ),
+//                     );
+//                     break;
+//                   case 'report abuse':
+//                     _showReportAbuseDialog(context);
+//                     break;
+//                   case 'refresh':
+//                     _refreshChatList();
+
+//                     break;
+//                   case 'exit':
+//                     if (Platform.isIOS) {
+//                       // Handle iOS-specific exit behavior (e.g., display an alert)
+//                       showDialog(
+//                         context: context,
+//                         builder: (context) => AlertDialog(
+//                           title: Text(DialogStrings.EXIT),
+//                           content: Text(DialogStrings.ARE_YOU_SURE),
+//                           actions: [
+//                             TextButton(
+//                               onPressed: () => Navigator.of(context).pop(),
+//                               child: Text(DialogStrings.CANCEL),
+//                             ),
+//                             TextButton(
+//                               onPressed: () => Navigator.of(context).pop(true),
+//                               child: Text(DialogStrings.EXIT),
+//                             ),
+//                           ],
+//                         ),
+//                       ).then((exitConfirmed) {
+//                         if (exitConfirmed ?? false) {
+//                           exit(0); // Exit the app
+//                         }
+//                       });
+//                     } else if (Platform.isAndroid) {
+//                       SystemNavigator.pop();
+//                     }
+//                     break;
+//                 }
+//               },
+//             ),
+//           ],
+//         ),
+//         body: Column(
+//           children: [
+//             Expanded(
+//               child: TabBarView(
+//                 controller: _tabController,
+//                 children: [
+//                   NewsTab(
+//                     key: UniqueKey(),
+//                   ),
+//                   ChatListr(key: UniqueKey()),
+//                   SponsorsTab(key: UniqueKey()),
+//                   ReviewsTab(key: UniqueKey()),
+//                   PrivateChatTab(key: UniqueKey()),
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+
+//         bottomNavigationBar: Container(
+//           decoration: BoxDecoration(
+//             boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 2.0)],
+//           ),
+//           child: AdmobBanner(
+//             adUnitId: AdHelper.bannerAdUnitId,
+//             adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+//               width: MediaQuery.of(context).size.width.toInt(),
+//             ),
+//           ),
+//         ),
+
+//         bottomSheet: PreferredSize(
+//           preferredSize: Size.fromHeight(60.0), // Set the height of the TabBar
+//           child: Container(
+//             height: 58.0,
+//             child: TabBar(
+//               controller: _tabController,
+//               tabs: [
+//                 Tab(icon: Icon(Icons.article), text: Constants.NEWS),
+//                 Tab(icon: Icon(Icons.chat), text: Constants.CHATS),
+//                 Tab(icon: Icon(Icons.star), text: Constants.SPONSORS),
+//                 Tab(icon: Icon(Icons.rate_review), text: Constants.REVIEWS),
+//                 Tab(icon: Icon(Icons.person), text: Constants.PRIVATE_CHAT),
+//               ],
+//               unselectedLabelColor:
+//                   Colors.grey, // Color of unselected tab icon and text
+//               labelColor: Colors.blue, // Color of selected tab icon and text
+//               labelPadding: EdgeInsets.symmetric(
+//                   horizontal: 6.0,
+//                   vertical: 2.0), // Add padding around the tab labels
+//             ),
+//           ),
+//         ),
+
+//       ),
+//     );
+//   }
+// }
+
+//testing for overlapping last list item
   @override
   Widget build(BuildContext context) {
     String? currentUserChatHandle =
@@ -1381,6 +1605,7 @@ class _HomeScreenState extends State<HomeScreen>
         body: Column(
           children: [
             Expanded(
+    
               child: TabBarView(
                 controller: _tabController,
                 children: [
@@ -1394,48 +1619,39 @@ class _HomeScreenState extends State<HomeScreen>
                 ],
               ),
             ),
+            BottomAppBar(
+              //color: Colors.blue, // Set background color of the TabBar
+              child: TabBar(
+                controller: _tabController,
+                tabs: [
+                  Tab(
+                    icon: Icon(Icons.article),
+                    text: Constants.NEWS,
+                  ),
+                  Tab(icon: Icon(Icons.chat), text: Constants.CHATS),
+                  Tab(icon: Icon(Icons.star), text: Constants.SPONSORS),
+                  Tab(icon: Icon(Icons.rate_review), text: Constants.REVIEWS),
+                  Tab(icon: Icon(Icons.person), text: Constants.PRIVATE_CHAT),
+                ],
+
+                unselectedLabelColor:
+                    Colors.grey, // Color of unselected tab icon and text
+                labelColor: Colors.blue, // Color of selected tab icon and text
+                labelPadding: EdgeInsets.symmetric(
+                    horizontal: 6.0,
+                    vertical: 0.0), // Add padding around the tab labels
+              ),
+            ),
           ],
         ),
 
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 2.0)],
-          ),
-          child: AdmobBanner(
-            adUnitId: AdHelper.bannerAdUnitId,
-            adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-              width: MediaQuery.of(context).size.width.toInt(),
-            ),
-          ),
-        ),
 
-        bottomSheet: PreferredSize(
-          preferredSize: Size.fromHeight(60.0), // Set the height of the TabBar
-          child: Container(
-            height: 60.0,
-            child: TabBar(
-              controller: _tabController,
-              tabs: [
-                Tab(icon: Icon(Icons.article), text: Constants.NEWS),
-                Tab(icon: Icon(Icons.chat), text: Constants.CHATS),
-                Tab(icon: Icon(Icons.star), text: Constants.SPONSORS),
-                Tab(icon: Icon(Icons.rate_review), text: Constants.REVIEWS),
-                Tab(icon: Icon(Icons.person), text: Constants.PRIVATE_CHAT),
-              ],
-              unselectedLabelColor:
-                  Colors.grey, // Color of unselected tab icon and text
-              labelColor: Colors.blue, // Color of selected tab icon and text
-              labelPadding: EdgeInsets.symmetric(
-                  horizontal: 6.0,
-                  vertical: 2.0), // Add padding around the tab labels
-            ),
+        bottomNavigationBar: AdmobBanner(
+          adUnitId: AdHelper.bannerAdUnitId,
+          adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+            width: MediaQuery.of(context).size.width.toInt(),
           ),
         ),
-        //           AdmobBanner(
-        //   adUnitId: AdHelper.bannerAdUnitId,
-        //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-        //       width: MediaQuery.of(context).size.width.toInt()),
-        // )
       ),
     );
   }
@@ -1471,24 +1687,200 @@ class SponsorsTab extends StatelessWidget {
   }
 }
 
-class ReviewsTab extends StatelessWidget {
-  final Key key;
+// class ReviewsTab extends StatelessWidget {
+//   final Key key;
 
-  ReviewsTab({
-    required this.key,
-  });
+//   ReviewsTab({
+//     required this.key,
+//   });
 
-  final String sponsorUrl = API.REVIEWS;
+//   final String sponsorUrl = API.REVIEWS;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return InAppWebView(
+      
+//         initialUrlRequest: URLRequest(url: Uri.parse(sponsorUrl)),
+//     );
+//   }
+// }
+
+
+
+
+
+// class ReviewsTab extends StatelessWidget {
+//   final Key key;
+//   late final WebViewController controller;
+
+//   ReviewsTab({
+//     required this.key,
+//   });
+
+//   final String sponsorUrl = API.REVIEWS;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return FlutterWebView(
+//       url: sponsorUrl,
+//       javascriptEnabled: true,
+//       gestureRecognizers: Set()
+//         ..add(Factory<VerticalDragGestureRecognizer>(
+//             () => VerticalDragGestureRecognizer())),
+//     );
+//   }
+// }
+class ReviewsTab extends StatefulWidget {
+  const ReviewsTab({super.key});
+
+  @override
+  State<ReviewsTab> createState() => _ReviewsTabState();
+}
+
+class _ReviewsTabState extends State<ReviewsTab> {
+  late final WebViewController controller;
+   final String sponsorUrl = API.REVIEWS;
+final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+  Factory(() => EagerGestureRecognizer())
+};
+  @override
+  void initState() {
+    super.initState();
+    controller = WebViewController()
+      ..loadRequest(
+        Uri.parse(sponsorUrl),
+      );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: InAppWebView(
-        initialUrlRequest: URLRequest(url: Uri.parse(sponsorUrl)),
+    return Scaffold(
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height, // Set explicit height
+        child: WebViewWidget(
+   gestureRecognizers: gestureRecognizers,
+          controller: controller,
+        ),
       ),
     );
   }
 }
+
+
+
+
+
+// class ReviewsTab extends StatelessWidget {
+//   final Key key;
+
+//   ReviewsTab({
+//     required this.key,
+//   });
+
+//   final String sponsorUrl = API.REVIEWS;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // Get the height of the screen
+//     double screenHeight = MediaQuery.of(context).size.height;
+
+//     return SingleChildScrollView(
+//       child: SizedBox(
+//         height: screenHeight, // Set the height to the screen height
+//         child: InAppWebView(
+//           initialUrlRequest: URLRequest(url: Uri.parse(sponsorUrl)),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+
+// class ReviewsTab extends StatelessWidget {
+//   final Key key;
+
+//   ReviewsTab({
+//     required this.key,
+//   });
+
+//   final String sponsorUrl = API.REVIEWS;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return WebviewScaffold(
+//       url: sponsorUrl,
+//     );
+//   }
+// }
+
+
+
+
+// class ReviewsTab extends StatelessWidget {
+//   final Key key;
+
+//   ReviewsTab({
+//     required this.key,
+//   });
+
+//   final String sponsorUrl = API.REVIEWS;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: NestedScrollView(
+//         headerSliverBuilder: (context, innerBoxIsScrolled) {
+//           return [
+//             // SliverAppBar(
+//             //   pinned: true,
+//             //   // Add any other SliverAppBar properties as needed
+//             // ),
+//           ];
+//         },
+//         body: Container(
+//           child: InAppWebView(
+//             initialUrlRequest: URLRequest(url: Uri.parse(sponsorUrl)),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+// class ReviewsTab extends StatelessWidget {
+//   final Key key;
+
+//   ReviewsTab({
+//     required this.key,
+//   });
+
+//   final String sponsorUrl = API.REVIEWS;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: CustomScrollView(
+//         slivers: [
+      
+//           SliverFillRemaining(
+//             hasScrollBody: true,
+//             child: InAppWebView(
+//               initialUrlRequest: URLRequest(url: Uri.parse(sponsorUrl)),
+//             ),
+//           ),
+       
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+
+
+
+
 
 class Help extends StatelessWidget {
   final String sponsorUrl = API.HELP;
