@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>520203771626-p4uurp45cdboknkrlnskj24qte68i3an.apps.googleusercontent.com</string>
+	<string>520203771626-3l8bqigis6o0on4bmfc8r5rsd8cign50.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.520203771626-p4uurp45cdboknkrlnskj24qte68i3an</string>
+	<string>com.googleusercontent.apps.520203771626-3l8bqigis6o0on4bmfc8r5rsd8cign50</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBjJ8tqSyBE7neJT-nDnFBz47OjiHtIouA</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.teletype.truckchat2.ios</string>
+	<string>com.truckchat.app</string>
 	<key>PROJECT_ID</key>
 	<string>truckchat2-515da</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:520203771626:ios:c38687ce0fc0b6d80bc193</string>
+	<string>1:520203771626:ios:5773ef567d6c90920bc193</string>
 	<key>DATABASE_URL</key>
 	<string>https://truckchat2-515da.firebaseio.com</string>
 </dict>

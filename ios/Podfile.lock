@@ -631,6 +631,8 @@ PODS:
   - admob_flutter (1.0.0):
     - Flutter
     - Google-Mobile-Ads-SDK (~> 7.64)
+  - app_settings (4.3.0):
+    - Flutter
   - BoringSSL-GRPC (0.0.24):
     - BoringSSL-GRPC/Implementation (= 0.0.24)
     - BoringSSL-GRPC/Interface (= 0.0.24)
@@ -867,9 +869,12 @@ PODS:
   - Try (2.1.1)
   - url_launcher_ios (0.0.1):
     - Flutter
+  - webview_flutter_wkwebview (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - admob_flutter (from `.symlinks/plugins/admob_flutter/ios`)
+  - app_settings (from `.symlinks/plugins/app_settings/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
@@ -886,6 +891,7 @@ DEPENDENCIES:
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - speech_to_text (from `.symlinks/plugins/speech_to_text/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
   trunk:
@@ -920,6 +926,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   admob_flutter:
     :path: ".symlinks/plugins/admob_flutter/ios"
+  app_settings:
+    :path: ".symlinks/plugins/app_settings/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   device_info:
@@ -952,10 +960,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/speech_to_text/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
   admob_flutter: 370023e0bc3f49a44ba94f14009e0728bffe43e8
+  app_settings: ee4ae4d1c9a907a23b81c40e5c56a5ca8a20a62b
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   cloud_firestore: ac09bcf42ed1f477cb6eeb1d5937255023862e29
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
@@ -998,6 +1009,7 @@ SPEC CHECKSUMS:
   speech_to_text: b43a7d99aef037bd758ed8e45d79bbac035d2dfe
   Try: 5ef669ae832617b3cee58cb2c6f99fb767a4ff96
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
+  webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
 
 PODFILE CHECKSUM: fff3348f19d060f45045a9c9fbca3a264147c2f7
 

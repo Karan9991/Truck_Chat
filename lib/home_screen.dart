@@ -914,9 +914,9 @@ class _HomeScreenState extends State<HomeScreen>
     if (notificationType == 'public') {
       _refreshChatList();
 
-      if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
-        FlutterBeep.beep();
-      }
+      // if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
+      //   FlutterBeep.beep();
+      // }
     }
   }
 
@@ -1676,60 +1676,20 @@ class SponsorsTab extends StatelessWidget {
   });
 
   final String sponsorUrl = API.SPONSORS;
-
+final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+  Factory(() => EagerGestureRecognizer())
+};
   @override
   Widget build(BuildContext context) {
     return Container(
       child: InAppWebView(
+        gestureRecognizers: gestureRecognizers,
         initialUrlRequest: URLRequest(url: Uri.parse(sponsorUrl)),
       ),
     );
   }
 }
 
-// class ReviewsTab extends StatelessWidget {
-//   final Key key;
-
-//   ReviewsTab({
-//     required this.key,
-//   });
-
-//   final String sponsorUrl = API.REVIEWS;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return InAppWebView(
-      
-//         initialUrlRequest: URLRequest(url: Uri.parse(sponsorUrl)),
-//     );
-//   }
-// }
-
-
-
-
-
-// class ReviewsTab extends StatelessWidget {
-//   final Key key;
-//   late final WebViewController controller;
-
-//   ReviewsTab({
-//     required this.key,
-//   });
-
-//   final String sponsorUrl = API.REVIEWS;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return FlutterWebView(
-//       url: sponsorUrl,
-//       javascriptEnabled: true,
-//       gestureRecognizers: Set()
-//         ..add(Factory<VerticalDragGestureRecognizer>(
-//             () => VerticalDragGestureRecognizer())),
-//     );
-//   }
-// }
 class ReviewsTab extends StatefulWidget {
   const ReviewsTab({super.key});
 
@@ -1765,121 +1725,6 @@ final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     );
   }
 }
-
-
-
-
-
-// class ReviewsTab extends StatelessWidget {
-//   final Key key;
-
-//   ReviewsTab({
-//     required this.key,
-//   });
-
-//   final String sponsorUrl = API.REVIEWS;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // Get the height of the screen
-//     double screenHeight = MediaQuery.of(context).size.height;
-
-//     return SingleChildScrollView(
-//       child: SizedBox(
-//         height: screenHeight, // Set the height to the screen height
-//         child: InAppWebView(
-//           initialUrlRequest: URLRequest(url: Uri.parse(sponsorUrl)),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-
-// class ReviewsTab extends StatelessWidget {
-//   final Key key;
-
-//   ReviewsTab({
-//     required this.key,
-//   });
-
-//   final String sponsorUrl = API.REVIEWS;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return WebviewScaffold(
-//       url: sponsorUrl,
-//     );
-//   }
-// }
-
-
-
-
-// class ReviewsTab extends StatelessWidget {
-//   final Key key;
-
-//   ReviewsTab({
-//     required this.key,
-//   });
-
-//   final String sponsorUrl = API.REVIEWS;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: NestedScrollView(
-//         headerSliverBuilder: (context, innerBoxIsScrolled) {
-//           return [
-//             // SliverAppBar(
-//             //   pinned: true,
-//             //   // Add any other SliverAppBar properties as needed
-//             // ),
-//           ];
-//         },
-//         body: Container(
-//           child: InAppWebView(
-//             initialUrlRequest: URLRequest(url: Uri.parse(sponsorUrl)),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-// class ReviewsTab extends StatelessWidget {
-//   final Key key;
-
-//   ReviewsTab({
-//     required this.key,
-//   });
-
-//   final String sponsorUrl = API.REVIEWS;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: CustomScrollView(
-//         slivers: [
-      
-//           SliverFillRemaining(
-//             hasScrollBody: true,
-//             child: InAppWebView(
-//               initialUrlRequest: URLRequest(url: Uri.parse(sponsorUrl)),
-//             ),
-//           ),
-       
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-
-
-
 
 
 class Help extends StatelessWidget {

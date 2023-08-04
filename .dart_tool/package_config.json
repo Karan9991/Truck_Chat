@@ -14,6 +14,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "app_settings",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/app_settings-5.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "args",
       "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/args-2.4.2",
       "packageUri": "lib/",
@@ -387,21 +393,21 @@
     },
     {
       "name": "location",
-      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/location-4.4.0",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/location-5.0.2+1",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "location_platform_interface",
-      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/location_platform_interface-2.3.0",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/location_platform_interface-3.1.1",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "location_web",
-      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/location_web-3.1.1",
+      "rootUri": "file:///Users/karandeepsingh/.pub-cache/hosted/pub.dev/location_web-4.1.1",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "matcher",
@@ -728,7 +734,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-08-03T04:38:57.229521Z",
+  "generated": "2023-08-04T16:02:57.443792Z",
   "generator": "pub",
   "generatorVersion": "3.0.1"
 }

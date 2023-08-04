@@ -975,7 +975,7 @@ class _ChatListrState extends State<ChatListr>
   List<String> serverMsgIds = [];
 
   Timer? conversationTimer;
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   bool get wantKeepAlive => true;
@@ -986,7 +986,11 @@ class _ChatListrState extends State<ChatListr>
     super.initState();
 
 
-    getData();
+    getData().then((_) {
+      setState(() {
+        isLoading = false; // Step 4: Set isLoading to false once data is loaded
+      });
+    });
 
 
     // _refreshChat();
@@ -1148,7 +1152,7 @@ class _ChatListrState extends State<ChatListr>
 
                 conversations.add(conversation);
 
-                setState(() {});
+              //  setState(() {});
               } catch (e) {
                 // Handle JSON decoding error
               }
@@ -1180,12 +1184,12 @@ class _ChatListrState extends State<ChatListr>
       body: FutureBuilder<List<Conversation>>(
         future: getStoredConversations(),
         builder: (context, snapshot) {
-          // if (snapshot.connectionState == ConnectionState.waiting ||
-          //     isLoading) {
-          //   return Center(
-          //     child: CircularProgressIndicator(),
-          //   );
-          // } else
+          if (snapshot.connectionState == ConnectionState.waiting ||
+              isLoading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else
           if (snapshot.hasData) {
             List<Conversation> storedConversations = snapshot.data!;
 
@@ -1225,7 +1229,7 @@ class _ChatListrState extends State<ChatListr>
                       setState(() {}); // Trigger a rebuild of the widget
                     }
 
-                    //  InterstitialAdManager.showInterstitialAd();
+                     //InterstitialAdManager.showInterstitialAd();
 
                     Navigator.push(
                       context,

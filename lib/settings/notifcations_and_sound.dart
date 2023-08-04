@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:chat/utils/ads.dart';
+import 'package:app_settings/app_settings.dart';
 
 class NotificationsAndSoundScreen extends StatefulWidget {
   @override
@@ -41,10 +44,9 @@ class _NotificationsAndSoundScreenState
         children: [
           Expanded(
             child: ListView(
-              padding: EdgeInsets.fromLTRB(0.0,16.0,0.0,16.0),
+              padding: EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 16.0),
               children: [
-                                Divider(),
-
+                Divider(),
                 _buildListTile(
                   Constants.CHAT_TONES,
                   Constants.PLAY_A_SOUND,
@@ -70,8 +72,7 @@ class _NotificationsAndSoundScreenState
                     SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS, value!);
                   },
                 ),
-                                Divider(),
-
+                Divider(),
                 _buildListTile(
                   Constants.NOTIFICATION_TONE,
                   Constants.NOTIFICATION_MESSAGES_WILL_PLAY,
@@ -81,12 +82,16 @@ class _NotificationsAndSoundScreenState
                     setState(() {
                       notificationToneEnabled = value;
                     });
-                    SharedPrefs.setBool(
-                        SharedPrefsKeys.NOTIFICATIONS_TONE, value!);
+                    if (Platform.isIOS) {
+                      AppSettings.openAppSettings(
+                          type: AppSettingsType.notification);
+                    } else {
+                      SharedPrefs.setBool(
+                          SharedPrefsKeys.NOTIFICATIONS_TONE, value!);
+                    }
                   },
                 ),
-                                Divider(),
-
+                Divider(),
                 _buildListTile(
                   Constants.VIBRATE,
                   Constants.NOTIFICATION_MESSAGES_WILL_VIBRATE,
@@ -96,11 +101,15 @@ class _NotificationsAndSoundScreenState
                     setState(() {
                       vibrateEnabled = value;
                     });
-                    SharedPrefs.setBool(SharedPrefsKeys.VIBRATE, value!);
+                    if (Platform.isIOS) {
+                      AppSettings.openAppSettings(
+                          type: AppSettingsType.notification);
+                    } else {
+                      SharedPrefs.setBool(SharedPrefsKeys.VIBRATE, value!);
+                    }
                   },
                 ),
-                                Divider(),
-
+                Divider(),
                 _buildListTile(
                   Constants.PRIVATE_CHAT,
                   Constants.ALLOW_USERS_TO,
@@ -113,8 +122,7 @@ class _NotificationsAndSoundScreenState
                     SharedPrefs.setBool(SharedPrefsKeys.PRIVATE_CHAT, value!);
                   },
                 ),
-                                Divider(),
-
+                Divider(),
               ],
             ),
           ),
@@ -158,18 +166,25 @@ class _NotificationsAndSoundScreenState
             // fontWeight: FontWeight.bold,
           ),
         ),
-        trailing: Checkbox(
-          value: value ?? false,
-          onChanged: (newValue) {
-            setState(() {
-              value = newValue;
-            });
-            onChanged(value);
-            SharedPrefs.setBool(key, value!);
-            print('check box $key ${SharedPrefs.getBool(key)}');
-          },
-          activeColor: Colors.blue,
-        ),
+        trailing:Platform.isIOS &&  (key == SharedPrefsKeys.NOTIFICATIONS_TONE ||
+                key == SharedPrefsKeys.VIBRATE)
+            ? Icon(
+                Icons.arrow_circle_right_outlined,
+                color: Colors.blue,
+                size: 30,
+              )
+            : Checkbox(
+                value: value ?? false,
+                onChanged: (newValue) {
+                  setState(() {
+                    value = newValue;
+                  });
+                  onChanged(value);
+                  SharedPrefs.setBool(key, value!);
+                  print('check box $key ${SharedPrefs.getBool(key)}');
+                },
+                activeColor: Colors.blue,
+              ),
       ),
     );
   }

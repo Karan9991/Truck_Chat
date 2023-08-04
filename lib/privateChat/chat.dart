@@ -497,7 +497,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 // setState(() {
                 //   _isUserOnChatScreen = false;
                 // });
-          _updateNewMessage(false);
+                _updateNewMessage(false);
 
                 Navigator.of(context).pop();
               },
@@ -821,8 +821,9 @@ class _ChatScreenState extends State<ChatScreen> {
           'notification': <String, dynamic>{
             'body': notificationBody,
             'title': notificationTitle,
+            'sound': 'default',
           },
-          'priority': 'high',
+          // 'priority': 'high',
           'data': <String, dynamic>{
             'click_action': 'FLUTTER_NOTIFICATION_CLICK',
             'type': 'private',

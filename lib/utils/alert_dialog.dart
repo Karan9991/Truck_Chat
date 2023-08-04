@@ -413,7 +413,7 @@ void showBlockUserDialog(
           children: [
             ListTile(
               leading: Icon(Icons.block, color: Colors.red,),
-              title: Text(isBlocked ? 'Unblock user' : 'Block user'),
+              title: Text(isBlocked ? 'Unblock this user' : 'Block this user'),
               onTap: () {
                 Navigator.pop(context); // Close the options menu
                 onBlockUnblock();

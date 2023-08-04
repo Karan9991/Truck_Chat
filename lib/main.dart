@@ -51,7 +51,7 @@ void main() async {
 
   if (!isAppInstalled) {
     await initNotificationsAndSoundPrefs();
-      await registerDevice();
+    await registerDevice();
     // await prefs.setBool('isAppInstalled', true);
   }
 
@@ -88,8 +88,8 @@ class MyApp extends StatelessWidget {
       ),
       // home: SendRequestScreen(senderId: '1', receiverId: '2'),
       // home: ChatScreen(chatId: '21'),
-     // home: ReviewsTab(key: UniqueKey(),),
-       home: HomeScreen(),
+      // home: ReviewsTab(key: UniqueKey(),),
+      home: HomeScreen(),
     );
   }
 }
@@ -278,7 +278,10 @@ void _configureFCM() {
 
     print('notification $title');
 
-    handleFCMMessage(message.data, message);
+    bool? notifications = SharedPrefs.getBool(SharedPrefsKeys.NOTIFICATIONS);
+    if (notifications!) {
+      handleFCMMessage(message.data, message);
+    }
 
     if (message.notification != null) {
       //  showNotification(message.notification!);
@@ -373,8 +376,8 @@ void showNotification(String? title, String? body) async {
   String channelId = await getNotificationChannelId();
   bool shouldPlaySound =
       (channelId == 'tone_channel' || channelId == 'tone_and_vibrate_channel');
-  bool shouldEnableVibration = (channelId == 'vibrate_channel' || channelId == 'tone_and_vibrate_channel');
-
+  bool shouldEnableVibration = (channelId == 'vibrate_channel' ||
+      channelId == 'tone_and_vibrate_channel');
 
   AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
@@ -403,7 +406,6 @@ void showNotification(String? title, String? body) async {
   );
 }
 
-//original AndroidInitializationSettings('@drawable/app_icon_foreground');
 void configLocalNotification() {
   AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@drawable/ic_launcher');

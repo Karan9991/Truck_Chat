@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 application
-INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:12:5-67:19
+INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:14:5-69:19
 MERGED from [:firebase_database] /Users/karandeepsingh/Downloads/Truck_Chat/build/firebase_database/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-15:19
 MERGED from [:firebase_database] /Users/karandeepsingh/Downloads/Truck_Chat/build/firebase_database/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-15:19
 MERGED from [:cloud_firestore] /Users/karandeepsingh/Downloads/Truck_Chat/build/cloud_firestore/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-15:19
@@ -53,8 +53,8 @@ MERGED from [com.google.firebase:firebase-datatransport:18.1.7] /Users/karandeep
 MERGED from [com.google.firebase:firebase-datatransport:18.1.7] /Users/karandeepsingh/.gradle/caches/transforms-3/b7e8a2b8dfcc6e63342ab44b2dbe8c44/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:23:5-31:19
 MERGED from [com.google.firebase:firebase-common:20.3.3] /Users/karandeepsingh/.gradle/caches/transforms-3/97ba536cb97715cf3a6afeff735547bd/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:24:5-37:19
 MERGED from [com.google.firebase:firebase-common:20.3.3] /Users/karandeepsingh/.gradle/caches/transforms-3/97ba536cb97715cf3a6afeff735547bd/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:24:5-37:19
-MERGED from [com.google.android.gms:play-services-location:16.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/eb0c8bf1d296a5c3187fb2c00658a54f/transformed/jetified-play-services-location-16.0.0/AndroidManifest.xml:7:5-20
-MERGED from [com.google.android.gms:play-services-location:16.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/eb0c8bf1d296a5c3187fb2c00658a54f/transformed/jetified-play-services-location-16.0.0/AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-location:21.0.1] /Users/karandeepsingh/.gradle/caches/transforms-3/5f4706813551eaac76794936f03a9a7d/transformed/jetified-play-services-location-21.0.1/AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-location:21.0.1] /Users/karandeepsingh/.gradle/caches/transforms-3/5f4706813551eaac76794936f03a9a7d/transformed/jetified-play-services-location-21.0.1/AndroidManifest.xml:7:5-20
 MERGED from [com.google.firebase:firebase-appcheck-interop:17.0.1] /Users/karandeepsingh/.gradle/caches/transforms-3/a7e4be7e4fe779244a8d6c5c911b399b/transformed/jetified-firebase-appcheck-interop-17.0.1/AndroidManifest.xml:23:5-20
 MERGED from [com.google.firebase:firebase-appcheck-interop:17.0.1] /Users/karandeepsingh/.gradle/caches/transforms-3/a7e4be7e4fe779244a8d6c5c911b399b/transformed/jetified-firebase-appcheck-interop-17.0.1/AndroidManifest.xml:23:5-20
 MERGED from [com.google.android.gms:play-services-base:18.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/f4c0500116144bc04cff0b0b27625b15/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:19:5-23:19
@@ -67,8 +67,6 @@ MERGED from [com.google.android.gms:play-services-gass:19.1.0] /Users/karandeeps
 MERGED from [com.google.android.gms:play-services-gass:19.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/8e568e15490c56618e06f219212d1fad/transformed/jetified-play-services-gass-19.1.0/AndroidManifest.xml:7:5-20
 MERGED from [com.google.android.gms:play-services-tasks:18.0.2] /Users/karandeepsingh/.gradle/caches/transforms-3/bfd28fc2b5a92ccad584767ef1a7f0c7/transformed/jetified-play-services-tasks-18.0.2/AndroidManifest.xml:5:5-20
 MERGED from [com.google.android.gms:play-services-tasks:18.0.2] /Users/karandeepsingh/.gradle/caches/transforms-3/bfd28fc2b5a92ccad584767ef1a7f0c7/transformed/jetified-play-services-tasks-18.0.2/AndroidManifest.xml:5:5-20
-MERGED from [com.google.android.gms:play-services-places-placereport:16.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/0b0abd616622750a42c926d460ef388c/transformed/jetified-play-services-places-placereport-16.0.0/AndroidManifest.xml:22:5-20
-MERGED from [com.google.android.gms:play-services-places-placereport:16.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/0b0abd616622750a42c926d460ef388c/transformed/jetified-play-services-places-placereport-16.0.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.gms:play-services-measurement:21.3.0] /Users/karandeepsingh/.gradle/caches/transforms-3/b00981f9f6519a10f9b5d1ffa94b525e/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:28:5-44:19
 MERGED from [com.google.android.gms:play-services-measurement:21.3.0] /Users/karandeepsingh/.gradle/caches/transforms-3/b00981f9f6519a10f9b5d1ffa94b525e/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:28:5-44:19
 MERGED from [com.google.android.gms:play-services-measurement-sdk:21.3.0] /Users/karandeepsingh/.gradle/caches/transforms-3/965942a91b3864800db535c5e19cbd80/transformed/jetified-play-services-measurement-sdk-21.3.0/AndroidManifest.xml:22:5-23:19
@@ -112,11 +110,11 @@ MERGED from [com.google.android.gms:play-services-ads-base:19.1.0] /Users/karand
 	android:name
 		INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml
 manifest
-ADDED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-68:12
-INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-68:12
-INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-68:12
-INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-68:12
-MERGED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-68:12
+ADDED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-70:12
+INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-70:12
+INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-70:12
+INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-70:12
+MERGED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-70:12
 MERGED from [:firebase_database] /Users/karandeepsingh/Downloads/Truck_Chat/build/firebase_database/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-17:12
 MERGED from [:cloud_firestore] /Users/karandeepsingh/Downloads/Truck_Chat/build/cloud_firestore/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-17:12
 MERGED from [:firebase_auth] /Users/karandeepsingh/Downloads/Truck_Chat/build/firebase_auth/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-17:12
@@ -126,6 +124,7 @@ MERGED from [:firebase_core] /Users/karandeepsingh/Downloads/Truck_Chat/build/fi
 MERGED from [:speech_to_text] /Users/karandeepsingh/Downloads/Truck_Chat/build/speech_to_text/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:image_picker_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-21:12
 MERGED from [:flutter_plugin_android_lifecycle] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_plugin_android_lifecycle/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:app_settings] /Users/karandeepsingh/Downloads/Truck_Chat/build/app_settings/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:flutter_local_notifications] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_local_notifications/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-34:12
 MERGED from [:url_launcher_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-16:12
 MERGED from [:admob_flutter] /Users/karandeepsingh/Downloads/Truck_Chat/build/admob_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
@@ -153,7 +152,7 @@ MERGED from [com.google.android.gms:play-services-measurement-api:21.3.0] /Users
 MERGED from [com.google.firebase:firebase-installations:17.1.3] /Users/karandeepsingh/.gradle/caches/transforms-3/984bb6232f18c5f046bd81aceaf2d212/transformed/jetified-firebase-installations-17.1.3/AndroidManifest.xml:2:1-23:12
 MERGED from [com.google.firebase:firebase-datatransport:18.1.7] /Users/karandeepsingh/.gradle/caches/transforms-3/b7e8a2b8dfcc6e63342ab44b2dbe8c44/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:15:1-33:12
 MERGED from [com.google.firebase:firebase-common:20.3.3] /Users/karandeepsingh/.gradle/caches/transforms-3/97ba536cb97715cf3a6afeff735547bd/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:15:1-39:12
-MERGED from [com.google.android.gms:play-services-location:16.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/eb0c8bf1d296a5c3187fb2c00658a54f/transformed/jetified-play-services-location-16.0.0/AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.android.gms:play-services-location:21.0.1] /Users/karandeepsingh/.gradle/caches/transforms-3/5f4706813551eaac76794936f03a9a7d/transformed/jetified-play-services-location-21.0.1/AndroidManifest.xml:2:1-9:12
 MERGED from [com.google.firebase:firebase-appcheck-interop:17.0.1] /Users/karandeepsingh/.gradle/caches/transforms-3/a7e4be7e4fe779244a8d6c5c911b399b/transformed/jetified-firebase-appcheck-interop-17.0.1/AndroidManifest.xml:15:1-25:12
 MERGED from [com.google.firebase:firebase-database-collection:18.0.1] /Users/karandeepsingh/.gradle/caches/transforms-3/712aabd21e690e376ba6198484dbb57a/transformed/jetified-firebase-database-collection-18.0.1/AndroidManifest.xml:2:1-9:12
 MERGED from [com.google.android.gms:play-services-auth-api-phone:17.4.0] /Users/karandeepsingh/.gradle/caches/transforms-3/d44764364e163b8d60b067fe22ab2915/transformed/jetified-play-services-auth-api-phone-17.4.0/AndroidManifest.xml:2:1-7:12
@@ -165,7 +164,6 @@ MERGED from [com.google.android.gms:play-services-cloud-messaging:17.0.1] /Users
 MERGED from [com.google.android.gms:play-services-ads:19.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/6072f77e335b429f56353ab1d4e9c427/transformed/jetified-play-services-ads-19.1.0/AndroidManifest.xml:17:1-25:12
 MERGED from [com.google.android.gms:play-services-gass:19.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/8e568e15490c56618e06f219212d1fad/transformed/jetified-play-services-gass-19.1.0/AndroidManifest.xml:2:1-9:12
 MERGED from [com.google.android.gms:play-services-tasks:18.0.2] /Users/karandeepsingh/.gradle/caches/transforms-3/bfd28fc2b5a92ccad584767ef1a7f0c7/transformed/jetified-play-services-tasks-18.0.2/AndroidManifest.xml:2:1-6:12
-MERGED from [com.google.android.gms:play-services-places-placereport:16.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/0b0abd616622750a42c926d460ef388c/transformed/jetified-play-services-places-placereport-16.0.0/AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.android.gms:play-services-measurement:21.3.0] /Users/karandeepsingh/.gradle/caches/transforms-3/b00981f9f6519a10f9b5d1ffa94b525e/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:17:1-46:12
 MERGED from [com.google.android.gms:play-services-measurement-sdk:21.3.0] /Users/karandeepsingh/.gradle/caches/transforms-3/965942a91b3864800db535c5e19cbd80/transformed/jetified-play-services-measurement-sdk-21.3.0/AndroidManifest.xml:17:1-25:12
 MERGED from [com.google.android.gms:play-services-measurement-impl:21.3.0] /Users/karandeepsingh/.gradle/caches/transforms-3/7fc7a1c024d0d0437111f86e16133c85/transformed/jetified-play-services-measurement-impl-21.3.0/AndroidManifest.xml:17:1-32:12
@@ -182,11 +180,11 @@ MERGED from [androidx.media:media:1.1.0] /Users/karandeepsingh/.gradle/caches/tr
 MERGED from [androidx.webkit:webkit:1.7.0] /Users/karandeepsingh/.gradle/caches/transforms-3/f6701cdb803a2ca6a6bf85dbd0573235/transformed/webkit-1.7.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.browser:browser:1.4.0] /Users/karandeepsingh/.gradle/caches/transforms-3/3df77d3f0e42ee5d73cdfadb8bcdc01c/transformed/browser-1.4.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/d5f3815dfe40e797f34b499819b1d7cc/transformed/swiperefreshlayout-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core-ktx:1.10.1] /Users/karandeepsingh/.gradle/caches/transforms-3/b07364c9ba41f48fb110deff927d2342/transformed/jetified-core-ktx-1.10.1/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.window:window-java:1.0.0-beta04] /Users/karandeepsingh/.gradle/caches/transforms-3/3c0e35d493ccd3f2bb8b07f96b013b9c/transformed/jetified-window-java-1.0.0-beta04/AndroidManifest.xml:17:1-23:12
 MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/c509b9e3fe4b622170021d255a2c783f/transformed/drawerlayout-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /Users/karandeepsingh/.gradle/caches/transforms-3/a2865fe33e16ee3047cda5a689a86757/transformed/jetified-emoji2-views-helper-1.2.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.emoji2:emoji2:1.2.0] /Users/karandeepsingh/.gradle/caches/transforms-3/da24b2c9b78ceeb51433bb8918b899ac/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:17:1-35:12
-MERGED from [androidx.core:core-ktx:1.10.1] /Users/karandeepsingh/.gradle/caches/transforms-3/b07364c9ba41f48fb110deff927d2342/transformed/jetified-core-ktx-1.10.1/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/fd791e784c4b2f2341eb254a85e9c4e9/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.window:window:1.0.0-beta04] /Users/karandeepsingh/.gradle/caches/transforms-3/003a22a5515e1f77f89701a46efbc2ec/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:17:1-33:12
 MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/4784b4855fb8c719a7e70c51ab3b37cf/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
@@ -219,8 +217,8 @@ MERGED from [com.google.android.datatransport:transport-api:3.0.0] /Users/karand
 MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/karandeepsingh/.gradle/caches/transforms-3/c3d1a040da39b00577728d316d17148e/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/32c376f3db9496fb410aa857524de6c4/transformed/documentfile-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/4b183a414cf16d41db3d306c67a6a6a1/transformed/print-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [io.grpc:grpc-android:1.52.1] /Users/karandeepsingh/.gradle/caches/transforms-3/b8d152da90f8ad50ccb85843bc53a8de/transformed/jetified-grpc-android-1.52.1/AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.annotation:annotation-experimental:1.3.0] /Users/karandeepsingh/.gradle/caches/transforms-3/3c4bea41a39e2ef91e4e90c0edbcdf3e/transformed/jetified-annotation-experimental-1.3.0/AndroidManifest.xml:17:1-22:12
+MERGED from [io.grpc:grpc-android:1.52.1] /Users/karandeepsingh/.gradle/caches/transforms-3/b8d152da90f8ad50ccb85843bc53a8de/transformed/jetified-grpc-android-1.52.1/AndroidManifest.xml:2:1-11:12
 MERGED from [com.google.firebase:protolite-well-known-types:18.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/a8f3976df63db55bd2a7ed93bbfe7223/transformed/jetified-protolite-well-known-types-18.0.0/AndroidManifest.xml:2:1-11:12
 MERGED from [com.google.android.gms:play-services-ads-base:19.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/11f4a51cac7d587ab2814098c4770e50/transformed/jetified-play-services-ads-base-19.1.0/AndroidManifest.xml:2:1-9:12
 INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/debug/AndroidManifest.xml:1:1-7:12
@@ -228,15 +226,15 @@ INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/debug/A
 INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 	package
 		INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-68:12
+		ADDED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-70:12
 		INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/debug/AndroidManifest.xml
 	android:versionName
 		INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-68:12
+		ADDED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-70:12
 		INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/debug/AndroidManifest.xml
 	android:versionCode
 		INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-68:12
+		ADDED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:1-70:12
 		INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/debug/AndroidManifest.xml
 	xmlns:android
 		ADDED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:1:11-69
@@ -308,6 +306,18 @@ uses-permission#android.permission.READ_EXTERNAL_STORAGE
 ADDED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:10:1-76
 	android:name
 		ADDED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:10:18-73
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:11:1-75
+MERGED from [:location] /Users/karandeepsingh/Downloads/Truck_Chat/build/location/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-79
+MERGED from [:location] /Users/karandeepsingh/Downloads/Truck_Chat/build/location/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-79
+	android:name
+		ADDED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:11:18-72
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:12:1-77
+MERGED from [:location] /Users/karandeepsingh/Downloads/Truck_Chat/build/location/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-81
+MERGED from [:location] /Users/karandeepsingh/Downloads/Truck_Chat/build/location/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-81
+	android:name
+		ADDED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml:12:18-74
 uses-sdk
 INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/karandeepsingh/Downloads/Truck_Chat/android/app/src/main/AndroidManifest.xml
@@ -330,6 +340,8 @@ MERGED from [:image_picker_android] /Users/karandeepsingh/Downloads/Truck_Chat/b
 MERGED from [:image_picker_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_plugin_android_lifecycle] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_plugin_android_lifecycle/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_plugin_android_lifecycle] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_plugin_android_lifecycle/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:app_settings] /Users/karandeepsingh/Downloads/Truck_Chat/build/app_settings/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:app_settings] /Users/karandeepsingh/Downloads/Truck_Chat/build/app_settings/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_local_notifications] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_local_notifications/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_local_notifications] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_local_notifications/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:url_launcher_android] /Users/karandeepsingh/Downloads/Truck_Chat/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
@@ -384,8 +396,8 @@ MERGED from [com.google.firebase:firebase-datatransport:18.1.7] /Users/karandeep
 MERGED from [com.google.firebase:firebase-datatransport:18.1.7] /Users/karandeepsingh/.gradle/caches/transforms-3/b7e8a2b8dfcc6e63342ab44b2dbe8c44/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:18:5-20:41
 MERGED from [com.google.firebase:firebase-common:20.3.3] /Users/karandeepsingh/.gradle/caches/transforms-3/97ba536cb97715cf3a6afeff735547bd/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:19:5-21:41
 MERGED from [com.google.firebase:firebase-common:20.3.3] /Users/karandeepsingh/.gradle/caches/transforms-3/97ba536cb97715cf3a6afeff735547bd/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:19:5-21:41
-MERGED from [com.google.android.gms:play-services-location:16.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/eb0c8bf1d296a5c3187fb2c00658a54f/transformed/jetified-play-services-location-16.0.0/AndroidManifest.xml:5:5-44
-MERGED from [com.google.android.gms:play-services-location:16.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/eb0c8bf1d296a5c3187fb2c00658a54f/transformed/jetified-play-services-location-16.0.0/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-location:21.0.1] /Users/karandeepsingh/.gradle/caches/transforms-3/5f4706813551eaac76794936f03a9a7d/transformed/jetified-play-services-location-21.0.1/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-location:21.0.1] /Users/karandeepsingh/.gradle/caches/transforms-3/5f4706813551eaac76794936f03a9a7d/transformed/jetified-play-services-location-21.0.1/AndroidManifest.xml:5:5-44
 MERGED from [com.google.firebase:firebase-appcheck-interop:17.0.1] /Users/karandeepsingh/.gradle/caches/transforms-3/a7e4be7e4fe779244a8d6c5c911b399b/transformed/jetified-firebase-appcheck-interop-17.0.1/AndroidManifest.xml:18:5-20:41
 MERGED from [com.google.firebase:firebase-appcheck-interop:17.0.1] /Users/karandeepsingh/.gradle/caches/transforms-3/a7e4be7e4fe779244a8d6c5c911b399b/transformed/jetified-firebase-appcheck-interop-17.0.1/AndroidManifest.xml:18:5-20:41
 MERGED from [com.google.firebase:firebase-database-collection:18.0.1] /Users/karandeepsingh/.gradle/caches/transforms-3/712aabd21e690e376ba6198484dbb57a/transformed/jetified-firebase-database-collection-18.0.1/AndroidManifest.xml:5:5-7:41
@@ -408,8 +420,6 @@ MERGED from [com.google.android.gms:play-services-gass:19.1.0] /Users/karandeeps
 MERGED from [com.google.android.gms:play-services-gass:19.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/8e568e15490c56618e06f219212d1fad/transformed/jetified-play-services-gass-19.1.0/AndroidManifest.xml:5:5-44
 MERGED from [com.google.android.gms:play-services-tasks:18.0.2] /Users/karandeepsingh/.gradle/caches/transforms-3/bfd28fc2b5a92ccad584767ef1a7f0c7/transformed/jetified-play-services-tasks-18.0.2/AndroidManifest.xml:4:5-43
 MERGED from [com.google.android.gms:play-services-tasks:18.0.2] /Users/karandeepsingh/.gradle/caches/transforms-3/bfd28fc2b5a92ccad584767ef1a7f0c7/transformed/jetified-play-services-tasks-18.0.2/AndroidManifest.xml:4:5-43
-MERGED from [com.google.android.gms:play-services-places-placereport:16.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/0b0abd616622750a42c926d460ef388c/transformed/jetified-play-services-places-placereport-16.0.0/AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.gms:play-services-places-placereport:16.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/0b0abd616622750a42c926d460ef388c/transformed/jetified-play-services-places-placereport-16.0.0/AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.gms:play-services-measurement:21.3.0] /Users/karandeepsingh/.gradle/caches/transforms-3/b00981f9f6519a10f9b5d1ffa94b525e/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.gms:play-services-measurement:21.3.0] /Users/karandeepsingh/.gradle/caches/transforms-3/b00981f9f6519a10f9b5d1ffa94b525e/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.gms:play-services-measurement-sdk:21.3.0] /Users/karandeepsingh/.gradle/caches/transforms-3/965942a91b3864800db535c5e19cbd80/transformed/jetified-play-services-measurement-sdk-21.3.0/AndroidManifest.xml:20:5-44
@@ -442,6 +452,8 @@ MERGED from [androidx.browser:browser:1.4.0] /Users/karandeepsingh/.gradle/cache
 MERGED from [androidx.browser:browser:1.4.0] /Users/karandeepsingh/.gradle/caches/transforms-3/3df77d3f0e42ee5d73cdfadb8bcdc01c/transformed/browser-1.4.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/d5f3815dfe40e797f34b499819b1d7cc/transformed/swiperefreshlayout-1.1.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/d5f3815dfe40e797f34b499819b1d7cc/transformed/swiperefreshlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core-ktx:1.10.1] /Users/karandeepsingh/.gradle/caches/transforms-3/b07364c9ba41f48fb110deff927d2342/transformed/jetified-core-ktx-1.10.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.10.1] /Users/karandeepsingh/.gradle/caches/transforms-3/b07364c9ba41f48fb110deff927d2342/transformed/jetified-core-ktx-1.10.1/AndroidManifest.xml:5:5-44
 MERGED from [androidx.window:window-java:1.0.0-beta04] /Users/karandeepsingh/.gradle/caches/transforms-3/3c0e35d493ccd3f2bb8b07f96b013b9c/transformed/jetified-window-java-1.0.0-beta04/AndroidManifest.xml:19:5-21:41
 MERGED from [androidx.window:window-java:1.0.0-beta04] /Users/karandeepsingh/.gradle/caches/transforms-3/3c0e35d493ccd3f2bb8b07f96b013b9c/transformed/jetified-window-java-1.0.0-beta04/AndroidManifest.xml:19:5-21:41
 MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/c509b9e3fe4b622170021d255a2c783f/transformed/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
@@ -450,8 +462,6 @@ MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /Users/karandeepsingh/.g
 MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /Users/karandeepsingh/.gradle/caches/transforms-3/a2865fe33e16ee3047cda5a689a86757/transformed/jetified-emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.emoji2:emoji2:1.2.0] /Users/karandeepsingh/.gradle/caches/transforms-3/da24b2c9b78ceeb51433bb8918b899ac/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:21:5-44
 MERGED from [androidx.emoji2:emoji2:1.2.0] /Users/karandeepsingh/.gradle/caches/transforms-3/da24b2c9b78ceeb51433bb8918b899ac/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:21:5-44
-MERGED from [androidx.core:core-ktx:1.10.1] /Users/karandeepsingh/.gradle/caches/transforms-3/b07364c9ba41f48fb110deff927d2342/transformed/jetified-core-ktx-1.10.1/AndroidManifest.xml:5:5-44
-MERGED from [androidx.core:core-ktx:1.10.1] /Users/karandeepsingh/.gradle/caches/transforms-3/b07364c9ba41f48fb110deff927d2342/transformed/jetified-core-ktx-1.10.1/AndroidManifest.xml:5:5-44
 MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/fd791e784c4b2f2341eb254a85e9c4e9/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/fd791e784c4b2f2341eb254a85e9c4e9/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.window:window:1.0.0-beta04] /Users/karandeepsingh/.gradle/caches/transforms-3/003a22a5515e1f77f89701a46efbc2ec/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:20:5-22:41
@@ -516,10 +526,10 @@ MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/karandeepsingh/.gr
 MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/32c376f3db9496fb410aa857524de6c4/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/4b183a414cf16d41db3d306c67a6a6a1/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/4b183a414cf16d41db3d306c67a6a6a1/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [io.grpc:grpc-android:1.52.1] /Users/karandeepsingh/.gradle/caches/transforms-3/b8d152da90f8ad50ccb85843bc53a8de/transformed/jetified-grpc-android-1.52.1/AndroidManifest.xml:5:5-7:41
-MERGED from [io.grpc:grpc-android:1.52.1] /Users/karandeepsingh/.gradle/caches/transforms-3/b8d152da90f8ad50ccb85843bc53a8de/transformed/jetified-grpc-android-1.52.1/AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.annotation:annotation-experimental:1.3.0] /Users/karandeepsingh/.gradle/caches/transforms-3/3c4bea41a39e2ef91e4e90c0edbcdf3e/transformed/jetified-annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.3.0] /Users/karandeepsingh/.gradle/caches/transforms-3/3c4bea41a39e2ef91e4e90c0edbcdf3e/transformed/jetified-annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
+MERGED from [io.grpc:grpc-android:1.52.1] /Users/karandeepsingh/.gradle/caches/transforms-3/b8d152da90f8ad50ccb85843bc53a8de/transformed/jetified-grpc-android-1.52.1/AndroidManifest.xml:5:5-7:41
+MERGED from [io.grpc:grpc-android:1.52.1] /Users/karandeepsingh/.gradle/caches/transforms-3/b8d152da90f8ad50ccb85843bc53a8de/transformed/jetified-grpc-android-1.52.1/AndroidManifest.xml:5:5-7:41
 MERGED from [com.google.firebase:protolite-well-known-types:18.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/a8f3976df63db55bd2a7ed93bbfe7223/transformed/jetified-protolite-well-known-types-18.0.0/AndroidManifest.xml:7:5-9:41
 MERGED from [com.google.firebase:protolite-well-known-types:18.0.0] /Users/karandeepsingh/.gradle/caches/transforms-3/a8f3976df63db55bd2a7ed93bbfe7223/transformed/jetified-protolite-well-known-types-18.0.0/AndroidManifest.xml:7:5-9:41
 MERGED from [com.google.android.gms:play-services-ads-base:19.1.0] /Users/karandeepsingh/.gradle/caches/transforms-3/11f4a51cac7d587ab2814098c4770e50/transformed/jetified-play-services-ads-base-19.1.0/AndroidManifest.xml:5:5-44
@@ -866,14 +876,6 @@ ADDED from [:flutter_inappwebview] /Users/karandeepsingh/Downloads/Truck_Chat/bu
 		ADDED from [:flutter_inappwebview] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:47:13-33
 	android:name
 		ADDED from [:flutter_inappwebview] /Users/karandeepsingh/Downloads/Truck_Chat/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:46:13-61
-uses-permission#android.permission.ACCESS_COARSE_LOCATION
-ADDED from [:location] /Users/karandeepsingh/Downloads/Truck_Chat/build/location/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-81
-	android:name
-		ADDED from [:location] /Users/karandeepsingh/Downloads/Truck_Chat/build/location/intermediates/merged_manifest/debug/AndroidManifest.xml:9:22-78
-uses-permission#android.permission.ACCESS_FINE_LOCATION
-ADDED from [:location] /Users/karandeepsingh/Downloads/Truck_Chat/build/location/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-79
-	android:name
-		ADDED from [:location] /Users/karandeepsingh/Downloads/Truck_Chat/build/location/intermediates/merged_manifest/debug/AndroidManifest.xml:10:22-76
 service#com.lyokone.location.FlutterLocationService
 ADDED from [:location] /Users/karandeepsingh/Downloads/Truck_Chat/build/location/intermediates/merged_manifest/debug/AndroidManifest.xml:13:9-17:56
 	android:enabled

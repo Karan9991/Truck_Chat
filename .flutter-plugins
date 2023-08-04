@@ -1,5 +1,6 @@
 # This is a generated file; do not edit or check into version control.
 admob_flutter=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/admob_flutter-3.0.0/
+app_settings=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/app_settings-5.0.0/
 cloud_firestore=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/cloud_firestore-4.8.3/
 cloud_firestore_web=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/cloud_firestore_web-3.6.3/
 device_info=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/device_info-2.0.3/
@@ -27,8 +28,8 @@ image_picker_ios=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/image_picker_io
 image_picker_linux=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/image_picker_linux-0.2.1/
 image_picker_macos=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/image_picker_macos-0.2.1/
 image_picker_windows=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/image_picker_windows-0.2.1/
-location=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/location-4.4.0/
-location_web=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/location_web-3.1.1/
+location=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/location-5.0.2+1/
+location_web=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/location_web-4.1.1/
 path_provider_linux=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/path_provider_linux-2.1.11/
 path_provider_windows=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/path_provider_windows-2.1.7/
 shared_preferences=/Users/karandeepsingh/.pub-cache/hosted/pub.dev/shared_preferences-2.1.2/

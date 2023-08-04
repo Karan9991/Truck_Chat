@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  app_settings:
+    dependency: "direct dev"
+    description:
+      name: app_settings
+      sha256: "67ca58aba6ec311d89597c2716d2e37da54b8c7cef28b7749e6551c57f88c1f4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.0"
   args:
     dependency: transitive
     description:
@@ -508,26 +516,26 @@ packages:
     dependency: "direct dev"
     description:
       name: location
-      sha256: "9051959f6f2ccadd887b28b66e9cbbcc25b6838e37cf9e894c421ccc0ebf80b5"
+      sha256: c8e0c8cd92c6ce8b42760f9aafd6d80592459e2e0cd702bc336061c738ec4715
       url: "https://pub.dev"
     source: hosted
-    version: "4.4.0"
+    version: "5.0.2+1"
   location_platform_interface:
     dependency: transitive
     description:
       name: location_platform_interface
-      sha256: "62eeaf1658e92e4459b727f55a3c328eccbac8ba043fa6d262ac5286ad48384c"
+      sha256: a211a41b1fdfaddaf02996750dd703abcc7ac1d4fd90e978c8773ccf2260af68
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0"
+    version: "3.1.1"
   location_web:
     dependency: transitive
     description:
       name: location_web
-      sha256: "6c08c408a040534c0269c4ff9fe17eebb5a36dea16512fbaf116b9c8bc21545b"
+      sha256: acde3e95c4dec2b82cbdc3490bf010eeaf66e793e20f62364887e072bd701d49
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.1"
+    version: "4.1.1"
   matcher:
     dependency: transitive
     description:
