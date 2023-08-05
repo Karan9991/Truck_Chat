@@ -7,6 +7,7 @@ import 'package:chat/chat/conversation_data.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:app_settings/app_settings.dart';
 
 void showMarkAsReadUnreadDialog(BuildContext context) async {
   showDialog(
@@ -153,41 +154,6 @@ Future<void> markAllUnread() async {
   await storeConversations(storedConversations);
 }
 
-// void showTermsOfServiceDialog(BuildContext context) {
-
-//   showDialog(
-//     context: context,
-//         barrierDismissible: false,
-
-//     builder: (context) => AlertDialog(
-//       title: Text('Terms of Service'),
-//       content: Text(
-//         'This app is provided as a free service for trucking professionals.\n\nWe want the commercial truck driving community to have a pleasant and useful experience using the free TruckChat app, so that means no posting of explicit or offensive content. More specifically: no porn, no racism, no homophobia, no threats, no abuse, no bullying, no profanity, no sexual advances, no solicitation or personal services. No advertising of your business (unless you are a paying Sponsor of the app with written permission from the developer).\n\nIf we feel you are violating these terms, we can remove your content and/or delete your profile without question. We encourage checking with drivers about weather, traffic, parking, company reviews, delivery discussions between drivers and dispatchers.\n\nBy pressing the "I Agree" button you agree to these terms.',
-//       ),
-//       actions: [
-//         TextButton(
-//           onPressed: () {
-//             // Perform action for "I Agree"
-//             SharedPrefs.setBool('termsAgreed', true);
-//             print('Terms Agreed');
-//             Navigator.of(context).pop();
-//           },
-//           child: Text('I Agree'),
-//         ),
-//         TextButton(
-//           onPressed: () {
-//             // Perform action for "Exit"
-//             // This will close the app
-//             SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-//           },
-//           child: Text('Exit'),
-//         ),
-//       ],
-//     ),
-//   );
-// }
-
-// ...
 
 void showTermsOfServiceDialog(BuildContext context) {
   showDialog(
@@ -373,6 +339,8 @@ void messageLongPressDialogWithoutPrivateChat(
 void deletePrivateChatDialog(
     BuildContext context, Function() onDelete, Function() onCancel) {
   showDialog(
+    barrierDismissible: false, // Set barrierDismissible to false
+
     context: context,
     builder: (context) {
       return AlertDialog(
@@ -412,7 +380,10 @@ void showBlockUserDialog(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(Icons.block, color: Colors.red,),
+              leading: Icon(
+                Icons.block,
+                color: Colors.red,
+              ),
               title: Text(isBlocked ? 'Unblock this user' : 'Block this user'),
               onTap: () {
                 Navigator.pop(context); // Close the options menu
@@ -623,3 +594,37 @@ void showChatHandleDialog(BuildContext context) {
     },
   );
 }
+
+
+ void showLocationPermissionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Location Permission Required'),
+          content: Text('Please enable location permission in your device settings.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Open Settings'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _openAppSettings();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _openAppSettings() async {
+         await  AppSettings.openAppSettings(
+                          type: AppSettingsType.notification);
+    //await AppSettings.openAppSettings();
+  }

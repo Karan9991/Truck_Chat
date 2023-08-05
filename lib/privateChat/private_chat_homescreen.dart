@@ -15,7 +15,7 @@ class PrivateChatTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-       String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+    String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 
     return DefaultTabController(
       length: 2,
@@ -34,12 +34,9 @@ class PrivateChatTab extends StatelessWidget {
               child: TabBarView(
                 children: [
                   ChatListScreen(),
-               // ChatScreen(userId: '1', receiverId: '2', receiverName: 'b',),
-                  // Center(
-                  //   child: Text('Chat List Content'),
-                  // ),
-                 PendingRequestsScreen(currentUserId: currentUserId!),
-           
+                  // so in below line provided currentUserId 0 if no userId exist. Because app crashes when user doesn't allow
+                  //location permission which doesn't allow to register device to get user id.
+                  PendingRequestsScreen(currentUserId: currentUserId ?? '0'),
                 ],
               ),
             ),

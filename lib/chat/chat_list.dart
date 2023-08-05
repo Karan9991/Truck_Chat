@@ -974,7 +974,7 @@ class _ChatListrState extends State<ChatListr>
   String statusMessage = '';
   List<String> serverMsgIds = [];
 
-  Timer? conversationTimer;
+  //Timer? conversationTimer;
   bool isLoading = true;
 
   @override
@@ -1229,7 +1229,7 @@ class _ChatListrState extends State<ChatListr>
                       setState(() {}); // Trigger a rebuild of the widget
                     }
 
-                     //InterstitialAdManager.showInterstitialAd();
+                     InterstitialAdManager.showInterstitialAd();
 
                     Navigator.push(
                       context,

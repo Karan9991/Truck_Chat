@@ -742,6 +742,7 @@ import 'package:chat/settings/settings.dart';
 import 'package:chat/utils/ads.dart';
 import 'package:chat/utils/alert_dialog.dart';
 import 'package:chat/utils/constants.dart';
+import 'package:chat/utils/device_type.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -762,6 +763,8 @@ import 'package:firebase_database/firebase_database.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:location/location.dart';
+import 'package:device_info/device_info.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -816,7 +819,8 @@ class _HomeScreenState extends State<HomeScreen>
     currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 
     //getFCMToken(currentUserId!);
-    getFirebaseToken();
+
+    getFirebaseTokenn();
 
     _refreshChatListWithFCM();
 
@@ -827,7 +831,7 @@ class _HomeScreenState extends State<HomeScreen>
     // });
   }
 
-  Future<void> getFirebaseToken() async {
+  Future<void> getFirebaseTokenn() async {
     bool isAppInstall = await isAppInstalled();
 
     if (!isAppInstall) {
@@ -835,6 +839,8 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
+//testing start
+  
   Future<bool> isAppInstalled() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isAppInstalled = prefs.getBool('isAppInstalled') ?? false;
@@ -1531,7 +1537,7 @@ class _HomeScreenState extends State<HomeScreen>
                 // Perform action when a pop-up menu item is selected
                 switch (value) {
                   case 'settings':
-                    //  InterstitialAdManager.showInterstitialAd();
+                      InterstitialAdManager.showInterstitialAd();
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SettingsScreen()),
@@ -1605,7 +1611,6 @@ class _HomeScreenState extends State<HomeScreen>
         body: Column(
           children: [
             Expanded(
-    
               child: TabBarView(
                 controller: _tabController,
                 children: [
@@ -1644,8 +1649,6 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ],
         ),
-
-
         bottomNavigationBar: AdmobBanner(
           adUnitId: AdHelper.bannerAdUnitId,
           adSize: AdmobBannerSize.ADAPTIVE_BANNER(
@@ -1676,9 +1679,9 @@ class SponsorsTab extends StatelessWidget {
   });
 
   final String sponsorUrl = API.SPONSORS;
-final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
-  Factory(() => EagerGestureRecognizer())
-};
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+    Factory(() => EagerGestureRecognizer())
+  };
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -1699,10 +1702,10 @@ class ReviewsTab extends StatefulWidget {
 
 class _ReviewsTabState extends State<ReviewsTab> {
   late final WebViewController controller;
-   final String sponsorUrl = API.REVIEWS;
-final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
-  Factory(() => EagerGestureRecognizer())
-};
+  final String sponsorUrl = API.REVIEWS;
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+    Factory(() => EagerGestureRecognizer())
+  };
   @override
   void initState() {
     super.initState();
@@ -1718,14 +1721,13 @@ final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
       body: SizedBox(
         height: MediaQuery.of(context).size.height, // Set explicit height
         child: WebViewWidget(
-   gestureRecognizers: gestureRecognizers,
+          gestureRecognizers: gestureRecognizers,
           controller: controller,
         ),
       ),
     );
   }
 }
-
 
 class Help extends StatelessWidget {
   final String sponsorUrl = API.HELP;

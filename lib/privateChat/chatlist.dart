@@ -21,7 +21,6 @@ class _ChatListScreenState extends State<ChatListScreen>
   int _selectedChatIndex = -1;
 
   String? currentUserId;
-  //String userId = '1';
 
   @override
   bool get wantKeepAlive => true;
@@ -31,7 +30,10 @@ class _ChatListScreenState extends State<ChatListScreen>
     super.initState();
     currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 
-    _loadChatList(currentUserId!);
+    // so in below line provided currentUserId 0 if no userId exist. Because app crashes when user doesn't allow
+    //location permission which doesn't allow to register device to get user id.
+
+    _loadChatList(currentUserId ?? '0');
     InterstitialAdManager.initialize();
   }
 
@@ -207,7 +209,7 @@ class _ChatListScreenState extends State<ChatListScreen>
                           ),
                     onTap: () {
                       // Open the chat screen with the selected user
-                    //  InterstitialAdManager.showInterstitialAd();
+                      InterstitialAdManager.showInterstitialAd();
 
                       Navigator.push(
                         context,

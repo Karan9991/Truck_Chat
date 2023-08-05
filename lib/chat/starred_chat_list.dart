@@ -317,7 +317,7 @@ class _StarredChatListState extends State<StarredChatList> {
                             setState(() {}); // Trigger a rebuild of the widget
                           }
 
-                          // InterstitialAdManager.showInterstitialAd();
+                           InterstitialAdManager.showInterstitialAd();
                           Navigator.pop(
                               context); // Remove the last screen from the stack
 
@@ -343,17 +343,17 @@ class _StarredChatListState extends State<StarredChatList> {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    _buildDialogOption(
-                                        DialogStrings.STAR_CHAT,
-                                        DialogStrings
-                                            .CHATS_THAT_ARE_STARRED_WILL,
-                                        () async {
-                                      print('Chat Starred');
+                                    // _buildDialogOption(
+                                    //     DialogStrings.STAR_CHAT,
+                                    //     DialogStrings
+                                    //         .CHATS_THAT_ARE_STARRED_WILL,
+                                    //     () async {
+                                    //   print('Chat Starred');
 
-                                      // await markAllRead();
+                                    //   // await markAllRead();
 
-                                      Navigator.of(context).pop();
-                                    }),
+                                    //   Navigator.of(context).pop();
+                                    // }),
                                     isRead
                                         ? _buildDialogOption(
                                             DialogStrings.MARK_CHAT_THIS_UNREAD,
