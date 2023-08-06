@@ -625,6 +625,5 @@ void showChatHandleDialog(BuildContext context) {
 
   Future<void> _openAppSettings() async {
          await  AppSettings.openAppSettings(
-                          type: AppSettingsType.notification);
-    //await AppSettings.openAppSettings();
+                          type: AppSettingsType.location);
   }

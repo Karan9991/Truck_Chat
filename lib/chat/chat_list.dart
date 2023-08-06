@@ -933,7 +933,9 @@ import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/chat/chat.dart';
 import 'package:chat/settings/settings.dart';
 import 'package:chat/utils/ads.dart';
+import 'package:chat/utils/alert_dialog.dart';
 import 'package:chat/utils/constants.dart';
+import 'package:chat/utils/register_user.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:chat/get_all_reply_messages.dart';
 import 'dart:convert';
@@ -947,7 +949,8 @@ import 'dart:async';
 import 'package:chat/chat/conversation_data.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
+import 'package:app_settings/app_settings.dart';
+import 'package:location/location.dart';
 
 class ChatListr extends StatefulWidget {
   final Key key;
@@ -977,21 +980,21 @@ class _ChatListrState extends State<ChatListr>
   //Timer? conversationTimer;
   bool isLoading = true;
 
+  Location location = Location();
+  late PermissionStatus _permissionGranted;
+
   @override
   bool get wantKeepAlive => true;
-
 
   @override
   void initState() {
     super.initState();
-
 
     getData().then((_) {
       setState(() {
         isLoading = false; // Step 4: Set isLoading to false once data is loaded
       });
     });
-
 
     // _refreshChat();
 
@@ -1031,17 +1034,15 @@ class _ChatListrState extends State<ChatListr>
   }
 
   Future<void> getData() async {
-    await getConversationsData();
+    _permissionGranted = await location.hasPermission();
 
-    // conversationTimer = Timer.periodic(Duration(seconds: 5), (_) async {
-    //   print('Timer');
-    //   // Clear the previous conversation data
-    //   conversationTopics.clear();
-    //   conversationTimestamps.clear();
-    //   replyCounts.clear();
-
-    //   await getConversationsData();
-    // });
+    if (_permissionGranted == PermissionStatus.granted ||
+        _permissionGranted == PermissionStatus.grantedLimited) {
+      await getConversationsData();
+    } else {
+      registerDevice();
+      await getConversationsData();
+    }
   }
 
   Future<void> getConversationsData() async {
@@ -1068,7 +1069,7 @@ class _ChatListrState extends State<ChatListr>
 
       if (response.statusCode == 200) {
         print('---------------ChatList Response---------------');
-        print(response.body);
+        // print(response.body);
         // print('--------------------------------------');
 
         Map<String, dynamic> jsonResponse = jsonDecode(response.body);
@@ -1109,7 +1110,7 @@ class _ChatListrState extends State<ChatListr>
               final result = response.body;
               print('---------------Messsage Replies Response---------------');
 
-              print(response.body);
+              //   print(response.body);
 
               // print('--------------------------------------');
 
@@ -1152,7 +1153,7 @@ class _ChatListrState extends State<ChatListr>
 
                 conversations.add(conversation);
 
-              //  setState(() {});
+                //  setState(() {});
               } catch (e) {
                 // Handle JSON decoding error
               }
@@ -1177,6 +1178,10 @@ class _ChatListrState extends State<ChatListr>
     }
   }
 
+  Future<void> _openAppSettings() async {
+    await AppSettings.openAppSettings(type: AppSettingsType.location);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1189,8 +1194,54 @@ class _ChatListrState extends State<ChatListr>
             return Center(
               child: CircularProgressIndicator(),
             );
-          } else
-          if (snapshot.hasData) {
+          }
+          if (_permissionGranted == PermissionStatus.denied ||
+              _permissionGranted == PermissionStatus.deniedForever) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Location Permission required',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 14), // Add
+                  Text(
+                    'to enable chat feature.',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 14), // Add
+                  Text(
+                    'Open Settings to turn on location.',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 16),
+                  TextButton(
+                    onPressed: () {
+                      _openAppSettings();
+                      print('opopopopopoopopopopopopopopopopopoopopo');
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.blue,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                    child: Text(
+                      'Open Settings',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else if (snapshot.hasData) {
             List<Conversation> storedConversations = snapshot.data!;
 
             if (storedConversations.isEmpty) {
@@ -1229,7 +1280,7 @@ class _ChatListrState extends State<ChatListr>
                       setState(() {}); // Trigger a rebuild of the widget
                     }
 
-                     InterstitialAdManager.showInterstitialAd();
+                    InterstitialAdManager.showInterstitialAd();
 
                     Navigator.push(
                       context,
@@ -1368,7 +1419,7 @@ class _ChatListrState extends State<ChatListr>
               },
             );
           } else {
-           // Handle error case
+            // Handle error case
             return Center(
               child: Text(''),
             );

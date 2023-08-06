@@ -34,188 +34,11 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
   String _typedText = '';
   String deviceType = getDeviceType();
 
-// @override
-// Widget build(BuildContext context) {
-//   return Scaffold(
-//     appBar: AppBar(
-//       title: Text(Constants.CONVERSATION),
-//     ),
-//     body: Container(
-//       padding: EdgeInsets.all(16.0),
-//       child: Row(
-//         children: [
-//           IconButton(
-//             icon: Icon(Icons.mic),
-//             onPressed: () {
-//               _toggleListening();
-//             },
-//           ),
-//           SizedBox(width: 8.0),
-//           Expanded(
-//             child: TextField(
-//               controller: _textEditingController,
-//               onChanged: (value) {
-//                 _typedText = value;
-//               },
-//                             maxLines: 4, // Increase the number of lines to show
-
-//               decoration: InputDecoration(
-//                 hintText: Constants.COMPOSE_CONVERSATION,
-//                 border: OutlineInputBorder(
-//                   borderRadius: BorderRadius.circular(15.0),
-//                 //  borderSide: BorderSide(
-//                 //     color: Colors.green, // Change the border color here
-//                 //   ),
-//                 ),
-//                     focusedBorder: OutlineInputBorder(
-//                   borderRadius: BorderRadius.circular(15.0),
-//                   borderSide: BorderSide(
-//                     color: Colors.green, // Change the selected border color here
-//                   ),
-//                 ),
-//                 filled: true,
-//                 fillColor: Colors.grey[200],
-//                 contentPadding: EdgeInsets.symmetric(
-//                   vertical: 12.0,
-//                   horizontal: 16.0,
-//                 ),
-//               ),
-//             ),
-//           ),
-//           SizedBox(width: 8.0),
-//           Material(
-//             borderRadius: BorderRadius.circular(24.0),
-//             color: Colors.blue,
-//             child: InkWell(
-//               borderRadius: BorderRadius.circular(24.0),
-//               onTap: () async {
-//                 String newConversation = _textEditingController.text.trim();
-//                 if (!newConversation.isEmpty) {
-//                   await _sendConversation();
-//                 }
-//               },
-//               child: Container(
-//                 padding: EdgeInsets.all(12.0),
-//                 child: _isSending
-//                     ? CircularProgressIndicator(
-//                         valueColor: AlwaysStoppedAnimation<Color>(
-//                           Colors.white,
-//                         ),
-//                       )
-//                     : Icon(
-//                         Icons.send,
-//                         color: Colors.white,
-//                       ),
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     ),
-//   );
-// }
-
-//testing 2
-// @override
-// Widget build(BuildContext context) {
-//   return Scaffold(
-//     appBar: AppBar(
-//       title: Text(Constants.CONVERSATION),
-//     ),
-//     body: Column(
-//       children: [
-//         Expanded(
-//           child: Container(
-//             padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 520.0),
-//             child: Row(
-//               children: [
-//                 IconButton(
-//                   icon: Icon(Icons.mic),
-//                   onPressed: () {
-//                     _toggleListening();
-//                   },
-//                 ),
-//                 SizedBox(width: 8.0),
-//                 Expanded(
-//                   child: TextField(
-//                     controller: _textEditingController,
-//                     onChanged: (value) {
-//                       _typedText = value;
-//                     },
-//                     maxLines: 4, // Increase the number of lines to show
-//                     decoration: InputDecoration(
-//                       hintText: Constants.COMPOSE_CONVERSATION,
-//                       border: OutlineInputBorder(
-//                         borderRadius: BorderRadius.circular(15.0),
-//                       ),
-//                       focusedBorder: OutlineInputBorder(
-//                         borderRadius: BorderRadius.circular(15.0),
-//                         borderSide: BorderSide(
-//                           color: Colors.green, // Change the selected border color here
-//                         ),
-//                       ),
-//                       filled: true,
-//                       fillColor: Colors.grey[200],
-//                       contentPadding: EdgeInsets.symmetric(
-//                         vertical: 12.0,
-//                         horizontal: 16.0,
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//                 SizedBox(width: 8.0),
-//                 Material(
-//                   borderRadius: BorderRadius.circular(24.0),
-//                   color: Colors.blue,
-//                   child: InkWell(
-//                     borderRadius: BorderRadius.circular(24.0),
-//                     onTap: () async {
-//                       String newConversation = _textEditingController.text.trim();
-//                       if (!newConversation.isEmpty) {
-//                         await _sendConversation();
-//                       }
-//                     },
-//                     child: Container(
-//                       padding: EdgeInsets.all(12.0),
-//                       child: _isSending
-//                           ? CircularProgressIndicator(
-//                               valueColor: AlwaysStoppedAnimation<Color>(
-//                                 Colors.white,
-//                               ),
-//                             )
-//                           : Icon(
-//                               Icons.send,
-//                               color: Colors.white,
-//                             ),
-//                     ),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//           AdmobBanner(
-//             adUnitId: AdHelper.bannerAdUnitId,
-//             adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-//               width: MediaQuery.of(context).size.width.toInt(),
-//             ),
-//           ),
-//       ],
-//     ),
-//     // floatingActionButton: Container(
-//     //   width: MediaQuery.of(context).size.width,
-//     //   alignment: Alignment.bottomCenter,
-//     //   child: AdmobBanner(
-//     //     adUnitId: AdHelper.bannerAdUnitId,
-//     //     adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-//     //       width: MediaQuery.of(context).size.width.toInt(),
-//     //     ),
-//     //   ),
-//     // ),
-//   );
-// }
-
-//testing 3
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -327,13 +150,6 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
       // print('new conversation emoji id $emojiId');
     }
 
-    // print('device id $serialNumber');
-    // print('message_device_type  $deviceType');
-    // print('message  $newConversation');
-    // print('message_latitude  $latitude');
-    // print('message_longitude  $longitude');
-    // print('emoji_id  $emojiId');
-
     final Uri url = Uri.parse(API.NEW_CONVERSATION);
 
     try {
@@ -387,48 +203,67 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
     return false;
   }
 
-//testing 1 passed
   Future<void> _sendConversation() async {
+    print('send conversation');
+    print('ttttttttttttttttttttt');
     Location location = Location();
     PermissionStatus _permissionGranted;
 
     _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied ||
         _permissionGranted == PermissionStatus.deniedForever) {
-      // if (Platform.isIOS) {
-      //   showLocationPermissionDialog(context);
-      // }
-      Platform.isIOS
-          ? showLocationPermissionDialog(context)
-          : _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted &&
-          _permissionGranted != PermissionStatus.grantedLimited) {
-        // Handle the case when the user denies permission again
-        return;
+      print('1');
+      showLocationPermissionDialog(context);
+    } else if (_permissionGranted == PermissionStatus.granted ||
+        _permissionGranted == PermissionStatus.grantedLimited) {
+      print('3');
+
+      String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+
+      if (userId == null) {
+        print('4');
+
+        await registerDevice();
+        setState(() {
+          _isSending = true;
+        });
+
+        bool sent = await send();
+
+        setState(() {
+          _isSending = false;
+        });
+
+        if (sent) {
+          print('5');
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        }
+      } else {
+        print('6');
+
+        setState(() {
+          _isSending = true;
+        });
+
+        bool sent = await send();
+
+        setState(() {
+          _isSending = false;
+        });
+
+        if (sent) {
+          print('7');
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        }
       }
-    }
-
-    String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
-
-    if (userId == null) {
-      await registerDevice();
-    }
-
-    setState(() {
-      _isSending = true;
-    });
-
-    bool sent = await send();
-
-    setState(() {
-      _isSending = false;
-    });
-
-    if (sent) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
     }
   }
 
