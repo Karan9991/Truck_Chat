@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:chat/utils/ads.dart';
 import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 
 class NewsTab extends StatefulWidget {
   final Key key;
@@ -67,81 +69,90 @@ class _NewsTabState extends State<NewsTab> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     return Center(
-    // Center the circular progress indicator
-    child: SingleChildScrollView(
-      child: _isLoading
-          ? Center(
-              // Display circular progress indicator when loading
-              child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: _newsItems.length,
-              itemBuilder: (context, index) {
-                final newsItem = _newsItems[index];
+      // Center the circular progress indicator
+      child: SingleChildScrollView(
+        child: _isLoading
+            ? Center(
+                // Display circular progress indicator when loading
+                child: CircularProgressIndicator(),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: _newsItems.length + (_newsItems.length ~/ 5),
+                itemBuilder: (context, index) {
+                  if (index % 6 == 5) {
+                    // Check if it's the ad banner index
+                    // The ad banner should be shown after every 5 items (0-based index)
+                    return AdBannerWidget();
+                  } else {
+                    // Calculate the actual index in the news list
+                    final newsIndex = index - (index ~/ 6);
 
-                DateTime postedDate = DateTime.parse(newsItem.postedDate);
+                    final newsItem = _newsItems[newsIndex];
 
-                String formattedDate =
-                    DateFormat('yyyy/MM/dd').format(postedDate);
+                    // final newsItem = _newsItems[index];
+                    DateTime postedDate = DateTime.parse(newsItem.postedDate);
+                    String formattedDate =
+                        DateFormat('yyyy/MM/dd').format(postedDate);
 
-                return Card(
-                  color: Colors.blue,
-                  elevation: 2,
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: InkWell(
-                    onTap: () {
-                      navigateToURL(newsItem.link);
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                    return Card(
+                      color: Colors.blue,
+                      elevation: 2,
+                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      child: InkWell(
+                        onTap: () {
+                          navigateToURL(newsItem.link);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Image.asset(
-                                'assets/news.png',
-                                width: 24,
-                                height: 24,
-                                color: Colors.black,
+                              Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/news.png',
+                                    width: 24,
+                                    height: 24,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Expanded(
+                                    // Wrap the Text widget with Expanded
+                                    child: Text(
+                                      newsItem.title,
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(width: 8),
-                              Expanded(
-                                // Wrap the Text widget with Expanded
+                              SizedBox(height: 8),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: 32), // Adjust the left padding
+
                                 child: Text(
-                                  newsItem.title,
+                                  'Posted on ${formattedDate}',
                                   style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 8),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 32), // Adjust the left padding
-
-                            child: Text(
-                              'Posted on ${formattedDate}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              },
-            ),
-    ),
+                    );
+                  }
+                },
+              ),
+      ),
     );
   }
 
@@ -174,3 +185,5 @@ class NewsItem {
     );
   }
 }
+
+

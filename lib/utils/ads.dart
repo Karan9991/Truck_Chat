@@ -1,41 +1,8 @@
 import 'dart:io';
 
 import 'package:admob_flutter/admob_flutter.dart';
+import 'package:flutter/material.dart';
 
-// class InterstitialAdManager {
-//   static AdmobInterstitial? _interstitialAd;
-//   static bool _isAdLoaded = false;
-
-//   static void initialize() {
-//     _interstitialAd = AdmobInterstitial(
-//       adUnitId: AdHelper.interstitialAdUnitId,
-//       listener: (AdmobAdEvent event, Map<String, dynamic>? args) {
-//         if (event == AdmobAdEvent.closed ||
-//             event == AdmobAdEvent.failedToLoad) {
-//           _isAdLoaded = false;
-//           _interstitialAd?.load();
-//         } else if (event == AdmobAdEvent.loaded) {
-//           _isAdLoaded = true;
-//         }
-//       },
-//     );
-
-//     _interstitialAd?.load();
-//   }
-
-//   static void showInterstitialAd() {
-
-//     if (_isAdLoaded) {
-//       _interstitialAd?.show();
-//     } else {
-//       print('Interstitial ad is not yet loaded');
-//     }
-//   }
-
-//   static void dispose() {
-//     _interstitialAd?.dispose();
-//   }
-// }
 class InterstitialAdManager {
   static AdmobInterstitial? _interstitialAd;
   static bool _isAdLoaded = false;
@@ -102,5 +69,20 @@ class AdHelper {
     } else {
       throw new UnsupportedError("Unsupported platform");
     }
+  }
+}
+
+
+class AdBannerWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Implement your ad banner widget here
+    // For example:
+    return AdmobBanner(
+      adUnitId: AdHelper.bannerAdUnitId,
+      adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+        width: MediaQuery.of(context).size.width.toInt(),
+      ),
+    );
   }
 }
