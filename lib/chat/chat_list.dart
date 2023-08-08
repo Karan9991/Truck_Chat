@@ -563,7 +563,7 @@ class _ChatListrState extends State<ChatListr>
 
   Location location = Location();
   late PermissionStatus _permissionGranted;
-  bool isAppSettingsOpen = false;
+  //bool isAppSettingsOpen = false;
 
   @override
   bool get wantKeepAlive => true;
@@ -571,6 +571,8 @@ class _ChatListrState extends State<ChatListr>
   @override
   void initState() {
     super.initState();
+
+    print('iiiiiiiiiiiiiiiinit called');
 
     WidgetsBinding.instance.addObserver(this);
 
@@ -601,31 +603,30 @@ class _ChatListrState extends State<ChatListr>
     }
   }
 
+  Future<void> getData() async {
+    _permissionGranted = await location.hasPermission();
+
+    if (_permissionGranted == PermissionStatus.granted ||
+        _permissionGranted == PermissionStatus.grantedLimited) {
+      await getConversationsData();
+    } else {
+      // await registerDevice();
+      // await getConversationsData();
+    }
+  }
+
   // Future<void> getData() async {
   //   _permissionGranted = await location.hasPermission();
 
-  //   if (_permissionGranted == PermissionStatus.granted ||
-  //       _permissionGranted == PermissionStatus.grantedLimited) {
-  //     await registerDevice();
-  //     await getConversationsData();
+  //   if (_permissionGranted == PermissionStatus.denied ||
+  //       _permissionGranted == PermissionStatus.deniedForever) {
+  //     print('get data permission denied');
   //   } else {
+  //     print('get data else');
   //     await registerDevice();
   //     await getConversationsData();
   //   }
   // }
-
-  Future<void> getData() async {
-    _permissionGranted = await location.hasPermission();
-
-    if (_permissionGranted == PermissionStatus.denied ||
-        _permissionGranted == PermissionStatus.deniedForever) {
-      print('get data permission denied');
-    } else {
-      print('get data else');
-      await registerDevice();
-      await getConversationsData();
-    }
-  }
 
   Future<void> getConversationsData() async {
     String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
@@ -753,55 +754,36 @@ class _ChatListrState extends State<ChatListr>
     }
   }
 
-//   Future<void> _openAppSettings(BuildContext context) async {
-//     await AppSettings.openAppSettings(type: AppSettingsType.location);
-
-// await Navigator.push(context, MaterialPageRoute(builder: (context) => this.widget));
-//   // Refresh the data after returning from settings
-//   getData();
-//   setState(() {});
-//     //  Navigator.pop(context); // Navigate back to ChatListr screen
-
-//     // Navigator.push(
-//     //   context,
-//     //   MaterialPageRoute(
-//     //     builder: (context) => HomeScreen(
-//     //     ),
-//     //   ),
-//     // );
-//   }
   Future<void> _openAppSettings(BuildContext context) async {
-    // Open app settings
-    //  if (mounted) {
+    SharedPrefs.setBool('isAppSettingsOpen', true);
     setState(() {
-      isAppSettingsOpen = true;
+     //isAppSettingsOpen = true;
 
       isLoading = true;
     });
-    //  }
     await AppSettings.openAppSettings(type: AppSettingsType.location);
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
-     setState(() {
-
-      isLoading = true;
-    });
     Location location = Location();
     late PermissionStatus _permissionGranted;
+        bool isAppOpenSettings = SharedPrefs.getBool('isAppSettingsOpen') ?? false;
+
     print('-----------start-------------');
     print('AppLifecycleState: $state'); // Add this line
 
     print('iiiiiiiiiiiiisloading $isLoading');
-    print('iiiiiiiiiiiiiappopen $isAppSettingsOpen');
+    print('iiiiiiiiiiiiiappopen $isAppOpenSettings');
 
-    if (state == AppLifecycleState.resumed) {
+
+    if (state == AppLifecycleState.resumed && isAppOpenSettings) {
+      setState(() {
+        isLoading = true;
+      });
+      SharedPrefs.setBool('isAppSettingsOpen', false);
+
       print('iiiiiiiiiiiiisiffloading $isLoading');
-
-      // isAppSettingsOpen = false; // Reset the flag
-
-      //   _initData();
 
       _permissionGranted = await location.hasPermission();
 
@@ -819,15 +801,7 @@ class _ChatListrState extends State<ChatListr>
       } else {
         print('eeelllssee');
       }
-      //  else if (_permissionGranted == PermissionStatus.denied) {
-      //   await registerDevice();
-      //   await getData();
-      //   setState(() {
-      //     isLoading = false;
-      //   });
-      //   print('else if Screen refreshed after returning from settings');
-      // }
-      //  if (mounted) {
+
       setState(() {
         isLoading = false;
       });
@@ -839,34 +813,8 @@ class _ChatListrState extends State<ChatListr>
     print('------------end-------------');
   }
 
-  void _initData() async {
-    _permissionGranted = await location.hasPermission();
-    print('initdata');
-    print(_permissionGranted);
-    if (isAppSettingsOpen) {
-      if (_permissionGranted == PermissionStatus.denied ||
-          _permissionGranted == PermissionStatus.deniedForever) {
-        print('_initdata permission denied');
-      } else {
-        print('_initdata else');
-        await registerDevice();
-        await getData();
-        if (mounted) {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    // ModalRoute.of(context)!.addScopedWillPopCallback(() async {
-    //   // This callback will be triggered when the user navigates back from settings
-    //   setState(() {});
-    //   return true; // Allow the route to be popped
-    // });
     return Scaffold(
       appBar: null,
       body: FutureBuilder<List<Conversation>>(
@@ -935,15 +883,15 @@ class _ChatListrState extends State<ChatListr>
             return ListView.builder(
                 // itemCount: conversationTopics.length,
                 itemCount: conversationTopics.length +
-                    (conversationTopics.length ~/ 5),
+                    (conversationTopics.length ~/ 4),
                 itemBuilder: (context, index) {
-                  if (index % 6 == 5) {
+                  if (index % 5 == 4) {
                     // Check if it's the ad banner index
                     // The ad banner should be shown after every 5 items (0-based index)
                     return AdBannerWidget();
                   } else {
                     // Calculate the actual index in the conversation topics list
-                    final conversationIndex = index - (index ~/ 6);
+                    final conversationIndex = index - (index ~/ 5);
                     final conversation = storedConversations[conversationIndex];
                     final topic = conversationTopics[conversationIndex];
                     final timestampp =
@@ -970,7 +918,7 @@ class _ChatListrState extends State<ChatListr>
                           setState(() {}); // Trigger a rebuild of the widget
                         }
 
-                        InterstitialAdManager.showInterstitialAd();
+                         InterstitialAdManager.showInterstitialAd();
 
                         Navigator.push(
                           context,

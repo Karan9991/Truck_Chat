@@ -1,6 +1,4 @@
-// import 'package:chat/chat/chatlist.dart';
 import 'dart:io';
-
 import 'package:chat/home_screen.dart';
 import 'package:chat/utils/alert_dialog.dart';
 import 'package:chat/utils/constants.dart';
@@ -15,6 +13,7 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:chat/utils/ads.dart';
 import 'package:location/location.dart';
+import 'package:flutter/services.dart'; // Import SystemChrome
 
 class NewConversationScreen extends StatefulWidget {
   @override
@@ -34,15 +33,44 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
   String _typedText = '';
   String deviceType = getDeviceType();
 
+  double _keyboardPadding = 0.0; // Initialize padding
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+
+  }
+
+  @override
+  void dispose() {
+    // Restore all available screen orientations
+    SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+        // Add a listener to the keyboard visibility
+    // final bool isVisible =
+    //     KeyboardVisibilityProvider.isKeyboardVisible(context);
+
+    // setState(() {
+    //   if (isVisible) {
+    //     // Calculate the keyboard height
+    //     double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    //     // Set the padding to the keyboard height
+    //     _keyboardPadding = keyboardHeight;
+    //   } else {
+    //     // Keyboard is not visible, reset padding to 0
+    //     _keyboardPadding = 0.0;
+    //   }
+    // });
+
     return Scaffold(
+     resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(Constants.CONVERSATION),
       ),
@@ -50,9 +78,10 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
         children: [
           Expanded(
             child: SingleChildScrollView(
+
               // Wrap this section with SingleChildScrollView
               child: Container(
-                padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 520.0),
+                padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                 child: Row(
                   children: [
                     IconButton(

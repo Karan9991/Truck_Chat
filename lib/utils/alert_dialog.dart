@@ -155,14 +155,39 @@ Future<void> markAllUnread() async {
 }
 
 
-void showTermsOfServiceDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    barrierDismissible: false, // Set barrierDismissible to false
-    builder: (context) => AlertDialog(
+GlobalKey<_TermsOfServiceDialogState> dialogKey = GlobalKey();
+
+class TermsOfServiceDialog extends StatefulWidget {
+  final Key key;
+
+  TermsOfServiceDialog({required this.key}) : super(key: key);
+
+  @override
+  _TermsOfServiceDialogState createState() => _TermsOfServiceDialogState();
+}
+
+class _TermsOfServiceDialogState extends State<TermsOfServiceDialog> {
+  bool _isButtonEnabled = true; // Add this variable
+
+  void _handleAgreeButton() {
+    if (_isButtonEnabled) {
+      setState(() {
+        _isButtonEnabled = false; // Disable the button
+      });
+
+      SharedPrefs.setBool(SharedPrefsKeys.TERMS_AGREED, true);
+      Navigator.of(context).pop();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
       title: Text(DialogStrings.TERMS_OF_SERVICE),
-      content: Text(
-        DialogStrings.THIS_APP_IS_PROVIDED_I_AGREED,
+      content: SingleChildScrollView(
+        child: Text(
+          DialogStrings.THIS_APP_IS_PROVIDED_I_AGREED,
+        ),
       ),
       actions: [
         TextButton(
@@ -207,8 +232,17 @@ void showTermsOfServiceDialog(BuildContext context) {
           },
           child: Text(DialogStrings.I_AGREE),
         ),
+        // Rest of your code...
       ],
-    ),
+    );
+  }
+}
+
+void showTermsOfServiceDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => TermsOfServiceDialog(key: dialogKey),
   );
 }
 
@@ -595,35 +629,34 @@ void showChatHandleDialog(BuildContext context) {
   );
 }
 
+void showLocationPermissionDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Location Permission Required'),
+        content:
+            Text('Please enable location permission in your device settings.'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: Text('Open Settings'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              _openAppSettings();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 
- void showLocationPermissionDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Location Permission Required'),
-          content: Text('Please enable location permission in your device settings.'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Open Settings'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _openAppSettings();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _openAppSettings() async {
-         await  AppSettings.openAppSettings(
-                          type: AppSettingsType.location);
-  }
+Future<void> _openAppSettings() async {
+  await AppSettings.openAppSettings(type: AppSettingsType.location);
+}

@@ -175,9 +175,9 @@ class About extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(DialogStrings.TERMS_OF_SERVICE),
-        content: Text(
+        content: SingleChildScrollView(child:  Text(
           DialogStrings.THIS_APP_IS_PROVIDED,
-        ),
+        ),),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),

@@ -778,6 +778,7 @@ class _HomeScreenState extends State<HomeScreen>
   PageStorageBucket _bucket = PageStorageBucket();
   late TabController _tabController;
 
+
   int _selectedIndex = 1;
   final List<Widget> _widgetOptions = [
     NewsTab(
@@ -817,6 +818,15 @@ class _HomeScreenState extends State<HomeScreen>
     _tabController = TabController(length: 5, vsync: this, initialIndex: 1);
 
     currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+
+  
+
+    bool hasAgreed = SharedPrefs.getBool(SharedPrefsKeys.TERMS_AGREED) ?? false;
+    if (!hasAgreed) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        showTermsOfServiceDialog(context);
+      });
+    }
 
     //getFCMToken(currentUserId!);
 
@@ -1453,14 +1463,13 @@ class _HomeScreenState extends State<HomeScreen>
         ? '${Constants.APP_BAR_TITLE} ($currentUserChatHandle)'
         : Constants.APP_BAR_TITLE;
 
-    //  SharedPrefs.setBool('termsAgreed', false);
 
-    bool hasAgreed = SharedPrefs.getBool(SharedPrefsKeys.TERMS_AGREED) ?? false;
-    if (!hasAgreed) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
-        showTermsOfServiceDialog(context);
-      });
-    }
+    // bool hasAgreed = SharedPrefs.getBool(SharedPrefsKeys.TERMS_AGREED) ?? false;
+    // //if (!hasAgreed) {
+    //   WidgetsBinding.instance!.addPostFrameCallback((_) {
+    //     //showTermsOfServiceDialog(context);
+    //   });
+    // //}
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

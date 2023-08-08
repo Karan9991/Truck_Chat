@@ -87,16 +87,16 @@ class _NewsTabState extends State<NewsTab> with AutomaticKeepAliveClientMixin {
             : ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: _newsItems.length + (_newsItems.length ~/ 5),
+                itemCount: _newsItems.length + (_newsItems.length ~/ 4),
                 itemBuilder: (context, index) {
-                  if (index % 6 == 5) {
+                  if (index % 5 == 4) {
                     // Check if it's the ad banner index
                     // The ad banner should be shown after every 5 items (0-based index)
 
                      return AdBannerWidget();
                   } else {
                     // Calculate the actual index in the news list
-                    final newsIndex = index - (index ~/ 6);
+                    final newsIndex = index - (index ~/ 5);
 
                     final newsItem = _newsItems[newsIndex];
 
