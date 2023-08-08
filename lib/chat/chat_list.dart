@@ -11,7 +11,6 @@
 // import 'package:http/http.dart' as http;
 // import 'package:chat/home_screen.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
-
 // import 'package:flutter/material.dart';
 // import 'package:intl/intl.dart';
 // import 'dart:async';
@@ -20,6 +19,7 @@
 // import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:app_settings/app_settings.dart';
 // import 'package:location/location.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 // class ChatListr extends StatefulWidget {
 //   final Key key;
@@ -65,13 +65,20 @@
 //     });
 
 //     InterstitialAdManager.initialize();
-
 //   }
 
 //   @override
 //   void dispose() {
 //     super.dispose();
 //     InterstitialAdManager.dispose();
+//   }
+
+//   @override
+//   void didChangeDependencies() {
+//     super.didChangeDependencies();
+
+//     // Call getData() when dependencies change (e.g., user returns to screen)
+//     getData();
 //   }
 
 //   Future<void> storedList() async {
@@ -97,7 +104,6 @@
 //   }
 
 //   Future<void> getConversationsData() async {
-
 //     String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 //     double? storedLatitude = SharedPrefs.getDouble(SharedPrefsKeys.LATITUDE);
 //     double? storedLongitude = SharedPrefs.getDouble(SharedPrefsKeys.LONGITUDE);
@@ -118,7 +124,7 @@
 
 //       if (response.statusCode == 200) {
 //         print('---------------ChatList Response---------------');
-//         // print(response.body);
+//         print(response.body);
 //         // print('--------------------------------------');
 
 //         Map<String, dynamic> jsonResponse = jsonDecode(response.body);
@@ -201,8 +207,6 @@
 //                 }
 
 //                 conversations.add(conversation);
-
-//                 //  setState(() {});
 //               } catch (e) {
 //                 // Handle JSON decoding error
 //               }
@@ -215,7 +219,6 @@
 //         }
 //         // Store conversations in shared preferences
 //         await storeConversations(conversations);
-
 //       } else {
 //         // Handle connection error
 //       }
@@ -225,7 +228,8 @@
 //   }
 
 //   Future<void> _openAppSettings() async {
-//     await AppSettings.openAppSettings(type: AppSettingsType.location);
+//    await AppSettings.openAppSettings(type: AppSettingsType.location);
+
 //   }
 
 //   @override
@@ -296,165 +300,175 @@
 //             }
 
 //             return ListView.builder(
-//               // itemCount: conversationTopics.length,
-//               itemCount: conversationTopics.length,
+//                 // itemCount: conversationTopics.length,
+//                 itemCount: conversationTopics.length +
+//                     (conversationTopics.length ~/ 5),
+//                 itemBuilder: (context, index) {
+//                   if (index % 6 == 5) {
+//                     // Check if it's the ad banner index
+//                     // The ad banner should be shown after every 5 items (0-based index)
+//                     return AdBannerWidget();
+//                   } else {
+//                     // Calculate the actual index in the conversation topics list
+//                     final conversationIndex = index - (index ~/ 6);
+//                     final conversation = storedConversations[conversationIndex];
+//                     final topic = conversationTopics[conversationIndex];
+//                     final timestampp =
+//                         conversationTimestamps[conversationIndex];
+//                     final count = replyCounts[conversationIndex];
+//                     final serverMsgID = serverMsgIds[conversationIndex];
 
-//               itemBuilder: (context, index) {
-//                 final conversation = storedConversations[index];
-//                 final topic = conversationTopics[index];
-//                 final timestampp = conversationTimestamps[index];
-//                 final count = replyCounts[index];
-//                 final serverMsgID = serverMsgIds[index];
+//                     DateTime dateTime =
+//                         DateTime.fromMillisecondsSinceEpoch(timestampp);
+//                     String formattedDateTime =
+//                         DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
+//                     final timestamp = formattedDateTime;
 
-//                 DateTime dateTime =
-//                     DateTime.fromMillisecondsSinceEpoch(timestampp);
-//                 String formattedDateTime =
-//                     DateFormat('MMM d, yyyy h:mm:ss a').format(dateTime);
-//                 final timestamp = formattedDateTime;
+//                     final isRead = conversation.isRead;
 
-//                 final isRead = conversation.isRead;
+//                     // print('List item read status $isRead');
 
-//                 // print('List item read status $isRead');
+//                     return GestureDetector(
+//                       onTap: () async {
+//                         if (!isRead) {
+//                           // Mark conversation as read
+//                           conversation.isRead = true;
+//                           await storeConversations(storedConversations);
+//                           setState(() {}); // Trigger a rebuild of the widget
+//                         }
 
-//                 return GestureDetector(
-//                   onTap: () async {
-//                     if (!isRead) {
-//                       // Mark conversation as read
-//                       conversation.isRead = true;
-//                       await storeConversations(storedConversations);
-//                       setState(() {}); // Trigger a rebuild of the widget
-//                     }
+//                         InterstitialAdManager.showInterstitialAd();
 
-//                     InterstitialAdManager.showInterstitialAd();
-
-//                     Navigator.push(
-//                       context,
-//                       MaterialPageRoute(
-//                         builder: (context) => Chat(
-//                           topic: topic,
-//                           serverMsgId: serverMsgID,
-//                         ),
-//                       ),
-//                     ).then((_) {
-//                       // Called when returning from the chat screen
-//                       setState(() {}); // Trigger a rebuild of the widget
-//                     });
-//                   },
-//                   onLongPress: () {
-//                     showDialog(
-//                       context: context,
-//                       builder: (BuildContext context) {
-//                         return AlertDialog(
-//                           content: Column(
-//                             mainAxisSize: MainAxisSize.min,
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-
-//                               isRead
-//                                   ? _buildDialogOption(
-//                                       DialogStrings.MARK_CHAT_THIS_UNREAD,
-//                                       DialogStrings.MARK_CHAT_UNREAD, () async {
-//                                       print('Chat UnRead');
-//                                       conversation.isRead = false;
-//                                       await storeConversations(
-//                                           storedConversations);
-//                                       setState(() {});
-
-//                                       Navigator.of(context)
-//                                           .pop(); // Close the dialog if needed
-//                                     })
-//                                   : _buildDialogOption(
-//                                       DialogStrings.MARK_CHAT_READ,
-//                                       DialogStrings.MESSAGE_ICON_WILL,
-//                                       () async {
-//                                       print('Chat Read');
-//                                       conversation.isRead = true;
-//                                       await storeConversations(
-//                                           storedConversations);
-//                                       setState(() {});
-
-//                                       Navigator.of(context)
-//                                           .pop(); // Close the dialog if needed
-//                                     }),
-//                             ],
-//                           ),
-//                           actions: [
-//                             TextButton(
-//                               child: Text(DialogStrings.CANCEL),
-//                               onPressed: () {
-//                                 Navigator.of(context).pop();
-//                               },
+//                         Navigator.push(
+//                           context,
+//                           MaterialPageRoute(
+//                             builder: (context) => Chat(
+//                               topic: topic,
+//                               serverMsgId: serverMsgID,
 //                             ),
-//                           ],
+//                           ),
+//                         ).then((_) {
+//                           // Called when returning from the chat screen
+//                           setState(() {}); // Trigger a rebuild of the widget
+//                         });
+//                       },
+//                       onLongPress: () {
+//                         showDialog(
+//                           context: context,
+//                           builder: (BuildContext context) {
+//                             return AlertDialog(
+//                               content: Column(
+//                                 mainAxisSize: MainAxisSize.min,
+//                                 crossAxisAlignment: CrossAxisAlignment.start,
+//                                 children: [
+//                                   isRead
+//                                       ? _buildDialogOption(
+//                                           DialogStrings.MARK_CHAT_THIS_UNREAD,
+//                                           DialogStrings.MARK_CHAT_UNREAD,
+//                                           () async {
+//                                           print('Chat UnRead');
+//                                           conversation.isRead = false;
+//                                           await storeConversations(
+//                                               storedConversations);
+//                                           setState(() {});
+
+//                                           Navigator.of(context)
+//                                               .pop(); // Close the dialog if needed
+//                                         })
+//                                       : _buildDialogOption(
+//                                           DialogStrings.MARK_CHAT_READ,
+//                                           DialogStrings.MESSAGE_ICON_WILL,
+//                                           () async {
+//                                           print('Chat Read');
+//                                           conversation.isRead = true;
+//                                           await storeConversations(
+//                                               storedConversations);
+//                                           setState(() {});
+
+//                                           Navigator.of(context)
+//                                               .pop(); // Close the dialog if needed
+//                                         }),
+//                                 ],
+//                               ),
+//                               actions: [
+//                                 TextButton(
+//                                   child: Text(DialogStrings.CANCEL),
+//                                   onPressed: () {
+//                                     Navigator.of(context).pop();
+//                                   },
+//                                 ),
+//                               ],
+//                             );
+//                           },
 //                         );
 //                       },
-//                     );
-//                   },
-//                   child: Card(
-//                     elevation: 2,
-//                     color: Colors.blue[300],
-//                     margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-//                     child: ListTile(
-//                       title: Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           isRead
-//                               ? SizedBox()
-//                               : Row(
-//                                   children: [
-//                                     Icon(
-//                                       Icons.chat,
-//                                       size: 17,
+//                       child: Card(
+//                         elevation: 2,
+//                         color: Colors.blue[300],
+//                         margin:
+//                             EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+//                         child: ListTile(
+//                           title: Column(
+//                             crossAxisAlignment: CrossAxisAlignment.start,
+//                             children: [
+//                               isRead
+//                                   ? SizedBox()
+//                                   : Row(
+//                                       children: [
+//                                         Icon(
+//                                           Icons.chat,
+//                                           size: 17,
+//                                         ),
+//                                         SizedBox(width: 8),
+//                                       ],
 //                                     ),
-//                                     SizedBox(width: 8),
-//                                   ],
+//                               Text(
+//                                 topic,
+//                                 style: TextStyle(
+//                                   fontSize: 18,
+//                                   fontWeight: isRead
+//                                       ? FontWeight.normal
+//                                       : FontWeight.bold,
 //                                 ),
-//                           Text(
-//                             topic,
-//                             style: TextStyle(
-//                               fontSize: 18,
-//                               fontWeight:
-//                                   isRead ? FontWeight.normal : FontWeight.bold,
-//                             ),
-//                             overflow: TextOverflow
-//                                 .ellipsis, // Show ellipsis if the text overflows
-//                             maxLines: 3, // Show only one line of text
-//                           ),
-//                         ],
-//                       ),
-//                       subtitle: Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           Padding(
-//                             padding: EdgeInsets.only(bottom: 5, top: 8),
-//                             child: Text(
-//                               '${Constants.LAST_ACTIVE}$timestamp',
-//                               style: TextStyle(fontSize: 14),
-//                             ),
-//                           ),
-//                           Padding(
-//                             padding: EdgeInsets.only(bottom: 5),
-//                             child: Text(
-//                               '${Constants.REPLIES}$count',
-//                               style: TextStyle(
-//                                 fontSize: 14,
-//                                 fontWeight: isRead
-//                                     ? FontWeight.normal
-//                                     : FontWeight.bold,
+//                                 overflow: TextOverflow
+//                                     .ellipsis, // Show ellipsis if the text overflows
+//                                 maxLines: 3, // Show only one line of text
 //                               ),
-//                             ),
+//                             ],
 //                           ),
-//                         ],
+//                           subtitle: Column(
+//                             crossAxisAlignment: CrossAxisAlignment.start,
+//                             children: [
+//                               Padding(
+//                                 padding: EdgeInsets.only(bottom: 5, top: 8),
+//                                 child: Text(
+//                                   '${Constants.LAST_ACTIVE}$timestamp',
+//                                   style: TextStyle(fontSize: 14),
+//                                 ),
+//                               ),
+//                               Padding(
+//                                 padding: EdgeInsets.only(bottom: 5),
+//                                 child: Text(
+//                                   '${Constants.REPLIES}$count',
+//                                   style: TextStyle(
+//                                     fontSize: 14,
+//                                     fontWeight: isRead
+//                                         ? FontWeight.normal
+//                                         : FontWeight.bold,
+//                                   ),
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                           trailing: Icon(
+//                             Icons.arrow_forward_ios,
+//                             color: Colors.white,
+//                           ),
+//                         ),
 //                       ),
-//                       trailing: Icon(
-//                         Icons.arrow_forward_ios,
-//                         color: Colors.white,
-//                       ),
-//                     ),
-//                   ),
-//                 );
-//               },
-//             );
+//                     );
+//                   }
+//                 });
 //           } else {
 //             // Handle error case
 //             return Center(
@@ -494,8 +508,11 @@
 // }
 
 //testing 1 for put add in 5 entries
+// import 'dart:html';
+
 import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/chat/chat.dart';
+import 'package:chat/main.dart';
 import 'package:chat/settings/settings.dart';
 import 'package:chat/utils/ads.dart';
 import 'package:chat/utils/alert_dialog.dart';
@@ -529,7 +546,7 @@ class ChatListr extends StatefulWidget {
 }
 
 class _ChatListrState extends State<ChatListr>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
   List<String> conversationTopics = [];
@@ -546,6 +563,7 @@ class _ChatListrState extends State<ChatListr>
 
   Location location = Location();
   late PermissionStatus _permissionGranted;
+  bool isAppSettingsOpen = false;
 
   @override
   bool get wantKeepAlive => true;
@@ -553,6 +571,8 @@ class _ChatListrState extends State<ChatListr>
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
 
     getData().then((_) {
       setState(() {
@@ -565,6 +585,8 @@ class _ChatListrState extends State<ChatListr>
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+
     super.dispose();
     InterstitialAdManager.dispose();
   }
@@ -579,14 +601,28 @@ class _ChatListrState extends State<ChatListr>
     }
   }
 
+  // Future<void> getData() async {
+  //   _permissionGranted = await location.hasPermission();
+
+  //   if (_permissionGranted == PermissionStatus.granted ||
+  //       _permissionGranted == PermissionStatus.grantedLimited) {
+  //     await registerDevice();
+  //     await getConversationsData();
+  //   } else {
+  //     await registerDevice();
+  //     await getConversationsData();
+  //   }
+  // }
+
   Future<void> getData() async {
     _permissionGranted = await location.hasPermission();
 
-    if (_permissionGranted == PermissionStatus.granted ||
-        _permissionGranted == PermissionStatus.grantedLimited) {
-      await getConversationsData();
+    if (_permissionGranted == PermissionStatus.denied ||
+        _permissionGranted == PermissionStatus.deniedForever) {
+      print('get data permission denied');
     } else {
-      registerDevice();
+      print('get data else');
+      await registerDevice();
       await getConversationsData();
     }
   }
@@ -612,7 +648,7 @@ class _ChatListrState extends State<ChatListr>
 
       if (response.statusCode == 200) {
         print('---------------ChatList Response---------------');
-         print(response.body);
+        print(response.body);
         // print('--------------------------------------');
 
         Map<String, dynamic> jsonResponse = jsonDecode(response.body);
@@ -717,12 +753,120 @@ class _ChatListrState extends State<ChatListr>
     }
   }
 
-  Future<void> _openAppSettings() async {
+//   Future<void> _openAppSettings(BuildContext context) async {
+//     await AppSettings.openAppSettings(type: AppSettingsType.location);
+
+// await Navigator.push(context, MaterialPageRoute(builder: (context) => this.widget));
+//   // Refresh the data after returning from settings
+//   getData();
+//   setState(() {});
+//     //  Navigator.pop(context); // Navigate back to ChatListr screen
+
+//     // Navigator.push(
+//     //   context,
+//     //   MaterialPageRoute(
+//     //     builder: (context) => HomeScreen(
+//     //     ),
+//     //   ),
+//     // );
+//   }
+  Future<void> _openAppSettings(BuildContext context) async {
+    // Open app settings
+    //  if (mounted) {
+    setState(() {
+      isAppSettingsOpen = true;
+
+      isLoading = true;
+    });
+    //  }
     await AppSettings.openAppSettings(type: AppSettingsType.location);
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+     setState(() {
+
+      isLoading = true;
+    });
+    Location location = Location();
+    late PermissionStatus _permissionGranted;
+    print('-----------start-------------');
+    print('AppLifecycleState: $state'); // Add this line
+
+    print('iiiiiiiiiiiiisloading $isLoading');
+    print('iiiiiiiiiiiiiappopen $isAppSettingsOpen');
+
+    if (state == AppLifecycleState.resumed) {
+      print('iiiiiiiiiiiiisiffloading $isLoading');
+
+      // isAppSettingsOpen = false; // Reset the flag
+
+      //   _initData();
+
+      _permissionGranted = await location.hasPermission();
+
+      print('ppppppppppermission $_permissionGranted');
+
+      if (_permissionGranted == PermissionStatus.granted ||
+          _permissionGranted == PermissionStatus.grantedLimited) {
+        print('if Screen refreshed after returning from settings');
+
+        await registerDevice();
+        await getData();
+        setState(() {
+          isLoading = false;
+        });
+      } else {
+        print('eeelllssee');
+      }
+      //  else if (_permissionGranted == PermissionStatus.denied) {
+      //   await registerDevice();
+      //   await getData();
+      //   setState(() {
+      //     isLoading = false;
+      //   });
+      //   print('else if Screen refreshed after returning from settings');
+      // }
+      //  if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+      // }
+      print('iiiiiiiiiiiiisendloading $isLoading');
+    } else {
+      print('main else');
+    }
+    print('------------end-------------');
+  }
+
+  void _initData() async {
+    _permissionGranted = await location.hasPermission();
+    print('initdata');
+    print(_permissionGranted);
+    if (isAppSettingsOpen) {
+      if (_permissionGranted == PermissionStatus.denied ||
+          _permissionGranted == PermissionStatus.deniedForever) {
+        print('_initdata permission denied');
+      } else {
+        print('_initdata else');
+        await registerDevice();
+        await getData();
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // ModalRoute.of(context)!.addScopedWillPopCallback(() async {
+    //   // This callback will be triggered when the user navigates back from settings
+    //   setState(() {});
+    //   return true; // Allow the route to be popped
+    // });
     return Scaffold(
       appBar: null,
       body: FutureBuilder<List<Conversation>>(
@@ -760,7 +904,7 @@ class _ChatListrState extends State<ChatListr>
                   SizedBox(height: 16),
                   TextButton(
                     onPressed: () {
-                      _openAppSettings();
+                      _openAppSettings(context);
                     },
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.white,

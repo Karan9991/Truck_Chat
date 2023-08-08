@@ -28,7 +28,15 @@ class _NewsTabState extends State<NewsTab> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
+
     fetchDataFromServer();
+    InterstitialAdManager.initialize();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    InterstitialAdManager.dispose();
   }
 
   Future<void> fetchDataFromServer() async {
@@ -84,7 +92,8 @@ class _NewsTabState extends State<NewsTab> with AutomaticKeepAliveClientMixin {
                   if (index % 6 == 5) {
                     // Check if it's the ad banner index
                     // The ad banner should be shown after every 5 items (0-based index)
-                    return AdBannerWidget();
+
+                     return AdBannerWidget();
                   } else {
                     // Calculate the actual index in the news list
                     final newsIndex = index - (index ~/ 6);
@@ -102,6 +111,8 @@ class _NewsTabState extends State<NewsTab> with AutomaticKeepAliveClientMixin {
                       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                       child: InkWell(
                         onTap: () {
+                          InterstitialAdManager.showInterstitialAd();
+
                           navigateToURL(newsItem.link);
                         },
                         child: Padding(
@@ -185,5 +196,3 @@ class NewsItem {
     );
   }
 }
-
-

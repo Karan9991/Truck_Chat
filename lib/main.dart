@@ -66,6 +66,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+    final LocationPermissionObserver _observer = LocationPermissionObserver();
+
   MyApp({super.key});
 
   // This widget is the root of your application.
@@ -426,4 +428,21 @@ void configLocalNotification() {
     iOS: initializationSettingsIOS,
   );
   flutterLocalNotificationsPlugin.initialize(initializationSettings);
+}
+
+
+class LocationPermissionObserver extends NavigatorObserver {
+  bool settingsScreenOpened = false;
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    if (previousRoute is MaterialPageRoute) {
+      settingsScreenOpened = true;
+    }
+    super.didPush(route, previousRoute);
+  }
+
+  void userReturnedFromSettingsScreen() {
+    settingsScreenOpened = false;
+  }
 }
