@@ -30,12 +30,10 @@ import 'package:firebase_database/firebase_database.dart';
 
 class Chat extends StatefulWidget {
   final String topic;
-  //  final List<ReplyMsg> replyMsgs;
   final String serverMsgId;
 
   Chat({
     required this.topic,
-    //  required this.replyMsgs,
     required this.serverMsgId,
   });
 
@@ -61,9 +59,7 @@ class _ChatState extends State<Chat> {
   bool sendingMessage = false; // Added variable to track sending state
   String? shareprefuserId = SharedPrefs.getString('userId');
   int userId = 0;
-  // double? storedLatitude = 1.0;
-  // double? storedLongitude = 1.0;
-  // late Timer refreshTimer;
+
   ScrollController _scrollController = ScrollController();
   String? currentUserHandle;
   String? currentUserEmojiId;
@@ -87,11 +83,7 @@ class _ChatState extends State<Chat> {
 
     _firebaseMessaging.subscribeToTopic('all');
 
-    //InterstitialAdManager.initialize();
-
     userId = int.parse(shareprefuserId!);
-    // storedLatitude = SharedPrefs.getDouble('latitude');
-    // storedLongitude = SharedPrefs.getDouble('longitude');
 
     currentUserHandle =
         SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
@@ -135,8 +127,6 @@ class _ChatState extends State<Chat> {
 
     SharedPrefs.setBool('isUserOnPublicChatScreen', false);
 
-    // refreshTimer.cancel();
-    //InterstitialAdManager.dispose();
     super.dispose();
   }
 
@@ -173,14 +163,6 @@ class _ChatState extends State<Chat> {
 
     WidgetsBinding.instance?.addPostFrameCallback((_) =>
         scrollToBottom()); // Call scrollToBottom() after the first frame is rendered
-
-    //   WidgetsBinding.instance!.addPostFrameCallback((_) {
-    //   _scrollController.animateTo(
-    //     _scrollController.position.maxScrollExtent,
-    //     duration: Duration(milliseconds: 500),
-    //     curve: Curves.ease,
-    //   );
-    // });
   }
 
   Future<void> sendFCMNotification(String topic, String message) async {
@@ -219,6 +201,81 @@ class _ChatState extends State<Chat> {
     } catch (e) {
       print('Error sending FCM notification: $e');
     }
+  }
+
+  Future<void> sendPrivateChatNotification(
+      String receiverFCMToken, String senderId, String receiverId) async {
+    print('receiver token $receiverFCMToken');
+    // Replace 'YOUR_SERVER_KEY' with your FCM server key
+    String serverKey =
+        'AAAAeR6Pnuo:APA91bHiasD4BKzgcY04ZiQ8oNi0L3HdOBeLBtUrxPfemCHHlxY0SGRP9VQ4kowDqRtOacdN8HUjmDTTMOgV1IzActxqGbKCT2W6dRm3Om5baCfJjDlBWnOm5vNqO-goLJRJV0UG1XgL';
+    String url = 'https://fcm.googleapis.com/fcm/send';
+
+    // Replace 'YOUR_NOTIFICATION_TITLE' and 'YOUR_NOTIFICATION_BODY' with your desired notification title and body
+    // String notificationTitle = currentUserName ?? 'New Message';
+    // String notificationBody = message;
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'key=$serverKey',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'notification': <String, dynamic>{
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'body': 'Tap here to open TruckChat',
+            'title': 'You got Private Chat Request',
+            'sound': 'default',
+          },
+          // 'priority': 'high',
+          'data': <String, dynamic>{
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'type': 'privatechat',
+            'senderUserId': currentUserId,
+            'receiverUserId': receiverId,
+          },
+          'to': receiverFCMToken,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Notification sent successfully');
+      } else {
+        print(
+            'Failed to send notification. StatusCode: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Failed to send notification. Error: $e');
+    }
+  }
+
+  Future<String?> getFCMToken(String receiverId) async {
+    DatabaseReference fcmTokenRef = FirebaseDatabase.instance
+        .ref()
+        .child('users')
+        .child(receiverId)
+        .child('fcmToken');
+
+    // Check if the token already exists in the database
+    DatabaseEvent event = await fcmTokenRef.once();
+    DataSnapshot dataSnapshot = event.snapshot;
+
+    String? token = dataSnapshot.value as String?;
+
+    if (token == null) {
+      // If the token doesn't exist in the database, generate a new token
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+      token = await messaging.getToken();
+
+      if (token != null) {
+        // Store the newly generated token in the database
+        fcmTokenRef.set(token);
+      }
+    }
+
+    return token;
   }
 
   Future<bool> getAllMessages(dynamic conversationId) async {
@@ -385,11 +442,10 @@ class _ChatState extends State<Chat> {
 
       if (response.statusCode == 200) {
         print('Message Sent');
-        setState(() {
-          sendingMessage = false; // Set sending state to false
-          WidgetsBinding.instance
-              ?.addPostFrameCallback((_) => scrollToBottom());
-        });
+        // setState(() {
+        // WidgetsBinding.instance
+        //     ?.addPostFrameCallback((_) => scrollToBottom());
+        //});
 
         final jsonResult = jsonDecode(response.body);
         print('---------------Send Message Response---------------');
@@ -398,6 +454,14 @@ class _ChatState extends State<Chat> {
         int statusCode = jsonResult[API.STATUS] as int;
 
         /// print('status code $statusCode');
+        await sendFCMNotification('all', 'message');
+
+        setState(() {
+          sendingMessage = false; // Set sending state to false
+
+          WidgetsBinding.instance
+              ?.addPostFrameCallback((_) => scrollToBottom());
+        });
 
         if (jsonResult.containsKey(API.MESSAGE)) {
           String status_message = jsonResult[API.MESSAGE] as String;
@@ -752,26 +816,6 @@ class _ChatState extends State<Chat> {
                                                             width: 30,
                                                             height: 30,
                                                           ),
-                                                          // if (privateChat ==
-                                                          //     '1') // Check if privateChat is 1 to show the indicator
-                                                          //   Padding(
-                                                          //     padding: EdgeInsets.only(
-                                                          //         top: 0.0,
-                                                          //         right: 0.0,
-                                                          //         left: 10,
-                                                          //         bottom:
-                                                          //             10), // Add padding here
-                                                          //     child: Container(
-                                                          //       width: 10,
-                                                          //       height: 10,
-                                                          //       decoration:
-                                                          //           BoxDecoration(
-                                                          //         color: brightGreen,
-                                                          //         shape:
-                                                          //             BoxShape.circle,
-                                                          //       ),
-                                                          //     ),
-                                                          //   ),
                                                         ],
                                                       ),
                                                     if (privateChat ==
@@ -861,10 +905,6 @@ class _ChatState extends State<Chat> {
                                             print(
                                                 'private chat $receiverUserName');
 
-                                            //sendPrivateChatInvite();
-                                            // sendRequest(
-                                            //     '1', '2', reply.emojiId, userName[0]);
-
                                             String? chatHandle = SharedPrefs
                                                 .getString(SharedPrefsKeys
                                                     .CURRENT_USER_CHAT_HANDLE);
@@ -872,17 +912,27 @@ class _ChatState extends State<Chat> {
                                             int? avatarId = SharedPrefs.getInt(
                                                 SharedPrefsKeys
                                                     .CURRENT_USER_AVATAR_ID);
+
+                                            print('-------000000--------');
+                                            print(
+                                                'current user emojiid $currentUserEmojiId');
+                                            print('avatar id $avatarId');
+                                            print('-------111111--------');
+
                                             if (chatHandle == null) {
                                               showChatHandleDialog(context);
                                             } else if (avatarId == null) {
                                               showAvatarSelectionDialog(
                                                   context);
                                             } else {
+                                              String realEmojiId =
+                                                  avatarId.toString();
+                                              print(
+                                                  'real emoji id $realEmojiId');
                                               sendRequest(
                                                   currentUserId!,
                                                   reply.uid.toString(),
-                                                  currentUserEmojiId ??
-                                                      avatarId.toString(),
+                                                  realEmojiId,
                                                   currentUserHandle ??
                                                       chatHandle,
                                                   reply.emojiId,
@@ -999,27 +1049,6 @@ class _ChatState extends State<Chat> {
                                                               width: 30,
                                                               height: 30,
                                                             ),
-                                                            // if (privateChat ==
-                                                            //     '1') // Check if privateChat is 1 to show the indicator
-                                                            //   Padding(
-                                                            //     padding: EdgeInsets.only(
-                                                            //         top: 0.0,
-                                                            //         right: 0.0,
-                                                            //         left: 10,
-                                                            //         bottom:
-                                                            //             10), // Add padding here
-                                                            //     child: Container(
-                                                            //       width: 10,
-                                                            //       height: 10,
-                                                            //       decoration:
-                                                            //           BoxDecoration(
-                                                            //         color:
-                                                            //             brightGreen,
-                                                            //         shape: BoxShape
-                                                            //             .circle,
-                                                            //       ),
-                                                            //     ),
-                                                            //   ),
                                                           ],
                                                         ),
                                                       if (privateChat ==
@@ -1074,51 +1103,97 @@ class _ChatState extends State<Chat> {
                                   ),
                           );
                         } else {
-                          final sentIndex = index - filteredReplyMsgs.length;
-                          final sentMessage = sentMessages[sentIndex];
-                          final timestampp = sentMessage.timestamp;
+                          // final sentIndex = index - filteredReplyMsgs.length;
+                          // final sentMessage = sentMessages[sentIndex];
+                          // final timestampp = sentMessage.timestamp;
 
-                          DateTime dateTime =
-                              DateTime.fromMillisecondsSinceEpoch(timestampp);
-                          String formattedDateTime =
-                              DateFormat('MMM d, yyyy h:mm:ss a')
-                                  .format(dateTime);
-                          final timestamp = formattedDateTime;
+                          // DateTime dateTime =
+                          //     DateTime.fromMillisecondsSinceEpoch(timestampp);
+                          // String formattedDateTime =
+                          //     DateFormat('MMM d, yyyy h:mm:ss a')
+                          //         .format(dateTime);
+                          // final timestamp = formattedDateTime;
 
-                          bool isCurrentUser = sentMessage.uid ==
-                              userId; // Check if the user_id is equal to 69979
+                          // bool isCurrentUser = sentMessage.uid ==
+                          //     userId; // Check if the user_id is equal to 69979
 
-                          return Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: ChatBubble(
-                              clipper: ChatBubbleClipper6(
-                                  type: isCurrentUser
-                                      ? BubbleType.sendBubble
-                                      : BubbleType.receiverBubble),
-                              alignment: isCurrentUser
-                                  ? Alignment.topRight
-                                  : Alignment.topLeft,
-                              margin: EdgeInsets.only(bottom: 16.0),
-                              backGroundColor: Colors.blue[300],
-                              child: Container(
-                                constraints: BoxConstraints(maxWidth: 250.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      sentMessage.replyMsg,
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 20),
-                                    ),
-                                    SizedBox(height: 4.0),
-                                    Text(
-                                      timestamp,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
+                          // return Padding(
+                          //   padding: EdgeInsets.all(8.0),
+                          //   child: ChatBubble(
+                          //       clipper: ChatBubbleClipper6(
+                          //           type: isCurrentUser
+                          //               ? BubbleType.sendBubble
+                          //               : BubbleType.receiverBubble),
+                          //       alignment: isCurrentUser
+                          //           ? Alignment.topRight
+                          //           : Alignment.topLeft,
+                          //       margin: EdgeInsets.only(bottom: 16.0),
+                          //       backGroundColor: Colors.blue[300],
+                          //       child:
+
+                          //           // Container(
+                          //           //   constraints: BoxConstraints(maxWidth: 250.0),
+                          //           //   child: Column(
+                          //           //     crossAxisAlignment: CrossAxisAlignment.start,
+                          //           //     children: [
+                          //           //       Text(
+                          //           //         sentMessage.replyMsg,
+                          //           //         style: TextStyle(
+                          //           //             color: Colors.black, fontSize: 20),
+                          //           //       ),
+                          //           //       SizedBox(height: 4.0),
+                          //           //       Text(
+                          //           //         timestamp,
+                          //           //       ),
+                          //           //     ],
+                          //           //   ),
+                          //           // ),
+
+                          //           //testing 1
+                          //           Container(
+                          //         constraints: BoxConstraints(maxWidth: 250.0),
+                          //         child: Column(
+                          //           crossAxisAlignment:
+                          //               CrossAxisAlignment.start,
+                          //           children: [
+                          //             Row(
+                          //               crossAxisAlignment:
+                          //                   CrossAxisAlignment.start,
+                          //               children: [
+                          //                 if (SharedPrefs.getString(SharedPrefsKeys
+                          //                         .CURRENT_USER_AVATAR_IMAGE_PATH) !=
+                          //                     null)
+                          //                   Image.asset(
+                          //                     SharedPrefs.getString(SharedPrefsKeys
+                          //                         .CURRENT_USER_AVATAR_IMAGE_PATH)!,
+                          //                     width: 30,
+                          //                     height: 30,
+                          //                   ),
+                          //                 SizedBox(width: 8.0),
+                          //                 Expanded(
+                          //                   child: Column(
+                          //                     crossAxisAlignment:
+                          //                         CrossAxisAlignment.start,
+                          //                     children: [
+                          //                       Text(
+                          //                         sentMessage.replyMsg,
+                          //                         style: TextStyle(
+                          //                             color: Colors.black,
+                          //                             fontSize: 20),
+                          //                       ),
+                          //                       SizedBox(height: 4.0),
+                          //                       Text(
+                          //                         timestamp,
+                          //                       ),
+                          //                     ],
+                          //                   ),
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       )),
+                          // );
                         }
                       },
                     ),
@@ -1160,26 +1235,26 @@ class _ChatState extends State<Chat> {
                         } else if (avatarId == null) {
                           showAvatarSelectionDialog(context);
                         } else {
-                          bool messageSent = await sendMessage(
+                          await sendMessage(
                             messageController.text,
                             widget.serverMsgId,
                             userId,
                           );
-                          if (messageSent) {
-                            print('message sent');
+                          // if (messageSent) {
+                          //   print('message sent');
 
-                            sendFCMNotification('all', 'message');
+                          //   // sendFCMNotification('all', 'message');
 
-                            setState(() {
-                              WidgetsBinding.instance?.addPostFrameCallback(
-                                  (_) => scrollToBottom());
-                            });
+                          //   // setState(() {
+                          //   //   WidgetsBinding.instance?.addPostFrameCallback(
+                          //   //       (_) => scrollToBottom());
+                          //   //});
 
-                            // Message sent successfully, handle any UI updates if needed
-                          } else {
-                            print('message failed');
-                            // Failed to send the message, handle any UI updates if needed
-                          }
+                          //   // Message sent successfully, handle any UI updates if needed
+                          // } else {
+                          //   print('message failed');
+                          //   // Failed to send the message, handle any UI updates if needed
+                          // }
                           setState(() {
                             messageController.clear();
                           });
@@ -1208,8 +1283,8 @@ class _ChatState extends State<Chat> {
     );
   }
 
-  void sendRequest(String senderId, String receiverId, String emojiId,
-      String userName, String receiverEmojiId, String receiverUserName) {
+  Future<void> sendRequest(String senderId, String receiverId, String emojiId,
+      String userName, String receiverEmojiId, String receiverUserName) async {
     DatabaseReference requestsRef =
         FirebaseDatabase.instance.ref().child('requests');
 
@@ -1224,6 +1299,10 @@ class _ChatState extends State<Chat> {
     );
     requestsRef.push().set(request.toJson());
 
+    final receiverFCMToken = await getFCMToken(receiverId);
+    // Send notification to the receiver
+    await sendPrivateChatNotification(
+        receiverFCMToken ?? '', senderId, receiverId);
     sendPrivateChatRequest(context, 'Your request has been sent.',
         'Once user accepted your request chat list will appear in private chat tab');
   }
@@ -1394,32 +1473,6 @@ class _ChatState extends State<Chat> {
     });
   }
 }
-
-// class Request {
-//   final String senderId;
-//   final String receiverId;
-//   final String status;
-//   final String emojiId;
-//   final String userName;
-
-//   Request({
-//     required this.senderId,
-//     required this.receiverId,
-//     required this.status,
-//     required this.emojiId,
-//     required this.userName,
-//   });
-
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'senderId': senderId,
-//       'receiverId': receiverId,
-//       'status': status,
-//       'emojiId': emojiId,
-//       'userName': userName,
-//     };
-//   }
-// }
 
 class Request {
   final String senderId;

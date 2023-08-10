@@ -3,19 +3,21 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:chat/home_screen.dart';
 import 'package:chat/privateChat/chat.dart';
+import 'package:chat/utils/alert_dialog.dart';
 import 'package:chat/utils/avatar.dart';
 import 'package:chat/utils/chat_handle.dart';
 import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/device_type.dart';
 import 'package:chat/utils/register_user.dart';
 import 'package:chat/utils/shared_pref.dart';
+import 'package:chat/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
- import 'package:location/location.dart';
+import 'package:location/location.dart';
 // import 'package:location2/location2.dart';
 
 import 'package:device_info/device_info.dart';
@@ -49,7 +51,7 @@ void main() async {
   _configureFCM();
 
   await SharedPrefs.init();
-   await registerDevice();
+  await registerDevice();
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isAppInstalled = prefs.getBool('isAppInstalled') ?? false;
@@ -66,7 +68,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-    final LocationPermissionObserver _observer = LocationPermissionObserver();
+  final LocationPermissionObserver _observer = LocationPermissionObserver();
 
   MyApp({super.key});
 
@@ -133,12 +135,10 @@ Future<void> initNotificationsAndSoundPrefs() async {
   SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS, true);
   SharedPrefs.setBool(SharedPrefsKeys.NOTIFICATIONS_TONE, true);
   SharedPrefs.setBool(SharedPrefsKeys.VIBRATE, true);
-  SharedPrefs.setBool(SharedPrefsKeys.PRIVATE_CHAT, false);
+  SharedPrefs.setBool(SharedPrefsKeys.PRIVATE_CHAT, true);
   SharedPrefs.setBool('isUserOnChatScreen', false);
   SharedPrefs.setBool('isUserOnPublicChatScreen', false);
 }
-
-
 
 // Future<void> registerDevice() async {
 //   String user_id = '';
@@ -309,7 +309,7 @@ void _configureFCM() {
     // _showLocalNotification(message.data);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print('onMessageOpenedApp $message');
+    print('onMessageOpenedApp----------------->');
     // handleFCMMessage(message.data, message);
 
     if (message.notification != null) {
@@ -345,6 +345,8 @@ void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) async {
     if (!SharedPrefs.getBool('isUserOnChatScreen')!) {
       showNotification(title, body);
     }
+  } else if (notificationType == 'privatechat') {
+    showNotification(title, body);
   }
 }
 
@@ -429,7 +431,6 @@ void configLocalNotification() {
   );
   flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
-
 
 class LocationPermissionObserver extends NavigatorObserver {
   bool settingsScreenOpened = false;

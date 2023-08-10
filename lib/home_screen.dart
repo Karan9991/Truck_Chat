@@ -778,7 +778,6 @@ class _HomeScreenState extends State<HomeScreen>
   PageStorageBucket _bucket = PageStorageBucket();
   late TabController _tabController;
 
-
   int _selectedIndex = 1;
   final List<Widget> _widgetOptions = [
     NewsTab(
@@ -815,11 +814,11 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
+    InterstitialAdManager.initialize();
+
     _tabController = TabController(length: 5, vsync: this, initialIndex: 1);
 
     currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
-
-  
 
     bool hasAgreed = SharedPrefs.getBool(SharedPrefsKeys.TERMS_AGREED) ?? false;
     if (!hasAgreed) {
@@ -828,17 +827,9 @@ class _HomeScreenState extends State<HomeScreen>
       });
     }
 
-    //getFCMToken(currentUserId!);
-
     getFirebaseTokenn();
 
     _refreshChatListWithFCM();
-
-    InterstitialAdManager.initialize();
-
-    //    Future.delayed(Duration(seconds: 5), () {
-    // InterstitialAdManager.showInterstitialAd();
-    // });
   }
 
   Future<void> getFirebaseTokenn() async {
@@ -850,7 +841,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
 //testing start
-  
+
   Future<bool> isAppInstalled() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isAppInstalled = prefs.getBool('isAppInstalled') ?? false;
@@ -1453,16 +1444,28 @@ class _HomeScreenState extends State<HomeScreen>
 //     );
 //   }
 // }
+  void setupFirebaseMessaging(BuildContext context) {
+    // Set up FCM initialization here
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('XXXXXXXXXXXXXXXXXXXXXXXXXXX---------->');
+      showTermsOfServiceDialog(context);
+      // Handle the situation when user interacts with FCM notification
+      // while the app is already open in the foreground
+      // Navigate to a specific screen or perform other actions
+    });
+  }
 
 //testing for overlapping last list item
   @override
   Widget build(BuildContext context) {
+    setupFirebaseMessaging(context);
+
     String? currentUserChatHandle =
         SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
     String appBarTitle = currentUserChatHandle != null
         ? '${Constants.APP_BAR_TITLE} ($currentUserChatHandle)'
         : Constants.APP_BAR_TITLE;
-
 
     // bool hasAgreed = SharedPrefs.getBool(SharedPrefsKeys.TERMS_AGREED) ?? false;
     // //if (!hasAgreed) {
@@ -1546,7 +1549,7 @@ class _HomeScreenState extends State<HomeScreen>
                 // Perform action when a pop-up menu item is selected
                 switch (value) {
                   case 'settings':
-                      InterstitialAdManager.showInterstitialAd();
+                    InterstitialAdManager.showInterstitialAd();
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SettingsScreen()),

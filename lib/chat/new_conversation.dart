@@ -40,8 +40,6 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
     // TODO: implement initState
     super.initState();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
-
   }
 
   @override
@@ -53,7 +51,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
 
   @override
   Widget build(BuildContext context) {
-        // Add a listener to the keyboard visibility
+    // Add a listener to the keyboard visibility
     // final bool isVisible =
     //     KeyboardVisibilityProvider.isKeyboardVisible(context);
 
@@ -70,7 +68,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
     // });
 
     return Scaffold(
-     resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(Constants.CONVERSATION),
       ),
@@ -78,7 +76,6 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
         children: [
           Expanded(
             child: SingleChildScrollView(
-
               // Wrap this section with SingleChildScrollView
               child: Container(
                 padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
@@ -251,11 +248,10 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
 
       if (userId == null) {
         print('4');
-
-        await registerDevice();
         setState(() {
           _isSending = true;
         });
+        await registerDevice();
 
         bool sent = await send();
 

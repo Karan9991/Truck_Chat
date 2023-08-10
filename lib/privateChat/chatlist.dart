@@ -28,13 +28,14 @@ class _ChatListScreenState extends State<ChatListScreen>
   @override
   void initState() {
     super.initState();
+    InterstitialAdManager.initialize();
+
     currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 
     // so in below line provided currentUserId 0 if no userId exist. Because app crashes when user doesn't allow
     //location permission which doesn't allow to register device to get user id.
 
     _loadChatList(currentUserId ?? '0');
-    InterstitialAdManager.initialize();
   }
 
   @override
@@ -103,7 +104,7 @@ class _ChatListScreenState extends State<ChatListScreen>
     print('deleteChat');
     // Assuming the user is already authenticated with Firebase Authentication
     // Replace 'userId' with the authenticated user's ID
-   // String userId = '70240'; // Change this to the authenticated user's ID
+    // String userId = '70240'; // Change this to the authenticated user's ID
 
     // Get the chat item corresponding to the selected index
     Map<dynamic, dynamic> chatItem = _chatList[index];
@@ -209,7 +210,7 @@ class _ChatListScreenState extends State<ChatListScreen>
                           ),
                     onTap: () {
                       // Open the chat screen with the selected user
-                      InterstitialAdManager.showInterstitialAd();
+                      // InterstitialAdManager.showInterstitialAd();
 
                       Navigator.push(
                         context,

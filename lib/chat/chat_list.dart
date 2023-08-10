@@ -571,6 +571,7 @@ class _ChatListrState extends State<ChatListr>
   @override
   void initState() {
     super.initState();
+    InterstitialAdManager.initialize();
 
     print('iiiiiiiiiiiiiiiinit called');
 
@@ -582,7 +583,6 @@ class _ChatListrState extends State<ChatListr>
       });
     });
 
-    InterstitialAdManager.initialize();
   }
 
   @override
@@ -918,7 +918,7 @@ class _ChatListrState extends State<ChatListr>
                           setState(() {}); // Trigger a rebuild of the widget
                         }
 
-                         InterstitialAdManager.showInterstitialAd();
+                       //  InterstitialAdManager.showInterstitialAd();
 
                         Navigator.push(
                           context,
