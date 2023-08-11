@@ -670,6 +670,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   Expanded(
                     child: TextField(
+                        minLines: 1,
+                      maxLines: 7,
                       controller: _messageController,
                       decoration: InputDecoration(
                         hintText: 'Type a message...',

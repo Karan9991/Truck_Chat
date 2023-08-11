@@ -2061,6 +2061,8 @@ class _StarredChatState extends State<StarredChat> {
                   ),
                   Expanded(
                     child: TextField(
+                        minLines: 1,
+                      maxLines: 7,
                       controller: messageController,
                       decoration: InputDecoration(
                         hintText: Constants.COMPOSE_MESSAGE,
