@@ -30,7 +30,7 @@ void showMarkAsReadUnreadDialog(BuildContext context) async {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
+                  builder: (context) => HomeScreen(initialTabIndex: 1,),
                 ),
               );
             }),
@@ -45,7 +45,7 @@ void showMarkAsReadUnreadDialog(BuildContext context) async {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
+                  builder: (context) => HomeScreen(initialTabIndex: 1,),
                 ),
               );
             }),
@@ -53,7 +53,9 @@ void showMarkAsReadUnreadDialog(BuildContext context) async {
         ),
         actions: [
           TextButton(
-            child: Text(DialogStrings.CANCEL),
+            child: Text(DialogStrings.CANCEL, style: TextStyle(
+                fontSize: 18, // Adjust the font size as needed
+              ),),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -93,10 +95,11 @@ void showMarkAsReadUnreadStarDialog(BuildContext context) async {
         ),
         actions: [
           TextButton(
-            child: Text(DialogStrings.CANCEL),
+            child: Text(DialogStrings.CANCEL,),
             onPressed: () {
               Navigator.of(context).pop();
             },
+   
           ),
         ],
       );

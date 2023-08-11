@@ -264,7 +264,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
 
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
+            MaterialPageRoute(builder: (context) => HomeScreen(initialTabIndex: 1,)),
           );
         }
       } else {
@@ -285,7 +285,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
 
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
+            MaterialPageRoute(builder: (context) => HomeScreen(initialTabIndex: 1,)),
           );
         }
       }

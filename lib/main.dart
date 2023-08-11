@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:chat/home_screen.dart';
 import 'package:chat/privateChat/chat.dart';
+import 'package:chat/privateChat/pending_requests.dart';
+import 'package:chat/privateChat/private_chat_homescreen.dart';
 import 'package:chat/utils/alert_dialog.dart';
 import 'package:chat/utils/avatar.dart';
 import 'package:chat/utils/chat_handle.dart';
@@ -26,7 +28,7 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_database/firebase_database.dart';
-// import 'package:permission_handler/permission_handler.dart'; // Import permission_handler
+import 'package:chat/utils/navigator_key.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   print("backgroundHandler: ${message.notification}");
@@ -68,8 +70,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final LocationPermissionObserver _observer = LocationPermissionObserver();
-
   MyApp({super.key});
 
   // This widget is the root of your application.
@@ -78,11 +78,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Truck Chat',
+    navigatorKey: navigatorKey,
 
       initialRoute: '/',
 
       routes: {
-        '/home': (context) => HomeScreen(),
+        '/': (context) => HomeScreen(
+              initialTabIndex: 1,
+            ),
+        '/privateChat': (context) => PrivateChatTab(key: UniqueKey()),
         '/chat': (context) => ChatScreen(
               userId: 'sd',
               receiverUserName: 'sd',
@@ -98,7 +102,7 @@ class MyApp extends StatelessWidget {
       // home: SendRequestScreen(senderId: '1', receiverId: '2'),
       // home: ChatScreen(chatId: '21'),
       // home: ReviewsTab(key: UniqueKey(),),
-      home: HomeScreen(),
+      // home: HomeScreen(initialTabIndex: 1, ),
     );
   }
 }

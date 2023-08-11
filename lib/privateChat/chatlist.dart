@@ -210,7 +210,7 @@ class _ChatListScreenState extends State<ChatListScreen>
                           ),
                     onTap: () {
                       // Open the chat screen with the selected user
-                      // InterstitialAdManager.showInterstitialAd();
+                    //   InterstitialAdManager.showInterstitialAd();
 
                       Navigator.push(
                         context,
