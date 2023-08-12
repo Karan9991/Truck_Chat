@@ -155,7 +155,7 @@ class HomeScreenState extends State<HomeScreen>
         }
       }
 
-      handleFCMMessage(message.data, message);
+      //handleFCMMessage(message.data, message);
 
       //openPrivateChatTab('s');
     });

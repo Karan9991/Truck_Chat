@@ -1156,11 +1156,11 @@ class _ChatListrState extends State<ChatListr>
 
     WidgetsBinding.instance.addObserver(this);
 
-    location.hasPermission().then((permission) {
-      setState(() {
-        _permissionGranted = permission;
-      });
-    });
+    // location.hasPermission().then((permission) {
+    //   setState(() {
+    //     _permissionGranted = permission;
+    //   });
+    // });
 
     getData().then((_) {
       setState(() {
