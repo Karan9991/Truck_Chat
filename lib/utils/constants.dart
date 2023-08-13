@@ -163,7 +163,7 @@ class Constants {
       '© TeleType Co. All Rights Reserved';
   static const String VISIT_THE_WEBSITE = 'Visit the website';
   static const String CONTACT_US = 'Contact us';
-  static const String VERSION = 'Version 2.0.11.44';
+  static const String VERSION = 'Version 2.0.1';
   static const String TERMS_OF_SERVICE = 'Terms of Service';
   static const String MESSAGES = 'Messages';
   static const String NOTIFICATIONS_AND_SOUND = 'Notifications and Sound';
@@ -203,6 +203,4 @@ class Constants {
 
   static const String FCM_NOTIFICATION_TITLE = 'There are new messages!';
   static const String FCM_NOTIFICATION_BODY = 'Tap here to open TruckChat';
- 
-
 }

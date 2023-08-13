@@ -1084,11 +1084,6 @@
 //   }
 // }
 
-
-
-
-
-
 //testing for cache
 import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/chat/chat.dart';
@@ -1201,7 +1196,7 @@ class _ChatListrState extends State<ChatListr>
   }
 
   Future<void> getData() async {
-     _permissionGranted = await location.hasPermission();
+    _permissionGranted = await location.hasPermission();
 
     if (_permissionGranted == PermissionStatus.granted ||
         _permissionGranted == PermissionStatus.grantedLimited) {
@@ -1497,8 +1492,10 @@ class _ChatListrState extends State<ChatListr>
                     if (index % 5 == 4) {
                       // Check if it's the ad banner index
                       // The ad banner should be shown after every 5 items (0-based index)
-                      // return AdBannerWidget();
-                      return Text('');
+                      return AdBannerWidget();
+                      // return _admobBanner;
+
+                      // return Text('');
                     } else {
                       // Calculate the actual index in the conversation topics list
                       final conversationIndex = index - (index ~/ 5);
@@ -1511,12 +1508,16 @@ class _ChatListrState extends State<ChatListr>
                       // final count = replyCounts[conversationIndex];
                       // final serverMsgID = serverMsgIds[conversationIndex];
 
-                                  //Step 2 start
-                                        final topic = conversation.topic; // Use topic from conversation
-                      final timestampp = conversation.timestamp; // Use timestamp from conversation
-                      final count = conversation.replyCount; // Use replyCount from conversation
-                      final serverMsgID = conversation.conversationId; // Use serverMsgId from conversation
-                                    //Step 2 start
+                      //Step 2 start
+                      final topic =
+                          conversation.topic; // Use topic from conversation
+                      final timestampp = conversation
+                          .timestamp; // Use timestamp from conversation
+                      final count = conversation
+                          .replyCount; // Use replyCount from conversation
+                      final serverMsgID = conversation
+                          .conversationId; // Use serverMsgId from conversation
+                      //Step 2 start
 
                       DateTime dateTime =
                           DateTime.fromMillisecondsSinceEpoch(timestampp);
@@ -1668,7 +1669,8 @@ class _ChatListrState extends State<ChatListr>
                         ),
                       );
                     }
-                  });
+                  }
+                  );
             } else {
               return Center(
                 child: Text(''),

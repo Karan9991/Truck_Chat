@@ -988,6 +988,8 @@ class _StarredChatState extends State<StarredChat> {
 
     _firebaseMessaging.subscribeToTopic('all');
 
+    SharedPrefs.setBool('isUserOnPublicChatScreen', true);
+
     //InterstitialAdManager.initialize();
 
     userId = int.parse(shareprefuserId!);
@@ -1033,6 +1035,7 @@ class _StarredChatState extends State<StarredChat> {
   @override
   void dispose() {
     _scrollController.dispose();
+    SharedPrefs.setBool('isUserOnPublicChatScreen', false);
 
     // refreshTimer.cancel();
     //InterstitialAdManager.dispose();
@@ -1191,7 +1194,9 @@ class _StarredChatState extends State<StarredChat> {
               //print('catch $timestamp');
             }
 
-            replyMsgs.add(ReplyMsg(rid, uid, replyMsg, timestamp, emojiId,
+            String decodedMessage = replyMsg.replaceAll('%3A', ':');
+
+            replyMsgs.add(ReplyMsg(rid, uid, decodedMessage, timestamp, emojiId,
                 widget.topic, driverName, privateChat));
           }
           // } else {
@@ -1225,6 +1230,16 @@ class _StarredChatState extends State<StarredChat> {
     return false;
   }
 
+  String formatUserHandle(String userHandle) {
+    String formatString =
+        ' %s: '; // The format string with %s placeholder and non-breaking space
+
+    // Replace %s with userHandle
+    String formattedString = formatString.replaceAll('%s', userHandle);
+
+    return formattedString;
+  }
+
   Future<bool> sendMessage(
     String message,
     String serverMsgId,
@@ -1249,6 +1264,11 @@ class _StarredChatState extends State<StarredChat> {
 
     privateChatStatus = privateChat! ? '1' : '0';
 
+//format code to separate chat handle with colon : with message
+    String encodedMessage = message.replaceAll(':', '%3A');
+
+    String formattedDriverName = formatUserHandle(driverName!);
+    String formattedMessage = formattedDriverName + encodedMessage;
     // print('send message');
     // print('message $message');
     // print('sermsgid $serverMsgId');
@@ -1264,7 +1284,7 @@ class _StarredChatState extends State<StarredChat> {
     final url = API.SEND_MESSAGE; // Replace with your API endpoint
     final headers = {API.CONTENT_TYPE: API.APPLICATION_JSON};
     final body = jsonEncode({
-      API.MESSAGE: message,
+      API.MESSAGE: formattedMessage,
       API.SERVER_MSG_ID: serverMsgId,
       API.USER_ID: userId,
       API.LATITUDE: latitude.toString(),
@@ -1540,299 +1560,53 @@ class _StarredChatState extends State<StarredChat> {
                     )
                   : ListView.builder(
                       controller: _scrollController,
-                      itemCount: filteredReplyMsgs.length + sentMessages.length,
+                      //  itemCount: filteredReplyMsgs.length + sentMessages.length,
+                      itemCount: filteredReplyMsgs.length +
+                          sentMessages.length +
+                          (filteredReplyMsgs.length + sentMessages.length ~/ 4),
+
                       itemBuilder: (context, index) {
-                        if (index < filteredReplyMsgs.length) {
-                          final reply = filteredReplyMsgs[index];
-                          final replyMsg = reply.replyMsg;
-                          final timestampp = reply.timestamp;
-                          final driverName = reply.driverName;
-                          final privateChat = reply.privateChat;
+                        if (index % 5 == 4) {
+                          // Check if it's the ad banner index
+                          // The ad banner should be shown after every 5 items (0-based index)
 
-                          DateTime dateTime =
-                              DateTime.fromMillisecondsSinceEpoch(timestampp);
-                          String formattedDateTime =
-                              DateFormat('MMM d, yyyy h:mm:ss a')
-                                  .format(dateTime);
-                          final timestamp = formattedDateTime;
+                          return AdBannerWidget();
+                        } else {
+                          // Calculate the actual index in the news list
+                          final newIndex = index - (index ~/ 5);
+                          if (newIndex < filteredReplyMsgs.length) {
+                            final reply = filteredReplyMsgs[newIndex];
+                            final replyMsg = reply.replyMsg;
+                            final timestampp = reply.timestamp;
+                            final driverName = reply.driverName;
+                            final privateChat = reply.privateChat;
 
-                          rid = reply.rid;
-                          emoji_id = reply.emojiId;
-                          timestam = timestampp;
+                            DateTime dateTime =
+                                DateTime.fromMillisecondsSinceEpoch(timestampp);
+                            String formattedDateTime =
+                                DateFormat('MMM d, yyyy h:mm:ss a')
+                                    .format(dateTime);
+                            final timestamp = formattedDateTime;
 
-                          bool isCurrentUser = reply.uid ==
-                              userId; // Check if the user_id is equal to currentUserId
+                            rid = reply.rid;
+                            emoji_id = reply.emojiId;
+                            timestam = timestampp;
 
-                          // Find the corresponding Avatar for the emoji_id
-                          Avatar? matchingAvatar = avatars.firstWhere(
-                            (avatar) => avatar.id == int.parse(reply.emojiId),
-                            orElse: () => Avatar(id: 0, imagePath: ''),
-                          );
-                          // print('emoji id $emoji_id');
-                          // print('matching avatar id ${matchingAvatar.id}');
+                            bool isCurrentUser = reply.uid ==
+                                userId; // Check if the user_id is equal to currentUserId
 
-                          return Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: isCurrentUser
-                                ? ChatBubble(
-                                    clipper: ChatBubbleClipper6(
-                                        type: isCurrentUser
-                                            ? BubbleType.sendBubble
-                                            : BubbleType.receiverBubble),
-                                    alignment: isCurrentUser
-                                        ? Alignment.topRight
-                                        : Alignment.topLeft,
-                                    margin: EdgeInsets.only(bottom: 16.0),
-                                    backGroundColor: isCurrentUser
-                                        ? Colors.blue[100]
-                                        : Colors.blue[300],
-                                    child: isCurrentUser
-                                        ? Container(
-                                            constraints:
-                                                BoxConstraints(maxWidth: 250.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    if (SharedPrefs.getString(
-                                                            SharedPrefsKeys
-                                                                .CURRENT_USER_AVATAR_IMAGE_PATH) !=
-                                                        null)
-                                                      Image.asset(
-                                                        SharedPrefs.getString(
-                                                            SharedPrefsKeys
-                                                                .CURRENT_USER_AVATAR_IMAGE_PATH)!,
-                                                        width: 30,
-                                                        height: 30,
-                                                      ),
-                                                    SizedBox(width: 8.0),
-                                                    Expanded(
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            driverName +
-                                                                replyMsg,
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 20),
-                                                          ),
-                                                          SizedBox(height: 4.0),
-                                                          Text(
-                                                            timestamp,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        : Container(
-                                            constraints:
-                                                BoxConstraints(maxWidth: 250.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    if (matchingAvatar.id != 0)
-                                                      Stack(
-                                                        alignment: Alignment(
-                                                            2.6,
-                                                            -2.4), // Adjust the alignment here
+                            // Find the corresponding Avatar for the emoji_id
+                            Avatar? matchingAvatar = avatars.firstWhere(
+                              (avatar) => avatar.id == int.parse(reply.emojiId),
+                              orElse: () => Avatar(id: 0, imagePath: ''),
+                            );
+                            // print('emoji id $emoji_id');
+                            // print('matching avatar id ${matchingAvatar.id}');
 
-                                                        children: [
-                                                          Image.asset(
-                                                            matchingAvatar
-                                                                .imagePath,
-                                                            width: 30,
-                                                            height: 30,
-                                                          ),
-                                                          // if (privateChat ==
-                                                          //     '1') // Check if privateChat is 1 to show the indicator
-                                                          //   Padding(
-                                                          //     padding: EdgeInsets.only(
-                                                          //         top: 0.0,
-                                                          //         right: 0.0,
-                                                          //         left: 10,
-                                                          //         bottom:
-                                                          //             10), // Add padding here
-                                                          //     child: Container(
-                                                          //       width: 10,
-                                                          //       height: 10,
-                                                          //       decoration: BoxDecoration(
-                                                          //         color: brightGreen,
-                                                          //         shape: BoxShape.circle,
-                                                          //       ),
-                                                          //     ),
-                                                          //   ),
-                                                        ],
-                                                      ),
-                                                    if (privateChat ==
-                                                        '1') // Check if privateChat is 1 to show the indicator
-                                                      Padding(
-                                                        padding: EdgeInsets.only(
-                                                            top: 0.0,
-                                                            right: 0.0,
-                                                            left: 0,
-                                                            bottom:
-                                                                0), // Add padding here
-                                                        child: Container(
-                                                          width: 10,
-                                                          height: 10,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: brightGreen,
-                                                            shape:
-                                                                BoxShape.circle,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    SizedBox(width: 8.0),
-                                                    Expanded(
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            replyMsg,
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 20),
-                                                          ),
-                                                          SizedBox(height: 4.0),
-                                                          Text(
-                                                            timestamp,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                  )
-                                : GestureDetector(
-                                    onLongPress: () {
-                                      // Show the custom dialog when the message is long-pressed
-                                      if (privateChat == '1') {
-                                        messageLongPressDialog(
-                                          context,
-                                          () {
-                                            // Handle Report Abuse action
-
-                                            reportUser(
-                                                reply.uid.toString(),
-                                                reply.rid.toString(),
-                                                reply.replyMsg);
-                                          },
-                                          () {
-                                            // Handle Ignore User action
-                                            ignoreUser(getDeviceType(),
-                                                reply.uid.toString());
-                                          },
-                                          () {
-                                            // // Handle Start Private Chat action
-                                            // // Implement the logic for starting a private chat here
-
-                                            // List<String> userName =
-                                            //     replyMsg.split(" ");
-
-                                            // print('private chat ${userName[0]}');
-
-                                            // //sendPrivateChatInvite();
-                                            // // sendRequest(
-                                            // //     '1', '2', reply.emojiId, userName[0]);
-                                            // sendRequest(
-                                            //     '1',
-                                            //     '2',
-                                            //     currentUserEmojiId!,
-                                            //     currentUserHandle!,
-                                            //     reply.emojiId,
-                                            //     userName[0]);
-
-                                            print(
-                                                '##################################################');
-
-                                            print(
-                                                'dddddddddddddddddriver name $driverName ');
-
-                                            String receiverUserName = '';
-                                            if (driverName == '') {
-                                              List<String> userName =
-                                                  replyMsg.split(" ");
-                                              receiverUserName = userName[0];
-                                            } else {
-                                              receiverUserName = driverName;
-                                            }
-
-                                            print(
-                                                'private chat $receiverUserName');
-
-                                            //sendPrivateChatInvite();
-                                            // sendRequest(
-                                            //     '1', '2', reply.emojiId, userName[0]);
-
-                                            String? chatHandle = SharedPrefs
-                                                .getString(SharedPrefsKeys
-                                                    .CURRENT_USER_CHAT_HANDLE);
-                                            print('chat handle $chatHandle');
-                                            int? avatarId = SharedPrefs.getInt(
-                                                SharedPrefsKeys
-                                                    .CURRENT_USER_AVATAR_ID);
-                                            if (chatHandle == null) {
-                                              showChatHandleDialog(context);
-                                            } else if (avatarId == null) {
-                                              showAvatarSelectionDialog(
-                                                  context);
-                                            } else {
-                                              sendRequest(
-                                                  currentUserId!,
-                                                  reply.uid.toString(),
-                                                  currentUserEmojiId ??
-                                                      avatarId.toString(),
-                                                  currentUserHandle ??
-                                                      chatHandle,
-                                                  reply.emojiId,
-                                                  capitalizeFirstLetter(
-                                                      receiverUserName));
-                                            }
-                                          },
-                                        );
-                                      } else {
-                                        messageLongPressDialogWithoutPrivateChat(
-                                          context,
-                                          () {
-                                            // Handle Report Abuse action
-                                            reportUser(
-                                                reply.uid.toString(),
-                                                reply.rid.toString(),
-                                                reply.replyMsg);
-                                          },
-                                          () {
-                                            // Handle Ignore User action
-                                            ignoreUser(getDeviceType(),
-                                                reply.uid.toString());
-                                          },
-                                        );
-                                      }
-                                    },
-                                    child: ChatBubble(
+                            return Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: isCurrentUser
+                                  ? ChatBubble(
                                       clipper: ChatBubbleClipper6(
                                           type: isCurrentUser
                                               ? BubbleType.sendBubble
@@ -1876,8 +1650,7 @@ class _StarredChatState extends State<StarredChat> {
                                                                   .start,
                                                           children: [
                                                             Text(
-                                                              driverName +
-                                                                  replyMsg,
+                                                              replyMsg,
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .black,
@@ -1934,12 +1707,9 @@ class _StarredChatState extends State<StarredChat> {
                                                             //     child: Container(
                                                             //       width: 10,
                                                             //       height: 10,
-                                                            //       decoration:
-                                                            //           BoxDecoration(
-                                                            //         color:
-                                                            //             brightGreen,
-                                                            //         shape: BoxShape
-                                                            //             .circle,
+                                                            //       decoration: BoxDecoration(
+                                                            //         color: brightGreen,
+                                                            //         shape: BoxShape.circle,
                                                             //       ),
                                                             //     ),
                                                             //   ),
@@ -1976,14 +1746,15 @@ class _StarredChatState extends State<StarredChat> {
                                                             Text(
                                                               replyMsg,
                                                               style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 20,
-                                                              ),
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize: 20),
                                                             ),
                                                             SizedBox(
                                                                 height: 4.0),
-                                                            Text(timestamp),
+                                                            Text(
+                                                              timestamp,
+                                                            ),
                                                           ],
                                                         ),
                                                       ),
@@ -1992,55 +1763,330 @@ class _StarredChatState extends State<StarredChat> {
                                                 ],
                                               ),
                                             ),
-                                    ),
-                                  ),
-                          );
-                        } else {
-                          final sentIndex = index - filteredReplyMsgs.length;
-                          final sentMessage = sentMessages[sentIndex];
-                          final timestampp = sentMessage.timestamp;
+                                    )
+                                  : GestureDetector(
+                                      onLongPress: () {
+                                        // Show the custom dialog when the message is long-pressed
+                                        if (privateChat == '1') {
+                                          messageLongPressDialog(
+                                            context,
+                                            () {
+                                              // Handle Report Abuse action
 
-                          DateTime dateTime =
-                              DateTime.fromMillisecondsSinceEpoch(timestampp);
-                          String formattedDateTime =
-                              DateFormat('MMM d, yyyy h:mm:ss a')
-                                  .format(dateTime);
-                          final timestamp = formattedDateTime;
+                                              reportUser(
+                                                  reply.uid.toString(),
+                                                  reply.rid.toString(),
+                                                  reply.replyMsg);
+                                            },
+                                            () {
+                                              // Handle Ignore User action
+                                              ignoreUser(getDeviceType(),
+                                                  reply.uid.toString());
+                                            },
+                                            () {
+                                              // // Handle Start Private Chat action
+                                              // // Implement the logic for starting a private chat here
 
-                          bool isCurrentUser = sentMessage.uid ==
-                              userId; // Check if the user_id is equal to 69979
+                                              // List<String> userName =
+                                              //     replyMsg.split(" ");
 
-                          return Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: ChatBubble(
-                              clipper: ChatBubbleClipper6(
-                                  type: isCurrentUser
-                                      ? BubbleType.sendBubble
-                                      : BubbleType.receiverBubble),
-                              alignment: isCurrentUser
-                                  ? Alignment.topRight
-                                  : Alignment.topLeft,
-                              margin: EdgeInsets.only(bottom: 16.0),
-                              backGroundColor: Colors.blue[300],
-                              child: Container(
-                                constraints: BoxConstraints(maxWidth: 250.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      sentMessage.replyMsg,
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 20),
+                                              // print('private chat ${userName[0]}');
+
+                                              // //sendPrivateChatInvite();
+                                              // // sendRequest(
+                                              // //     '1', '2', reply.emojiId, userName[0]);
+                                              // sendRequest(
+                                              //     '1',
+                                              //     '2',
+                                              //     currentUserEmojiId!,
+                                              //     currentUserHandle!,
+                                              //     reply.emojiId,
+                                              //     userName[0]);
+
+                                              print(
+                                                  '##################################################');
+
+                                              print(
+                                                  'dddddddddddddddddriver name $driverName ');
+
+                                              String receiverUserName = '';
+                                              if (driverName == '') {
+                                                List<String> userName =
+                                                    replyMsg.split(" ");
+                                                receiverUserName = userName[0];
+                                              } else {
+                                                receiverUserName = driverName;
+                                              }
+
+                                              print(
+                                                  'private chat $receiverUserName');
+
+                                              //sendPrivateChatInvite();
+                                              // sendRequest(
+                                              //     '1', '2', reply.emojiId, userName[0]);
+
+                                              String? chatHandle = SharedPrefs
+                                                  .getString(SharedPrefsKeys
+                                                      .CURRENT_USER_CHAT_HANDLE);
+                                              print('chat handle $chatHandle');
+                                              int? avatarId = SharedPrefs
+                                                  .getInt(SharedPrefsKeys
+                                                      .CURRENT_USER_AVATAR_ID);
+                                              if (chatHandle == null) {
+                                                showChatHandleDialog(context);
+                                              } else if (avatarId == null) {
+                                                showAvatarSelectionDialog(
+                                                    context);
+                                              } else {
+                                                String realEmojiId =
+                                                    avatarId.toString();
+                                                String realChatHandle =
+                                                    currentUserHandle ??
+                                                        chatHandle;
+                                                print(
+                                                    'real emoji id $realEmojiId');
+                                                sendRequest(
+                                                    currentUserId!,
+                                                    reply.uid.toString(),
+                                                    realEmojiId,
+                                                    currentUserHandle ??
+                                                        chatHandle,
+                                                    reply.emojiId,
+                                                    capitalizeFirstLetter(
+                                                        receiverUserName));
+                                              }
+                                            },
+                                          );
+                                        } else {
+                                          messageLongPressDialogWithoutPrivateChat(
+                                            context,
+                                            () {
+                                              // Handle Report Abuse action
+                                              reportUser(
+                                                  reply.uid.toString(),
+                                                  reply.rid.toString(),
+                                                  reply.replyMsg);
+                                            },
+                                            () {
+                                              // Handle Ignore User action
+                                              ignoreUser(getDeviceType(),
+                                                  reply.uid.toString());
+                                            },
+                                          );
+                                        }
+                                      },
+                                      child: ChatBubble(
+                                        clipper: ChatBubbleClipper6(
+                                            type: isCurrentUser
+                                                ? BubbleType.sendBubble
+                                                : BubbleType.receiverBubble),
+                                        alignment: isCurrentUser
+                                            ? Alignment.topRight
+                                            : Alignment.topLeft,
+                                        margin: EdgeInsets.only(bottom: 16.0),
+                                        backGroundColor: isCurrentUser
+                                            ? Colors.blue[100]
+                                            : Colors.blue[300],
+                                        child: isCurrentUser
+                                            ? Container(
+                                                constraints: BoxConstraints(
+                                                    maxWidth: 250.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        if (SharedPrefs.getString(
+                                                                SharedPrefsKeys
+                                                                    .CURRENT_USER_AVATAR_IMAGE_PATH) !=
+                                                            null)
+                                                          Image.asset(
+                                                            SharedPrefs.getString(
+                                                                SharedPrefsKeys
+                                                                    .CURRENT_USER_AVATAR_IMAGE_PATH)!,
+                                                            width: 30,
+                                                            height: 30,
+                                                          ),
+                                                        SizedBox(width: 8.0),
+                                                        Expanded(
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                replyMsg,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        20),
+                                                              ),
+                                                              SizedBox(
+                                                                  height: 4.0),
+                                                              Text(
+                                                                timestamp,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            : Container(
+                                                constraints: BoxConstraints(
+                                                    maxWidth: 250.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        if (matchingAvatar.id !=
+                                                            0)
+                                                          Stack(
+                                                            alignment: Alignment(
+                                                                2.6,
+                                                                -2.4), // Adjust the alignment here
+
+                                                            children: [
+                                                              Image.asset(
+                                                                matchingAvatar
+                                                                    .imagePath,
+                                                                width: 30,
+                                                                height: 30,
+                                                              ),
+                                                              // if (privateChat ==
+                                                              //     '1') // Check if privateChat is 1 to show the indicator
+                                                              //   Padding(
+                                                              //     padding: EdgeInsets.only(
+                                                              //         top: 0.0,
+                                                              //         right: 0.0,
+                                                              //         left: 10,
+                                                              //         bottom:
+                                                              //             10), // Add padding here
+                                                              //     child: Container(
+                                                              //       width: 10,
+                                                              //       height: 10,
+                                                              //       decoration:
+                                                              //           BoxDecoration(
+                                                              //         color:
+                                                              //             brightGreen,
+                                                              //         shape: BoxShape
+                                                              //             .circle,
+                                                              //       ),
+                                                              //     ),
+                                                              //   ),
+                                                            ],
+                                                          ),
+                                                        if (privateChat ==
+                                                            '1') // Check if privateChat is 1 to show the indicator
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    top: 0.0,
+                                                                    right: 0.0,
+                                                                    left: 0,
+                                                                    bottom:
+                                                                        0), // Add padding here
+                                                            child: Container(
+                                                              width: 10,
+                                                              height: 10,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color:
+                                                                    brightGreen,
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        SizedBox(width: 8.0),
+                                                        Expanded(
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                replyMsg,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize: 20,
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                  height: 4.0),
+                                                              Text(timestamp),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                      ),
                                     ),
-                                    SizedBox(height: 4.0),
-                                    Text(
-                                      timestamp,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
+                            );
+                          } else {
+                            // final sentIndex = index - filteredReplyMsgs.length;
+                            // final sentMessage = sentMessages[sentIndex];
+                            // final timestampp = sentMessage.timestamp;
+
+                            // DateTime dateTime =
+                            //     DateTime.fromMillisecondsSinceEpoch(timestampp);
+                            // String formattedDateTime =
+                            //     DateFormat('MMM d, yyyy h:mm:ss a')
+                            //         .format(dateTime);
+                            // final timestamp = formattedDateTime;
+
+                            // bool isCurrentUser = sentMessage.uid ==
+                            //     userId; // Check if the user_id is equal to 69979
+
+                            // return Padding(
+                            //   padding: EdgeInsets.all(8.0),
+                            //   child: ChatBubble(
+                            //     clipper: ChatBubbleClipper6(
+                            //         type: isCurrentUser
+                            //             ? BubbleType.sendBubble
+                            //             : BubbleType.receiverBubble),
+                            //     alignment: isCurrentUser
+                            //         ? Alignment.topRight
+                            //         : Alignment.topLeft,
+                            //     margin: EdgeInsets.only(bottom: 16.0),
+                            //     backGroundColor: Colors.blue[300],
+                            //     child: Container(
+                            //       constraints: BoxConstraints(maxWidth: 250.0),
+                            //       child: Column(
+                            //         crossAxisAlignment: CrossAxisAlignment.start,
+                            //         children: [
+                            //           Text(
+                            //             sentMessage.replyMsg,
+                            //             style: TextStyle(
+                            //                 color: Colors.black, fontSize: 20),
+                            //           ),
+                            //           SizedBox(height: 4.0),
+                            //           Text(
+                            //             timestamp,
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ),
+                            // );
+                          }
                         }
                       },
                     ),
@@ -2061,7 +2107,7 @@ class _StarredChatState extends State<StarredChat> {
                   ),
                   Expanded(
                     child: TextField(
-                        minLines: 1,
+                      minLines: 1,
                       maxLines: 7,
                       controller: messageController,
                       decoration: InputDecoration(

@@ -2258,282 +2258,70 @@ class _ChatState extends State<Chat> {
                     )
                   : ListView.builder(
                       controller: _scrollController,
-                      itemCount: filteredReplyMsgs.length + sentMessages.length,
+                      // itemCount: filteredReplyMsgs.length + sentMessages.length,
+
+                      itemCount: filteredReplyMsgs.length +
+                          sentMessages.length +
+                          (filteredReplyMsgs.length + sentMessages.length ~/ 4),
+
                       itemBuilder: (context, index) {
-                        // if (index % 5 == 0 && index != 0) {
-                        // if ((index + 1) % 5 == 0) {
+                        if (index % 5 == 4) {
+                          // Check if it's the ad banner index
+                          // The ad banner should be shown after every 5 items (0-based index)
 
-                        //   return AdBannerWidget();
-                        // } else {
-                        //   final messageIndex = index -
-                        //       (index ~/
-                        //           5); // Adjust the index for the inserted ad banners
+                          return AdBannerWidget();
+                        } else {
+                          // Calculate the actual index in the news list
+                          final newIndex = index - (index ~/ 5);
 
-                        //   // final messageIndex = index - (index ~/ 5); // Adjust the index for the inserted ad banners
-                        //   final reply = filteredReplyMsgs[messageIndex];
+                          //final newsItem = _newsItems[newsIndex];
+                          // if (index % 5 == 0 && index != 0) {
+                          // if ((index + 1) % 5 == 0) {
 
-                        if (index < filteredReplyMsgs.length) {
-                          final reply = filteredReplyMsgs[index];
-                          final replyMsg = reply.replyMsg;
-                          final timestampp = reply.timestamp;
-                          final driverName = reply.driverName;
-                          final privateChat = reply.privateChat;
+                          //   return AdBannerWidget();
+                          // } else {
+                          //   final messageIndex = index -
+                          //       (index ~/
+                          //           5); // Adjust the index for the inserted ad banners
 
-                          print('ttttttt private chat $privateChat');
+                          //   // final messageIndex = index - (index ~/ 5); // Adjust the index for the inserted ad banners
+                          //   final reply = filteredReplyMsgs[messageIndex];
 
-                          DateTime dateTime =
-                              DateTime.fromMillisecondsSinceEpoch(timestampp);
-                          String formattedDateTime =
-                              DateFormat('MMM d, yyyy h:mm:ss a')
-                                  .format(dateTime);
-                          final timestamp = formattedDateTime;
+                          if (newIndex < filteredReplyMsgs.length) {
+                            final reply = filteredReplyMsgs[newIndex];
+                            final replyMsg = reply.replyMsg;
+                            final timestampp = reply.timestamp;
+                            final driverName = reply.driverName;
+                            final privateChat = reply.privateChat;
 
-                          rid = reply.rid;
-                          emoji_id = reply.emojiId;
-                          timestam = timestampp;
+                            print('ttttttt private chat $privateChat');
 
-                          bool isCurrentUser = reply.uid ==
-                              userId; // Check if the user_id is equal to currentUserId
+                            DateTime dateTime =
+                                DateTime.fromMillisecondsSinceEpoch(timestampp);
+                            String formattedDateTime =
+                                DateFormat('MMM d, yyyy h:mm:ss a')
+                                    .format(dateTime);
+                            final timestamp = formattedDateTime;
 
-                          // Find the corresponding Avatar for the emoji_id
-                          Avatar? matchingAvatar = avatars.firstWhere(
-                            (avatar) => avatar.id == int.parse(reply.emojiId),
-                            orElse: () => Avatar(id: 0, imagePath: ''),
-                          );
-                          // print('emoji id $emoji_id');
-                          // print('matching avatar id ${matchingAvatar.id}');
+                            rid = reply.rid;
+                            emoji_id = reply.emojiId;
+                            timestam = timestampp;
 
-                          return Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: isCurrentUser
-                                ? ChatBubble(
-                                    clipper: ChatBubbleClipper6(
-                                        type: isCurrentUser
-                                            ? BubbleType.sendBubble
-                                            : BubbleType.receiverBubble),
-                                    alignment: isCurrentUser
-                                        ? Alignment.topRight
-                                        : Alignment.topLeft,
-                                    margin: EdgeInsets.only(bottom: 16.0),
-                                    backGroundColor: isCurrentUser
-                                        ? Colors.blue[100]
-                                        : Colors.blue[300],
-                                    child: isCurrentUser
-                                        ? Container(
-                                            constraints:
-                                                BoxConstraints(maxWidth: 250.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    if (SharedPrefs.getString(
-                                                            SharedPrefsKeys
-                                                                .CURRENT_USER_AVATAR_IMAGE_PATH) !=
-                                                        null)
-                                                      Image.asset(
-                                                        SharedPrefs.getString(
-                                                            SharedPrefsKeys
-                                                                .CURRENT_USER_AVATAR_IMAGE_PATH)!,
-                                                        width: 30,
-                                                        height: 30,
-                                                      ),
-                                                    SizedBox(width: 8.0),
-                                                    Expanded(
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            replyMsg,
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 20),
-                                                          ),
-                                                          SizedBox(height: 4.0),
-                                                          Text(
-                                                            timestamp,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        : Container(
-                                            constraints:
-                                                BoxConstraints(maxWidth: 250.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    if (matchingAvatar.id != 0)
-                                                      Stack(
-                                                        alignment: Alignment(
-                                                            2.6,
-                                                            -2.4), // Adjust the alignment here
+                            bool isCurrentUser = reply.uid ==
+                                userId; // Check if the user_id is equal to currentUserId
 
-                                                        children: [
-                                                          Image.asset(
-                                                            matchingAvatar
-                                                                .imagePath,
-                                                            width: 30,
-                                                            height: 30,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    if (privateChat ==
-                                                        '1') // Check if privateChat is 1 to show the indicator
-                                                      Padding(
-                                                        padding: EdgeInsets.only(
-                                                            top: 0.0,
-                                                            right: 0.0,
-                                                            left: 10,
-                                                            bottom:
-                                                                10), // Add padding here
-                                                        child: Container(
-                                                          width: 10,
-                                                          height: 10,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: brightGreen,
-                                                            shape:
-                                                                BoxShape.circle,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    SizedBox(width: 8.0),
-                                                    Expanded(
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            replyMsg,
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize: 20,
-                                                            ),
-                                                          ),
-                                                          SizedBox(height: 4.0),
-                                                          Text(timestamp),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                  )
-                                : GestureDetector(
-                                    onLongPress: () {
-                                      // Show the custom dialog when the message is long-pressed
-                                      if (privateChat == '1') {
-                                        messageLongPressDialog(
-                                          context,
-                                          () {
-                                            // Handle Report Abuse action
+                            // Find the corresponding Avatar for the emoji_id
+                            Avatar? matchingAvatar = avatars.firstWhere(
+                              (avatar) => avatar.id == int.parse(reply.emojiId),
+                              orElse: () => Avatar(id: 0, imagePath: ''),
+                            );
+                            // print('emoji id $emoji_id');
+                            // print('matching avatar id ${matchingAvatar.id}');
 
-                                            reportUser(
-                                                reply.uid.toString(),
-                                                reply.rid.toString(),
-                                                reply.replyMsg);
-                                          },
-                                          () {
-                                            // Handle Ignore User action
-                                            ignoreUser(getDeviceType(),
-                                                reply.uid.toString());
-                                          },
-                                          () {
-                                            // Handle Start Private Chat action
-                                            // Implement the logic for starting a private chat here
-                                            print(
-                                                '##################################################');
-
-                                            print(
-                                                'dddddddddddddddddriver name $driverName ');
-
-                                            String receiverUserName = '';
-                                            if (driverName == '') {
-                                              List<String> userName =
-                                                  replyMsg.split(" ");
-                                              receiverUserName = userName[0];
-                                            } else {
-                                              receiverUserName = driverName;
-                                            }
-
-                                            print(
-                                                'private chat $receiverUserName');
-
-                                            String? chatHandle = SharedPrefs
-                                                .getString(SharedPrefsKeys
-                                                    .CURRENT_USER_CHAT_HANDLE);
-                                            print('chat handle $chatHandle');
-                                            int? avatarId = SharedPrefs.getInt(
-                                                SharedPrefsKeys
-                                                    .CURRENT_USER_AVATAR_ID);
-
-                                            print('-------000000--------');
-                                            print(
-                                                'current user emojiid $currentUserEmojiId');
-                                            print('avatar id $avatarId');
-                                            print('-------111111--------');
-
-                                            if (chatHandle == null) {
-                                              showChatHandleDialog(context);
-                                            } else if (avatarId == null) {
-                                              showAvatarSelectionDialog(
-                                                  context);
-                                            } else {
-                                              String realEmojiId =
-                                                  avatarId.toString();
-                                              print(
-                                                  'real emoji id $realEmojiId');
-                                              sendRequest(
-                                                  currentUserId!,
-                                                  reply.uid.toString(),
-                                                  realEmojiId,
-                                                  currentUserHandle ??
-                                                      chatHandle,
-                                                  reply.emojiId,
-                                                  capitalizeFirstLetter(
-                                                      receiverUserName));
-                                            }
-                                          },
-                                        );
-                                      } else {
-                                        messageLongPressDialogWithoutPrivateChat(
-                                          context,
-                                          () {
-                                            // Handle Report Abuse action
-                                            reportUser(
-                                                reply.uid.toString(),
-                                                reply.rid.toString(),
-                                                reply.replyMsg);
-                                          },
-                                          () {
-                                            // Handle Ignore User action
-                                            ignoreUser(getDeviceType(),
-                                                reply.uid.toString());
-                                          },
-                                        );
-                                      }
-                                    },
-                                    child: ChatBubble(
+                            return Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: isCurrentUser
+                                  ? ChatBubble(
                                       clipper: ChatBubbleClipper6(
                                           type: isCurrentUser
                                               ? BubbleType.sendBubble
@@ -2630,7 +2418,7 @@ class _ChatState extends State<Chat> {
                                                           padding: EdgeInsets.only(
                                                               top: 0.0,
                                                               right: 0.0,
-                                                              left: 0,
+                                                              left: 10,
                                                               bottom:
                                                                   10), // Add padding here
                                                           child: Container(
@@ -2671,102 +2459,343 @@ class _ChatState extends State<Chat> {
                                                 ],
                                               ),
                                             ),
+                                    )
+                                  : GestureDetector(
+                                      onLongPress: () {
+                                        // Show the custom dialog when the message is long-pressed
+                                        if (privateChat == '1') {
+                                          messageLongPressDialog(
+                                            context,
+                                            () {
+                                              // Handle Report Abuse action
+
+                                              reportUser(
+                                                  reply.uid.toString(),
+                                                  reply.rid.toString(),
+                                                  reply.replyMsg);
+                                            },
+                                            () {
+                                              // Handle Ignore User action
+                                              ignoreUser(getDeviceType(),
+                                                  reply.uid.toString());
+                                            },
+                                            () {
+                                              // Handle Start Private Chat action
+                                              // Implement the logic for starting a private chat here
+                                              print(
+                                                  '##################################################');
+
+                                              print(
+                                                  'dddddddddddddddddriver name $driverName ');
+
+                                              String receiverUserName = '';
+                                              if (driverName == '') {
+                                                List<String> userName =
+                                                    replyMsg.split(" ");
+                                                receiverUserName = userName[0];
+                                              } else {
+                                                receiverUserName = driverName;
+                                              }
+
+                                              print(
+                                                  'private chat $receiverUserName');
+
+                                              String? chatHandle = SharedPrefs
+                                                  .getString(SharedPrefsKeys
+                                                      .CURRENT_USER_CHAT_HANDLE);
+                                              print('chat handle $chatHandle');
+                                              int? avatarId = SharedPrefs
+                                                  .getInt(SharedPrefsKeys
+                                                      .CURRENT_USER_AVATAR_ID);
+
+                                              print('-------000000--------');
+                                              print(
+                                                  'current user emojiid $currentUserEmojiId');
+                                              print('avatar id $avatarId');
+                                              print('-------111111--------');
+
+                                              if (chatHandle == null) {
+                                                showChatHandleDialog(context);
+                                              } else if (avatarId == null) {
+                                                showAvatarSelectionDialog(
+                                                    context);
+                                              } else {
+                                                String realEmojiId =
+                                                    avatarId.toString();
+                                                String realChatHandle =
+                                                    currentUserHandle ??
+                                                        chatHandle;
+
+                                                print(
+                                                    'real emoji id $realEmojiId');
+                                                sendRequest(
+                                                    currentUserId!,
+                                                    reply.uid.toString(),
+                                                    realEmojiId,
+                                                    currentUserHandle ??
+                                                        chatHandle,
+                                                    reply.emojiId,
+                                                    capitalizeFirstLetter(
+                                                        receiverUserName));
+                                              }
+                                            },
+                                          );
+                                        } else {
+                                          messageLongPressDialogWithoutPrivateChat(
+                                            context,
+                                            () {
+                                              // Handle Report Abuse action
+                                              reportUser(
+                                                  reply.uid.toString(),
+                                                  reply.rid.toString(),
+                                                  reply.replyMsg);
+                                            },
+                                            () {
+                                              // Handle Ignore User action
+                                              ignoreUser(getDeviceType(),
+                                                  reply.uid.toString());
+                                            },
+                                          );
+                                        }
+                                      },
+                                      child: ChatBubble(
+                                        clipper: ChatBubbleClipper6(
+                                            type: isCurrentUser
+                                                ? BubbleType.sendBubble
+                                                : BubbleType.receiverBubble),
+                                        alignment: isCurrentUser
+                                            ? Alignment.topRight
+                                            : Alignment.topLeft,
+                                        margin: EdgeInsets.only(bottom: 16.0),
+                                        backGroundColor: isCurrentUser
+                                            ? Colors.blue[100]
+                                            : Colors.blue[300],
+                                        child: isCurrentUser
+                                            ? Container(
+                                                constraints: BoxConstraints(
+                                                    maxWidth: 250.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        if (SharedPrefs.getString(
+                                                                SharedPrefsKeys
+                                                                    .CURRENT_USER_AVATAR_IMAGE_PATH) !=
+                                                            null)
+                                                          Image.asset(
+                                                            SharedPrefs.getString(
+                                                                SharedPrefsKeys
+                                                                    .CURRENT_USER_AVATAR_IMAGE_PATH)!,
+                                                            width: 30,
+                                                            height: 30,
+                                                          ),
+                                                        SizedBox(width: 8.0),
+                                                        Expanded(
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                replyMsg,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        20),
+                                                              ),
+                                                              SizedBox(
+                                                                  height: 4.0),
+                                                              Text(
+                                                                timestamp,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            : Container(
+                                                constraints: BoxConstraints(
+                                                    maxWidth: 250.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        if (matchingAvatar.id !=
+                                                            0)
+                                                          Stack(
+                                                            alignment: Alignment(
+                                                                2.6,
+                                                                -2.4), // Adjust the alignment here
+
+                                                            children: [
+                                                              Image.asset(
+                                                                matchingAvatar
+                                                                    .imagePath,
+                                                                width: 30,
+                                                                height: 30,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        if (privateChat ==
+                                                            '1') // Check if privateChat is 1 to show the indicator
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    top: 0.0,
+                                                                    right: 0.0,
+                                                                    left: 0,
+                                                                    bottom:
+                                                                        10), // Add padding here
+                                                            child: Container(
+                                                              width: 10,
+                                                              height: 10,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color:
+                                                                    brightGreen,
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        SizedBox(width: 8.0),
+                                                        Expanded(
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                replyMsg,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize: 20,
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                  height: 4.0),
+                                                              Text(timestamp),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                      ),
                                     ),
-                                  ),
-                          );
-                        } else {
-                          // final sentIndex = index - filteredReplyMsgs.length;
-                          // final sentMessage = sentMessages[sentIndex];
-                          // final timestampp = sentMessage.timestamp;
+                            );
+                          } else {
+                            // final sentIndex = index - filteredReplyMsgs.length;
+                            // final sentMessage = sentMessages[sentIndex];
+                            // final timestampp = sentMessage.timestamp;
 
-                          // DateTime dateTime =
-                          //     DateTime.fromMillisecondsSinceEpoch(timestampp);
-                          // String formattedDateTime =
-                          //     DateFormat('MMM d, yyyy h:mm:ss a')
-                          //         .format(dateTime);
-                          // final timestamp = formattedDateTime;
+                            // DateTime dateTime =
+                            //     DateTime.fromMillisecondsSinceEpoch(timestampp);
+                            // String formattedDateTime =
+                            //     DateFormat('MMM d, yyyy h:mm:ss a')
+                            //         .format(dateTime);
+                            // final timestamp = formattedDateTime;
 
-                          // bool isCurrentUser = sentMessage.uid ==
-                          //     userId; // Check if the user_id is equal to 69979
+                            // bool isCurrentUser = sentMessage.uid ==
+                            //     userId; // Check if the user_id is equal to 69979
 
-                          // return Padding(
-                          //   padding: EdgeInsets.all(8.0),
-                          //   child: ChatBubble(
-                          //       clipper: ChatBubbleClipper6(
-                          //           type: isCurrentUser
-                          //               ? BubbleType.sendBubble
-                          //               : BubbleType.receiverBubble),
-                          //       alignment: isCurrentUser
-                          //           ? Alignment.topRight
-                          //           : Alignment.topLeft,
-                          //       margin: EdgeInsets.only(bottom: 16.0),
-                          //       backGroundColor: Colors.blue[300],
-                          //       child:
+                            // return Padding(
+                            //   padding: EdgeInsets.all(8.0),
+                            //   child: ChatBubble(
+                            //       clipper: ChatBubbleClipper6(
+                            //           type: isCurrentUser
+                            //               ? BubbleType.sendBubble
+                            //               : BubbleType.receiverBubble),
+                            //       alignment: isCurrentUser
+                            //           ? Alignment.topRight
+                            //           : Alignment.topLeft,
+                            //       margin: EdgeInsets.only(bottom: 16.0),
+                            //       backGroundColor: Colors.blue[300],
+                            //       child:
 
-                          //           // Container(
-                          //           //   constraints: BoxConstraints(maxWidth: 250.0),
-                          //           //   child: Column(
-                          //           //     crossAxisAlignment: CrossAxisAlignment.start,
-                          //           //     children: [
-                          //           //       Text(
-                          //           //         sentMessage.replyMsg,
-                          //           //         style: TextStyle(
-                          //           //             color: Colors.black, fontSize: 20),
-                          //           //       ),
-                          //           //       SizedBox(height: 4.0),
-                          //           //       Text(
-                          //           //         timestamp,
-                          //           //       ),
-                          //           //     ],
-                          //           //   ),
-                          //           // ),
+                            //           // Container(
+                            //           //   constraints: BoxConstraints(maxWidth: 250.0),
+                            //           //   child: Column(
+                            //           //     crossAxisAlignment: CrossAxisAlignment.start,
+                            //           //     children: [
+                            //           //       Text(
+                            //           //         sentMessage.replyMsg,
+                            //           //         style: TextStyle(
+                            //           //             color: Colors.black, fontSize: 20),
+                            //           //       ),
+                            //           //       SizedBox(height: 4.0),
+                            //           //       Text(
+                            //           //         timestamp,
+                            //           //       ),
+                            //           //     ],
+                            //           //   ),
+                            //           // ),
 
-                          //           //testing 1
-                          //           Container(
-                          //         constraints: BoxConstraints(maxWidth: 250.0),
-                          //         child: Column(
-                          //           crossAxisAlignment:
-                          //               CrossAxisAlignment.start,
-                          //           children: [
-                          //             Row(
-                          //               crossAxisAlignment:
-                          //                   CrossAxisAlignment.start,
-                          //               children: [
-                          //                 if (SharedPrefs.getString(SharedPrefsKeys
-                          //                         .CURRENT_USER_AVATAR_IMAGE_PATH) !=
-                          //                     null)
-                          //                   Image.asset(
-                          //                     SharedPrefs.getString(SharedPrefsKeys
-                          //                         .CURRENT_USER_AVATAR_IMAGE_PATH)!,
-                          //                     width: 30,
-                          //                     height: 30,
-                          //                   ),
-                          //                 SizedBox(width: 8.0),
-                          //                 Expanded(
-                          //                   child: Column(
-                          //                     crossAxisAlignment:
-                          //                         CrossAxisAlignment.start,
-                          //                     children: [
-                          //                       Text(
-                          //                         sentMessage.replyMsg,
-                          //                         style: TextStyle(
-                          //                             color: Colors.black,
-                          //                             fontSize: 20),
-                          //                       ),
-                          //                       SizedBox(height: 4.0),
-                          //                       Text(
-                          //                         timestamp,
-                          //                       ),
-                          //                     ],
-                          //                   ),
-                          //                 ),
-                          //               ],
-                          //             ),
-                          //           ],
-                          //         ),
-                          //       )),
-                          // );
-                          // } this
+                            //           //testing 1
+                            //           Container(
+                            //         constraints: BoxConstraints(maxWidth: 250.0),
+                            //         child: Column(
+                            //           crossAxisAlignment:
+                            //               CrossAxisAlignment.start,
+                            //           children: [
+                            //             Row(
+                            //               crossAxisAlignment:
+                            //                   CrossAxisAlignment.start,
+                            //               children: [
+                            //                 if (SharedPrefs.getString(SharedPrefsKeys
+                            //                         .CURRENT_USER_AVATAR_IMAGE_PATH) !=
+                            //                     null)
+                            //                   Image.asset(
+                            //                     SharedPrefs.getString(SharedPrefsKeys
+                            //                         .CURRENT_USER_AVATAR_IMAGE_PATH)!,
+                            //                     width: 30,
+                            //                     height: 30,
+                            //                   ),
+                            //                 SizedBox(width: 8.0),
+                            //                 Expanded(
+                            //                   child: Column(
+                            //                     crossAxisAlignment:
+                            //                         CrossAxisAlignment.start,
+                            //                     children: [
+                            //                       Text(
+                            //                         sentMessage.replyMsg,
+                            //                         style: TextStyle(
+                            //                             color: Colors.black,
+                            //                             fontSize: 20),
+                            //                       ),
+                            //                       SizedBox(height: 4.0),
+                            //                       Text(
+                            //                         timestamp,
+                            //                       ),
+                            //                     ],
+                            //                   ),
+                            //                 ),
+                            //               ],
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       )),
+                            // );
+                            // } this
+                          }
                         }
                       },
                     ),

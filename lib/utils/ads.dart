@@ -86,3 +86,30 @@ class AdBannerWidget extends StatelessWidget {
     );
   }
 }
+
+
+// class AdBannerWidget extends StatefulWidget {
+//   @override
+//   _AdBannerWidgetState createState() => _AdBannerWidgetState();
+// }
+
+// class _AdBannerWidgetState extends State<AdBannerWidget> {
+//   late AdmobBanner _admobBanner;
+
+//   @override
+//   void initState() {
+//     super.initState();
+
+//     _admobBanner = AdmobBanner(
+//       adUnitId: AdHelper.bannerAdUnitId,
+//       adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+//         width: MediaQuery.of(context).size.width.toInt(),
+//       ),
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return _admobBanner;
+//   }
+// }
