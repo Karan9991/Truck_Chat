@@ -195,6 +195,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
       );
 
       if (response.statusCode == 200) {
+
         String result = response.body;
         print('---------------New Conversation Response---------------');
 
@@ -254,17 +255,21 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
         await registerDevice();
 
         bool sent = await send();
-
+        
         setState(() {
           _isSending = false;
         });
 
         if (sent) {
           print('5');
+        await sendFCMNotification('all', 'message');
 
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen(initialTabIndex: 1,)),
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(
+                      initialTabIndex: 1,
+                    )),
           );
         }
       } else {
@@ -282,10 +287,14 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
 
         if (sent) {
           print('7');
+        await sendFCMNotification('all', 'message');
 
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen(initialTabIndex: 1,)),
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(
+                      initialTabIndex: 1,
+                    )),
           );
         }
       }
@@ -320,5 +329,45 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
     setState(() {
       _isListening = false;
     });
+  }
+
+  Future<void> sendFCMNotification(String topic, String message) async {
+          String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+
+    final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+    final serverKey =
+        'AAAAeR6Pnuo:APA91bHiasD4BKzgcY04ZiQ8oNi0L3HdOBeLBtUrxPfemCHHlxY0SGRP9VQ4kowDqRtOacdN8HUjmDTTMOgV1IzActxqGbKCT2W6dRm3Om5baCfJjDlBWnOm5vNqO-goLJRJV0UG1XgL'; // Replace with your FCM server key
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'key=$serverKey',
+    };
+
+    final body = {
+      'to': '/topics/$topic',
+      'notification': {
+        'body': 'Tap here to open TruckChat',
+        'title': 'There are new messages!',
+        'sound': 'default',
+      },
+      'data': {
+        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+        'type': 'public',
+        'senderUserId':
+            userId, // Include the senderId in the data payload
+      },
+    };
+
+    try {
+      final response =
+          await http.post(url, headers: headers, body: jsonEncode(body));
+      if (response.statusCode == 200) {
+        print('FCM notification sent successfully');
+      } else {
+        print('Failed to send FCM notification');
+      }
+    } catch (e) {
+      print('Error sending FCM notification: $e');
+    }
   }
 }

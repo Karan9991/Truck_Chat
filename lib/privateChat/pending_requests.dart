@@ -1,4 +1,3 @@
-
 import 'package:chat/utils/avatar.dart';
 import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
@@ -20,7 +19,6 @@ class PendingRequestsScreen extends StatelessWidget {
   DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
 
   PendingRequestsScreen({required this.currentUserId});
-
 
   void acceptRequest(String requestId, BuildContext context) {
     String? chatHandle =
@@ -53,7 +51,8 @@ class PendingRequestsScreen extends StatelessWidget {
           receiverEmojiId = requestData['receiverEmojiId'];
           receiverUserName = requestData['receiverUserName'];
 
-          _initializeChat(senderId, receiverId);
+          await _initializeChat(senderId, receiverId);
+          await requestRef.remove();
         }
       });
     }
@@ -95,10 +94,15 @@ class PendingRequestsScreen extends StatelessWidget {
     }
   }
 
+  // void rejectRequest(String requestId) {
+  //   DatabaseReference requestRef =
+  //       FirebaseDatabase.instance.ref().child('requests/$requestId');
+  //   requestRef.update({'status': 'rejected'});
+  // }
   void rejectRequest(String requestId) {
     DatabaseReference requestRef =
         FirebaseDatabase.instance.ref().child('requests/$requestId');
-    requestRef.update({'status': 'rejected'});
+    requestRef.remove(); // Remove the entire request node from the database
   }
 
   @override
