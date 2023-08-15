@@ -434,38 +434,38 @@ void showBlockUserDialog(
   );
 }
 
-void showReportAbuseSuccessDialog(
-    BuildContext context, String title, String subtitle1, String subtitle2) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(title),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              subtitle1,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Text(
-              subtitle2,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context); // Close the dialog
-            },
-            child: Text('OK'),
-          ),
-        ],
-      );
-    },
-  );
-}
+// void showReportAbuseSuccessDialog(
+//     BuildContext context, String title, String subtitle1, String subtitle2) {
+//   showDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return AlertDialog(
+//         title: Text(title),
+//         content: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             Text(
+//               subtitle1,
+//               style: TextStyle(fontWeight: FontWeight.bold),
+//             ),
+//             Text(
+//               subtitle2,
+//             ),
+//           ],
+//         ),
+//         actions: [
+//           TextButton(
+//             onPressed: () {
+//               Navigator.pop(context); // Close the dialog
+//             },
+//             child: Text('OK'),
+//           ),
+//         ],
+//       );
+//     },
+//   );
+// }
 
 void showIgnoreUserSuccessDialog(BuildContext context, String title) {
   showDialog(
@@ -485,6 +485,61 @@ void showIgnoreUserSuccessDialog(BuildContext context, String title) {
     },
   );
 }
+
+Future<void> showReportDialog(BuildContext context, VoidCallback onReport) async {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Report Abuse'),
+        content: Text('Are you sure you want to report abuse?'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+          ),
+          TextButton(
+            child: Text('Report'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+              onReport(); // Call the provided callback function
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<void> showIgnoreUserDialog(BuildContext context, VoidCallback onIgnore) async {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Ignore User'),
+        content: Text('Are you sure you want to Ignore this user?'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+          ),
+          TextButton(
+            child: Text('Ignore'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+              onIgnore(); // Call the provided callback function
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
 void sendPrivateChatRequest(
     BuildContext context, String title, String subtitle) {

@@ -272,11 +272,11 @@ class HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     setupFirebaseMessaging(context);
 
-    String? currentUserChatHandle =
-        SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
-    String appBarTitle = currentUserChatHandle != null
-        ? '${Constants.APP_BAR_TITLE} ($currentUserChatHandle)'
-        : Constants.APP_BAR_TITLE;
+    // String? currentUserChatHandle =
+    //     SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
+    // String appBarTitle = currentUserChatHandle != null
+    //     ? '${Constants.APP_BAR_TITLE} ($currentUserChatHandle)'
+    //     : Constants.APP_BAR_TITLE;
 
     return OrientationBuilder(builder: (context, orientation) {
       return MaterialApp(
@@ -291,7 +291,7 @@ class HomeScreenState extends State<HomeScreen>
               width: 34,
               height: 34,
             ),
-            title: Text(appBarTitle),
+            title: Text(Constants.APP_BAR_TITLE),
             actions: [
               IconButton(
                 icon: Image.asset(

@@ -1847,7 +1847,7 @@ class _ChatState extends State<Chat> {
         print('---------------Chat Response---------------');
         print(result);
 
-        //print('response body $result');
+        print('response body $result');
 
         try {
           final jsonResult = jsonDecode(result);
@@ -2468,7 +2468,15 @@ class _ChatState extends State<Chat> {
                                             context,
                                             () {
                                               // Handle Report Abuse action
-
+                                              // showReportDialog(
+                                              //   context,
+                                              //   () {
+                                              //     reportUser(
+                                              //         reply.uid.toString(),
+                                              //         reply.rid.toString(),
+                                              //         reply.replyMsg);
+                                              //   },
+                                              // );
                                               reportUser(
                                                   reply.uid.toString(),
                                                   reply.rid.toString(),
@@ -2476,8 +2484,12 @@ class _ChatState extends State<Chat> {
                                             },
                                             () {
                                               // Handle Ignore User action
-                                              ignoreUser(getDeviceType(),
-                                                  reply.uid.toString());
+                                              showIgnoreUserDialog(context, () {
+                                                ignoreUser(getDeviceType(),
+                                                    reply.uid.toString());
+                                              });
+                                              // ignoreUser(getDeviceType(),
+                                              //     reply.uid.toString());
                                             },
                                             () {
                                               // Handle Start Private Chat action
@@ -2545,6 +2557,15 @@ class _ChatState extends State<Chat> {
                                             context,
                                             () {
                                               // Handle Report Abuse action
+                                              // showReportDialog(
+                                              //   context,
+                                              //   () {
+                                              //     reportUser(
+                                              //         reply.uid.toString(),
+                                              //         reply.rid.toString(),
+                                              //         reply.replyMsg);
+                                              //   },
+                                              // );
                                               reportUser(
                                                   reply.uid.toString(),
                                                   reply.rid.toString(),
@@ -2552,8 +2573,12 @@ class _ChatState extends State<Chat> {
                                             },
                                             () {
                                               // Handle Ignore User action
-                                              ignoreUser(getDeviceType(),
-                                                  reply.uid.toString());
+                                              showIgnoreUserDialog(context, () {
+                                                ignoreUser(getDeviceType(),
+                                                    reply.uid.toString());
+                                              });
+                                              // ignoreUser(getDeviceType(),
+                                              //     reply.uid.toString());
                                             },
                                           );
                                         }
@@ -2948,11 +2973,29 @@ class _ChatState extends State<Chat> {
         print('status_code $status_code');
 
         if (status_code == 200) {
-          showReportAbuseSuccessDialog(
-              context, 'User Reported', 'Reported Message: ', user_notes);
+          showReportDialog(context, () {
+            String email = Uri.encodeComponent("abuse@truckchatapp.com");
+            String subject = Uri.encodeComponent("Report Abuse Truck Chat");
+            String body = Uri.encodeComponent(
+                "User Id:- $flagger_user_id \n\n Message Id:- $post_id \n\n Message:- $user_notes");
+            print(subject);
+            Uri mail = Uri.parse("mailto:$email?subject=$subject&body=$body");
+            launchUrl(mail);
+          });
+          // showReportAbuseSuccessDialog(
+          //     context, 'User Reported', 'Reported Message: ', user_notes);
         } else if (status_code == 501) {
-          showReportAbuseSuccessDialog(context, 'User Already Reported',
-              'Reported Message: ', user_notes);
+          showReportDialog(context, () {
+            String email = Uri.encodeComponent("abuse@truckchatapp.com");
+            String subject = Uri.encodeComponent("Report Abuse Truck Chat");
+            String body = Uri.encodeComponent(
+                "User Id:- $flagger_user_id \n\n Message Id:- $post_id \n\n Message:- $user_notes");
+            print(subject);
+            Uri mail = Uri.parse("mailto:$email?subject=$subject&body=$body");
+            launchUrl(mail);
+          });
+          // showReportAbuseSuccessDialog(context, 'User Already Reported',
+          //     'Reported Message: ', user_notes);
         }
 
         if (jsonResult.containsKey('message')) {

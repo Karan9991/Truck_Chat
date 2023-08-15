@@ -287,6 +287,7 @@ class _ChatListScreenState extends State<ChatListScreen>
   bool _isLoading = true;
 
   String? currentUserId;
+  String noPrivateChats = '';
 
   @override
   bool get wantKeepAlive => true;
@@ -306,6 +307,7 @@ class _ChatListScreenState extends State<ChatListScreen>
         _isLoading = false;
       });
     });
+    //_delayedDisplay();
   }
 
   @override
@@ -372,7 +374,8 @@ class _ChatListScreenState extends State<ChatListScreen>
 
   Future<void> _delayedDisplay() async {
     await Future.delayed(
-        Duration(milliseconds: 300)); // Adjust the duration as needed
+        Duration(milliseconds: 500)); // Adjust the duration as needed
+    noPrivateChats = 'No Private Chats';
   }
 
   void _deleteChat(int index) {
