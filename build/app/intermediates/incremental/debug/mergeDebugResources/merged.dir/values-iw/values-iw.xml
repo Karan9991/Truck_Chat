@@ -56,13 +56,24 @@
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"העתקת הקישור"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"פתיחה בדפדפן"</string>
     <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"לשיתוף הקישור"</string>
-    <string msgid="368094699078615544" name="s1">"שמור את התמונה"</string>
-    <string msgid="4550830452390689489" name="s2">"האם לאפשר למודעה לאחסן תמונה בגלריית התמונות?"</string>
-    <string msgid="2435407834265420668" name="s3">"קבל"</string>
-    <string msgid="9167523597401839819" name="s4">"דחה"</string>
-    <string msgid="1566682516266724847" name="s5">"צור אירוע ביומן"</string>
-    <string msgid="5996672174517137271" name="s6">"האם לאפשר למודעה ליצור אירוע ביומן?"</string>
-    <string msgid="7163549807207034258" name="s7">"מודעת בדיקה"</string>
+    <string name="native_body">גוף המודעה</string>
+    <string name="native_headline">כותרת</string>
+    <string name="native_media_view">תצוגת המדיה</string>
+    <string name="offline_notification_text">יש להקיש כדי לפתוח את המודעה</string>
+    <string name="offline_notification_title">צפייה במודעה ששמרת כשלא היה לך חיבור לאינטרנט</string>
+    <string name="offline_opt_in_confirm">אישור</string>
+    <string name="offline_opt_in_confirmation">תישלח לך התראה עם קישור כשיתחדש החיבור לאינטרנט</string>
+    <string name="offline_opt_in_decline">לא תודה</string>
+    <string name="offline_opt_in_message">נשלח לך התראה עם קישור לאתר המפרסם.</string>
+    <string name="offline_opt_in_title">יש לפתוח את המודעה כשיתחדש החיבור לאינטרנט.</string>
+    <string name="s1">שמור את התמונה</string>
+    <string name="s2">האם לאפשר למודעה לאחסן תמונה בגלריית התמונות?</string>
+    <string name="s3">קבל</string>
+    <string name="s4">דחה</string>
+    <string name="s5">צור אירוע ביומן</string>
+    <string name="s6">האם לאפשר למודעה ליצור אירוע ביומן?</string>
+    <string name="s7">מודעת בדיקה</string>
     <string msgid="6264217191555673260" name="search_menu_title">"חיפוש"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="watermark_label_prefix">AdMob – </string>
 </resources>

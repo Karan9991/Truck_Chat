@@ -1,3 +1,4 @@
+import 'package:chat/chat/conversation_data.dart';
 import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/main.dart';
 import 'package:chat/privateChat/pending_requests.dart';
@@ -23,7 +24,7 @@ import 'package:http/http.dart' as http;
 import 'package:chat/utils/shared_pref.dart';
 import 'dart:convert';
 import 'dart:io';
-import 'package:admob_flutter/admob_flutter.dart';
+//import 'package:admob_flutter/admob_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_beep/flutter_beep.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -35,6 +36,7 @@ import 'package:location/location.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:chat/utils/navigator_global.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class HomeScreen extends StatefulWidget {
   final int initialTabIndex; // Add this parameter to the constructor
@@ -53,6 +55,7 @@ class HomeScreenState extends State<HomeScreen>
   PageController pageController = PageController(initialPage: 1);
   PageStorageBucket _bucket = PageStorageBucket();
   late TabController _tabController;
+  //late AppLifecycleReactor _appLifecycleReactor;
 
   int _selectedIndex = 1;
   final List<Widget> _widgetOptions = [
@@ -82,7 +85,14 @@ class HomeScreenState extends State<HomeScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
-    InterstitialAdManager.initialize();
+    //Load AppOpen Ad
+
+    //  AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+    //   _appLifecycleReactor = AppLifecycleReactor(
+    //     appOpenAdManager: appOpenAdManager);
+
+    print('init called on home screen');
+    //InterstitialAdManager.initialize();
 
     _tabController = TabController(
         length: 5, vsync: this, initialIndex: widget.initialTabIndex);
@@ -99,7 +109,11 @@ class HomeScreenState extends State<HomeScreen>
     getFirebaseTokenn();
 
     _refreshChatListWithFCM();
+
+    //  _loadAndShowInterstitialAd();
   }
+
+
 
   Future<void> getFirebaseTokenn() async {
     bool isAppInstall = await isAppInstalled();
@@ -134,30 +148,68 @@ class HomeScreenState extends State<HomeScreen>
   @override
   void dispose() {
     super.dispose();
-    InterstitialAdManager.dispose();
+    //InterstitialAdManager.dispose();
     _tabController.dispose();
   }
 
+  // void _refreshChatListWithFCM() {
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //     print('Public Chat Foreground notification received');
+  //     Map<String, dynamic> data = message.data;
+  //     final notificationType = data['type'];
+  //     final chatid = data['chatid'];
+
+  //     print('data ${message.data}');
+  //     print('type $notificationType');
+
+  //     if (notificationType == 'public') {
+
+  //       _refreshChatList();
+
+  //       if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
+  //         FlutterBeep.beep();
+  //       }
+  //     }
+
+  //   });
+  // }
+//test notification
   void _refreshChatListWithFCM() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print('Public Chat Foreground notification received');
       Map<String, dynamic> data = message.data;
       final notificationType = data['type'];
+      final conversationId = data[
+          'conversationId']; // Assuming you receive the conversation ID in the notification data
 
       print('data ${message.data}');
       print('type $notificationType');
 
       if (notificationType == 'public') {
-        _refreshChatList();
+        List<Conversation> storedConversations = await getStoredConversations();
+        Conversation? conversationToRefresh; // Initialize as nullable
 
+        for (var conversation in storedConversations) {
+          if (conversation.conversationId == conversationId &&
+              !conversation.isDeleted) {
+            conversationToRefresh = conversation;
+            break;
+          }
+        }
+
+        if (conversationToRefresh != null) {
+          _refreshChatList();
+
+          if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
+            FlutterBeep.beep();
+          }
+        }
+      } else if (notificationType == 'newchat') {
+        _refreshChatList();
         if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
           FlutterBeep.beep();
         }
       }
-
-      //handleFCMMessage(message.data, message);
-
-      //openPrivateChatTab('s');
     });
   }
 
@@ -251,8 +303,8 @@ class HomeScreenState extends State<HomeScreen>
 
     if (notificationType == 'privatechat') {
       //OverlayManager.showPopup(context);
-      GlobalNavigator.showAlertDialog('New Private Chat Request!', 'Open your Private Chat and view pending requests to see who wants to connect.');
-
+      GlobalNavigator.showAlertDialog('New Private Chat Request!',
+          'Open your Private Chat and view pending requests to see who wants to connect.');
     }
   }
 
@@ -271,12 +323,6 @@ class HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     setupFirebaseMessaging(context);
-
-    // String? currentUserChatHandle =
-    //     SharedPrefs.getString(SharedPrefsKeys.CURRENT_USER_CHAT_HANDLE);
-    // String appBarTitle = currentUserChatHandle != null
-    //     ? '${Constants.APP_BAR_TITLE} ($currentUserChatHandle)'
-    //     : Constants.APP_BAR_TITLE;
 
     return OrientationBuilder(builder: (context, orientation) {
       return MaterialApp(
@@ -311,6 +357,8 @@ class HomeScreenState extends State<HomeScreen>
               IconButton(
                 icon: Icon(Icons.grid_view_rounded),
                 onPressed: () async {
+                  // InterstitialAdManager.showInterstitialAd();
+
                   showMarkAsReadUnreadDialog(context);
                   // _refreshChatList();
                   // Perform action when grid box icon is pressed
@@ -472,12 +520,14 @@ class HomeScreenState extends State<HomeScreen>
               ),
             ],
           ),
-          bottomNavigationBar: AdmobBanner(
-            adUnitId: AdHelper.bannerAdUnitId,
-            adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-              width: MediaQuery.of(context).size.width.toInt(),
-            ),
-          ),
+          bottomNavigationBar: CustomBannerAd(key: UniqueKey(),),
+        
+          // bottomNavigationBar: AdmobBanner(
+          //   adUnitId: AdHelper.bannerAdUnitId,
+          //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+          //     width: MediaQuery.of(context).size.width.toInt(),
+          //   ),
+          // ),
         ),
       );
     });
@@ -485,15 +535,15 @@ class HomeScreenState extends State<HomeScreen>
 }
 
 // Calculate the height of the AdmobBanner based on the available constraints
-double _getAdmobBannerHeight(BoxConstraints constraints) {
-  // Choose the desired AdSize based on the device orientation
-  final adSize = AdmobBannerSize.ADAPTIVE_BANNER(
-    width: constraints.maxWidth.toInt(),
-  );
+// double _getAdmobBannerHeight(BoxConstraints constraints) {
+//   // Choose the desired AdSize based on the device orientation
+//   final adSize = AdmobBannerSize.ADAPTIVE_BANNER(
+//     width: constraints.maxWidth.toInt(),
+//   );
 
-  // Calculate the height based on the width and height aspect ratio of the AdSize
-  return adSize.height.toDouble();
-}
+//   // Calculate the height based on the width and height aspect ratio of the AdSize
+//   return adSize.height.toDouble();
+// }
 
 class SponsorsTab extends StatelessWidget {
   final Key key;
@@ -658,51 +708,52 @@ class _PopupDialogState extends State<PopupDialog>
             //   },
             //   child: Text('View Requests'),
             // ),
-              TextButton(
-          onPressed: () {
-            OverlayManager.hidePopup();
-            // homescreen.openPrivateChatTab('senderId'); // Navigate to the private chat tab
+            TextButton(
+              onPressed: () {
+                OverlayManager.hidePopup();
+                // homescreen.openPrivateChatTab('senderId'); // Navigate to the private chat tab
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomeScreen(
+                      initialTabIndex: 4,
+                    ),
+                  ),
+                );
 
-                builder: (context) => HomeScreen(initialTabIndex: 4,),
-              ),
-            );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => HomeScreen(
+                //       initialTabIndex: 4,
+                //     ), // Go back to HomeScreen first
+                //   ),
+                // ).then((_) {
+                //   // After returning to HomeScreen, navigate to PrivateChatTab
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) =>
+                //           PrivateChatTab(key: UniqueKey(),),
+                //     ),
+                //   );
+                // });
 
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => HomeScreen(
-            //       initialTabIndex: 4,
-            //     ), // Go back to HomeScreen first
-            //   ),
-            // ).then((_) {
-            //   // After returning to HomeScreen, navigate to PrivateChatTab
-            //   Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //       builder: (context) =>
-            //           PrivateChatTab(key: UniqueKey(),),
-            //     ),
-            //   );
-            // });
+                //      Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) =>
+                //         PrivateChatTab(key: UniqueKey(), ),
+                //   ),
+                // );
 
-            //      Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) =>
-            //         PrivateChatTab(key: UniqueKey(), ),
-            //   ),
-            // );
+                //   Navigator.pushNamed(context, '/privateChat');
 
-            //   Navigator.pushNamed(context, '/privateChat');
-
-             OverlayManager.hidePopup();
-          },
-          child: Text('View Requests'),
-        ),
+                OverlayManager.hidePopup();
+              },
+              child: Text('View Requests'),
+            ),
           ],
         );
       },

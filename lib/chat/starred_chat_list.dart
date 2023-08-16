@@ -525,10 +525,15 @@
 
 //testing cache
 
+// import 'package:chat/chat/conversation_data.dart';
+import 'package:chat/chat/conversation_data.dart' as conversation;
+
 import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/chat/starred_chat.dart';
 // import 'package:chat/chats_screen.dart';
 import 'package:chat/chat/starred_conversation_data.dart';
+//import 'package:chat/chat/starred_conversation_data.dart' as starred;
+
 import 'package:chat/settings/settings.dart';
 import 'package:chat/utils/ads.dart';
 import 'package:chat/utils/constants.dart';
@@ -542,9 +547,10 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_beep/flutter_beep.dart';
+//import 'package:admob_flutter/admob_flutter.dart';
 
 class StarredChatList extends StatefulWidget {
   final Key key;
@@ -624,29 +630,77 @@ class _StarredChatListState extends State<StarredChatList>
   // void refreshScreen() {
   //   getData();
   // }
+  // void _refreshChatListWithFCM() {
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //     print('Public Chat Foreground notification received');
+  //     Map<String, dynamic> data = message.data;
+  //     final notificationType = data['type'];
+
+  //     print('data ${message.data}');
+  //     print('type $notificationType');
+
+  //     if (notificationType == 'public') {
+  //       getData().then((_) {
+  //         setState(() {
+  //           isLoading = false;
+  //         });
+  //       });
+  //       // if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
+  //       //   FlutterBeep.beep();
+  //       // }
+  //     }
+
+  //     //handleFCMMessage(message.data, message);
+
+  //     //openPrivateChatTab('s');
+  //   });
+  // }
+//testing notificaitons
   void _refreshChatListWithFCM() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print('Public Chat Foreground notification received');
       Map<String, dynamic> data = message.data;
       final notificationType = data['type'];
+      final conversationId = data[
+          'conversationId']; // Assuming you receive the conversation ID in the notification data
 
       print('data ${message.data}');
       print('type $notificationType');
 
       if (notificationType == 'public') {
+        List<conversation.Conversation> storedConversations =
+            await conversation.getStoredConversations();
+        conversation.Conversation?
+            conversationToRefresh; // Initialize as nullable
+
+        for (var conversation in storedConversations) {
+          if (conversation.conversationId == conversationId &&
+              !conversation.isDeleted) {
+            conversationToRefresh = conversation;
+            break;
+          }
+        }
+
+        if (conversationToRefresh != null) {
+          getData().then((_) {
+            setState(() {
+              isLoading = false;
+            });
+          });
+          if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
+            FlutterBeep.beep();
+          }
+        }
+      } else if (notificationType == 'newchat') {
         getData().then((_) {
           setState(() {
             isLoading = false;
           });
         });
-        // if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
-        //   FlutterBeep.beep();
-        // }
+        if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
+          FlutterBeep.beep();
+        }
       }
-
-      //handleFCMMessage(message.data, message);
-
-      //openPrivateChatTab('s');
     });
   }
 
@@ -850,8 +904,11 @@ class _StarredChatListState extends State<StarredChatList>
                         if (index % 5 == 4) {
                           // Check if it's the ad banner index
                           // The ad banner should be shown after every 5 items (0-based index)
-                          return AdBannerWidget();
+                          //  return AdBannerWidget();
                           // return _admobBanner;
+                          return CustomBannerAd(
+                            key: UniqueKey(),
+                          );
 
                           // return Text('');
                         } else {
@@ -1077,12 +1134,12 @@ class _StarredChatListState extends State<StarredChatList>
               },
             ),
           ),
-          AdmobBanner(
-            adUnitId: AdHelper.bannerAdUnitId,
-            adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-              width: MediaQuery.of(context).size.width.toInt(),
-            ),
-          ),
+          // AdmobBanner(
+          //   adUnitId: AdHelper.bannerAdUnitId,
+          //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+          //     width: MediaQuery.of(context).size.width.toInt(),
+          //   ),
+          // ),
         ],
       ),
     );

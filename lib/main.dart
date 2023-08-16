@@ -1,6 +1,7 @@
 import 'dart:convert';
 // import 'dart:html';
 import 'dart:io';
+import 'package:chat/chat/conversation_data.dart';
 import 'package:chat/home_screen.dart';
 import 'package:chat/privateChat/chat.dart';
 import 'package:chat/privateChat/pending_requests.dart';
@@ -24,11 +25,12 @@ import 'package:location/location.dart';
 
 import 'package:device_info/device_info.dart';
 import 'get_all_reply_messages.dart';
-import 'package:admob_flutter/admob_flutter.dart';
+//import 'package:admob_flutter/admob_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:chat/utils/navigator_key.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   print("backgroundHandler: ${message.notification}");
@@ -36,18 +38,80 @@ Future<void> backgroundHandler(RemoteMessage message) async {
   await SharedPrefs.init();
   bool? notifications = SharedPrefs.getBool(SharedPrefsKeys.NOTIFICATIONS);
   if (notifications!) {
-    handleFCMMessage(message.data, message);
+    handleFCMMessageBackground(message.data, message);
   }
+}
+
+// AppOpenAd? openAd;
+
+// Future<void> loadAd() async {
+//   await AppOpenAd.load(
+//       adUnitId: 'ca-app-pub-3940256099942544/3419835294',
+//       request: const AdRequest(),
+//       adLoadCallback: AppOpenAdLoadCallback(onAdLoaded: (ad) {
+//         print('ad is loaded');
+//         openAd = ad;
+//         // openAd!.show();
+//       }, onAdFailedToLoad: (error) {
+//         print('ad failed to load $error');
+//       }),
+//       orientation: AppOpenAd.orientationPortrait);
+// }
+
+// void showAd() {
+//   if (openAd == null) {
+//     print('trying tto show before loading');
+//     loadAd();
+//     return;
+//   }
+
+//   openAd!.fullScreenContentCallback =
+//       FullScreenContentCallback(onAdShowedFullScreenContent: (ad) {
+//     print('onAdShowedFullScreenContent');
+//   }, onAdFailedToShowFullScreenContent: (ad, error) {
+//     ad.dispose();
+//     print('failed to load $error');
+//     openAd = null;
+//     loadAd();
+//   }, onAdDismissedFullScreenContent: (ad) {
+//     ad.dispose();
+//     print('dismissed');
+//     openAd = null;
+//     loadAd();
+//   });
+
+//   openAd!.show();
+// }
+AppOpenAd? myAppOpenAd;
+
+loadAppOpenAd() {
+  AppOpenAd.load(
+      adUnitId:'ca-app-pub-7181343877669077/8346499195', //Your ad Id from admob
+      request: const AdRequest(),
+      adLoadCallback: AppOpenAdLoadCallback(
+          onAdLoaded: (ad) {
+            myAppOpenAd = ad;
+            myAppOpenAd!.show();
+          },
+          onAdFailedToLoad: (error) {}),
+      orientation: AppOpenAd.orientationPortrait);
 }
 
 //7FADBC328BBB96431CA78C2E559B06A7
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await Admob.initialize(
-      // testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
-      ); //testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
-  await Admob.requestTrackingAuthorization();
+
+  MobileAds.instance.initialize();
+
+  await loadAppOpenAd();
+
+  // await Admob.initialize(
+  //     // testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
+  //     ); //testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
+  // // MobileAds.instance.initialize();
+
+  // await Admob.requestTrackingAuthorization();
 
   configLocalNotification();
   _configureFCM();
@@ -78,7 +142,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Truck Chat',
-    navigatorKey: navigatorKey,
+      navigatorKey: navigatorKey,
 
       initialRoute: '/',
 
@@ -325,9 +389,40 @@ void _configureFCM() {
   });
 }
 
+// void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) async {
+//   final senderId = data['senderUserId'];
+//   final notificationType = data['type'];
+
+//   print('--------------------------Notification-----------------------------');
+//   print('sender id $senderId');
+//   print('type $notificationType');
+//   print('--------------------------Notification-----------------------------');
+
+//   String title = message.notification!.title ?? 'There are new messages!';
+//   String body = message.notification!.body ?? 'Tap here to open TruckChat';
+//   String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+
+//   if (notificationType == 'public') {
+//     if (!SharedPrefs.getBool('isUserOnPublicChatScreen')!) {
+//       if (currentUserId != senderId) {
+//         showNotification(
+//             Constants.FCM_NOTIFICATION_TITLE, Constants.FCM_NOTIFICATION_BODY);
+//       }
+//     }
+//   } else if (notificationType == 'private') {
+//     if (!SharedPrefs.getBool('isUserOnChatScreen')!) {
+//       showNotification(title, body);
+//     }
+//   } else if (notificationType == 'privatechat') {
+//     showNotification(title, body);
+//   }
+// }
+//testing notificaioin
 void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) async {
   final senderId = data['senderUserId'];
   final notificationType = data['type'];
+  final conversationId = data[
+      'conversationId']; // Assuming you receive the conversation ID in the notification data
 
   print('--------------------------Notification-----------------------------');
   print('sender id $senderId');
@@ -341,8 +436,21 @@ void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) async {
   if (notificationType == 'public') {
     if (!SharedPrefs.getBool('isUserOnPublicChatScreen')!) {
       if (currentUserId != senderId) {
-        showNotification(
-            Constants.FCM_NOTIFICATION_TITLE, Constants.FCM_NOTIFICATION_BODY);
+        List<Conversation> storedConversations = await getStoredConversations();
+        Conversation? conversationToRefresh; // Initialize as nullable
+
+        for (var conversation in storedConversations) {
+          if (conversation.conversationId == conversationId &&
+              !conversation.isDeleted) {
+            conversationToRefresh = conversation;
+            break;
+          }
+        }
+
+        if (conversationToRefresh != null) {
+          showNotification(Constants.FCM_NOTIFICATION_TITLE,
+              Constants.FCM_NOTIFICATION_BODY);
+        }
       }
     }
   } else if (notificationType == 'private') {
@@ -351,8 +459,84 @@ void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) async {
     }
   } else if (notificationType == 'privatechat') {
     showNotification(title, body);
+  } else if (notificationType == 'newchat') {
+    showNotification(title, body);
   }
 }
+
+void handleFCMMessageBackground(
+    Map<String, dynamic> data, RemoteMessage message) async {
+  final senderId = data['senderUserId'];
+  final notificationType = data['type'];
+  final conversationId = data[
+      'conversationId']; // Assuming you receive the conversation ID in the notification data
+
+  print('--------------------------Notification-----------------------------');
+  print('sender id $senderId');
+  print('type $notificationType');
+  print('--------------------------Notification-----------------------------');
+
+  String title = message.notification!.title ?? 'There are new messages!';
+  String body = message.notification!.body ?? 'Tap here to open TruckChat';
+  String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+
+  if (notificationType == 'public') {
+    if (currentUserId != senderId) {
+      List<Conversation> storedConversations = await getStoredConversations();
+      Conversation? conversationToRefresh; // Initialize as nullable
+
+      for (var conversation in storedConversations) {
+        if (conversation.conversationId == conversationId &&
+            !conversation.isDeleted) {
+          conversationToRefresh = conversation;
+          break;
+        }
+      }
+
+      if (conversationToRefresh != null) {
+        showNotification(
+            Constants.FCM_NOTIFICATION_TITLE, Constants.FCM_NOTIFICATION_BODY);
+      }
+    }
+  } else if (notificationType == 'private') {
+    showNotification(title, body);
+  } else if (notificationType == 'privatechat') {
+    showNotification(title, body);
+  } else if (notificationType == 'newchat') {
+    showNotification(title, body);
+  }
+}
+// void _refreshChatListWithFCM() {
+//   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+//     print('Public Chat Foreground notification received');
+//     Map<String, dynamic> data = message.data;
+//     final notificationType = data['type'];
+//     final conversationId = data['conversationId']; // Assuming you receive the conversation ID in the notification data
+
+//     print('data ${message.data}');
+//     print('type $notificationType');
+
+//     if (notificationType == 'public') {
+//       List<Conversation> storedConversations = await getStoredConversations();
+//       Conversation? conversationToRefresh; // Initialize as nullable
+
+//       for (var conversation in storedConversations) {
+//         if (conversation.conversationId == conversationId && !conversation.isDeleted) {
+//           conversationToRefresh = conversation;
+//           break;
+//         }
+//       }
+
+//       if (conversationToRefresh != null) {
+//         _refreshChatList();
+
+//         if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
+//           FlutterBeep.beep();
+//         }
+//       }
+//     }
+//   });
+// }
 
 Future<String> getNotificationChannelId() async {
   bool notificationTone =

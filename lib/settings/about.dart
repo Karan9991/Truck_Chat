@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 import 'package:device_info/device_info.dart';
-import 'package:admob_flutter/admob_flutter.dart';
+//import 'package:admob_flutter/admob_flutter.dart';
 import 'package:chat/utils/ads.dart';
 
 class About extends StatelessWidget {
@@ -152,12 +152,13 @@ class About extends StatelessWidget {
                 ),
               ),
             ),
-            AdmobBanner(
-              adUnitId: AdHelper.bannerAdUnitId,
-              adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-                width: MediaQuery.of(context).size.width.toInt(),
-              ),
-            ),
+            // AdmobBanner(
+            //   adUnitId: AdHelper.bannerAdUnitId,
+            //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+            //     width: MediaQuery.of(context).size.width.toInt(),
+            //   ),
+            // ),
+            CustomBannerAd(key: UniqueKey(),)
           ],
         ));
   }

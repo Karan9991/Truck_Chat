@@ -2,7 +2,7 @@ import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import '/utils/avatar.dart';
-import 'package:admob_flutter/admob_flutter.dart';
+//import 'package:admob_flutter/admob_flutter.dart';
 import 'package:chat/utils/ads.dart';
 
 class MessagesScreen extends StatelessWidget {
@@ -41,12 +41,13 @@ class MessagesScreen extends StatelessWidget {
               ],
             ),
           ),
-          AdmobBanner(
-            adUnitId: AdHelper.bannerAdUnitId,
-            adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-              width: MediaQuery.of(context).size.width.toInt(),
-            ),
-          ),
+          // AdmobBanner(
+          //   adUnitId: AdHelper.bannerAdUnitId,
+          //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+          //     width: MediaQuery.of(context).size.width.toInt(),
+          //   ),
+          // ),
+          CustomBannerAd(key: UniqueKey(),)
         ],
       ),
     );

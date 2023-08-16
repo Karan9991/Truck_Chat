@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
-import 'package:admob_flutter/admob_flutter.dart';
+//import 'package:admob_flutter/admob_flutter.dart';
 
 class NewsTab extends StatefulWidget {
   final Key key;
@@ -30,13 +30,13 @@ class _NewsTabState extends State<NewsTab> with AutomaticKeepAliveClientMixin {
     super.initState();
 
     fetchDataFromServer();
-    InterstitialAdManager.initialize();
+    // InterstitialAdManager.initialize();
   }
 
   @override
   void dispose() {
     super.dispose();
-    InterstitialAdManager.dispose();
+    //  InterstitialAdManager.dispose();
   }
 
   Future<void> fetchDataFromServer() async {
@@ -92,8 +92,12 @@ class _NewsTabState extends State<NewsTab> with AutomaticKeepAliveClientMixin {
                   if (index % 5 == 4) {
                     // Check if it's the ad banner index
                     // The ad banner should be shown after every 5 items (0-based index)
+                    //  return Container();
+                    return CustomBannerAd(
+                      key: UniqueKey(),
+                    );
 
-                     return AdBannerWidget();
+                    // return AdBannerWidget();
                   } else {
                     // Calculate the actual index in the news list
                     final newsIndex = index - (index ~/ 5);
@@ -111,7 +115,7 @@ class _NewsTabState extends State<NewsTab> with AutomaticKeepAliveClientMixin {
                       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                       child: InkWell(
                         onTap: () {
-                          InterstitialAdManager.showInterstitialAd();
+                          // InterstitialAdManager.showInterstitialAd();
 
                           navigateToURL(newsItem.link);
                         },

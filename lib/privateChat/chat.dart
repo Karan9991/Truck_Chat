@@ -20,7 +20,7 @@ import 'dart:async';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
-import 'package:admob_flutter/admob_flutter.dart';
+//import 'package:admob_flutter/admob_flutter.dart';
 
 class ChatScreen extends StatefulWidget {
   final String userId;
@@ -716,11 +716,12 @@ class _ChatScreenState extends State<ChatScreen> {
                 ],
               ),
             ),
-            AdmobBanner(
-              adUnitId: AdHelper.bannerAdUnitId,
-              adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-                  width: MediaQuery.of(context).size.width.toInt()),
-            )
+            // AdmobBanner(
+            //   adUnitId: AdHelper.bannerAdUnitId,
+            //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+            //       width: MediaQuery.of(context).size.width.toInt()),
+            // )
+            CustomBannerAd(key: UniqueKey(),)
           ],
         ),
       ),

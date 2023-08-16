@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
-import 'package:admob_flutter/admob_flutter.dart';
+//import 'package:admob_flutter/admob_flutter.dart';
 import 'package:chat/utils/ads.dart';
 import 'package:app_settings/app_settings.dart';
 
@@ -126,12 +126,13 @@ class _NotificationsAndSoundScreenState
               ],
             ),
           ),
-          AdmobBanner(
-            adUnitId: AdHelper.bannerAdUnitId,
-            adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-              width: MediaQuery.of(context).size.width.toInt(),
-            ),
-          ),
+          // AdmobBanner(
+          //   adUnitId: AdHelper.bannerAdUnitId,
+          //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+          //     width: MediaQuery.of(context).size.width.toInt(),
+          //   ),
+          // ),
+          CustomBannerAd(key: UniqueKey(),)
         ],
       ),
     );

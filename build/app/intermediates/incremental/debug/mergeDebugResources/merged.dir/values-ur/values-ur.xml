@@ -56,13 +56,24 @@
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"لنک کاپی کریں"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"براؤزر میں کھولیں"</string>
     <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"لنک کا اشتراک کریں"</string>
-    <string msgid="368094699078615544" name="s1">"تصویر محفوظ کریں"</string>
-    <string msgid="4550830452390689489" name="s2">"اشتہار کو تصویری گیلری میں تصویر محفوظ کرنے کی اجازت دیں؟"</string>
-    <string msgid="2435407834265420668" name="s3">"قبول کریں"</string>
-    <string msgid="9167523597401839819" name="s4">"مسترد کریں"</string>
-    <string msgid="1566682516266724847" name="s5">"کیلنڈر ایونٹ بنائیں"</string>
-    <string msgid="5996672174517137271" name="s6">"اشتہار کو ایک کیلنڈر ایونٹ بنانے کی اجازت دیں؟"</string>
-    <string msgid="7163549807207034258" name="s7">"اشتہار ٹیسٹ کریں"</string>
+    <string name="native_body">نفسِ مضمون</string>
+    <string name="native_headline">ہیڈ لائن</string>
+    <string name="native_media_view">میڈیا منظر</string>
+    <string name="offline_notification_text">اشتہار کھولنے کیلئے تھپتھپائیں</string>
+    <string name="offline_notification_title">جب آپ آف لائن تھے تب آپ نے جس اشتہار کو محفوظ کیا تھا اس کا ملاحظہ کریں</string>
+    <string name="offline_opt_in_confirm">ٹھیک ہے</string>
+    <string name="offline_opt_in_confirmation">جب آپ آن لائن واپس آئیں گے تو آپ کو لنک کے ساتھ اطلاع حاصل ہوگی</string>
+    <string name="offline_opt_in_decline">نہیں شکریہ</string>
+    <string name="offline_opt_in_message">ہم آپ کو مشتہر کی سائٹ کے لنک کے ساتھ اطلاع بھیجیں گے۔</string>
+    <string name="offline_opt_in_title">آن لائن واپس آنے پر اشتہار کھولیں۔</string>
+    <string name="s1">تصویر محفوظ کریں</string>
+    <string name="s2">اشتہار کو تصویری گیلری میں تصویر محفوظ کرنے کی اجازت دیں؟</string>
+    <string name="s3">قبول کریں</string>
+    <string name="s4">مسترد کریں</string>
+    <string name="s5">کیلنڈر ایونٹ بنائیں</string>
+    <string name="s6">اشتہار کو ایک کیلنڈر ایونٹ بنانے کی اجازت دیں؟</string>
+    <string name="s7">اشتہار ٹیسٹ کریں</string>
     <string msgid="6264217191555673260" name="search_menu_title">"تلاش کریں"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"+999"</string>
+    <string name="watermark_label_prefix">AdMob - ‎ </string>
 </resources>

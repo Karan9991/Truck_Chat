@@ -271,7 +271,7 @@ import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
-import 'package:admob_flutter/admob_flutter.dart';
+//import 'package:admob_flutter/admob_flutter.dart';
 
 class ChatListScreen extends StatefulWidget {
   @override
@@ -295,7 +295,7 @@ class _ChatListScreenState extends State<ChatListScreen>
   @override
   void initState() {
     super.initState();
-    InterstitialAdManager.initialize();
+   // InterstitialAdManager.initialize();
 
     currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 
@@ -314,7 +314,7 @@ class _ChatListScreenState extends State<ChatListScreen>
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    InterstitialAdManager.dispose();
+  //  InterstitialAdManager.dispose();
   }
 
   Future<void> _loadChatList(String userId) async {

@@ -56,13 +56,24 @@
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"کپی پیوند"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"بازکردن در مرورگر"</string>
     <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"هم‌رسانی پیوند"</string>
-    <string msgid="368094699078615544" name="s1">"ذخیره تصویر"</string>
-    <string msgid="4550830452390689489" name="s2">"به آگهی اجازه داده شود تصویر را در گالری تصویر ذخیره کند؟"</string>
-    <string msgid="2435407834265420668" name="s3">"پذیرفتن"</string>
-    <string msgid="9167523597401839819" name="s4">"نپذیرفتن"</string>
-    <string msgid="1566682516266724847" name="s5">"ایجاد رویداد تقویم"</string>
-    <string msgid="5996672174517137271" name="s6">"به آگهی اجازه داده شود رویداد تقویم ایجاد کند؟"</string>
-    <string msgid="7163549807207034258" name="s7">"آگهی آزمایشی"</string>
+    <string name="native_body">نوشتار اصلی</string>
+    <string name="native_headline">سرخط</string>
+    <string name="native_media_view">بازدید از رسانه</string>
+    <string name="offline_notification_text">برای باز کردن آگهی، ضربه بزنید</string>
+    <string name="offline_notification_title">مشاهده آگهی‌ای که هنگام آفلاین بودن ذخیره کردید</string>
+    <string name="offline_opt_in_confirm">تأیید</string>
+    <string name="offline_opt_in_confirmation">وقتی دوباره آنلاین شدید، اعلانی حاوی پیوند دریافت خواهید کرد</string>
+    <string name="offline_opt_in_decline">نه متشکرم</string>
+    <string name="offline_opt_in_message">اعلانی با پیوندی به سایت آگهی‌دهنده برایتان ارسال خواهیم کرد.</string>
+    <string name="offline_opt_in_title">وقتی دوباره آنلاین شدید آگهی را باز کنید.</string>
+    <string name="s1">ذخیره تصویر</string>
+    <string name="s2">به آگهی اجازه داده شود تصویر را در گالری تصویر ذخیره کند؟</string>
+    <string name="s3">پذیرفتن</string>
+    <string name="s4">نپذیرفتن</string>
+    <string name="s5">ایجاد رویداد تقویم</string>
+    <string name="s6">به آگهی اجازه داده شود رویداد تقویم ایجاد کند؟</string>
+    <string name="s7">آگهی آزمایشی</string>
     <string msgid="6264217191555673260" name="search_menu_title">"جستجو"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="watermark_label_prefix">AdMob - </string>
 </resources>

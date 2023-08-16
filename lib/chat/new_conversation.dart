@@ -10,10 +10,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:chat/utils/lat_lng.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:chat/utils/ads.dart';
 import 'package:location/location.dart';
 import 'package:flutter/services.dart'; // Import SystemChrome
+//import 'package:admob_flutter/admob_flutter.dart';
 
 class NewConversationScreen extends StatefulWidget {
   @override
@@ -149,12 +149,13 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
               ),
             ),
           ),
-          AdmobBanner(
-            adUnitId: AdHelper.bannerAdUnitId,
-            adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-              width: MediaQuery.of(context).size.width.toInt(),
-            ),
-          ),
+          // AdmobBanner(
+          //   adUnitId: AdHelper.bannerAdUnitId,
+          //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+          //     width: MediaQuery.of(context).size.width.toInt(),
+          //   ),
+          // ),
+          CustomBannerAd(key: UniqueKey(),),
         ],
       ),
     );
@@ -195,7 +196,6 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
       );
 
       if (response.statusCode == 200) {
-
         String result = response.body;
         print('---------------New Conversation Response---------------');
 
@@ -255,14 +255,14 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
         await registerDevice();
 
         bool sent = await send();
-        
+
         setState(() {
           _isSending = false;
         });
 
         if (sent) {
           print('5');
-        await sendFCMNotification('all', 'message');
+          await sendFCMNotification('all', 'message');
 
           Navigator.push(
             context,
@@ -287,7 +287,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
 
         if (sent) {
           print('7');
-        await sendFCMNotification('all', 'message');
+          await sendFCMNotification('all', 'message');
 
           Navigator.push(
             context,
@@ -332,7 +332,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
   }
 
   Future<void> sendFCMNotification(String topic, String message) async {
-          String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+    String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 
     final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
     final serverKey =
@@ -352,9 +352,8 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
       },
       'data': {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-        'type': 'public',
-        'senderUserId':
-            userId, // Include the senderId in the data payload
+        'type': 'newchat',
+        'senderUserId': userId, // Include the senderId in the data payload
       },
     };
 

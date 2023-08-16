@@ -586,10 +586,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:chat/chat/conversation_data.dart';
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:location/location.dart';
+//import 'package:admob_flutter/admob_flutter.dart';
 
 class ChatListr extends StatefulWidget {
   final Key key;
@@ -626,7 +626,7 @@ class _ChatListrState extends State<ChatListr>
   @override
   void initState() {
     super.initState();
-    InterstitialAdManager.initialize();
+    //InterstitialAdManager.initialize();
 
     print('iiiiiiiiiiiiiiiinit called');
 
@@ -644,7 +644,7 @@ class _ChatListrState extends State<ChatListr>
     WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
-    InterstitialAdManager.dispose();
+   // InterstitialAdManager.dispose();
   }
 
   Future<void> storedList() async {
@@ -918,6 +918,7 @@ class _ChatListrState extends State<ChatListr>
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     print('wwwwwwwwwidget');
@@ -1003,7 +1004,9 @@ class _ChatListrState extends State<ChatListr>
                     if (index % 5 == 4) {
                       // Check if it's the ad banner index
                       // The ad banner should be shown after every 5 items (0-based index)
-                      return AdBannerWidget();
+                      // return AdBannerWidget();
+                                            return CustomBannerAd(key: UniqueKey(),);
+
                     } else {
                       // Calculate the actual index in the conversation topics list
                       // final conversationIndex = index - (index ~/ 5);
@@ -1050,7 +1053,7 @@ class _ChatListrState extends State<ChatListr>
                             setState(() {}); // Trigger a rebuild of the widget
                           }
 
-                          //  InterstitialAdManager.showInterstitialAd();
+                         //  InterstitialAdManager.showInterstitialAd();
 
                           Navigator.push(
                             context,
@@ -1101,6 +1104,21 @@ class _ChatListrState extends State<ChatListr>
                                             Navigator.of(context)
                                                 .pop(); // Close the dialog if needed
                                           }),
+                                    _buildDialogOption(
+                                      DialogStrings
+                                          .DELETE_CHAT, // New option: Delete Chat
+                                      DialogStrings
+                                          .CHAT_WILL_BE_DELETED, // New message for deletion
+                                      () async {
+                                        Navigator.of(context).pop();
+                                        showDeleteChatDialog(
+                                            context,
+                                            () => {
+                                                  _deleteChat(conversation
+                                                      .conversationId),
+                                                });
+                                      },
+                                    ),
                                   ],
                                 ),
                                 actions: [
@@ -1173,19 +1191,21 @@ class _ChatListrState extends State<ChatListr>
                                 ),
                               ],
                             ),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.delete),
-                                  onPressed: () {
-                                    _deleteChat(conversation.conversationId);
-                                  },
-                                ),
-                                Icon(Icons.arrow_forward_ios,
-                                    color: Colors.white),
-                              ],
-                            ),
+                            trailing: Icon(Icons.arrow_forward_ios,
+                                color: Colors.white),
+                            //  Row(
+                            //   mainAxisSize: MainAxisSize.min,
+                            //   children: [
+                            //     IconButton(
+                            //       icon: Icon(Icons.delete),
+                            //       onPressed: () {
+                            //         _deleteChat(conversation.conversationId);
+                            //       },
+                            //     ),
+                            //     Icon(Icons.arrow_forward_ios,
+                            //         color: Colors.white),
+                            //   ],
+                            // ),
                           ),
                         ),
                       );

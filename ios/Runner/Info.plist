@@ -39,6 +39,8 @@
 	</dict>
 	<key>NSAppUsesWebKitWebViews</key>
 	<true/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>TruckChat app uses your location to provide accurate latitude and longitude coordinates, enabling you to discover nearby users to chat and enhance your overall experience.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>TruckChat app uses your location to provide accurate latitude and longitude coordinates, enabling you to discover nearby users to chat and enhance your overall experience.</string>
 	<key>NSMicrophoneUsageDescription</key>

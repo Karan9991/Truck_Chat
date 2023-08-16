@@ -56,13 +56,24 @@
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Copiați linkul"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Deschideți în browser"</string>
     <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Trimiteți linkul"</string>
-    <string msgid="368094699078615544" name="s1">"Salvați imaginea"</string>
-    <string msgid="4550830452390689489" name="s2">"Permiteți ca anunțul să stocheze imaginea în Galeria de fotografii?"</string>
-    <string msgid="2435407834265420668" name="s3">"Acceptați"</string>
-    <string msgid="9167523597401839819" name="s4">"Refuzați"</string>
-    <string msgid="1566682516266724847" name="s5">"Creați un eveniment în calendar"</string>
-    <string msgid="5996672174517137271" name="s6">"Permiteți ca anunțul să creeze un eveniment în calendar?"</string>
-    <string msgid="7163549807207034258" name="s7">"Anunț de probă"</string>
+    <string name="native_body">Conținut</string>
+    <string name="native_headline">Titlu</string>
+    <string name="native_media_view">Afișarea fișierului media</string>
+    <string name="offline_notification_text">Atinge pentru a deschide anunțul</string>
+    <string name="offline_notification_title">Vezi anunțul salvat când erai offline</string>
+    <string name="offline_opt_in_confirm">OK</string>
+    <string name="offline_opt_in_confirmation">Vei primi o notificare cu linkul când revii online</string>
+    <string name="offline_opt_in_decline">Nu</string>
+    <string name="offline_opt_in_message">Îți vom trimite o notificare cu un link la site-ul advertiserului.</string>
+    <string name="offline_opt_in_title">Deschide anunțul când revii online.</string>
+    <string name="s1">Salvează imaginea</string>
+    <string name="s2">Permiți ca anunțul să stocheze imaginea în Galeria de fotografii?</string>
+    <string name="s3">Acceptă</string>
+    <string name="s4">Refuză</string>
+    <string name="s5">Creează un eveniment în calendar</string>
+    <string name="s6">Permiți ca anunțul să creeze un eveniment în calendar?</string>
+    <string name="s7">Anunț de probă</string>
     <string msgid="6264217191555673260" name="search_menu_title">"Căutați"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="watermark_label_prefix">AdMob – </string>
 </resources>

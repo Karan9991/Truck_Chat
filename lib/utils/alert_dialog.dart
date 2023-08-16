@@ -30,7 +30,9 @@ void showMarkAsReadUnreadDialog(BuildContext context) async {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomeScreen(initialTabIndex: 1,),
+                  builder: (context) => HomeScreen(
+                    initialTabIndex: 1,
+                  ),
                 ),
               );
             }),
@@ -45,7 +47,9 @@ void showMarkAsReadUnreadDialog(BuildContext context) async {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomeScreen(initialTabIndex: 1,),
+                  builder: (context) => HomeScreen(
+                    initialTabIndex: 1,
+                  ),
                 ),
               );
             }),
@@ -53,9 +57,12 @@ void showMarkAsReadUnreadDialog(BuildContext context) async {
         ),
         actions: [
           TextButton(
-            child: Text(DialogStrings.CANCEL, style: TextStyle(
+            child: Text(
+              DialogStrings.CANCEL,
+              style: TextStyle(
                 fontSize: 18, // Adjust the font size as needed
-              ),),
+              ),
+            ),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -95,11 +102,12 @@ void showMarkAsReadUnreadStarDialog(BuildContext context) async {
         ),
         actions: [
           TextButton(
-            child: Text(DialogStrings.CANCEL,),
+            child: Text(
+              DialogStrings.CANCEL,
+            ),
             onPressed: () {
               Navigator.of(context).pop();
             },
-   
           ),
         ],
       );
@@ -156,7 +164,6 @@ Future<void> markAllUnread() async {
   // Store the updated conversations
   await storeConversations(storedConversations);
 }
-
 
 GlobalKey<_TermsOfServiceDialogState> dialogKey = GlobalKey();
 
@@ -280,7 +287,8 @@ void showExitConversationDialog(BuildContext context) async {
   }
 }
 
-void showPrivateChatDialog(BuildContext context, bool isPrivateChatEnabled) {
+void showPrivateChatDialog(
+    BuildContext context, bool isPrivateChatEnabled, Function() onOk) {
   showDialog(
     context: context,
     builder: (context) {
@@ -295,6 +303,8 @@ void showPrivateChatDialog(BuildContext context, bool isPrivateChatEnabled) {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
+
+              onOk();
             },
             child: Text(DialogStrings.GOT_IT),
           ),
@@ -434,6 +444,33 @@ void showBlockUserDialog(
   );
 }
 
+void showDeleteChatDialog(BuildContext context, Function() onDeleteChat) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(DialogStrings.DELETE_CHAT),
+        content: Text(DialogStrings.ARE_YOU_SURE_DELETE_CHAT),
+        actions: [
+          TextButton(
+            child: Text(DialogStrings.CANCEL),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the confirmation dialog
+            },
+          ),
+          TextButton(
+            child: Text(DialogStrings.DELETE),
+            onPressed: () async {
+              Navigator.of(context).pop();
+              onDeleteChat();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 // void showReportAbuseSuccessDialog(
 //     BuildContext context, String title, String subtitle1, String subtitle2) {
 //   showDialog(
@@ -486,7 +523,8 @@ void showIgnoreUserSuccessDialog(BuildContext context, String title) {
   );
 }
 
-Future<void> showReportDialog(BuildContext context, VoidCallback onReport) async {
+Future<void> showReportDialog(
+    BuildContext context, VoidCallback onReport) async {
   return showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -513,7 +551,8 @@ Future<void> showReportDialog(BuildContext context, VoidCallback onReport) async
   );
 }
 
-Future<void> showIgnoreUserDialog(BuildContext context, VoidCallback onIgnore) async {
+Future<void> showIgnoreUserDialog(
+    BuildContext context, VoidCallback onIgnore) async {
   return showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -539,7 +578,6 @@ Future<void> showIgnoreUserDialog(BuildContext context, VoidCallback onIgnore) a
     },
   );
 }
-
 
 void sendPrivateChatRequest(
     BuildContext context, String title, String subtitle) {

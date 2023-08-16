@@ -103,7 +103,14 @@ class DialogStrings {
   static const String SEND_PRIVATE_CHAT_REQUEST = 'Send Private Chat Request';
   static const String CAMERA = 'Camera';
   static const String GALLERY = 'Galley';
+    static const String DELETE = 'Delete';
+
   static const String CHOOSE_AN_OPTION = 'Choose an option';
+  static const String DELETE_CHAT = 'Delete this chat';
+  static const String CHAT_WILL_BE_DELETED =
+      'This chat will be deleted. You will no longer receive messages & notifications from this chat.';
+        static const String ARE_YOU_SURE_DELETE_CHAT = 'Are you sure you want to delete this chat?';
+
 }
 
 class SharedPrefsKeys {
