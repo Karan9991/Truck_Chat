@@ -6,6 +6,7 @@ import 'package:chat/home_screen.dart';
 import 'package:chat/privateChat/chat.dart';
 import 'package:chat/privateChat/pending_requests.dart';
 import 'package:chat/privateChat/private_chat_homescreen.dart';
+import 'package:chat/utils/ads.dart';
 import 'package:chat/utils/alert_dialog.dart';
 import 'package:chat/utils/avatar.dart';
 import 'package:chat/utils/chat_handle.dart';
@@ -38,7 +39,7 @@ Future<void> backgroundHandler(RemoteMessage message) async {
   await SharedPrefs.init();
   bool? notifications = SharedPrefs.getBool(SharedPrefsKeys.NOTIFICATIONS);
   if (notifications!) {
-    handleFCMMessageBackground(message.data, message);
+    handleFCMMessage(message.data, message);
   }
 }
 
@@ -86,7 +87,7 @@ AppOpenAd? myAppOpenAd;
 
 loadAppOpenAd() {
   AppOpenAd.load(
-      adUnitId:'ca-app-pub-7181343877669077/8346499195', //Your ad Id from admob
+      adUnitId: AdHelper.openAppAdUnitId, //Your ad Id from admob
       request: const AdRequest(),
       adLoadCallback: AppOpenAdLoadCallback(
           onAdLoaded: (ad) {
@@ -434,32 +435,50 @@ void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) async {
   String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 
   if (notificationType == 'public') {
+    print('if public');
     if (!SharedPrefs.getBool('isUserOnPublicChatScreen')!) {
+      print('if isUserOnPublicChatScreen');
+
       if (currentUserId != senderId) {
         List<Conversation> storedConversations = await getStoredConversations();
         Conversation? conversationToRefresh; // Initialize as nullable
+        print('if curren');
 
         for (var conversation in storedConversations) {
           if (conversation.conversationId == conversationId &&
               !conversation.isDeleted) {
+            print('if conversationToRefresh ${conversation.isDeleted}');
+
             conversationToRefresh = conversation;
             break;
+          } else {
+            print('else conversationid  ${conversation.conversationId} $conversationId ${conversation.isDeleted} ${conversation.topic}');
           }
         }
 
         if (conversationToRefresh != null) {
+          print('if conversationToRefresh nulled $conversationToRefresh');
+
           showNotification(Constants.FCM_NOTIFICATION_TITLE,
               Constants.FCM_NOTIFICATION_BODY);
+        } else {
+          print('else conversationToRefresh $conversationToRefresh');
         }
       }
     }
   } else if (notificationType == 'private') {
+    print('if private');
+
     if (!SharedPrefs.getBool('isUserOnChatScreen')!) {
       showNotification(title, body);
     }
   } else if (notificationType == 'privatechat') {
+    print('if privatechat');
+
     showNotification(title, body);
   } else if (notificationType == 'newchat') {
+    print('if newchat');
+
     showNotification(title, body);
   }
 }
@@ -506,37 +525,6 @@ void handleFCMMessageBackground(
     showNotification(title, body);
   }
 }
-// void _refreshChatListWithFCM() {
-//   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-//     print('Public Chat Foreground notification received');
-//     Map<String, dynamic> data = message.data;
-//     final notificationType = data['type'];
-//     final conversationId = data['conversationId']; // Assuming you receive the conversation ID in the notification data
-
-//     print('data ${message.data}');
-//     print('type $notificationType');
-
-//     if (notificationType == 'public') {
-//       List<Conversation> storedConversations = await getStoredConversations();
-//       Conversation? conversationToRefresh; // Initialize as nullable
-
-//       for (var conversation in storedConversations) {
-//         if (conversation.conversationId == conversationId && !conversation.isDeleted) {
-//           conversationToRefresh = conversation;
-//           break;
-//         }
-//       }
-
-//       if (conversationToRefresh != null) {
-//         _refreshChatList();
-
-//         if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
-//           FlutterBeep.beep();
-//         }
-//       }
-//     }
-//   });
-// }
 
 Future<String> getNotificationChannelId() async {
   bool notificationTone =

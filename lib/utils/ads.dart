@@ -2,6 +2,7 @@ import 'dart:io';
 
 //import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
+ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 // import 'dart:io' show Platform;
@@ -127,44 +128,70 @@ import 'package:flutter/material.dart';
 //   }
 // }
 
-// class AdHelper {
-//   static String get bannerAdUnitId {
-//     if (Platform.isAndroid) {
-//       //working banner id ca-app-pub-7181343877669077/1377492143   ca-app-pub-7181343877669077/1377492143
-//       // return 'ca-app-pub-3940256099942544/6300978111';
-//       return 'ca-app-pub-7181343877669077/5678624787';
-//     } else if (Platform.isIOS) {
-//       // return 'ca-app-pub-7181343877669077/5410197832';
-//       return 'ca-app-pub-7181343877669077/2375844027';
-//       // return 'ca-app-pub-3940256099942544/2934735716';
-//     } else {
-//       throw new UnsupportedError('Unsupported platform');
-//     }
-//   }
+class AdHelper {
+  // static String get bannerAdUnitId {
+  //   if (Platform.isAndroid) {
+  //     //working banner id ca-app-pub-7181343877669077/1377492143   ca-app-pub-7181343877669077/1377492143
+  //     // return 'ca-app-pub-3940256099942544/6300978111';
+  //     return 'ca-app-pub-7181343877669077/5678624787';
+  //   } else if (Platform.isIOS) {
+  //     // return 'ca-app-pub-7181343877669077/5410197832';
+  //     return 'ca-app-pub-7181343877669077/2375844027';
+  //     // return 'ca-app-pub-3940256099942544/2934735716';
+  //   } else {
+  //     throw new UnsupportedError('Unsupported platform');
+  //   }
+  // }
+  static String get bannerAdUnitId {
+    if (Platform.isAndroid) {
+      //working banner id ca-app-pub-7181343877669077/1377492143   ca-app-pub-7181343877669077/1377492143
+      // return 'ca-app-pub-3940256099942544/6300978111';
+      return 'ca-app-pub-7181343877669077/5678624787';
+    } else if (Platform.isIOS) {
+      // return 'ca-app-pub-7181343877669077/5410197832';
+      return 'ca-app-pub-7181343877669077/2375844027';
+      // return 'ca-app-pub-3940256099942544/2934735716';
+    } else {
+      throw new UnsupportedError('Unsupported platform');
+    }
+  }
+  static String get interstitialAdUnitId {
+    if (Platform.isAndroid) {
+      // return "ca-app-pub-7181343877669077/9813069201";
+      return "ca-app-pub-7181343877669077/5759349989";
+    } else if (Platform.isIOS) {
+      // return "ca-app-pub-7181343877669077/5345359476";
+      return "ca-app-pub-7181343877669077/9871190663";
+      //return "ca-app-pub-3940256099942544/4411468910";
+    } else {
+      throw new UnsupportedError("Unsupported platform");
+    }
+  }
 
-//   static String get interstitialAdUnitId {
-//     if (Platform.isAndroid) {
-//       // return "ca-app-pub-7181343877669077/9813069201";
-//       return "ca-app-pub-7181343877669077/5759349989";
-//     } else if (Platform.isIOS) {
-//       // return "ca-app-pub-7181343877669077/5345359476";
-//       return "ca-app-pub-7181343877669077/9871190663";
-//       //return "ca-app-pub-3940256099942544/4411468910";
-//     } else {
-//       throw new UnsupportedError("Unsupported platform");
-//     }
-//   }
+  static String get rewardedAdUnitId {
+    if (Platform.isAndroid) {
+      return "ca-app-pub-3940256099942544/5224354917";
+    } else if (Platform.isIOS) {
+      return "ca-app-pub-3940256099942544/1712485313";
+    } else {
+      throw new UnsupportedError("Unsupported platform");
+    }
+  }
 
-//   static String get rewardedAdUnitId {
-//     if (Platform.isAndroid) {
-//       return "ca-app-pub-3940256099942544/5224354917";
-//     } else if (Platform.isIOS) {
-//       return "ca-app-pub-3940256099942544/1712485313";
-//     } else {
-//       throw new UnsupportedError("Unsupported platform");
-//     }
-//   }
-// }
+    static String get openAppAdUnitId {
+    if (Platform.isAndroid) {
+      //working banner id ca-app-pub-7181343877669077/1377492143   ca-app-pub-7181343877669077/1377492143
+      // return 'ca-app-pub-3940256099942544/6300978111';
+      return 'ca-app-pub-7181343877669077/8346499195';
+    } else if (Platform.isIOS) {
+      // return 'ca-app-pub-7181343877669077/5410197832';
+      return 'ca-app-pub-7181343877669077/7556177613';
+      // return 'ca-app-pub-3940256099942544/2934735716';
+    } else {
+      throw new UnsupportedError('Unsupported platform');
+    }
+  }
+}
 
 // class AdBannerWidget extends StatelessWidget {
 //   @override
@@ -301,7 +328,6 @@ import 'package:flutter/material.dart';
 
 
 //
- import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AppOpenAdManager {
   AppOpenAd? _appOpenAd;
@@ -311,7 +337,7 @@ class AppOpenAdManager {
   /// Load an AppOpenAd.
   void loadAd() {
     AppOpenAd.load(
-      adUnitId: "ca-app-pub-3940256099942544/3419835294",
+      adUnitId: AdHelper.openAppAdUnitId,
       orientation: AppOpenAd.orientationPortrait,
       request: const AdRequest(),
       adLoadCallback: AppOpenAdLoadCallback(
@@ -386,7 +412,7 @@ class _CustomBannerAdState extends State<CustomBannerAd> {
     super.didChangeDependencies();
     bannerAd = BannerAd(
       size: AdSize.fullBanner,
-      adUnitId: "ca-app-pub-7181343877669077/5678624787",
+      adUnitId: AdHelper.bannerAdUnitId,
       listener: BannerAdListener(onAdFailedToLoad: (ad, error) {
         print("Ad Failed to Load");
         ad.dispose();
@@ -405,7 +431,7 @@ class _CustomBannerAdState extends State<CustomBannerAd> {
   Widget build(BuildContext context) {
     return isBannerAdLoaded
         ? SizedBox(
-             width: double.infinity,
+            width: double.infinity,
             height: 60,
             child: AdWidget(
               ad: bannerAd,

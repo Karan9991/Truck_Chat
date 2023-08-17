@@ -62,7 +62,6 @@
         android:icon="@mipmap/ic_launcher"
         android:label="Truck Chat"
         android:requestLegacyExternalStorage="true"
-        android:testOnly="true"
         android:usesCleartextTraffic="true" >
         <activity
             android:name="com.teletype.truckchat2.android.MainActivity"
@@ -113,6 +112,9 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-7181343877669077~4700650074" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="tone_and_vibrate_channel" />
 
         <!-- ca-app-pub-3940256099942544~3347511713 -->
 
