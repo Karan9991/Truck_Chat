@@ -46,7 +46,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:520203771626:android:3b55a7389ca9e40e0bc193",
         "android_client_info": {
-          "package_name": "com.teletype.truckchat2.android"
+          "package_name": "com.teletype.truckchat"
         }
       },
       "oauth_client": [

@@ -25,6 +25,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_database/firebase_database.dart';
 //import 'package:admob_flutter/admob_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class Chat extends StatefulWidget {
   final String topic;
@@ -72,13 +73,20 @@ class _ChatState extends State<Chat> {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   List<String> starredConversationList = [];
   bool isLoading = true;
+  InterstitialAd? _interstitialAd;
 
   @override
   void initState() {
+
     super.initState();
+    
+    AdHelper().showInterstitialAd();
 
     // InterstitialAdManager.initialize();
-    AdHelper().showInterstitialAd();
+    //AdHelper().showInterstitialAd();
+
+    // _createInterstitialAd();
+    //showAd();
 
     SharedPrefs.setBool('isUserOnPublicChatScreen', true);
 
@@ -120,6 +128,30 @@ class _ChatState extends State<Chat> {
     //     scrollToBottom()); // Call scrollToBottom() after the first frame is rendered
 
     // filterReplyMsgs();
+  }
+
+  Future<void> showAd() async {
+    await _createInterstitialAd();
+  }
+
+  Future<void> _createInterstitialAd() async {
+    await InterstitialAd.load(
+      adUnitId: AdHelper.interstitialAdUnitId,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          debugPrint('$ad loaded');
+          _interstitialAd = ad;
+          _interstitialAd!.setImmersiveMode(true);
+          // The ad is fully loaded here, so you can choose to show it immediately
+          _interstitialAd!.show();
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          debugPrint('InterstitialAd failed to load: $error.');
+          _interstitialAd = null;
+        },
+      ),
+    );
   }
 
   @override

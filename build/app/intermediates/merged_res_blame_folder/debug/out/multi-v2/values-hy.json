@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.teletype.truckchat2.android.app-mergeDebugResources-41:/values-hy/values-hy.xml",
+            "outputFile": "com.teletype.truckchat.app-mergeDebugResources-41:/values-hy/values-hy.xml",
             "map": [
                 {
                     "source": "/Users/karandeepsingh/.gradle/caches/transforms-3/3df77d3f0e42ee5d73cdfadb8bcdc01c/transformed/browser-1.4.0/res/values-hy/values-hy.xml",

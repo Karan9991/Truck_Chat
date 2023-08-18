@@ -7,23 +7,22 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="jbr-17" />
         <option name="modules">
           <set>
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/admob_flutter-3.0.0/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/app_settings-5.0.0/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/cloud_firestore-4.8.3/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/device_info-2.0.3/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_auth-4.6.3/android" />
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_core-2.15.0/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_core-2.15.1/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_database-10.2.4/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_messaging-14.6.3/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_storage-11.2.5/android" />
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_admob_app_open-1.1.3/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_beep-1.0.0/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_inappwebview-5.7.2+3/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_local_notifications-14.1.1/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.15/android" />
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/google_mobile_ads-0.13.6/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/google_mobile_ads-3.0.0/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/image_picker_android-0.8.7+4/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/location-5.0.2+1/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_android-2.1.4/android" />

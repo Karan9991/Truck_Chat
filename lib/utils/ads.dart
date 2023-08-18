@@ -2,7 +2,7 @@ import 'dart:io';
 
 //import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
- import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 // import 'dart:io' show Platform;
@@ -14,8 +14,6 @@ import 'package:flutter/material.dart';
 
 //   AppOpenAd? _appOpenAd;
 //   bool _isShowingAd = false;
-
-
 
 //   /// Whether an ad is available to be shown.
 //   bool get isAdAvailable {
@@ -39,7 +37,6 @@ import 'package:flutter/material.dart';
 //       ),
 //     );
 //   }
-
 
 //      void showAdIfAvailable() {
 //     if (!isAdAvailable) {
@@ -74,7 +71,6 @@ import 'package:flutter/material.dart';
 //   }
 // }
 
-
 // /// Listens for app foreground events and shows app open ads.
 // class AppLifecycleReactor {
 //   final AppOpenAdManager appOpenAdManager;
@@ -97,11 +93,10 @@ import 'package:flutter/material.dart';
 // }
 
 // class InterstitialAdManager {
-  
+
 //   static AdmobInterstitial? _interstitialAd;
 //   static bool _isAdLoaded = false;
 //   static bool _isAdShowing = false;
-
 
 //   static Future<void> initialize() async {
 //     _interstitialAd = AdmobInterstitial(
@@ -142,7 +137,8 @@ class AdHelper {
   //     throw new UnsupportedError('Unsupported platform');
   //   }
   // }
-    static InterstitialAd? _interstitialAd;
+
+  static InterstitialAd? _interstitialAd;
 
   static String get bannerAdUnitId {
     if (Platform.isAndroid) {
@@ -157,6 +153,7 @@ class AdHelper {
       throw new UnsupportedError('Unsupported platform');
     }
   }
+
   static String get interstitialAdUnitId {
     if (Platform.isAndroid) {
       // return "ca-app-pub-7181343877669077/9813069201";
@@ -180,7 +177,7 @@ class AdHelper {
     }
   }
 
-    static String get openAppAdUnitId {
+  static String get openAppAdUnitId {
     if (Platform.isAndroid) {
       //working banner id ca-app-pub-7181343877669077/1377492143   ca-app-pub-7181343877669077/1377492143
       // return 'ca-app-pub-3940256099942544/6300978111';
@@ -194,7 +191,7 @@ class AdHelper {
     }
   }
 
-    Future<void> _createInterstitialAd() async {
+  Future<void> createInterstitialAd() async {
     await InterstitialAd.load(
         adUnitId: AdHelper.interstitialAdUnitId,
         request: const AdRequest(),
@@ -207,22 +204,15 @@ class AdHelper {
           onAdFailedToLoad: (LoadAdError error) {
             debugPrint('InterstitialAd failed to load: $error.');
             _interstitialAd = null;
-            _createInterstitialAd();
+            createInterstitialAd();
           },
         ));
   }
 
   // Show Interstitial Ads for Non VIP Users
   void showInterstitialAd() async {
-    // Check "Active" VIP Status
-    // if (UserModel().userIsVip) {
-    //   // Debug
-    //   debugPrint('User is VIP Member!');
-    //   return;
-    // }
-
     // Load Interstitial Ad
-    await _createInterstitialAd();
+    await createInterstitialAd();
 
     if (_interstitialAd == null) {
       // Debug
@@ -236,12 +226,12 @@ class AdHelper {
       onAdDismissedFullScreenContent: (InterstitialAd ad) {
         debugPrint('$ad onAdDismissedFullScreenContent.');
         ad.dispose();
-        _createInterstitialAd();
+        createInterstitialAd();
       },
       onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
         debugPrint('$ad onAdFailedToShowFullScreenContent: $error');
         ad.dispose();
-        _createInterstitialAd();
+        createInterstitialAd();
       },
     );
     _interstitialAd!.show();
@@ -253,8 +243,67 @@ class AdHelper {
     _interstitialAd?.dispose();
     _interstitialAd = null;
   }
-}
 
+  //new
+  // Initialize the interstitial ad during app initialization or at a relevant point
+  // void createInterstitialAd() async {
+  //   await _createInterstitialAds();
+  // }
+
+// ... Other code ...
+
+// Load Interstitial Ad
+//   Future<void> _createInterstitialAds() async {
+//     await InterstitialAd.load(
+//       adUnitId: AdHelper.interstitialAdUnitId,
+//       request: const AdRequest(),
+//       adLoadCallback: InterstitialAdLoadCallback(
+//         onAdLoaded: (InterstitialAd ad) {
+//           debugPrint('$ad loaded');
+//           _interstitialAd = ad;
+//           _interstitialAd!.setImmersiveMode(true);
+//         },
+//         onAdFailedToLoad: (LoadAdError error) {
+//           debugPrint('InterstitialAd failed to load: $error.');
+//           _interstitialAd = null; // Set ad to null upon failure
+//         },
+//       ),
+//     );
+//   }
+
+// // Show Interstitial Ads for Non VIP Users
+//   void showInterstitialAd() {
+//     if (_interstitialAd == null) {
+//       debugPrint('Warning: attempt to show interstitial before loaded.');
+//       return;
+//     }
+
+//     // Run callbacks
+//     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+//       onAdShowedFullScreenContent: (InterstitialAd ad) =>
+//           debugPrint('ad onAdShowedFullScreenContent.'),
+//       onAdDismissedFullScreenContent: (InterstitialAd ad) {
+//         debugPrint('$ad onAdDismissedFullScreenContent.');
+//         ad.dispose();
+//         _createInterstitialAds(); // Load a new ad after dismissal
+//       },
+//       onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+//         debugPrint('$ad onAdFailedToShowFullScreenContent: $error');
+//         ad.dispose();
+//         _createInterstitialAds(); // Load a new ad after failure
+//       },
+//     );
+
+//     _interstitialAd!.show();
+//     _interstitialAd = null;
+//   }
+
+// // Dispose Interstitial Ad
+//   void disposeInterstitialAd() {
+//     _interstitialAd?.dispose();
+//     _interstitialAd = null;
+//   }
+}
 // class AdBannerWidget extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
@@ -268,7 +317,6 @@ class AdHelper {
 //     );
 //   }
 // }
-
 
 // class AdBannerWidget extends StatefulWidget {
 //   @override
@@ -296,18 +344,16 @@ class AdHelper {
 //   }
 // }
 
-
-
 //new
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 // import 'dart:io' show Platform;
 
 // class AppOpenAdManager {
-  
+
 //   String adUnitId = Platform.isAndroid
 //     ? 'ca-app-pub-7181343877669077/8346499195'
 //     : 'ca-app-pub-7181343877669077/7556177613';
-  
+
 //   AppOpenAd? _appOpenAd;
 //   bool _isShowingAd = false;
 
@@ -388,13 +434,12 @@ class AdHelper {
 //   }
 // }
 
-
 //
 
 class AppOpenAdManager {
   AppOpenAd? _appOpenAd;
   bool _isShowingAd = false;
-  static bool isLoaded=false;
+  static bool isLoaded = false;
 
   /// Load an AppOpenAd.
   void loadAd() {
@@ -406,7 +451,7 @@ class AppOpenAdManager {
         onAdLoaded: (ad) {
           print("Ad Loadede.................................");
           _appOpenAd = ad;
-          isLoaded=true;
+          isLoaded = true;
         },
         onAdFailedToLoad: (error) {
           // Handle the error.
@@ -421,7 +466,8 @@ class AppOpenAdManager {
   }
 
   void showAdIfAvailable() {
-    print("Called=====================================================================");
+    print(
+        "Called=====================================================================");
     if (_appOpenAd == null) {
       print('Tried to show ad before available.');
       loadAd();
@@ -455,8 +501,6 @@ class AppOpenAdManager {
   }
 }
 
-
-
 class CustomBannerAd extends StatefulWidget {
   const CustomBannerAd({Key? key}) : super(key: key);
 
@@ -465,7 +509,7 @@ class CustomBannerAd extends StatefulWidget {
 }
 
 class _CustomBannerAdState extends State<CustomBannerAd> {
- late BannerAd bannerAd;
+  late BannerAd bannerAd;
   bool isBannerAdLoaded = false;
 
   @override
@@ -520,6 +564,5 @@ class _CustomBannerAdState extends State<CustomBannerAd> {
 //     : SizedBox();
 
 //   }
-
 }
- 
+

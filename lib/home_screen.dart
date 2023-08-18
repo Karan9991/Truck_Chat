@@ -85,6 +85,7 @@ class HomeScreenState extends State<HomeScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
+    AdHelper().createInterstitialAd();
     //Load AppOpen Ad
 
     //  AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
@@ -112,8 +113,6 @@ class HomeScreenState extends State<HomeScreen>
 
     //  _loadAndShowInterstitialAd();
   }
-
-
 
   Future<void> getFirebaseTokenn() async {
     bool isAppInstall = await isAppInstalled();
@@ -147,6 +146,8 @@ class HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
+    print('-----------------dddddddd-------------------------');
+    AdHelper().disposeInterstitialAd();
     super.dispose();
     //InterstitialAdManager.dispose();
     _tabController.dispose();
@@ -520,8 +521,10 @@ class HomeScreenState extends State<HomeScreen>
               ),
             ],
           ),
-          bottomNavigationBar: CustomBannerAd(key: UniqueKey(),),
-        
+          bottomNavigationBar: CustomBannerAd(
+            key: UniqueKey(),
+          ),
+
           // bottomNavigationBar: AdmobBanner(
           //   adUnitId: AdHelper.bannerAdUnitId,
           //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(

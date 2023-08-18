@@ -1,4 +1,4 @@
-package com.teletype.truckchat2.android
+package com.teletype.truckchat
 
 import io.flutter.embedding.android.FlutterActivity
 
