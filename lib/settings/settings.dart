@@ -9,7 +9,30 @@ import 'package:flutter/material.dart';
 import 'about.dart';
 //import 'package:admob_flutter/admob_flutter.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
+  @override
+  _SettingsScreenState createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+// class SettingsScreen extends StatelessWidget {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    AdHelper().showInterstitialAd();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+
+    AdHelper().showInterstitialAd();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,73 +46,75 @@ class SettingsScreen extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body:Column(
-      children: [
-        Expanded(
-          child: ListView(
+      body: Column(
         children: [
+          Expanded(
+            child: ListView(
+              children: [
+                ListTile(
+                  title: Text(Constants.MESSAGES),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MessagesScreen()),
+                    );
+                  },
+                ),
+                Divider(), // Add a divider after the first list item
 
-          ListTile(
-            title: Text(Constants.MESSAGES),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MessagesScreen()),
-              );
-            },
-          ),
-          Divider(), // Add a divider after the first list item
+                ListTile(
+                  title: Text(Constants.NOTIFICATIONS_AND_SOUND),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationsAndSoundScreen()),
+                    );
+                  },
+                ),
+                Divider(), // Add a divider after the first list item
 
-          ListTile(
-            title: Text(Constants.NOTIFICATIONS_AND_SOUND),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NotificationsAndSoundScreen()),
-              );
-            },
-          ),
-          Divider(), // Add a divider after the first list item
+                ListTile(
+                  title: Text(Constants.ABOUT),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => About()),
+                    );
+                  },
+                ),
+                Divider(), // Add a divider after the first list item
 
-          ListTile(
-            title: Text(Constants.ABOUT),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => About()),
-              );
-            },
+                ListTile(
+                  title: Text(Constants.TERMS_AND_CONDITIONS),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TermsOfServiceScreen()),
+                    );
+                  },
+                ),
+                Divider(), // Add a divider after the first list item
+                // AdmobBanner(
+                //   adUnitId: AdHelper.bannerAdUnitId,
+                //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+                //       width: MediaQuery.of(context).size.width.toInt()),
+                // )
+              ],
+            ),
           ),
-          Divider(), // Add a divider after the first list item
+          //   AdmobBanner(
+          //   adUnitId: AdHelper.bannerAdUnitId,
+          //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+          //     width: MediaQuery.of(context).size.width.toInt(),
+          //   ),
+          // ),
 
-          ListTile(
-            title: Text(Constants.TERMS_AND_CONDITIONS),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TermsOfServiceScreen()),
-              );
-            },
+          CustomBannerAd(
+            key: UniqueKey(),
           ),
-          Divider(), // Add a divider after the first list item
-            // AdmobBanner(
-            //   adUnitId: AdHelper.bannerAdUnitId,
-            //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-            //       width: MediaQuery.of(context).size.width.toInt()),
-            // )
         ],
-      ),
-        ),
-        //   AdmobBanner(
-        //   adUnitId: AdHelper.bannerAdUnitId,
-        //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-        //     width: MediaQuery.of(context).size.width.toInt(),
-        //   ),
-        // ),
-
-        CustomBannerAd(key: UniqueKey(),),
-      ],
       ),
     );
   }

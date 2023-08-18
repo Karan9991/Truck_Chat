@@ -142,6 +142,8 @@ class AdHelper {
   //     throw new UnsupportedError('Unsupported platform');
   //   }
   // }
+    static InterstitialAd? _interstitialAd;
+
   static String get bannerAdUnitId {
     if (Platform.isAndroid) {
       //working banner id ca-app-pub-7181343877669077/1377492143   ca-app-pub-7181343877669077/1377492143
@@ -190,6 +192,66 @@ class AdHelper {
     } else {
       throw new UnsupportedError('Unsupported platform');
     }
+  }
+
+    Future<void> _createInterstitialAd() async {
+    await InterstitialAd.load(
+        adUnitId: AdHelper.interstitialAdUnitId,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            debugPrint('$ad loaded');
+            _interstitialAd = ad;
+            _interstitialAd!.setImmersiveMode(true);
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            debugPrint('InterstitialAd failed to load: $error.');
+            _interstitialAd = null;
+            _createInterstitialAd();
+          },
+        ));
+  }
+
+  // Show Interstitial Ads for Non VIP Users
+  void showInterstitialAd() async {
+    // Check "Active" VIP Status
+    // if (UserModel().userIsVip) {
+    //   // Debug
+    //   debugPrint('User is VIP Member!');
+    //   return;
+    // }
+
+    // Load Interstitial Ad
+    await _createInterstitialAd();
+
+    if (_interstitialAd == null) {
+      // Debug
+      debugPrint('Warning: attempt to show interstitial before loaded.');
+      return;
+    }
+    // Run callbacks
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (InterstitialAd ad) =>
+          debugPrint('ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        debugPrint('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+        _createInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        debugPrint('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+        _createInterstitialAd();
+      },
+    );
+    _interstitialAd!.show();
+    _interstitialAd = null;
+  }
+
+  // Dispose Interstitial Ad
+  void disposeInterstitialAd() {
+    _interstitialAd?.dispose();
+    _interstitialAd = null;
   }
 }
 

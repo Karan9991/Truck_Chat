@@ -77,6 +77,8 @@ class _StarredChatState extends State<StarredChat> {
   void initState() {
     super.initState();
 
+    AdHelper().showInterstitialAd();
+
     _firebaseMessaging.subscribeToTopic('all');
 
     SharedPrefs.setBool('isUserOnPublicChatScreen', true);
@@ -125,6 +127,8 @@ class _StarredChatState extends State<StarredChat> {
 
   @override
   void dispose() {
+    AdHelper().disposeInterstitialAd();
+    
     _scrollController.dispose();
     SharedPrefs.setBool('isUserOnPublicChatScreen', false);
 
@@ -674,7 +678,6 @@ class _StarredChatState extends State<StarredChat> {
                           );
 
                           // return AdBannerWidget();
-
                         } else {
                           // Calculate the actual index in the news list
                           final newIndex = index - (index ~/ 5);
@@ -1284,7 +1287,9 @@ class _StarredChatState extends State<StarredChat> {
             //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
             //       width: MediaQuery.of(context).size.width.toInt()),
             // )
-            CustomBannerAd(key: UniqueKey(),)
+            CustomBannerAd(
+              key: UniqueKey(),
+            )
           ],
         ),
       ),

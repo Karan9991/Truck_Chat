@@ -8,6 +8,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:520203771626:android:70362d9878cc38270bc193",
+        "android_client_info": {
+          "package_name": "com.teletype.truckchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "520203771626-d9modrpps1vc2o725jjottpl3uhp0d90.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFTgS3Pu3VaC9pYqwn0jHGzh6nnyhC-jg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "520203771626-d9modrpps1vc2o725jjottpl3uhp0d90.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "520203771626-3l8bqigis6o0on4bmfc8r5rsd8cign50.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.truckchat.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:520203771626:android:3b55a7389ca9e40e0bc193",
         "android_client_info": {
           "package_name": "com.teletype.truckchat2.android"
@@ -32,7 +68,7 @@
               "client_type": 3
             },
             {
-              "client_id": "520203771626-p4uurp45cdboknkrlnskj24qte68i3an.apps.googleusercontent.com",
+              "client_id": "520203771626-3l8bqigis6o0on4bmfc8r5rsd8cign50.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.truckchat.app"

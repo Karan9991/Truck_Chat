@@ -60,6 +60,8 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
 
+    AdHelper().showInterstitialAd();
+
     SharedPrefs.setBool('isUserOnChatScreen', true);
 
     currentUserName =
@@ -76,6 +78,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void dispose() {
+    AdHelper().disposeInterstitialAd();
+    
     SharedPrefs.setBool('isUserOnChatScreen', false);
 
     super.dispose();
@@ -670,7 +674,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   Expanded(
                     child: TextField(
-                        minLines: 1,
+                      minLines: 1,
                       maxLines: 7,
                       controller: _messageController,
                       decoration: InputDecoration(
@@ -721,7 +725,9 @@ class _ChatScreenState extends State<ChatScreen> {
             //   adSize: AdmobBannerSize.ADAPTIVE_BANNER(
             //       width: MediaQuery.of(context).size.width.toInt()),
             // )
-            CustomBannerAd(key: UniqueKey(),)
+            CustomBannerAd(
+              key: UniqueKey(),
+            )
           ],
         ),
       ),
