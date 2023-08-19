@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.teletype.truckchat"
-    android:versionCode="2"
-    android:versionName="2.0.1" >
+    android:versionCode="47"
+    android:versionName="3.0.0" >
 
     <uses-sdk
         android:minSdkVersion="21"
@@ -116,6 +116,7 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="tone_and_vibrate_channel" />
 
+        <!-- ca-app-pub-7181343877669077~4700650074 -->
         <!-- ca-app-pub-3940256099942544~3347511713 -->
 
 

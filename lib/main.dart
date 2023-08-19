@@ -83,6 +83,7 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 
 //   openAd!.show();
 // }
+
 AppOpenAd? myAppOpenAd;
 
 loadAppOpenAd() {
@@ -106,6 +107,8 @@ void main() async {
   MobileAds.instance.initialize();
 
   await loadAppOpenAd();
+  //loadAd();
+
 
   // await Admob.initialize(
   //     // testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
@@ -452,7 +455,8 @@ void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) async {
             conversationToRefresh = conversation;
             break;
           } else {
-            print('else conversationid  ${conversation.conversationId} $conversationId ${conversation.isDeleted} ${conversation.topic}');
+            print(
+                'else conversationid  ${conversation.conversationId} $conversationId ${conversation.isDeleted} ${conversation.topic}');
           }
         }
 

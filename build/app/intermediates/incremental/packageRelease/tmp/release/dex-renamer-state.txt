@@ -1,7 +1,0 @@
-#Fri Aug 18 15:46:49 ADT 2023
-base.0=/Users/karandeepsingh/Downloads/Truck_Chat/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
-base.1=/Users/karandeepsingh/Downloads/Truck_Chat/build/app/intermediates/dex/release/minifyReleaseWithR8/classes2.dex
-path.0=classes.dex
-path.1=classes2.dex
-renamed.0=classes.dex
-renamed.1=classes2.dex

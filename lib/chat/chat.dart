@@ -77,9 +77,8 @@ class _ChatState extends State<Chat> {
 
   @override
   void initState() {
-
     super.initState();
-    
+
     AdHelper().showInterstitialAd();
 
     // InterstitialAdManager.initialize();
@@ -301,16 +300,16 @@ class _ChatState extends State<Chat> {
 
     String? token = dataSnapshot.value as String?;
 
-    if (token == null) {
-      // If the token doesn't exist in the database, generate a new token
-      FirebaseMessaging messaging = FirebaseMessaging.instance;
-      token = await messaging.getToken();
+    // if (token == null) {
+    // If the token doesn't exist in the database, generate a new token
+    // FirebaseMessaging messaging = FirebaseMessaging.instance;
+    // token = await messaging.getToken();
 
-      if (token != null) {
-        // Store the newly generated token in the database
-        fcmTokenRef.set(token);
-      }
-    }
+    // if (token != null) {
+    //   // Store the newly generated token in the database
+    //   fcmTokenRef.set(token);
+    // }
+    //}
 
     return token;
   }
@@ -1432,10 +1431,20 @@ class _ChatState extends State<Chat> {
     );
     requestsRef.push().set(request.toJson());
 
+    print('senderid $senderId');
+    print('receiver id $receiverId');
+
     final receiverFCMToken = await getFCMToken(receiverId);
     // Send notification to the receiver
-    await sendPrivateChatNotification(
-        receiverFCMToken ?? '', senderId, receiverId);
+    if (receiverFCMToken != null) {
+            print('------------------------ifffff');
+
+      await sendPrivateChatNotification(
+          receiverFCMToken ?? '', senderId, receiverId);
+    } else {
+      print('------------------------elsee');
+      print('receiverFCMToken $receiverFCMToken');
+    }
 
     sendPrivateChatRequest(context, 'Your request has been sent.',
         'Once user accepted your request chat list will appear in private chat tab');

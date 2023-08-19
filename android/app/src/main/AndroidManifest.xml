@@ -66,6 +66,8 @@
   android:name="com.google.firebase.messaging.default_notification_channel_id"
   android:value="tone_and_vibrate_channel"/>
 
+
+<!-- ca-app-pub-7181343877669077~4700650074 -->
       <!-- ca-app-pub-3940256099942544~3347511713 -->
 
       <!-- ca-app-pub-7181343877669077~7476370948 -->
