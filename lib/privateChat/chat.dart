@@ -328,13 +328,7 @@ class _ChatScreenState extends State<ChatScreen> {
           'timestamp': timestamp,
         });
 
-        // final receiverFCMToken = await getFCMToken(widget.receiverId);
-        // // Send notification to the receiver
-        // await sendNotificationToReceiver(
-        //     receiverFCMToken ?? '', widget.userId, widget.receiverId, 'Image');
-
-        // Update the chat list for the sender (widget.userId)
-        //   _updateChatList(widget.userId, widget.receiverId, imageUrl, timestamp);
+      
 
         // Update the chat list for the receiver (widget.receiverId)
         _updateChatList(widget.receiverId, widget.userId, imageUrl, timestamp);
@@ -385,10 +379,7 @@ class _ChatScreenState extends State<ChatScreen> {
           'timestamp': timestamp,
         });
 
-        // final receiverFCMToken = await getFCMToken(widget.receiverId);
-        // // Send notification to the receiver
-        // await sendNotificationToReceiver(
-        //     receiverFCMToken ?? '', widget.userId, widget.receiverId, 'Image');
+       
 
         // Update the chat list for the sender (widget.userId)
         // _updateChatList(widget.userId, widget.receiverId, imageUrl, timestamp);
@@ -647,18 +638,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       timestamp: timestamp,
                     );
                   }
-                  // if (_currentDate != formattedDate) {
-                  //   _currentDate = formattedDate;
-                  //   return DateDivider(formattedDate);
-                  // } else {
-                  //   return MessageBubble(
-                  //     message: messages,
-                  //     isCurrentUser: isSender,
-                  //     isImageMessage: isImageMessage,
-                  //     imageUrl: imageUrl,
-                  //     timestamp: timestamp,
-                  //   );
-                  // }
+                
                 },
               ),
             ),
@@ -812,8 +792,8 @@ class _ChatScreenState extends State<ChatScreen> {
     print('receiver token $receiverFCMToken');
     // Replace 'YOUR_SERVER_KEY' with your FCM server key
     String serverKey =
-        'AAAAeR6Pnuo:APA91bHiasD4BKzgcY04ZiQ8oNi0L3HdOBeLBtUrxPfemCHHlxY0SGRP9VQ4kowDqRtOacdN8HUjmDTTMOgV1IzActxqGbKCT2W6dRm3Om5baCfJjDlBWnOm5vNqO-goLJRJV0UG1XgL';
-    String url = 'https://fcm.googleapis.com/fcm/send';
+        MyFirebase.FIREBASE_CLOUD_MESSAGING_KEY_NOTIFICATION;
+    String url = MyFirebase.FIREBASE_NOTIFICATION_URL;
 
     // Replace 'YOUR_NOTIFICATION_TITLE' and 'YOUR_NOTIFICATION_BODY' with your desired notification title and body
     String notificationTitle = currentUserName ?? 'New Message';
@@ -855,57 +835,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-// class MessageBubble extends StatelessWidget {
-//   final String message;
-//   final bool isCurrentUser;
-//   final bool
-//       isImageMessage; // Add a new boolean variable to identify image messages
-//   final String imageUrl; // Add a new variable to store the image URL
-
-//   MessageBubble({
-//     required this.message,
-//     required this.isCurrentUser,
-//     required this.isImageMessage,
-//     required this.imageUrl,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Align(
-//       alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
-//       child: GestureDetector(
-//         onTap: () {
-//           // Open the full image when tapped
-//           if (isImageMessage) {
-//             _showFullImage(context, imageUrl);
-//           }
-//         },
-//         child: Container(
-//           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-//           margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-//           decoration: BoxDecoration(
-//             color: isCurrentUser ? Colors.blue[400] : Colors.grey[300],
-//             borderRadius: BorderRadius.circular(16),
-//           ),
-//           child: isImageMessage
-//               ? Image.network(
-//                   imageUrl,
-//                   width:
-//                       200, // Set the width of the image as per your requirement
-//                   height:
-//                       200, // Set the height of the image as per your requirement
-//                   fit: BoxFit.cover, // Adjust the image fit as needed
-//                 )
-//               : Text(
-//                   message,
-//                   style: TextStyle(
-//                       color: isCurrentUser ? Colors.white : Colors.black),
-//                 ),
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class DateDivider extends StatelessWidget {
   final String formattedDate;

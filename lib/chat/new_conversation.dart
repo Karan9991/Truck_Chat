@@ -51,22 +51,6 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Add a listener to the keyboard visibility
-    // final bool isVisible =
-    //     KeyboardVisibilityProvider.isKeyboardVisible(context);
-
-    // setState(() {
-    //   if (isVisible) {
-    //     // Calculate the keyboard height
-    //     double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-    //     // Set the padding to the keyboard height
-    //     _keyboardPadding = keyboardHeight;
-    //   } else {
-    //     // Keyboard is not visible, reset padding to 0
-    //     _keyboardPadding = 0.0;
-    //   }
-    // });
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -155,7 +139,9 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
           //     width: MediaQuery.of(context).size.width.toInt(),
           //   ),
           // ),
-          CustomBannerAd(key: UniqueKey(),),
+          CustomBannerAd(
+            key: UniqueKey(),
+          ),
         ],
       ),
     );
@@ -232,7 +218,6 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
 
   Future<void> _sendConversation() async {
     print('send conversation');
-    print('ttttttttttttttttttttt');
     Location location = Location();
     PermissionStatus _permissionGranted;
 
@@ -334,9 +319,9 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
   Future<void> sendFCMNotification(String topic, String message) async {
     String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 
-    final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+    final url = Uri.parse(MyFirebase.FIREBASE_NOTIFICATION_URL);
     final serverKey =
-        'AAAAeR6Pnuo:APA91bHiasD4BKzgcY04ZiQ8oNi0L3HdOBeLBtUrxPfemCHHlxY0SGRP9VQ4kowDqRtOacdN8HUjmDTTMOgV1IzActxqGbKCT2W6dRm3Om5baCfJjDlBWnOm5vNqO-goLJRJV0UG1XgL'; // Replace with your FCM server key
+        MyFirebase.FIREBASE_CLOUD_MESSAGING_KEY_NOTIFICATION; // Replace with your FCM server key
 
     final headers = {
       'Content-Type': 'application/json',

@@ -471,38 +471,7 @@ void showDeleteChatDialog(BuildContext context, Function() onDeleteChat) {
   );
 }
 
-// void showReportAbuseSuccessDialog(
-//     BuildContext context, String title, String subtitle1, String subtitle2) {
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return AlertDialog(
-//         title: Text(title),
-//         content: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             Text(
-//               subtitle1,
-//               style: TextStyle(fontWeight: FontWeight.bold),
-//             ),
-//             Text(
-//               subtitle2,
-//             ),
-//           ],
-//         ),
-//         actions: [
-//           TextButton(
-//             onPressed: () {
-//               Navigator.pop(context); // Close the dialog
-//             },
-//             child: Text('OK'),
-//           ),
-//         ],
-//       );
-//     },
-//   );
-// }
+
 
 void showIgnoreUserSuccessDialog(BuildContext context, String title) {
   showDialog(

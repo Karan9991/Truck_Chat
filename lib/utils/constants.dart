@@ -46,6 +46,13 @@ class API {
   static const String LINK = 'link';
 }
 
+class MyFirebase {
+  static const String FIREBASE_CLOUD_MESSAGING_KEY_NOTIFICATION =
+      'AAAAeR6Pnuo:APA91bHiasD4BKzgcY04ZiQ8oNi0L3HdOBeLBtUrxPfemCHHlxY0SGRP9VQ4kowDqRtOacdN8HUjmDTTMOgV1IzActxqGbKCT2W6dRm3Om5baCfJjDlBWnOm5vNqO-goLJRJV0UG1XgL';
+  static const String FIREBASE_NOTIFICATION_URL =
+      'https://fcm.googleapis.com/fcm/send';
+}
+
 class DialogStrings {
   static const String STAR_CHAT = 'Star this chat';
   static const String CHATS_THAT_ARE_STARRED_WILL =

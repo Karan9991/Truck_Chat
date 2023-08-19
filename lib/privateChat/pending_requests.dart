@@ -94,11 +94,7 @@ class PendingRequestsScreen extends StatelessWidget {
     }
   }
 
-  // void rejectRequest(String requestId) {
-  //   DatabaseReference requestRef =
-  //       FirebaseDatabase.instance.ref().child('requests/$requestId');
-  //   requestRef.update({'status': 'rejected'});
-  // }
+
   void rejectRequest(String requestId) {
     DatabaseReference requestRef =
         FirebaseDatabase.instance.ref().child('requests/$requestId');

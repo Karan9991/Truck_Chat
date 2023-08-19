@@ -28,12 +28,10 @@ import 'package:firebase_database/firebase_database.dart';
 
 class StarredChat extends StatefulWidget {
   final String topic;
-  //  final List<ReplyMsg> replyMsgs;
   final String serverMsgId;
 
   StarredChat({
     required this.topic,
-    //  required this.replyMsgs,
     required this.serverMsgId,
   });
 
@@ -86,8 +84,7 @@ class _StarredChatState extends State<StarredChat> {
     //InterstitialAdManager.initialize();
 
     userId = int.parse(shareprefuserId!);
-    // storedLatitude = SharedPrefs.getDouble('latitude');
-    // storedLongitude = SharedPrefs.getDouble('longitude');
+   
     currentUserEmojiId =
         SharedPrefs.getInt(SharedPrefsKeys.CURRENT_USER_AVATAR_ID).toString();
 
@@ -107,22 +104,7 @@ class _StarredChatState extends State<StarredChat> {
 
     checkChatStarredStatus();
 
-    // await getAllMessages(widget.serverMsgId);
-
-    // Scroll to the bottom when messages are loaded initially
-    // WidgetsBinding.instance!.addPostFrameCallback((_) {
-    //   _scrollToBottom();
-    // });
-    // _scrollToBottom();
-
-    // refreshTimer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
-    //   getAllMessages(widget.serverMsgId);
-    // });
-
-    // WidgetsBinding.instance?.addPostFrameCallback((_) =>
-    //     scrollToBottom()); // Call scrollToBottom() after the first frame is rendered
-
-    // filterReplyMsgs();
+  
   }
 
   @override
@@ -132,7 +114,6 @@ class _StarredChatState extends State<StarredChat> {
     _scrollController.dispose();
     SharedPrefs.setBool('isUserOnPublicChatScreen', false);
 
-    // refreshTimer.cancel();
     //InterstitialAdManager.dispose();
     super.dispose();
   }
@@ -171,19 +152,13 @@ class _StarredChatState extends State<StarredChat> {
     WidgetsBinding.instance?.addPostFrameCallback((_) =>
         scrollToBottom()); // Call scrollToBottom() after the first frame is rendered
 
-    //   WidgetsBinding.instance!.addPostFrameCallback((_) {
-    //   _scrollController.animateTo(
-    //     _scrollController.position.maxScrollExtent,
-    //     duration: Duration(milliseconds: 500),
-    //     curve: Curves.ease,
-    //   );
-    // });
+
   }
 
   Future<void> sendFCMNotification(String topic, String message) async {
-    final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+    final url = Uri.parse(MyFirebase.FIREBASE_NOTIFICATION_URL);
     final serverKey =
-        'AAAAeR6Pnuo:APA91bHiasD4BKzgcY04ZiQ8oNi0L3HdOBeLBtUrxPfemCHHlxY0SGRP9VQ4kowDqRtOacdN8HUjmDTTMOgV1IzActxqGbKCT2W6dRm3Om5baCfJjDlBWnOm5vNqO-goLJRJV0UG1XgL'; // Replace with your FCM server key
+        MyFirebase.FIREBASE_CLOUD_MESSAGING_KEY_NOTIFICATION; // Replace with your FCM server key
 
     final headers = {
       'Content-Type': 'application/json',
@@ -296,15 +271,10 @@ class _StarredChatState extends State<StarredChat> {
             replyMsgs.add(ReplyMsg(rid, uid, decodedMessage, timestamp, emojiId,
                 widget.topic, driverName, privateChat));
           }
-          // } else {
-          //   print('elsee');
-          // }
+        
 
           setState(() {
-            // Update the conversation data
-            // conversationTopics.add(conversationTopic);
-            // conversationTimestamps.add(conversationTimestamp);
-            // replyCounts.add(counts);
+          
             this.replyMsgs = replyMsgs;
 
             filterReplyMsgs();
@@ -322,7 +292,6 @@ class _StarredChatState extends State<StarredChat> {
     } catch (e) {
       print('${Constants.ERROR} $e');
     }
-    //  }
 
     return false;
   }
@@ -399,11 +368,7 @@ class _StarredChatState extends State<StarredChat> {
 
       if (response.statusCode == 200) {
         print('Message Sent');
-        // setState(() {
-        //   sendingMessage = false; // Set sending state to false
-        //   WidgetsBinding.instance
-        //       ?.addPostFrameCallback((_) => scrollToBottom());
-        // });
+      
 
         final jsonResult = jsonDecode(response.body);
         print('---------------Send Message Response---------------');
@@ -561,10 +526,7 @@ class _StarredChatState extends State<StarredChat> {
                 //showPrivateChatDialog(context, isPrivateChatEnabled);
                 showPrivateChatDialog(context, isPrivateChatEnabled, () async {
                   Navigator.of(context).pop();
-                  // final isLoaded = await interstitialAd.isLoaded;
-                  //             if (isLoaded ?? false) {
-                  //               interstitialAd.show();
-                  //             }
+                 
                 });
               },
             ),
@@ -802,24 +764,7 @@ class _StarredChatState extends State<StarredChat> {
                                                               width: 30,
                                                               height: 30,
                                                             ),
-                                                            // if (privateChat ==
-                                                            //     '1') // Check if privateChat is 1 to show the indicator
-                                                            //   Padding(
-                                                            //     padding: EdgeInsets.only(
-                                                            //         top: 0.0,
-                                                            //         right: 0.0,
-                                                            //         left: 10,
-                                                            //         bottom:
-                                                            //             10), // Add padding here
-                                                            //     child: Container(
-                                                            //       width: 10,
-                                                            //       height: 10,
-                                                            //       decoration: BoxDecoration(
-                                                            //         color: brightGreen,
-                                                            //         shape: BoxShape.circle,
-                                                            //       ),
-                                                            //     ),
-                                                            //   ),
+                                                         
                                                           ],
                                                         ),
                                                       if (privateChat ==
@@ -891,34 +836,17 @@ class _StarredChatState extends State<StarredChat> {
                                                 ignoreUser(getDeviceType(),
                                                     reply.uid.toString());
                                               });
-                                              // ignoreUser(getDeviceType(),
-                                              //     reply.uid.toString());
+                                             
                                             },
                                             () {
                                               // // Handle Start Private Chat action
                                               // // Implement the logic for starting a private chat here
 
-                                              // List<String> userName =
-                                              //     replyMsg.split(" ");
 
-                                              // print('private chat ${userName[0]}');
-
-                                              // //sendPrivateChatInvite();
-                                              // // sendRequest(
-                                              // //     '1', '2', reply.emojiId, userName[0]);
-                                              // sendRequest(
-                                              //     '1',
-                                              //     '2',
-                                              //     currentUserEmojiId!,
-                                              //     currentUserHandle!,
-                                              //     reply.emojiId,
-                                              //     userName[0]);
+                                           
 
                                               print(
-                                                  '##################################################');
-
-                                              print(
-                                                  'dddddddddddddddddriver name $driverName ');
+                                                  'driver name $driverName ');
 
                                               String receiverUserName = '';
                                               if (driverName == '') {
@@ -932,9 +860,7 @@ class _StarredChatState extends State<StarredChat> {
                                               print(
                                                   'private chat $receiverUserName');
 
-                                              //sendPrivateChatInvite();
-                                              // sendRequest(
-                                              //     '1', '2', reply.emojiId, userName[0]);
+                                        
 
                                               String? chatHandle = SharedPrefs
                                                   .getString(SharedPrefsKeys
@@ -984,8 +910,7 @@ class _StarredChatState extends State<StarredChat> {
                                                 ignoreUser(getDeviceType(),
                                                     reply.uid.toString());
                                               });
-                                              // ignoreUser(getDeviceType(),
-                                              //     reply.uid.toString());
+                                            
                                             },
                                           );
                                         }
@@ -1080,27 +1005,7 @@ class _StarredChatState extends State<StarredChat> {
                                                                 width: 30,
                                                                 height: 30,
                                                               ),
-                                                              // if (privateChat ==
-                                                              //     '1') // Check if privateChat is 1 to show the indicator
-                                                              //   Padding(
-                                                              //     padding: EdgeInsets.only(
-                                                              //         top: 0.0,
-                                                              //         right: 0.0,
-                                                              //         left: 10,
-                                                              //         bottom:
-                                                              //             10), // Add padding here
-                                                              //     child: Container(
-                                                              //       width: 10,
-                                                              //       height: 10,
-                                                              //       decoration:
-                                                              //           BoxDecoration(
-                                                              //         color:
-                                                              //             brightGreen,
-                                                              //         shape: BoxShape
-                                                              //             .circle,
-                                                              //       ),
-                                                              //     ),
-                                                              //   ),
+                                                             
                                                             ],
                                                           ),
                                                         if (privateChat ==
@@ -1156,51 +1061,7 @@ class _StarredChatState extends State<StarredChat> {
                                     ),
                             );
                           } else {
-                            // final sentIndex = index - filteredReplyMsgs.length;
-                            // final sentMessage = sentMessages[sentIndex];
-                            // final timestampp = sentMessage.timestamp;
-
-                            // DateTime dateTime =
-                            //     DateTime.fromMillisecondsSinceEpoch(timestampp);
-                            // String formattedDateTime =
-                            //     DateFormat('MMM d, yyyy h:mm:ss a')
-                            //         .format(dateTime);
-                            // final timestamp = formattedDateTime;
-
-                            // bool isCurrentUser = sentMessage.uid ==
-                            //     userId; // Check if the user_id is equal to 69979
-
-                            // return Padding(
-                            //   padding: EdgeInsets.all(8.0),
-                            //   child: ChatBubble(
-                            //     clipper: ChatBubbleClipper6(
-                            //         type: isCurrentUser
-                            //             ? BubbleType.sendBubble
-                            //             : BubbleType.receiverBubble),
-                            //     alignment: isCurrentUser
-                            //         ? Alignment.topRight
-                            //         : Alignment.topLeft,
-                            //     margin: EdgeInsets.only(bottom: 16.0),
-                            //     backGroundColor: Colors.blue[300],
-                            //     child: Container(
-                            //       constraints: BoxConstraints(maxWidth: 250.0),
-                            //       child: Column(
-                            //         crossAxisAlignment: CrossAxisAlignment.start,
-                            //         children: [
-                            //           Text(
-                            //             sentMessage.replyMsg,
-                            //             style: TextStyle(
-                            //                 color: Colors.black, fontSize: 20),
-                            //           ),
-                            //           SizedBox(height: 4.0),
-                            //           Text(
-                            //             timestamp,
-                            //           ),
-                            //         ],
-                            //       ),
-                            //     ),
-                            //   ),
-                            // );
+                           
                           }
                         }
                       },
@@ -1250,21 +1111,7 @@ class _StarredChatState extends State<StarredChat> {
                             widget.serverMsgId,
                             userId,
                           );
-                          // if (messageSent) {
-                          //   print('message sent');
-
-                          //   // sendFCMNotification('all', 'message');
-
-                          //   // setState(() {
-                          //   //   WidgetsBinding.instance?.addPostFrameCallback(
-                          //   //       (_) => scrollToBottom());
-                          //   // });
-
-                          //   // Message sent successfully, handle any UI updates if needed
-                          // } else {
-                          //   print('message failed');
-                          //   // Failed to send the message, handle any UI updates if needed
-                          // }
+                         
                           setState(() {
                             messageController.clear();
                           });
@@ -1301,8 +1148,8 @@ class _StarredChatState extends State<StarredChat> {
     return text[0].toUpperCase() + text.substring(1);
   }
 
-  void sendRequest(String senderId, String receiverId, String emojiId,
-      String userName, String receiverEmojiId, String receiverUserName) {
+  Future<void> sendRequest(String senderId, String receiverId, String emojiId,
+      String userName, String receiverEmojiId, String receiverUserName) async {
     DatabaseReference requestsRef =
         FirebaseDatabase.instance.ref().child('requests');
 
@@ -1317,8 +1164,90 @@ class _StarredChatState extends State<StarredChat> {
     );
     requestsRef.push().set(request.toJson());
 
+  print('senderid $senderId');
+    print('receiver id $receiverId');
+
+    final receiverFCMToken = await getFCMToken(receiverId);
+    // Send notification to the receiver
+    if (receiverFCMToken != null) {
+      await sendPrivateChatNotification(
+          receiverFCMToken ?? '', senderId, receiverId);
+    } else {
+      print('receiverFCMToken $receiverFCMToken');
+    }
+
     sendPrivateChatRequest(context, 'Your request has been sent.',
         'Once user accepted your request chat list will appear in private chat tab');
+  }
+
+    Future<void> sendPrivateChatNotification(
+      String receiverFCMToken, String senderId, String receiverId) async {
+    print('receiver token $receiverFCMToken');
+    // Replace 'YOUR_SERVER_KEY' with your FCM server key
+    String serverKey = MyFirebase.FIREBASE_CLOUD_MESSAGING_KEY_NOTIFICATION;
+    String url = MyFirebase.FIREBASE_NOTIFICATION_URL;
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'key=$serverKey',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'notification': <String, dynamic>{
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'body': 'Tap here to open TruckChat',
+            'title': 'You got Private Chat Request',
+            'sound': 'default',
+          },
+          // 'priority': 'high',
+          'data': <String, dynamic>{
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'type': 'privatechat',
+            'senderUserId': currentUserId,
+            'receiverUserId': receiverId,
+          },
+          'to': receiverFCMToken,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Notification sent successfully');
+      } else {
+        print(
+            'Failed to send notification. StatusCode: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Failed to send notification. Error: $e');
+    }
+  }
+
+  Future<String?> getFCMToken(String receiverId) async {
+    DatabaseReference fcmTokenRef = FirebaseDatabase.instance
+        .ref()
+        .child('users')
+        .child(receiverId)
+        .child('fcmToken');
+
+    // Check if the token already exists in the database
+    DatabaseEvent event = await fcmTokenRef.once();
+    DataSnapshot dataSnapshot = event.snapshot;
+
+    String? token = dataSnapshot.value as String?;
+
+    // if (token == null) {
+    // If the token doesn't exist in the database, generate a new token
+    // FirebaseMessaging messaging = FirebaseMessaging.instance;
+    // token = await messaging.getToken();
+
+    // if (token != null) {
+    //   // Store the newly generated token in the database
+    //   fcmTokenRef.set(token);
+    // }
+    //}
+
+    return token;
   }
 
   Future<bool> reportUser(

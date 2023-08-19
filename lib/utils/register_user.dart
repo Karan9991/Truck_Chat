@@ -5,16 +5,16 @@ import 'package:device_info/device_info.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
- import 'package:location/location.dart';
- import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:location/location.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 Future<void> registerDevice() async {
   String user_id = '';
   String deviceType = getDeviceType();
 
   //print("register device");
-   Location location = Location();
-   LocationData? currentLocation;
+  Location location = Location();
+  LocationData? currentLocation;
 
   // Request location permission
 
@@ -27,8 +27,8 @@ Future<void> registerDevice() async {
 
   // Fetch current location
   try {
-  //    Permission.location.request();
-  //  currentLocation = await getLocation(); //catch exception
+    //    Permission.location.request();
+    //  currentLocation = await getLocation(); //catch exception
     currentLocation = await location.getLocation();
     print(currentLocation.latitude);
     print(currentLocation.longitude);
@@ -97,10 +97,6 @@ Future<void> registerDevice() async {
           SharedPrefsKeys.LATITUDE, currentLocation.latitude!);
       SharedPrefs.setDouble(
           SharedPrefsKeys.LONGITUDE, currentLocation.longitude!);
-
-      //  String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
-
-      //  getFCMToken(currentUserId!);
 
       print('testing ${SharedPrefs.getString(SharedPrefsKeys.USER_ID)}');
     } else {

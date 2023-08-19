@@ -155,28 +155,7 @@ class HomeScreenState extends State<HomeScreen>
     _tabController.dispose();
   }
 
-  // void _refreshChatListWithFCM() {
-  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-  //     print('Public Chat Foreground notification received');
-  //     Map<String, dynamic> data = message.data;
-  //     final notificationType = data['type'];
-  //     final chatid = data['chatid'];
 
-  //     print('data ${message.data}');
-  //     print('type $notificationType');
-
-  //     if (notificationType == 'public') {
-
-  //       _refreshChatList();
-
-  //       if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
-  //         FlutterBeep.beep();
-  //       }
-  //     }
-
-  //   });
-  // }
-//test notification
   void _refreshChatListWithFCM() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print('Public Chat Foreground notification received');
@@ -216,27 +195,7 @@ class HomeScreenState extends State<HomeScreen>
     });
   }
 
-  void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) {
-    final senderId = data['senderUserId'];
-    final notificationType = data['type'];
-    print(
-        '--------------------------Private Chat Notification-----------------------------');
-    print('sender id $senderId');
-    print('type $notificationType');
 
-    print(
-        '--------------------------Private Chat Notification-----------------------------');
-    String title = message.notification!.title ?? 'There are new messages!';
-    String body = message.notification!.body ?? 'Tap here to open TruckChat';
-
-    if (notificationType == 'public') {
-      _refreshChatList();
-
-      // if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
-      //   FlutterBeep.beep();
-      // }
-    }
-  }
 
   void _refreshChatList() {
     setState(() {
@@ -288,14 +247,7 @@ class HomeScreenState extends State<HomeScreen>
 
   void setupFirebaseMessaging(BuildContext context) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      // OverlayManager.showPopup(context);
-      // SharedPreferences.getInstance().then((prefs) {
-      //   bool isAppInstalled = prefs.getBool('isAppInstalled') ?? false;
 
-      //   if (!isAppInstalled) {}
-      // });
-      // OverlayManager.showPopupFirstLaunch(context);
-      // OverlayManager.hidePopup();
       showPrivateChatSentRequestPopUp(message.data, message, context);
     });
   }
@@ -621,39 +573,7 @@ class Help extends StatelessWidget {
   }
 }
 
-// class PopupDialog extends StatelessWidget {
-//   var homescreen = HomeScreenState();
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return OrientationBuilder(
-//       builder: (context, orientation) {
-//         return AlertDialog(
-//           title:
-//               Text('New Private Chat Request!', style: TextStyle(fontSize: 20)),
-//           content: SingleChildScrollView(
-//             child: Text(
-//                 "You've received a private chat request. Open your Private Chat and view pending requests to see who wants to connect.",
-//                 style: TextStyle(fontSize: 16)),
-//           ),
-//           actions: [
-//             TextButton(
-//               onPressed: () {
-//                 // Handle button click
-//                 OverlayManager.hidePopup(); // Dismiss the overlay
-
-//                 print('object');
-//                                 OverlayManager.hidePopup(); // Dismiss the overlay
-
-//               },
-//               child: Text('OK'),
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
-// }
 
 class PopupDialog extends StatefulWidget {
   @override
@@ -693,26 +613,7 @@ class _PopupDialogState extends State<PopupDialog>
                 style: TextStyle(fontSize: 16)),
           ),
           actions: [
-            // TextButton(
-            //   onPressed: () {
-            //     OverlayManager.hidePopup();
-            //   },
-            //   child: Text('Cancel'),
-            // ),
-            // TextButton(
-            //   onPressed: () {
-            //     OverlayManager.hidePopup();
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) => HomeScreen(
-            //           initialTabIndex: 4,
-            //         ),
-            //       ),
-            //     );
-            //   },
-            //   child: Text('View Requests'),
-            // ),
+           
             TextButton(
               onPressed: () {
                 OverlayManager.hidePopup();
@@ -727,33 +628,7 @@ class _PopupDialogState extends State<PopupDialog>
                   ),
                 );
 
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => HomeScreen(
-                //       initialTabIndex: 4,
-                //     ), // Go back to HomeScreen first
-                //   ),
-                // ).then((_) {
-                //   // After returning to HomeScreen, navigate to PrivateChatTab
-                //   Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) =>
-                //           PrivateChatTab(key: UniqueKey(),),
-                //     ),
-                //   );
-                // });
-
-                //      Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) =>
-                //         PrivateChatTab(key: UniqueKey(), ),
-                //   ),
-                // );
-
-                //   Navigator.pushNamed(context, '/privateChat');
+              
 
                 OverlayManager.hidePopup();
               },
@@ -765,28 +640,7 @@ class _PopupDialogState extends State<PopupDialog>
     );
   }
 }
-// class OverlayManager {
-//   static OverlayEntry? _overlayEntry;
 
-//   static void showPopup(BuildContext context) {
-//     _overlayEntry = OverlayEntry(
-//       builder: (BuildContext context) {
-//         return Positioned(
-//           top: 50, // Adjust the position as needed
-//           right: 20, // Adjust the position as needed
-//           child: PopupDialog(),
-//         );
-//       },
-//     );
-
-//     Overlay.of(context).insert(_overlayEntry!);
-//   }
-
-//   static void hidePopup() {
-//     _overlayEntry?.remove();
-//     _overlayEntry = null;
-//   }
-// }
 
 class OverlayManager {
   static OverlayEntry? _overlayEntry;
@@ -835,48 +689,4 @@ class OverlayManager {
 }
 
 
-  // TextButton(
-        //   onPressed: () {
-        //     OverlayManager.hidePopup();
-        //     // homescreen.openPrivateChatTab('senderId'); // Navigate to the private chat tab
-
-        //     // Navigator.push(
-        //     //   context,
-        //     //   MaterialPageRoute(
-
-        //     //     builder: (context) => HomeScreen(initialTabIndex: 4,),
-        //     //   ),
-        //     // );
-
-        //     // Navigator.push(
-        //     //   context,
-        //     //   MaterialPageRoute(
-        //     //     builder: (context) => HomeScreen(
-        //     //       initialTabIndex: 4,
-        //     //     ), // Go back to HomeScreen first
-        //     //   ),
-        //     // ).then((_) {
-        //     //   // After returning to HomeScreen, navigate to PrivateChatTab
-        //     //   Navigator.push(
-        //     //     context,
-        //     //     MaterialPageRoute(
-        //     //       builder: (context) =>
-        //     //           PrivateChatTab(key: UniqueKey(),),
-        //     //     ),
-        //     //   );
-        //     // });
-
-        //     //      Navigator.push(
-        //     //   context,
-        //     //   MaterialPageRoute(
-        //     //     builder: (context) =>
-        //     //         PrivateChatTab(key: UniqueKey(), ),
-        //     //   ),
-        //     // );
-
-        //     //   Navigator.pushNamed(context, '/privateChat');
-
-        //     // OverlayManager.hidePopup();
-        //   },
-        //   child: Text('View Requests'),
-        // ),
+  

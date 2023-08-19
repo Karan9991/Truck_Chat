@@ -103,30 +103,13 @@ class _ChatState extends State<Chat> {
 
     getData(widget.serverMsgId).then((_) {
       setState(() {
-        isLoading = false; // Step 4: Set isLoading to false once data is loaded
+        isLoading = false;
       });
     });
 
     _refreshChat();
 
     checkChatStarredStatus();
-
-    // await getAllMessages(widget.serverMsgId);
-
-    // Scroll to the bottom when messages are loaded initially
-    // WidgetsBinding.instance!.addPostFrameCallback((_) {
-    //   _scrollToBottom();
-    // });
-    // _scrollToBottom();
-
-    // refreshTimer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
-    //   getAllMessages(widget.serverMsgId);
-    // });
-
-    // WidgetsBinding.instance?.addPostFrameCallback((_) =>
-    //     scrollToBottom()); // Call scrollToBottom() after the first frame is rendered
-
-    // filterReplyMsgs();
   }
 
   Future<void> showAd() async {
@@ -201,9 +184,9 @@ class _ChatState extends State<Chat> {
   }
 
   Future<void> sendFCMNotification(String topic, String message) async {
-    final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
-    final serverKey =
-        'AAAAeR6Pnuo:APA91bHiasD4BKzgcY04ZiQ8oNi0L3HdOBeLBtUrxPfemCHHlxY0SGRP9VQ4kowDqRtOacdN8HUjmDTTMOgV1IzActxqGbKCT2W6dRm3Om5baCfJjDlBWnOm5vNqO-goLJRJV0UG1XgL'; // Replace with your FCM server key
+    final url = Uri.parse(MyFirebase.FIREBASE_NOTIFICATION_URL);
+    final serverKey = MyFirebase
+        .FIREBASE_CLOUD_MESSAGING_KEY_NOTIFICATION; // Replace with your FCM server key
 
     final headers = {
       'Content-Type': 'application/json',
@@ -243,13 +226,8 @@ class _ChatState extends State<Chat> {
       String receiverFCMToken, String senderId, String receiverId) async {
     print('receiver token $receiverFCMToken');
     // Replace 'YOUR_SERVER_KEY' with your FCM server key
-    String serverKey =
-        'AAAAeR6Pnuo:APA91bHiasD4BKzgcY04ZiQ8oNi0L3HdOBeLBtUrxPfemCHHlxY0SGRP9VQ4kowDqRtOacdN8HUjmDTTMOgV1IzActxqGbKCT2W6dRm3Om5baCfJjDlBWnOm5vNqO-goLJRJV0UG1XgL';
-    String url = 'https://fcm.googleapis.com/fcm/send';
-
-    // Replace 'YOUR_NOTIFICATION_TITLE' and 'YOUR_NOTIFICATION_BODY' with your desired notification title and body
-    // String notificationTitle = currentUserName ?? 'New Message';
-    // String notificationBody = message;
+    String serverKey = MyFirebase.FIREBASE_CLOUD_MESSAGING_KEY_NOTIFICATION;
+    String url = MyFirebase.FIREBASE_NOTIFICATION_URL;
 
     try {
       final response = await http.post(
@@ -393,9 +371,6 @@ class _ChatState extends State<Chat> {
             replyMsgs.add(ReplyMsg(rid, uid, decodedMessage, timestamp, emojiId,
                 widget.topic, driverName, privateChat));
           }
-          // } else {
-          //   print('elsee');
-          // }
 
           setState(() {
             // Update the conversation data
@@ -774,19 +749,6 @@ class _ChatState extends State<Chat> {
                           // Calculate the actual index in the news list
                           final newIndex = index - (index ~/ 5);
 
-                          //final newsItem = _newsItems[newsIndex];
-                          // if (index % 5 == 0 && index != 0) {
-                          // if ((index + 1) % 5 == 0) {
-
-                          //   return AdBannerWidget();
-                          // } else {
-                          //   final messageIndex = index -
-                          //       (index ~/
-                          //           5); // Adjust the index for the inserted ad banners
-
-                          //   // final messageIndex = index - (index ~/ 5); // Adjust the index for the inserted ad banners
-                          //   final reply = filteredReplyMsgs[messageIndex];
-
                           if (newIndex < filteredReplyMsgs.length) {
                             final reply = filteredReplyMsgs[newIndex];
                             final replyMsg = reply.replyMsg;
@@ -794,7 +756,7 @@ class _ChatState extends State<Chat> {
                             final driverName = reply.driverName;
                             final privateChat = reply.privateChat;
 
-                            print('ttttttt private chat $privateChat');
+                            print(' private chat $privateChat');
 
                             DateTime dateTime =
                                 DateTime.fromMillisecondsSinceEpoch(timestampp);
@@ -968,15 +930,7 @@ class _ChatState extends State<Chat> {
                                             context,
                                             () {
                                               // Handle Report Abuse action
-                                              // showReportDialog(
-                                              //   context,
-                                              //   () {
-                                              //     reportUser(
-                                              //         reply.uid.toString(),
-                                              //         reply.rid.toString(),
-                                              //         reply.replyMsg);
-                                              //   },
-                                              // );
+
                                               reportUser(
                                                   reply.uid.toString(),
                                                   reply.rid.toString(),
@@ -988,17 +942,12 @@ class _ChatState extends State<Chat> {
                                                 ignoreUser(getDeviceType(),
                                                     reply.uid.toString());
                                               });
-                                              // ignoreUser(getDeviceType(),
-                                              //     reply.uid.toString());
                                             },
                                             () {
                                               // Handle Start Private Chat action
                                               // Implement the logic for starting a private chat here
-                                              print(
-                                                  '##################################################');
 
-                                              print(
-                                                  'dddddddddddddddddriver name $driverName ');
+                                              print('driver name $driverName ');
 
                                               String receiverUserName = '';
                                               if (driverName == '') {
@@ -1009,9 +958,6 @@ class _ChatState extends State<Chat> {
                                                 receiverUserName = driverName;
                                               }
 
-                                              print(
-                                                  'private chat $receiverUserName');
-
                                               String? chatHandle = SharedPrefs
                                                   .getString(SharedPrefsKeys
                                                       .CURRENT_USER_CHAT_HANDLE);
@@ -1020,11 +966,9 @@ class _ChatState extends State<Chat> {
                                                   .getInt(SharedPrefsKeys
                                                       .CURRENT_USER_AVATAR_ID);
 
-                                              print('-------000000--------');
                                               print(
                                                   'current user emojiid $currentUserEmojiId');
                                               print('avatar id $avatarId');
-                                              print('-------111111--------');
 
                                               if (chatHandle == null) {
                                                 showChatHandleDialog(context);
@@ -1057,15 +1001,7 @@ class _ChatState extends State<Chat> {
                                             context,
                                             () {
                                               // Handle Report Abuse action
-                                              // showReportDialog(
-                                              //   context,
-                                              //   () {
-                                              //     reportUser(
-                                              //         reply.uid.toString(),
-                                              //         reply.rid.toString(),
-                                              //         reply.replyMsg);
-                                              //   },
-                                              // );
+
                                               reportUser(
                                                   reply.uid.toString(),
                                                   reply.rid.toString(),
@@ -1077,8 +1013,6 @@ class _ChatState extends State<Chat> {
                                                 ignoreUser(getDeviceType(),
                                                     reply.uid.toString());
                                               });
-                                              // ignoreUser(getDeviceType(),
-                                              //     reply.uid.toString());
                                             },
                                           );
                                         }
@@ -1227,100 +1161,7 @@ class _ChatState extends State<Chat> {
                                       ),
                                     ),
                             );
-                          } else {
-                            // final sentIndex = index - filteredReplyMsgs.length;
-                            // final sentMessage = sentMessages[sentIndex];
-                            // final timestampp = sentMessage.timestamp;
-
-                            // DateTime dateTime =
-                            //     DateTime.fromMillisecondsSinceEpoch(timestampp);
-                            // String formattedDateTime =
-                            //     DateFormat('MMM d, yyyy h:mm:ss a')
-                            //         .format(dateTime);
-                            // final timestamp = formattedDateTime;
-
-                            // bool isCurrentUser = sentMessage.uid ==
-                            //     userId; // Check if the user_id is equal to 69979
-
-                            // return Padding(
-                            //   padding: EdgeInsets.all(8.0),
-                            //   child: ChatBubble(
-                            //       clipper: ChatBubbleClipper6(
-                            //           type: isCurrentUser
-                            //               ? BubbleType.sendBubble
-                            //               : BubbleType.receiverBubble),
-                            //       alignment: isCurrentUser
-                            //           ? Alignment.topRight
-                            //           : Alignment.topLeft,
-                            //       margin: EdgeInsets.only(bottom: 16.0),
-                            //       backGroundColor: Colors.blue[300],
-                            //       child:
-
-                            //           // Container(
-                            //           //   constraints: BoxConstraints(maxWidth: 250.0),
-                            //           //   child: Column(
-                            //           //     crossAxisAlignment: CrossAxisAlignment.start,
-                            //           //     children: [
-                            //           //       Text(
-                            //           //         sentMessage.replyMsg,
-                            //           //         style: TextStyle(
-                            //           //             color: Colors.black, fontSize: 20),
-                            //           //       ),
-                            //           //       SizedBox(height: 4.0),
-                            //           //       Text(
-                            //           //         timestamp,
-                            //           //       ),
-                            //           //     ],
-                            //           //   ),
-                            //           // ),
-
-                            //           //testing 1
-                            //           Container(
-                            //         constraints: BoxConstraints(maxWidth: 250.0),
-                            //         child: Column(
-                            //           crossAxisAlignment:
-                            //               CrossAxisAlignment.start,
-                            //           children: [
-                            //             Row(
-                            //               crossAxisAlignment:
-                            //                   CrossAxisAlignment.start,
-                            //               children: [
-                            //                 if (SharedPrefs.getString(SharedPrefsKeys
-                            //                         .CURRENT_USER_AVATAR_IMAGE_PATH) !=
-                            //                     null)
-                            //                   Image.asset(
-                            //                     SharedPrefs.getString(SharedPrefsKeys
-                            //                         .CURRENT_USER_AVATAR_IMAGE_PATH)!,
-                            //                     width: 30,
-                            //                     height: 30,
-                            //                   ),
-                            //                 SizedBox(width: 8.0),
-                            //                 Expanded(
-                            //                   child: Column(
-                            //                     crossAxisAlignment:
-                            //                         CrossAxisAlignment.start,
-                            //                     children: [
-                            //                       Text(
-                            //                         sentMessage.replyMsg,
-                            //                         style: TextStyle(
-                            //                             color: Colors.black,
-                            //                             fontSize: 20),
-                            //                       ),
-                            //                       SizedBox(height: 4.0),
-                            //                       Text(
-                            //                         timestamp,
-                            //                       ),
-                            //                     ],
-                            //                   ),
-                            //                 ),
-                            //               ],
-                            //             ),
-                            //           ],
-                            //         ),
-                            //       )),
-                            // );
-                            // } this
-                          }
+                          } else {}
                         }
                       },
                     ),
@@ -1369,21 +1210,7 @@ class _ChatState extends State<Chat> {
                             widget.serverMsgId,
                             userId,
                           );
-                          // if (messageSent) {
-                          //   print('message sent');
 
-                          //   // sendFCMNotification('all', 'message');
-
-                          //   // setState(() {
-                          //   //   WidgetsBinding.instance?.addPostFrameCallback(
-                          //   //       (_) => scrollToBottom());
-                          //   //});
-
-                          //   // Message sent successfully, handle any UI updates if needed
-                          // } else {
-                          //   print('message failed');
-                          //   // Failed to send the message, handle any UI updates if needed
-                          // }
                           setState(() {
                             messageController.clear();
                           });
@@ -1437,12 +1264,9 @@ class _ChatState extends State<Chat> {
     final receiverFCMToken = await getFCMToken(receiverId);
     // Send notification to the receiver
     if (receiverFCMToken != null) {
-            print('------------------------ifffff');
-
       await sendPrivateChatNotification(
           receiverFCMToken ?? '', senderId, receiverId);
     } else {
-      print('------------------------elsee');
       print('receiverFCMToken $receiverFCMToken');
     }
 
@@ -1467,7 +1291,6 @@ class _ChatState extends State<Chat> {
     int status_code = 0;
     final url = Uri.parse(API.REPORT_ABUSE);
     final headers = {'Content-Type': 'application/json'};
-    // final ignoredUserArray = [flagger_user_id];
 
     try {
       final entity = {
@@ -1667,31 +1490,31 @@ class Request {
   }
 }
 
-class ChatList {
-  final String senderId;
-  final String receiverId;
-  final String senderEmojiId;
-  final String senderUserName;
-  final String receiverEmojiId;
-  final String receiverUserName;
+// class ChatList {
+//   final String senderId;
+//   final String receiverId;
+//   final String senderEmojiId;
+//   final String senderUserName;
+//   final String receiverEmojiId;
+//   final String receiverUserName;
 
-  ChatList({
-    required this.senderId,
-    required this.receiverId,
-    required this.senderEmojiId,
-    required this.senderUserName,
-    required this.receiverEmojiId,
-    required this.receiverUserName,
-  });
+//   ChatList({
+//     required this.senderId,
+//     required this.receiverId,
+//     required this.senderEmojiId,
+//     required this.senderUserName,
+//     required this.receiverEmojiId,
+//     required this.receiverUserName,
+//   });
 
-  Map<String, dynamic> toJson() {
-    return {
-      'senderId': senderId,
-      'receiverId': receiverId,
-      'senderEmojiId': senderEmojiId,
-      'senderUserName': senderUserName,
-      'receiverEmojiId': receiverEmojiId,
-      'receiverUserName': receiverUserName,
-    };
-  }
-}
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'senderId': senderId,
+//       'receiverId': receiverId,
+//       'senderEmojiId': senderEmojiId,
+//       'senderUserName': senderUserName,
+//       'receiverEmojiId': receiverEmojiId,
+//       'receiverUserName': receiverUserName,
+//     };
+//   }
+// }
