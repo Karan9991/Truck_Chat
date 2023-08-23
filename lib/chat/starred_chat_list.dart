@@ -1,4 +1,3 @@
-
 import 'package:chat/chat/conversation_data.dart' as conversation;
 
 import 'package:chat/chat/new_conversation.dart';
@@ -69,8 +68,6 @@ class _StarredChatListState extends State<StarredChatList>
     // storedList();
   }
 
- 
-
   @override
   void dispose() {
     super.dispose();
@@ -89,7 +86,6 @@ class _StarredChatListState extends State<StarredChatList>
     }
   }
 
-  
   void _refreshChatListWithFCM() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print('Public Chat Foreground notification received');
@@ -134,6 +130,15 @@ class _StarredChatListState extends State<StarredChatList>
         if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
           FlutterBeep.beep();
         }
+      } else if (notificationType == null) {
+        getData().then((_) {
+          setState(() {
+            isLoading = false;
+          });
+        });
+        if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
+          FlutterBeep.beep();
+        }
       }
     });
   }
@@ -152,7 +157,6 @@ class _StarredChatListState extends State<StarredChatList>
   }
 
   Future<void> getConversationsData() async {
-
     String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
     double? storedLatitude = SharedPrefs.getDouble(SharedPrefsKeys.LATITUDE);
     double? storedLongitude = SharedPrefs.getDouble(SharedPrefsKeys.LONGITUDE);
@@ -276,7 +280,6 @@ class _StarredChatListState extends State<StarredChatList>
         }
         // Store conversations in shared preferences
         await storeConversations(conversations);
-    
       } else {
         // Handle connection error
       }
@@ -333,11 +336,10 @@ class _StarredChatListState extends State<StarredChatList>
                         if (index % 5 == 4) {
                           // Check if it's the ad banner index
                           // The ad banner should be shown after every 5 items (0-based index)
-                        
+
                           return CustomBannerAd(
                             key: UniqueKey(),
                           );
-
                         } else {
                           // Calculate the actual index in the conversation topics list
                           final conversationIndex = index - (index ~/ 5);
@@ -401,7 +403,6 @@ class _StarredChatListState extends State<StarredChatList>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                      
                                         isRead
                                             ? _buildDialogOption(
                                                 DialogStrings

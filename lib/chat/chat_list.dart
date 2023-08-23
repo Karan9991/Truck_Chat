@@ -1,4 +1,3 @@
-
 import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/chat/chat.dart';
 import 'package:chat/main.dart';
@@ -31,10 +30,10 @@ class ChatListr extends StatefulWidget {
   });
 
   @override
-  _ChatListrState createState() => _ChatListrState();
+  ChatListrState createState() => ChatListrState();
 }
 
-class _ChatListrState extends State<ChatListr>
+class ChatListrState extends State<ChatListr>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
   List<String> conversationTopics = [];
@@ -45,10 +44,16 @@ class _ChatListrState extends State<ChatListr>
   String statusMessage = '';
   List<String> serverMsgIds = [];
   bool isLoading = true;
+  bool isAppInstalled = false;
+
   Location location = Location();
   PermissionStatus? _permissionGranted;
   @override
   bool get wantKeepAlive => true;
+
+  SharedPreferences? prefs;
+  //bool isDeviceRegister = false;
+
 
   @override
   void initState() {
@@ -56,12 +61,29 @@ class _ChatListrState extends State<ChatListr>
 
     WidgetsBinding.instance.addObserver(this);
 
+    // initSharedPreferences();
+   // isDeviceRegister = SharedPrefs.getBool('isDeviceRegister') ?? false;
+
+    // registerDevice().then((_) {
+    //   setState(() {
+    //     isLoading = false;
+    //   });
+    // });
+
     getData().then((_) {
       setState(() {
         isLoading = false;
       });
     });
   }
+
+  // Initialize SharedPreferences
+  // void initSharedPreferences() async {
+  //   prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     isAppInstalled = prefs!.getBool('isAppInstalled') ?? false;
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -81,14 +103,30 @@ class _ChatListrState extends State<ChatListr>
   }
 
   Future<void> getData() async {
+    //Future.delayed(Duration(seconds: 2));
+
+    //    bool? isDeviceRegister = SharedPrefs.getBool('isDeviceRegister') ?? false;
+
+    // print('isdevicerrrrrrrrrrrr $isDeviceRegister');
+
+    // if (!isDeviceRegister) {
+    //       print('iiifffffsdevicerrrrrrrrrrrr $isDeviceRegister');
+
+    //   await registerDevice();
+    // } else {
+    //   print('------rrrr not reigster');
+    // }
+
+    // Future.delayed(Duration(seconds: 1), () async {
+    //   await registerDevice();
+    // });
+
     _permissionGranted = await location.hasPermission();
 
     if (_permissionGranted == PermissionStatus.granted ||
         _permissionGranted == PermissionStatus.grantedLimited) {
       await getConversationsData();
-    } else {
-    
-    }
+    } else {}
   }
 
   Future<void> getConversationsData() async {
@@ -154,7 +192,6 @@ class _ChatListrState extends State<ChatListr>
 
               print(response.body);
 
-
               try {
                 final jsonResult = jsonDecode(result);
 
@@ -201,7 +238,6 @@ class _ChatListrState extends State<ChatListr>
                 }
 
                 conversations.add(conversation);
-            
               } catch (e) {
                 // Handle JSON decoding error
               }
@@ -263,15 +299,12 @@ class _ChatListrState extends State<ChatListr>
         setState(() {
           isLoading = false;
         });
-      } else {
-      }
+      } else {}
 
       setState(() {
         isLoading = false;
       });
-  
-    } else {
-    }
+    } else {}
     print('------------end-------------');
   }
 
@@ -296,19 +329,22 @@ class _ChatListrState extends State<ChatListr>
           print(
               'Conversation ID: ${conversation.conversationId}, isDeleted: ${conversation.isDeleted}');
         }
-      }); 
+      });
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
+    // WidgetsBinding.instance!.addPostFrameCallback((_) async {
+    //   // showLocationAccessDialog(context, () => registerDevice());
+    // });
     return Scaffold(
       appBar: null,
       body: FutureBuilder<List<Conversation>>(
         future: getStoredConversations(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting ) {
+           if (snapshot.connectionState == ConnectionState.waiting) {
+         // if (isLoading) {
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -367,19 +403,16 @@ class _ChatListrState extends State<ChatListr>
                   .toList();
 
               return ListView.builder(
-                 
-
                   itemCount: filteredConversations.length +
                       (filteredConversations.length ~/ 4),
                   itemBuilder: (context, index) {
-
                     if (index % 5 == 4) {
                       // Check if it's the ad banner index
                       // The ad banner should be shown after every 5 items (0-based index)
-                                            return CustomBannerAd(key: UniqueKey(),);
-
+                      return CustomBannerAd(
+                        key: UniqueKey(),
+                      );
                     } else {
-                    
                       final conversationIndex = index - (index ~/ 5);
                       if (conversationIndex >= filteredConversations.length) {
                         // Return an empty container for out-of-range index
@@ -414,7 +447,6 @@ class _ChatListrState extends State<ChatListr>
                             await storeConversations(storedConversations);
                             setState(() {}); // Trigger a rebuild of the widget
                           }
-
 
                           Navigator.push(
                             context,
@@ -554,7 +586,6 @@ class _ChatListrState extends State<ChatListr>
                             ),
                             trailing: Icon(Icons.arrow_forward_ios,
                                 color: Colors.white),
-                           
                           ),
                         ),
                       );

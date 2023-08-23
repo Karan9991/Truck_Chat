@@ -12,6 +12,7 @@ import 'package:chat/utils/avatar.dart';
 import 'package:chat/utils/chat_handle.dart';
 import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/device_type.dart';
+import 'package:chat/utils/location_disclosure_dialog.dart';
 import 'package:chat/utils/register_user.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:chat/utils/snackbar.dart';
@@ -43,47 +44,6 @@ Future<void> backgroundHandler(RemoteMessage message) async {
   }
 }
 
-// AppOpenAd? openAd;
-
-// Future<void> loadAd() async {
-//   await AppOpenAd.load(
-//       adUnitId: 'ca-app-pub-3940256099942544/3419835294',
-//       request: const AdRequest(),
-//       adLoadCallback: AppOpenAdLoadCallback(onAdLoaded: (ad) {
-//         print('ad is loaded');
-//         openAd = ad;
-//         // openAd!.show();
-//       }, onAdFailedToLoad: (error) {
-//         print('ad failed to load $error');
-//       }),
-//       orientation: AppOpenAd.orientationPortrait);
-// }
-
-// void showAd() {
-//   if (openAd == null) {
-//     print('trying tto show before loading');
-//     loadAd();
-//     return;
-//   }
-
-//   openAd!.fullScreenContentCallback =
-//       FullScreenContentCallback(onAdShowedFullScreenContent: (ad) {
-//     print('onAdShowedFullScreenContent');
-//   }, onAdFailedToShowFullScreenContent: (ad, error) {
-//     ad.dispose();
-//     print('failed to load $error');
-//     openAd = null;
-//     loadAd();
-//   }, onAdDismissedFullScreenContent: (ad) {
-//     ad.dispose();
-//     print('dismissed');
-//     openAd = null;
-//     loadAd();
-//   });
-
-//   openAd!.show();
-// }
-
 AppOpenAd? myAppOpenAd;
 
 loadAppOpenAd() {
@@ -99,7 +59,6 @@ loadAppOpenAd() {
       orientation: AppOpenAd.orientationPortrait);
 }
 
-//7FADBC328BBB96431CA78C2E559B06A7
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -107,49 +66,89 @@ void main() async {
   MobileAds.instance.initialize();
 
   await loadAppOpenAd();
-  //loadAd();
-
-
-  // await Admob.initialize(
-  //     // testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
-  //     ); //testDeviceIds: ['5F18997E57B09D90875E5BFFF902E13D'],
-  // // MobileAds.instance.initialize();
-
-  // await Admob.requestTrackingAuthorization();
 
   configLocalNotification();
   _configureFCM();
 
   await SharedPrefs.init();
-  await registerDevice();
+
+
+  // await registerDevice();
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isAppInstalled = prefs.getBool('isAppInstalled') ?? false;
 
   if (!isAppInstalled) {
     await initNotificationsAndSoundPrefs();
-    //await registerDevice();
-    // await prefs.setBool('isAppInstalled', true);
   }
 
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
   runApp(MyApp());
+
+  //  showLocationAccessDialogGlobalKey(navigatorKey, () => null);
+  // await registerDevice(navigatorKey: navigatorKey);
+
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    print('------------------------opopopopo');
+    // WidgetsBinding.instance!.addPostFrameCallback((_) {
+    //   //showDialogs();
+    //   showTermsOfServiceDialog(context);
+    //   //  showLocationAccessDialog(context, () => registerDevice());
+    // });
+    //  WidgetsBinding.instance!.addPostFrameCallback((_) {
+    //     showLocationDataDialog(context);
+    //   });
+  }
+
+  void showLocationDataDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Location Data'),
+          content: Text('Would you like to share your location data?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: Text('No'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+                // Handle user's decision to share location data
+                // You can perform any necessary actions here
+              },
+              child: Text('Yes'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Truck Chat',
       navigatorKey: navigatorKey,
-
       initialRoute: '/',
-
       routes: {
         '/': (context) => HomeScreen(
               initialTabIndex: 1,
@@ -164,13 +163,9 @@ class MyApp extends StatelessWidget {
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      // home: SendRequestScreen(senderId: '1', receiverId: '2'),
-      // home: ChatScreen(chatId: '21'),
-      // home: ReviewsTab(key: UniqueKey(),),
-      // home: HomeScreen(initialTabIndex: 1, ),
     );
   }
 }
@@ -210,8 +205,8 @@ Future<void> initNotificationsAndSoundPrefs() async {
   SharedPrefs.setBool(SharedPrefsKeys.PRIVATE_CHAT, true);
   SharedPrefs.setBool('isUserOnChatScreen', false);
   SharedPrefs.setBool('isUserOnPublicChatScreen', false);
+  SharedPrefs.setBool('isDeviceRegister', false);
 }
-
 
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -223,9 +218,9 @@ void _configureFCM() {
     print('Foreground notification received');
 
     print('data ${message.data}');
-    String title = message.notification!.title ?? '';
+    // String title = message.notification!.title ?? '';
 
-    print('notification $title');
+    // print('notification $title');
 
     bool? notifications = SharedPrefs.getBool(SharedPrefsKeys.NOTIFICATIONS);
     if (notifications!) {
@@ -258,21 +253,30 @@ void _configureFCM() {
   });
 }
 
-
 void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) async {
+  print('--------------------------Notification-----------------------------');
+  String title = 'There are new messages!';
+  String body = 'Tap here to open TruckChat';
   final senderId = data['senderUserId'];
   final notificationType = data['type'];
   final conversationId = data[
       'conversationId']; // Assuming you receive the conversation ID in the notification data
 
-  print('--------------------------Notification-----------------------------');
   print('sender id $senderId');
   print('type $notificationType');
   print('--------------------------Notification-----------------------------');
 
-  String title = message.notification!.title ?? 'There are new messages!';
-  String body = message.notification!.body ?? 'Tap here to open TruckChat';
+  if (message.notification != null) {
+    title = message.notification!.title ?? 'There are new messages!';
+    body = message.notification!.body ?? 'Tap here to open TruckChat';
+  } else {
+    title = 'There are new messages!';
+    body = 'Tap here to open TruckChat';
+  }
+
   String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+
+  //showNotification(title, body);
 
   if (notificationType == 'public') {
     print('if public');
@@ -321,49 +325,12 @@ void handleFCMMessage(Map<String, dynamic> data, RemoteMessage message) async {
     print('if newchat');
 
     showNotification(title, body);
-  }
-}
+  } else if (notificationType == null) {
+    print('null notificatoin');
 
-void handleFCMMessageBackground(
-    Map<String, dynamic> data, RemoteMessage message) async {
-  final senderId = data['senderUserId'];
-  final notificationType = data['type'];
-  final conversationId = data[
-      'conversationId']; // Assuming you receive the conversation ID in the notification data
-
-  print('--------------------------Notification-----------------------------');
-  print('sender id $senderId');
-  print('type $notificationType');
-  print('--------------------------Notification-----------------------------');
-
-  String title = message.notification!.title ?? 'There are new messages!';
-  String body = message.notification!.body ?? 'Tap here to open TruckChat';
-  String? currentUserId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
-
-  if (notificationType == 'public') {
-    if (currentUserId != senderId) {
-      List<Conversation> storedConversations = await getStoredConversations();
-      Conversation? conversationToRefresh; // Initialize as nullable
-
-      for (var conversation in storedConversations) {
-        if (conversation.conversationId == conversationId &&
-            !conversation.isDeleted) {
-          conversationToRefresh = conversation;
-          break;
-        }
-      }
-
-      if (conversationToRefresh != null) {
-        showNotification(
-            Constants.FCM_NOTIFICATION_TITLE, Constants.FCM_NOTIFICATION_BODY);
-      }
+    if (!SharedPrefs.getBool('isUserOnPublicChatScreen')!) {
+      showNotification(title, body);
     }
-  } else if (notificationType == 'private') {
-    showNotification(title, body);
-  } else if (notificationType == 'privatechat') {
-    showNotification(title, body);
-  } else if (notificationType == 'newchat') {
-    showNotification(title, body);
   }
 }
 

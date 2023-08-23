@@ -1,7 +1,13 @@
+import 'package:chat/chat/chat_list.dart';
+import 'package:chat/privateChat/chatlist.dart';
+import 'package:chat/utils/alert_dialog.dart';
 import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/device_type.dart';
+// import 'package:chat/utils/navigator_global.dart';
+import 'package:chat/utils/location_disclosure_dialog.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:device_info/device_info.dart';
+import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -9,6 +15,18 @@ import 'package:location/location.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 Future<void> registerDevice() async {
+  // GlobalNavigator.showAlertDialog(
+  //   'Location Access',
+  //   'This app collects location data to provide city and province information related to chat messages, '
+  //       'while you are using it. This '
+  //       'data is not used for any other purposes and is not shared with third '
+  //       'parties.',
+  // );
+  //  GlobalNavigator.showAlertDialog('New Private Chat Request!',
+  //         'Open your Private Chat and view pending requests to see who wants to connect.');
+
+  // showLocationAccessDialogGlobalKey(navigatorKey!, () => null);
+
   String user_id = '';
   String deviceType = getDeviceType();
 
@@ -19,7 +37,9 @@ Future<void> registerDevice() async {
   // Request location permission
 
   PermissionStatus? permissionStatus;
-  permissionStatus = await location.requestPermission();
+  // permissionStatus = await location.requestPermission();
+  permissionStatus = await location.hasPermission();
+
   if (permissionStatus != PermissionStatus.granted) {
     // Handle permission not granted
     return;
@@ -108,6 +128,10 @@ Future<void> registerDevice() async {
     // Registration failed
     print("Device registration failed: ${response.body}");
   }
+
+  SharedPrefs.setBool('isDeviceRegister', true);
+
+  ChatListrState().getData();
 }
 
 Future<String?> getDeviceSerialNumber() async {

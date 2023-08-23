@@ -11,6 +11,8 @@ import 'package:chat/utils/ads.dart';
 import 'package:chat/utils/alert_dialog.dart';
 import 'package:chat/utils/constants.dart';
 import 'package:chat/utils/device_type.dart';
+import 'package:chat/utils/navigator_key.dart';
+import 'package:chat/utils/register_user.dart';
 import 'package:chat/utils/snackbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +38,10 @@ import 'package:location/location.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:chat/utils/navigator_global.dart';
+import 'package:chat/utils/location_disclosure_dialog.dart' as locationDialog;
+
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:location/location.dart';
 
 class HomeScreen extends StatefulWidget {
   final int initialTabIndex; // Add this parameter to the constructor
@@ -103,7 +108,13 @@ class HomeScreenState extends State<HomeScreen>
     bool hasAgreed = SharedPrefs.getBool(SharedPrefsKeys.TERMS_AGREED) ?? false;
     if (!hasAgreed) {
       WidgetsBinding.instance!.addPostFrameCallback((_) {
+        //showDialogs();
         showTermsOfServiceDialog(context);
+        showLocationAccessDialog(context, () async {
+          await registAndreqPermis();
+        });
+
+        // showLocationAccessDialog(context, () => showTermsOfServiceDialog(context));
       });
     }
 
@@ -114,13 +125,43 @@ class HomeScreenState extends State<HomeScreen>
     //  _loadAndShowInterstitialAd();
   }
 
-  
+  // Future<void> showDialogs() async {
+  //   //  locationDialog.GlobalNavigator.showAlertDialog(
+  //   //     'Location Access',
+  //   //     'This app collects location data to provide city and province information related to chat messages, '
+  //   //         'while you are using it. This '
+  //   //         'data is not used for any other purposes and is not shared with third '
+  //   //         'parties.',
+  //   //   );
+  //   await showTermsOfServiceDialog(context);
+
+  //   // showLocationAccessDialog(context, () => registerDevice());
+  // }
+
+  Future<void> registAndreqPermis() async {
+    await reqPermisioLocation();
+    _refreshChatList();
+
+    await registrDevc();
+    _refreshChatList();
+  }
+
+  Future<void> registrDevc() async {
+    await registerDevice();
+  }
+
+  Future<void> reqPermisioLocation() async {
+    Location location = Location();
+
+    PermissionStatus? permissionStatus;
+    permissionStatus = await location.requestPermission();
+  }
 
   Future<void> getFirebaseTokenn() async {
     bool isAppInstall = await isAppInstalled();
 
     if (!isAppInstall) {
-      await getFCMToken(currentUserId!);
+      await getFCMToken(currentUserId ?? '0');
     }
   }
 
@@ -154,7 +195,6 @@ class HomeScreenState extends State<HomeScreen>
     //InterstitialAdManager.dispose();
     _tabController.dispose();
   }
-
 
   void _refreshChatListWithFCM() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
@@ -191,11 +231,14 @@ class HomeScreenState extends State<HomeScreen>
         if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
           FlutterBeep.beep();
         }
+      } else if (notificationType == null) {
+        _refreshChatList();
+        if (SharedPrefs.getBool(SharedPrefsKeys.CHAT_TONES)!) {
+          FlutterBeep.beep();
+        }
       }
     });
   }
-
-
 
   void _refreshChatList() {
     setState(() {
@@ -247,7 +290,6 @@ class HomeScreenState extends State<HomeScreen>
 
   void setupFirebaseMessaging(BuildContext context) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-
       showPrivateChatSentRequestPopUp(message.data, message, context);
     });
   }
@@ -573,8 +615,6 @@ class Help extends StatelessWidget {
   }
 }
 
-
-
 class PopupDialog extends StatefulWidget {
   @override
   _PopupDialogState createState() => _PopupDialogState();
@@ -613,7 +653,6 @@ class _PopupDialogState extends State<PopupDialog>
                 style: TextStyle(fontSize: 16)),
           ),
           actions: [
-           
             TextButton(
               onPressed: () {
                 OverlayManager.hidePopup();
@@ -628,8 +667,6 @@ class _PopupDialogState extends State<PopupDialog>
                   ),
                 );
 
-              
-
                 OverlayManager.hidePopup();
               },
               child: Text('View Requests'),
@@ -640,7 +677,6 @@ class _PopupDialogState extends State<PopupDialog>
     );
   }
 }
-
 
 class OverlayManager {
   static OverlayEntry? _overlayEntry;
@@ -687,6 +723,3 @@ class OverlayManager {
     _overlayEntry = null;
   }
 }
-
-
-  

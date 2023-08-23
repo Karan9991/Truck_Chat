@@ -49,6 +49,10 @@ class API {
 class MyFirebase {
   static const String FIREBASE_CLOUD_MESSAGING_KEY_NOTIFICATION =
       'AAAAeR6Pnuo:APA91bHiasD4BKzgcY04ZiQ8oNi0L3HdOBeLBtUrxPfemCHHlxY0SGRP9VQ4kowDqRtOacdN8HUjmDTTMOgV1IzActxqGbKCT2W6dRm3Om5baCfJjDlBWnOm5vNqO-goLJRJV0UG1XgL';
+
+  // static const String FIREBASE_CLOUD_MESSAGING_KEY_NOTIFICATION =
+  //     'AAAA51Dk8wU:APA91bH16JrFM6yg3w014AeQ77SmXCjaTCiT8XlRy3CKPhv79XZx7xVV1_SpzLMsGaG1Zal9Cjr9gBhdMVDwz7Ka4-nnKMRyCLx2hWwoec3VahSQ5aEWxDJkqPbLkebovTWdCgkdSFTB';
+
   static const String FIREBASE_NOTIFICATION_URL =
       'https://fcm.googleapis.com/fcm/send';
 }
@@ -177,7 +181,7 @@ class Constants {
       '© TeleType Co. All Rights Reserved';
   static const String VISIT_THE_WEBSITE = 'Visit the website';
   static const String CONTACT_US = 'Contact us';
-  static const String VERSION = 'Version 2.0.1';
+  static const String VERSION = 'Version 3.0.0';
   static const String TERMS_OF_SERVICE = 'Terms of Service';
   static const String MESSAGES = 'Messages';
   static const String NOTIFICATIONS_AND_SOUND = 'Notifications and Sound';

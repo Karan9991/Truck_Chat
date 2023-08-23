@@ -110,6 +110,7 @@ class About extends StatelessWidget {
                     ),
                     SizedBox(height: 16.0),
                     Text(Constants.VERSION),
+                    
                     Text(
                       'Serial# ',
                       style: TextStyle(fontSize: 16),

@@ -1,5 +1,6 @@
 import 'package:chat/home_screen.dart';
 import 'package:chat/utils/constants.dart';
+import 'package:chat/utils/register_user.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:chat/chat/chat_list.dart';
@@ -239,6 +240,7 @@ class _TermsOfServiceDialogState extends State<TermsOfServiceDialog> {
             SharedPrefs.setBool(SharedPrefsKeys.TERMS_AGREED, true);
             print('Terms Agreed');
             Navigator.of(context).pop();
+          //  showLocationAccessDialog(context, () => null);
           },
           child: Text(DialogStrings.I_AGREE),
         ),
@@ -248,7 +250,7 @@ class _TermsOfServiceDialogState extends State<TermsOfServiceDialog> {
   }
 }
 
-void showTermsOfServiceDialog(BuildContext context) {
+Future<void> showTermsOfServiceDialog(BuildContext context) async {
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -285,6 +287,83 @@ void showExitConversationDialog(BuildContext context) async {
     // Perform the exit action or navigate to the previous screen
     Navigator.of(context).pop(); // Go back to the previous screen
   }
+}
+
+// Future<void> showLocationAccessDialog(
+//     BuildContext context, Function() onOk) async {
+//   AlertDialog(
+//     title: Text('Location Access'),
+//     content: Text(
+//       'This app collects location data to provide city and province information related to chat messages, '
+//       'while you are using it. This '
+//       'data is not used for any other purposes and is not shared with third '
+//       'parties.',
+//     ),
+//     actions: [
+//       TextButton(
+//         onPressed: () {
+//           Navigator.pop(context);
+//           onOk();
+//         },
+//         child: Text('OK'),
+//       ),
+//     ],
+//   );
+// }
+void showLocationAccessDialog(BuildContext context, Function() onOk) {
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Location Access'),
+        content: Text(
+          'This app collects location data to provide city and province information related to chat messages, '
+          'while you are using it. This '
+          'data is not used for any other purposes and is not shared with third '
+          'parties.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+
+              onOk();
+            },
+            child: Text(DialogStrings.OK),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void showLocationAccessDialogGlobalKey(GlobalKey<NavigatorState> navigatorKey, Function() onOk) {
+  showDialog(
+    barrierDismissible: false,
+    context: navigatorKey.currentContext!,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Location Access'),
+        content: Text(
+          'This app collects location data to provide city and province information related to chat messages, '
+          'while you are using it. This '
+          'data is not used for any other purposes and is not shared with third '
+          'parties.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+
+              onOk();
+            },
+            child: Text(DialogStrings.OK),
+          ),
+        ],
+      );
+    },
+  );
 }
 
 void showPrivateChatDialog(
@@ -470,8 +549,6 @@ void showDeleteChatDialog(BuildContext context, Function() onDeleteChat) {
     },
   );
 }
-
-
 
 void showIgnoreUserSuccessDialog(BuildContext context, String title) {
   showDialog(
