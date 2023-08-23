@@ -49,6 +49,8 @@ Future<void> registerDevice() async {
   try {
     //    Permission.location.request();
     //  currentLocation = await getLocation(); //catch exception
+    location.changeSettings(accuracy: LocationAccuracy.low);
+    
     currentLocation = await location.getLocation();
     print(currentLocation.latitude);
     print(currentLocation.longitude);
@@ -131,7 +133,7 @@ Future<void> registerDevice() async {
 
   SharedPrefs.setBool('isDeviceRegister', true);
 
-  ChatListrState().getData();
+//  ChatListrState().getData();
 }
 
 Future<String?> getDeviceSerialNumber() async {

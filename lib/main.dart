@@ -86,9 +86,6 @@ void main() async {
 
   runApp(MyApp());
 
-  //  showLocationAccessDialogGlobalKey(navigatorKey, () => null);
-  // await registerDevice(navigatorKey: navigatorKey);
-
 }
 
 class MyApp extends StatefulWidget {
@@ -104,15 +101,6 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     super.initState();
 
-    print('------------------------opopopopo');
-    // WidgetsBinding.instance!.addPostFrameCallback((_) {
-    //   //showDialogs();
-    //   showTermsOfServiceDialog(context);
-    //   //  showLocationAccessDialog(context, () => registerDevice());
-    // });
-    //  WidgetsBinding.instance!.addPostFrameCallback((_) {
-    //     showLocationDataDialog(context);
-    //   });
   }
 
   void showLocationDataDialog(BuildContext context) {

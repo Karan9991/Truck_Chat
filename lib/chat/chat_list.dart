@@ -43,7 +43,7 @@ class ChatListrState extends State<ChatListr>
   int statusCode = 0;
   String statusMessage = '';
   List<String> serverMsgIds = [];
-  bool isLoading = true;
+  bool isLoading = false;
   bool isAppInstalled = false;
 
   Location location = Location();
@@ -52,8 +52,6 @@ class ChatListrState extends State<ChatListr>
   bool get wantKeepAlive => true;
 
   SharedPreferences? prefs;
-  //bool isDeviceRegister = false;
-
 
   @override
   void initState() {
@@ -61,29 +59,12 @@ class ChatListrState extends State<ChatListr>
 
     WidgetsBinding.instance.addObserver(this);
 
-    // initSharedPreferences();
-   // isDeviceRegister = SharedPrefs.getBool('isDeviceRegister') ?? false;
-
-    // registerDevice().then((_) {
-    //   setState(() {
-    //     isLoading = false;
-    //   });
-    // });
-
     getData().then((_) {
       setState(() {
         isLoading = false;
       });
     });
   }
-
-  // Initialize SharedPreferences
-  // void initSharedPreferences() async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     isAppInstalled = prefs!.getBool('isAppInstalled') ?? false;
-  //   });
-  // }
 
   @override
   void dispose() {
@@ -130,6 +111,14 @@ class ChatListrState extends State<ChatListr>
   }
 
   Future<void> getConversationsData() async {
+    // bool? isDeviceRegister = SharedPrefs.getBool('isDeviceRegister') ?? false;
+
+    // if (!isDeviceRegister) {
+    //   setState(() {
+    //     isLoading = true;
+    //   });
+    // }
+
     String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
     double? storedLatitude = SharedPrefs.getDouble(SharedPrefsKeys.LATITUDE);
     double? storedLongitude = SharedPrefs.getDouble(SharedPrefsKeys.LONGITUDE);
@@ -251,7 +240,9 @@ class ChatListrState extends State<ChatListr>
 
         // Store conversations in shared preferences
         await storeConversations(conversations);
-        setState(() {});
+        setState(() {
+          // isLoading = false;
+        });
       } else {
         // Handle connection error
       }
@@ -335,16 +326,13 @@ class ChatListrState extends State<ChatListr>
 
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance!.addPostFrameCallback((_) async {
-    //   // showLocationAccessDialog(context, () => registerDevice());
-    // });
     return Scaffold(
       appBar: null,
       body: FutureBuilder<List<Conversation>>(
         future: getStoredConversations(),
         builder: (context, snapshot) {
-           if (snapshot.connectionState == ConnectionState.waiting) {
-         // if (isLoading) {
+          if (snapshot.connectionState == ConnectionState.waiting || isLoading) {
+            // if (isLoading) {
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -593,13 +581,13 @@ class ChatListrState extends State<ChatListr>
                   });
             } else {
               return Center(
-                child: Text(''),
+                child: CircularProgressIndicator(),
               );
             }
           } else {
             // Handle error case
             return Center(
-              child: Text(''),
+              child: CircularProgressIndicator(),
             );
           }
         },

@@ -1,3 +1,4 @@
+
 import 'package:chat/chat/conversation_data.dart';
 import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/main.dart';
@@ -108,7 +109,6 @@ class HomeScreenState extends State<HomeScreen>
     bool hasAgreed = SharedPrefs.getBool(SharedPrefsKeys.TERMS_AGREED) ?? false;
     if (!hasAgreed) {
       WidgetsBinding.instance!.addPostFrameCallback((_) {
-        //showDialogs();
         showTermsOfServiceDialog(context);
         showLocationAccessDialog(context, () async {
           await registAndreqPermis();
@@ -124,19 +124,6 @@ class HomeScreenState extends State<HomeScreen>
 
     //  _loadAndShowInterstitialAd();
   }
-
-  // Future<void> showDialogs() async {
-  //   //  locationDialog.GlobalNavigator.showAlertDialog(
-  //   //     'Location Access',
-  //   //     'This app collects location data to provide city and province information related to chat messages, '
-  //   //         'while you are using it. This '
-  //   //         'data is not used for any other purposes and is not shared with third '
-  //   //         'parties.',
-  //   //   );
-  //   await showTermsOfServiceDialog(context);
-
-  //   // showLocationAccessDialog(context, () => registerDevice());
-  // }
 
   Future<void> registAndreqPermis() async {
     await reqPermisioLocation();
@@ -155,6 +142,22 @@ class HomeScreenState extends State<HomeScreen>
 
     PermissionStatus? permissionStatus;
     permissionStatus = await location.requestPermission();
+//        final accuracyStatus = await Geolocator.getLocationAccuracy();
+// switch(accuracyStatus) {
+//   case LocationAccuracyStatus.reduced:
+//     // Precise location switch is OFF.
+//     break;
+//   case LocationAccuracyStatus.precise:
+//     // Precise location switch is ON.
+//     break;
+//   case LocationAccuracyStatus.unknown:
+//     // The platform doesn't support this feature, for example an Android device.
+//     break;
+// }
+ 
+    print('---------------permission test');
+    print('permission status $permissionStatus');
+    print('---------------permission test');
   }
 
   Future<void> getFirebaseTokenn() async {
