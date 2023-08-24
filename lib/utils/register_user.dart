@@ -212,8 +212,8 @@ Future<void> registerDevice() async {
   // Location location = Location();
   // LocationData? currentLocation;
   geoloc.Position? currentLocation;
-  double? latitude;
-  double? longitude;
+  double latitude = 1.0;
+  double longitude = 1.0;
 
   // Request location permission
 
@@ -225,13 +225,13 @@ Future<void> registerDevice() async {
       '---------------------------Permission status $permissionStatus------------------------------');
   // if (_permissionGranted == PermissionStatus.granted ||
   //     _permissionGranted == PermissionStatus.grantedLimited) {
-  if (permissionStatus == geoloc.LocationPermission.denied ||
-      permissionStatus == geoloc.LocationPermission.deniedForever
-     ) {
-    //if (permissionStatus != PermissionStatus.granted) {
-    // Handle permission not granted
-    return;
-  }
+  // if (permissionStatus == geoloc.LocationPermission.denied ||
+  //     permissionStatus == geoloc.LocationPermission.deniedForever
+  //    ) {
+  //   //if (permissionStatus != PermissionStatus.granted) {
+  //   // Handle permission not granted
+  //   return;
+  // }
 
   //start
   try {

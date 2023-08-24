@@ -5,6 +5,7 @@ import 'package:chat/settings/settings.dart';
 import 'package:chat/utils/ads.dart';
 import 'package:chat/utils/alert_dialog.dart';
 import 'package:chat/utils/constants.dart';
+import 'package:chat/utils/lat_lng.dart';
 import 'package:chat/utils/register_user.dart';
 import 'package:chat/utils/shared_pref.dart';
 import 'package:chat/get_all_reply_messages.dart';
@@ -115,10 +116,10 @@ class ChatListrState extends State<ChatListr>
 
     // if (_permissionGranted == PermissionStatus.granted ||
     //     _permissionGranted == PermissionStatus.grantedLimited) {
-    if (_locationPermission != LocationPermission.denied ||
-        _locationPermission != LocationPermission.deniedForever) {
+    // if (_locationPermission != LocationPermission.denied ||
+    //     _locationPermission != LocationPermission.deniedForever) {
       await getConversationsData();
-    } else {}
+  //  } else {}
   }
 
   Future<void> getConversationsData() async {
@@ -133,6 +134,9 @@ class ChatListrState extends State<ChatListr>
     String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
     double? storedLatitude = SharedPrefs.getDouble(SharedPrefsKeys.LATITUDE);
     double? storedLongitude = SharedPrefs.getDouble(SharedPrefsKeys.LONGITUDE);
+  // Map<String, double> locationData = await getLocation();
+  //   double? storedLatitude = locationData[Constants.LATITUDE]!;
+  //   double? storedLongitude = locationData[Constants.LONGITUDE]!;
 
     Uri url = Uri.parse(API.CONVERSATION_LIST);
     Map<String, dynamic> requestBody = {
@@ -262,21 +266,25 @@ class ChatListrState extends State<ChatListr>
     }
   }
 
-  Future<void> _openAppSettings(BuildContext context) async {
-    SharedPrefs.setBool('isAppSettingsOpen', true);
-    setState(() {
-      //isAppSettingsOpen = true;
+  // Future<void> _openAppSettings(BuildContext context) async {
+  //   SharedPrefs.setBool('isAppSettingsOpen', true);
+  //   setState(() {
+  //     //isAppSettingsOpen = true;
 
-      isLoading = true;
-    });
-    await AppSettings.openAppSettings(type: AppSettingsType.location);
-  }
+  //     isLoading = true;
+  //   });
+  //   await AppSettings.openAppSettings(type: AppSettingsType.location);
+  // }
 
-//with locatin plugin
+
+
+  //with geolocator plugin
   // @override
   // void didChangeAppLifecycleState(AppLifecycleState state) async {
-  //   Location location = Location();
-  //   late PermissionStatus _permissionGranted;
+  //   //Location location = Location();
+  //   // late PermissionStatus _permissionGranted;
+  //   _locationPermission = await Geolocator.checkPermission();
+
   //   bool isAppOpenSettings = SharedPrefs.getBool('isAppSettingsOpen') ?? false;
 
   //   print('-----------start-------------');
@@ -291,10 +299,19 @@ class ChatListrState extends State<ChatListr>
   //     });
   //     SharedPrefs.setBool('isAppSettingsOpen', false);
 
-  //     _permissionGranted = await location.hasPermission();
+  //     //  _permissionGranted = await location.hasPermission();
+  //     final permissionStatus = await Geolocator.checkPermission();
+  //     print(
+  //         '=======213421344@#%^*&*%^&%^&%^&-----------------$permissionStatus');
 
-  //     if (_permissionGranted == PermissionStatus.granted ||
-  //         _permissionGranted == PermissionStatus.grantedLimited) {
+  //     // if (_permissionGranted == PermissionStatus.granted ||
+  //     //     _permissionGranted == PermissionStatus.grantedLimited) {
+  //     // if (permissionStatus == LocationPermission.whileInUse ||
+  //     //     permissionStatus == LocationPermission.always) {
+  //     // if (permissionStatus == LocationPermission.whileInUse ||
+  //     //         permissionStatus == LocationPermission.always) {
+  //     if (_locationPermission != LocationPermission.denied ||
+  //         _locationPermission != LocationPermission.deniedForever) {
   //       print('if Screen refreshed after returning from settings');
 
   //       await registerDevice();
@@ -302,7 +319,9 @@ class ChatListrState extends State<ChatListr>
   //       setState(() {
   //         isLoading = false;
   //       });
-  //     } else {}
+  //     } else {
+  //       print('appp elseeeeeeeeee');
+  //     }
 
   //     setState(() {
   //       isLoading = false;
@@ -311,144 +330,7 @@ class ChatListrState extends State<ChatListr>
   //   print('------------end-------------');
   // }
 
-  //with geolocator plugin
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    //Location location = Location();
-    // late PermissionStatus _permissionGranted;
-    _locationPermission = await Geolocator.checkPermission();
 
-    bool isAppOpenSettings = SharedPrefs.getBool('isAppSettingsOpen') ?? false;
-
-    print('-----------start-------------');
-    print('AppLifecycleState: $state'); // Add this line
-
-    print('isloading $isLoading');
-    print('isappopen $isAppOpenSettings');
-
-    if (state == AppLifecycleState.resumed && isAppOpenSettings) {
-      setState(() {
-        isLoading = true;
-      });
-      SharedPrefs.setBool('isAppSettingsOpen', false);
-
-      //  _permissionGranted = await location.hasPermission();
-      final permissionStatus = await Geolocator.checkPermission();
-      print(
-          '=======213421344@#%^*&*%^&%^&%^&-----------------$permissionStatus');
-
-      // if (_permissionGranted == PermissionStatus.granted ||
-      //     _permissionGranted == PermissionStatus.grantedLimited) {
-      // if (permissionStatus == LocationPermission.whileInUse ||
-      //     permissionStatus == LocationPermission.always) {
-      // if (permissionStatus == LocationPermission.whileInUse ||
-      //         permissionStatus == LocationPermission.always) {
-      if (_locationPermission != LocationPermission.denied ||
-          _locationPermission != LocationPermission.deniedForever) {
-        print('if Screen refreshed after returning from settings');
-
-        await registerDevice();
-        await getData();
-        setState(() {
-          isLoading = false;
-        });
-      } else {
-        print('appp elseeeeeeeeee');
-      }
-
-      setState(() {
-        isLoading = false;
-      });
-    } else {}
-    print('------------end-------------');
-  }
-
-//
-
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) async {
-  //   print('------------------one');
-  //   String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
-  //   print('user Id as $userId');
-
-  //   if (userId == null) {
-  //     _locationPermission = await Geolocator.checkPermission();
-
-  //     setState(() {
-  //       isLoading = true;
-  //     });
-
-  //     print('location permission status as $_locationPermission');
-
-  //     if (_locationPermission != LocationPermission.denied ||
-  //         _locationPermission != LocationPermission.deniedForever) {
-  //       // await registerDevice();
-  //       // await getData();
-  //       setState(() {
-  //         isLoading = false;
-  //       });
-  //     } else {
-  //       print('elseee 2');
-  //        setState(() {
-  //         isLoading = false;
-  //       });
-  //     }
-  //   } else {
-  //     print('elseeeee 1');
-  //      setState(() {
-  //         isLoading = false;
-  //       });
-  //   }
-  //       print('------------------two');
-
-  //   //  _permissionGranted = await location.hasPermission();
-
-  //   // if (_permissionGranted == PermissionStatus.granted ||
-  //   //     _permissionGranted == PermissionStatus.grantedLimited) {
-  //   // if (permissionStatus == LocationPermission.whileInUse ||
-  //   //     permissionStatus == LocationPermission.always) {
-
-  //   //   if (_locationPermission == LocationPermission.whileInUse ||
-  //   //       _locationPermission == LocationPermission.always) {
-  //   //     print('if Screen refreshed after returning from settings');
-
-  //   //     await registerDevice();
-  //   //     await getData();
-  //   //     setState(() {
-  //   //       isLoading = false;
-  //   //     });
-  //   //   } else {
-  //   //     print('appp elseeeeeeeeee');
-  //   //   }
-
-  //   //   setState(() {
-  //   //     isLoading = false;
-  //   //   });
-  //   // } else {}
-  //   // print('------------end-------------');
-  // }
-
-  // Future<void> checkLocationPermission() async {
-  //   final permissionStatus = await Geolocator.checkPermission();
-
-  //   switch (permissionStatus) {
-  //     case LocationPermission.denied:
-  //       print("Location permission is denied.");
-  //       break;
-  //     case LocationPermission.deniedForever:
-  //       print("Location permission is permanently denied.");
-  //       break;
-  //     case LocationPermission.unableToDetermine:
-  //       print("Location permission is unableToDetermine.");
-  //       break;
-  //     case LocationPermission.whileInUse:
-  //       print("Location permission is granted only while in use.");
-  //       break;
-  //     case LocationPermission.always:
-  //       print("Location permission is granted always.");
-  //       break;
-  //   }
-  // }
 
   Future<void> _deleteChat(String conversationId) async {
     List<Conversation> storedConversations = await getStoredConversations();
@@ -492,52 +374,53 @@ class ChatListrState extends State<ChatListr>
             List<Conversation> storedConversations =
                 snapshot.data ?? []; // Use cached data
 
-            if (_locationPermission == LocationPermission.denied ||
-                _locationPermission == LocationPermission.deniedForever) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Location Permission required',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 14), // Add
-                    Text(
-                      'to enable chat feature.',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    SizedBox(height: 14), // Add
-                    Text(
-                      'Open Settings to turn on location.',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    SizedBox(height: 16),
-                    TextButton(
-                      onPressed: () {
-                        _openAppSettings(context);
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.blue,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                      ),
-                      child: Text(
-                        'Open Settings',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            } else if (storedConversations.isNotEmpty) {
+            // if (_locationPermission == LocationPermission.denied ||
+            //     _locationPermission == LocationPermission.deniedForever) {
+            //   return Center(
+            //     child: Column(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         Text(
+            //           'Location Permission required',
+            //           style: TextStyle(
+            //             fontSize: 22,
+            //             fontWeight: FontWeight.bold,
+            //           ),
+            //         ),
+            //         SizedBox(height: 14), // Add
+            //         Text(
+            //           'to enable chat feature.',
+            //           style: TextStyle(fontSize: 16),
+            //         ),
+            //         SizedBox(height: 14), // Add
+            //         Text(
+            //           'Open Settings to turn on location.',
+            //           style: TextStyle(fontSize: 16),
+            //         ),
+            //         SizedBox(height: 16),
+            //         TextButton(
+            //           onPressed: () {
+            //             _openAppSettings(context);
+            //           },
+            //           style: TextButton.styleFrom(
+            //             foregroundColor: Colors.white,
+            //             backgroundColor: Colors.blue,
+            //             padding:
+            //                 EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            //             shape: RoundedRectangleBorder(
+            //               borderRadius: BorderRadius.circular(24),
+            //             ),
+            //           ),
+            //           child: Text(
+            //             'Open Settings',
+            //             style: TextStyle(fontSize: 18),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   );
+            //} 
+             if (storedConversations.isNotEmpty) {
               final filteredConversations = storedConversations
                   .where((conversation) => !conversation.isDeleted)
                   .toList();
