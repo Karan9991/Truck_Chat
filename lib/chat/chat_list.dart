@@ -19,8 +19,9 @@ import 'dart:async';
 import 'package:chat/chat/conversation_data.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:app_settings/app_settings.dart';
-import 'package:location/location.dart';
+//import 'package:location/location.dart';
 //import 'package:admob_flutter/admob_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 class ChatListr extends StatefulWidget {
   final Key key;
@@ -46,8 +47,10 @@ class ChatListrState extends State<ChatListr>
   bool isLoading = false;
   bool isAppInstalled = false;
 
-  Location location = Location();
-  PermissionStatus? _permissionGranted;
+  // Location location = Location();
+  //PermissionStatus? _permissionGranted;
+  LocationPermission? _locationPermission;
+
   @override
   bool get wantKeepAlive => true;
 
@@ -84,16 +87,22 @@ class ChatListrState extends State<ChatListr>
   }
 
   Future<void> getData() async {
+    _locationPermission = await Geolocator.checkPermission();
+
     //Future.delayed(Duration(seconds: 2));
 
-    //    bool? isDeviceRegister = SharedPrefs.getBool('isDeviceRegister') ?? false;
+    bool? isDeviceRegister = SharedPrefs.getBool('isDeviceRegister') ?? false;
 
-    // print('isdevicerrrrrrrrrrrr $isDeviceRegister');
+    print('isdevicerrrrrrrrrrrr $isDeviceRegister');
 
     // if (!isDeviceRegister) {
-    //       print('iiifffffsdevicerrrrrrrrrrrr $isDeviceRegister');
+    //   print('iiifffffsdevicerrrrrrrrrrrr $isDeviceRegister');
+    //   _locationPermission = await Geolocator.checkPermission();
 
-    //   await registerDevice();
+    //   if (_locationPermission != LocationPermission.denied ||
+    //       _locationPermission != LocationPermission.deniedForever) {
+    //     await registerDevice();
+    //   }
     // } else {
     //   print('------rrrr not reigster');
     // }
@@ -102,10 +111,12 @@ class ChatListrState extends State<ChatListr>
     //   await registerDevice();
     // });
 
-    _permissionGranted = await location.hasPermission();
+    // _permissionGranted = await location.hasPermission();
 
-    if (_permissionGranted == PermissionStatus.granted ||
-        _permissionGranted == PermissionStatus.grantedLimited) {
+    // if (_permissionGranted == PermissionStatus.granted ||
+    //     _permissionGranted == PermissionStatus.grantedLimited) {
+    if (_locationPermission != LocationPermission.denied ||
+        _locationPermission != LocationPermission.deniedForever) {
       await getConversationsData();
     } else {}
   }
@@ -261,10 +272,52 @@ class ChatListrState extends State<ChatListr>
     await AppSettings.openAppSettings(type: AppSettingsType.location);
   }
 
+//with locatin plugin
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) async {
+  //   Location location = Location();
+  //   late PermissionStatus _permissionGranted;
+  //   bool isAppOpenSettings = SharedPrefs.getBool('isAppSettingsOpen') ?? false;
+
+  //   print('-----------start-------------');
+  //   print('AppLifecycleState: $state'); // Add this line
+
+  //   print('isloading $isLoading');
+  //   print('isappopen $isAppOpenSettings');
+
+  //   if (state == AppLifecycleState.resumed && isAppOpenSettings) {
+  //     setState(() {
+  //       isLoading = true;
+  //     });
+  //     SharedPrefs.setBool('isAppSettingsOpen', false);
+
+  //     _permissionGranted = await location.hasPermission();
+
+  //     if (_permissionGranted == PermissionStatus.granted ||
+  //         _permissionGranted == PermissionStatus.grantedLimited) {
+  //       print('if Screen refreshed after returning from settings');
+
+  //       await registerDevice();
+  //       await getData();
+  //       setState(() {
+  //         isLoading = false;
+  //       });
+  //     } else {}
+
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   } else {}
+  //   print('------------end-------------');
+  // }
+
+  //with geolocator plugin
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
-    Location location = Location();
-    late PermissionStatus _permissionGranted;
+    //Location location = Location();
+    // late PermissionStatus _permissionGranted;
+    _locationPermission = await Geolocator.checkPermission();
+
     bool isAppOpenSettings = SharedPrefs.getBool('isAppSettingsOpen') ?? false;
 
     print('-----------start-------------');
@@ -279,10 +332,19 @@ class ChatListrState extends State<ChatListr>
       });
       SharedPrefs.setBool('isAppSettingsOpen', false);
 
-      _permissionGranted = await location.hasPermission();
+      //  _permissionGranted = await location.hasPermission();
+      final permissionStatus = await Geolocator.checkPermission();
+      print(
+          '=======213421344@#%^*&*%^&%^&%^&-----------------$permissionStatus');
 
-      if (_permissionGranted == PermissionStatus.granted ||
-          _permissionGranted == PermissionStatus.grantedLimited) {
+      // if (_permissionGranted == PermissionStatus.granted ||
+      //     _permissionGranted == PermissionStatus.grantedLimited) {
+      // if (permissionStatus == LocationPermission.whileInUse ||
+      //     permissionStatus == LocationPermission.always) {
+      // if (permissionStatus == LocationPermission.whileInUse ||
+      //         permissionStatus == LocationPermission.always) {
+      if (_locationPermission != LocationPermission.denied ||
+          _locationPermission != LocationPermission.deniedForever) {
         print('if Screen refreshed after returning from settings');
 
         await registerDevice();
@@ -290,7 +352,9 @@ class ChatListrState extends State<ChatListr>
         setState(() {
           isLoading = false;
         });
-      } else {}
+      } else {
+        print('appp elseeeeeeeeee');
+      }
 
       setState(() {
         isLoading = false;
@@ -298,6 +362,93 @@ class ChatListrState extends State<ChatListr>
     } else {}
     print('------------end-------------');
   }
+
+//
+
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) async {
+  //   print('------------------one');
+  //   String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
+  //   print('user Id as $userId');
+
+  //   if (userId == null) {
+  //     _locationPermission = await Geolocator.checkPermission();
+
+  //     setState(() {
+  //       isLoading = true;
+  //     });
+
+  //     print('location permission status as $_locationPermission');
+
+  //     if (_locationPermission != LocationPermission.denied ||
+  //         _locationPermission != LocationPermission.deniedForever) {
+  //       // await registerDevice();
+  //       // await getData();
+  //       setState(() {
+  //         isLoading = false;
+  //       });
+  //     } else {
+  //       print('elseee 2');
+  //        setState(() {
+  //         isLoading = false;
+  //       });
+  //     }
+  //   } else {
+  //     print('elseeeee 1');
+  //      setState(() {
+  //         isLoading = false;
+  //       });
+  //   }
+  //       print('------------------two');
+
+  //   //  _permissionGranted = await location.hasPermission();
+
+  //   // if (_permissionGranted == PermissionStatus.granted ||
+  //   //     _permissionGranted == PermissionStatus.grantedLimited) {
+  //   // if (permissionStatus == LocationPermission.whileInUse ||
+  //   //     permissionStatus == LocationPermission.always) {
+
+  //   //   if (_locationPermission == LocationPermission.whileInUse ||
+  //   //       _locationPermission == LocationPermission.always) {
+  //   //     print('if Screen refreshed after returning from settings');
+
+  //   //     await registerDevice();
+  //   //     await getData();
+  //   //     setState(() {
+  //   //       isLoading = false;
+  //   //     });
+  //   //   } else {
+  //   //     print('appp elseeeeeeeeee');
+  //   //   }
+
+  //   //   setState(() {
+  //   //     isLoading = false;
+  //   //   });
+  //   // } else {}
+  //   // print('------------end-------------');
+  // }
+
+  // Future<void> checkLocationPermission() async {
+  //   final permissionStatus = await Geolocator.checkPermission();
+
+  //   switch (permissionStatus) {
+  //     case LocationPermission.denied:
+  //       print("Location permission is denied.");
+  //       break;
+  //     case LocationPermission.deniedForever:
+  //       print("Location permission is permanently denied.");
+  //       break;
+  //     case LocationPermission.unableToDetermine:
+  //       print("Location permission is unableToDetermine.");
+  //       break;
+  //     case LocationPermission.whileInUse:
+  //       print("Location permission is granted only while in use.");
+  //       break;
+  //     case LocationPermission.always:
+  //       print("Location permission is granted always.");
+  //       break;
+  //   }
+  // }
 
   Future<void> _deleteChat(String conversationId) async {
     List<Conversation> storedConversations = await getStoredConversations();
@@ -331,7 +482,8 @@ class ChatListrState extends State<ChatListr>
       body: FutureBuilder<List<Conversation>>(
         future: getStoredConversations(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting || isLoading) {
+          if (snapshot.connectionState == ConnectionState.waiting ||
+              isLoading) {
             // if (isLoading) {
             return Center(
               child: CircularProgressIndicator(),
@@ -340,8 +492,8 @@ class ChatListrState extends State<ChatListr>
             List<Conversation> storedConversations =
                 snapshot.data ?? []; // Use cached data
 
-            if (_permissionGranted == PermissionStatus.denied ||
-                _permissionGranted == PermissionStatus.deniedForever) {
+            if (_locationPermission == LocationPermission.denied ||
+                _locationPermission == LocationPermission.deniedForever) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -581,13 +733,16 @@ class ChatListrState extends State<ChatListr>
                   });
             } else {
               return Center(
+                // child: Text(''),
                 child: CircularProgressIndicator(),
               );
             }
           } else {
             // Handle error case
             return Center(
-              child: CircularProgressIndicator(),
+              child: Text(''),
+
+              // child: CircularProgressIndicator(),
             );
           }
         },

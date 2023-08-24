@@ -1,4 +1,3 @@
-
 import 'package:chat/chat/conversation_data.dart';
 import 'package:chat/chat/new_conversation.dart';
 import 'package:chat/main.dart';
@@ -35,14 +34,14 @@ import 'package:firebase_database/firebase_database.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:location/location.dart';
+//import 'package:location/location.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:chat/utils/navigator_global.dart';
 import 'package:chat/utils/location_disclosure_dialog.dart' as locationDialog;
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:location/location.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HomeScreen extends StatefulWidget {
   final int initialTabIndex; // Add this parameter to the constructor
@@ -127,10 +126,15 @@ class HomeScreenState extends State<HomeScreen>
 
   Future<void> registAndreqPermis() async {
     await reqPermisioLocation();
-    _refreshChatList();
+    // final permissionStatus = await Geolocator.checkPermission();
 
-    await registrDevc();
-    _refreshChatList();
+    // if (permissionStatus != LocationPermission.denied ||
+    //     permissionStatus != LocationPermission.deniedForever) {
+      _refreshChatList();
+
+      await registrDevc();
+      _refreshChatList();
+    //} else {}
   }
 
   Future<void> registrDevc() async {
@@ -138,26 +142,57 @@ class HomeScreenState extends State<HomeScreen>
   }
 
   Future<void> reqPermisioLocation() async {
-    Location location = Location();
+    // Location location = Location();
 
-    PermissionStatus? permissionStatus;
-    permissionStatus = await location.requestPermission();
-//        final accuracyStatus = await Geolocator.getLocationAccuracy();
-// switch(accuracyStatus) {
-//   case LocationAccuracyStatus.reduced:
-//     // Precise location switch is OFF.
-//     break;
-//   case LocationAccuracyStatus.precise:
-//     // Precise location switch is ON.
-//     break;
-//   case LocationAccuracyStatus.unknown:
-//     // The platform doesn't support this feature, for example an Android device.
-//     break;
-// }
- 
+    // PermissionStatus? permissionStatus;
+    // permissionStatus = await location.requestPermission();
+    final permissionStatus = await Geolocator.requestPermission();
+
     print('---------------permission test');
     print('permission status $permissionStatus');
-    print('---------------permission test');
+    // final accuracyStatus = await Geolocator.getLocationAccuracy();
+    // switch (accuracyStatus) {
+    //   case LocationAccuracyStatus.reduced:
+    //     print('accuracyStatus status $accuracyStatus');
+
+    //     // Precise location switch is OFF.
+    //     break;
+    //   case LocationAccuracyStatus.precise:
+    //     print('accuracyStatus status $accuracyStatus');
+
+    //     // Precise location switch is ON.
+    //     break;
+    //   case LocationAccuracyStatus.unknown:
+    //     print('accuracyStatus status $accuracyStatus');
+
+    //     // The platform doesn't support this feature, for example an Android device.
+    //     break;
+    // }
+    print('---------------permission test check location permission');
+
+    // await checkLocationPermission();
+  }
+
+  Future<void> checkLocationPermission() async {
+    final permissionStatus = await Geolocator.checkPermission();
+
+    switch (permissionStatus) {
+      case LocationPermission.denied:
+        print("Location permission is denied.");
+        break;
+      case LocationPermission.deniedForever:
+        print("Location permission is permanently denied.");
+        break;
+      case LocationPermission.unableToDetermine:
+        print("Location permission is unableToDetermine.");
+        break;
+      case LocationPermission.whileInUse:
+        print("Location permission is granted only while in use.");
+        break;
+      case LocationPermission.always:
+        print("Location permission is granted always.");
+        break;
+    }
   }
 
   Future<void> getFirebaseTokenn() async {

@@ -22,7 +22,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
-import 'package:location/location.dart';
+//import 'package:location/location.dart';
 // import 'package:location2/location2.dart';
 
 import 'package:device_info/device_info.dart';

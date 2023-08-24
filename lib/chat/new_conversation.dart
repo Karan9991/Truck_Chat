@@ -11,9 +11,10 @@ import 'package:http/http.dart' as http;
 import 'package:chat/utils/lat_lng.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:chat/utils/ads.dart';
-import 'package:location/location.dart';
+//import 'package:location/location.dart';
 import 'package:flutter/services.dart'; // Import SystemChrome
 //import 'package:admob_flutter/admob_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 class NewConversationScreen extends StatefulWidget {
   @override
@@ -218,17 +219,26 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
 
   Future<void> _sendConversation() async {
     print('send conversation');
-    Location location = Location();
-    PermissionStatus _permissionGranted;
+    // Location location = Location();
+    // PermissionStatus _permissionGranted;
+    final _locationPermission = await Geolocator.checkPermission();
 
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied ||
-        _permissionGranted == PermissionStatus.deniedForever) {
-      print('1');
-      showLocationPermissionDialog(context);
-    } else if (_permissionGranted == PermissionStatus.granted ||
-        _permissionGranted == PermissionStatus.grantedLimited) {
-      print('3');
+    // _permissionGranted = await location.hasPermission();
+
+    if (_locationPermission == LocationPermission.denied ||
+        _locationPermission == LocationPermission.deniedForever) {
+                   showLocationPermissionDialog(context);
+
+        }
+
+   else  {
+      // if (_permissionGranted == PermissionStatus.denied ||
+      //     _permissionGranted == PermissionStatus.deniedForever) {
+      //   print('1');
+      //   showLocationPermissionDialog(context);
+      // } else if (_permissionGranted == PermissionStatus.granted ||
+      //     _permissionGranted == PermissionStatus.grantedLimited) {
+      //   print('3');
 
       String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 
@@ -320,8 +330,8 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
     String? userId = SharedPrefs.getString(SharedPrefsKeys.USER_ID);
 
     final url = Uri.parse(MyFirebase.FIREBASE_NOTIFICATION_URL);
-    final serverKey =
-        MyFirebase.FIREBASE_CLOUD_MESSAGING_KEY_NOTIFICATION; // Replace with your FCM server key
+    final serverKey = MyFirebase
+        .FIREBASE_CLOUD_MESSAGING_KEY_NOTIFICATION; // Replace with your FCM server key
 
     final headers = {
       'Content-Type': 'application/json',
