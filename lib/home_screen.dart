@@ -90,7 +90,7 @@ class HomeScreenState extends State<HomeScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
-    AdHelper().createInterstitialAd();
+   // AdHelper().createInterstitialAd();
     //Load AppOpen Ad
 
     //  AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
@@ -132,8 +132,8 @@ class HomeScreenState extends State<HomeScreen>
     //     permissionStatus != LocationPermission.deniedForever) {
       _refreshChatList();
 
-      await registrDevc();
-      _refreshChatList();
+      // await registrDevc();
+      // _refreshChatList();
     //} else {}
   }
 
@@ -541,7 +541,7 @@ class HomeScreenState extends State<HomeScreen>
                     Tab(icon: Icon(Icons.chat), text: Constants.CHATS),
                     Tab(icon: Icon(Icons.star), text: Constants.SPONSORS),
                     Tab(icon: Icon(Icons.rate_review), text: Constants.REVIEWS),
-                    Tab(icon: Icon(Icons.person), text: Constants.PRIVATE_CHAT),
+                    Tab(icon: Icon(Icons.person), text: 'Private'),
                   ],
 
                   unselectedLabelColor:

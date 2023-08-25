@@ -79,7 +79,7 @@ class _ChatState extends State<Chat> {
   void initState() {
     super.initState();
 
-    AdHelper().showInterstitialAd();
+   // AdHelper().showInterstitialAd();
 
     // InterstitialAdManager.initialize();
     //AdHelper().showInterstitialAd();
@@ -140,7 +140,7 @@ class _ChatState extends State<Chat> {
   void dispose() {
     //   InterstitialAdManager.dispose();
 
-    AdHelper().disposeInterstitialAd();
+  //  AdHelper().disposeInterstitialAd();
     _scrollController.dispose();
 
     SharedPrefs.setBool('isUserOnPublicChatScreen', false);

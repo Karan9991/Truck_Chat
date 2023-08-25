@@ -33,6 +33,7 @@ import 'package:flutter/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:chat/utils/navigator_key.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:geolocator/geolocator.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   print("backgroundHandler: ${message.notification}");
@@ -73,7 +74,7 @@ void main() async {
   await SharedPrefs.init();
 
 
-  // await registerDevice();
+ await registerDevice();
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isAppInstalled = prefs.getBool('isAppInstalled') ?? false;
@@ -81,6 +82,8 @@ void main() async {
   if (!isAppInstalled) {
     await initNotificationsAndSoundPrefs();
   }
+
+  //await Geolocator.requestPermission();
 
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 

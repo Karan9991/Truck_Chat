@@ -194,31 +194,16 @@ import 'package:geolocator/geolocator.dart' as geoloc;
 Future<void> registerDevice() async {
   print(
       '---------------------------User Register Start------------------------------');
-  // GlobalNavigator.showAlertDialog(
-  //   'Location Access',
-  //   'This app collects location data to provide city and province information related to chat messages, '
-  //       'while you are using it. This '
-  //       'data is not used for any other purposes and is not shared with third '
-  //       'parties.',
-  // );
-  //  GlobalNavigator.showAlertDialog('New Private Chat Request!',
-  //         'Open your Private Chat and view pending requests to see who wants to connect.');
 
-  // showLocationAccessDialogGlobalKey(navigatorKey!, () => null);
 
   String user_id = '';
   String deviceType = getDeviceType();
 
-  // Location location = Location();
-  // LocationData? currentLocation;
   geoloc.Position? currentLocation;
   double latitude = 1.0;
   double longitude = 1.0;
 
   // Request location permission
-
-  // PermissionStatus? permissionStatus;
-  // permissionStatus = await location.hasPermission();
   final permissionStatus = await geoloc.Geolocator.checkPermission();
 
   print(
@@ -250,20 +235,6 @@ Future<void> registerDevice() async {
   }
   //end
 
-  // Fetch current location
-  // try {
-  //   //    Permission.location.request();
-  //   //  currentLocation = await getLocation(); //catch exception
-  //   location.changeSettings(accuracy: LocationAccuracy.low);
-
-  //   currentLocation = await location.getLocation();
-  //   print(currentLocation.latitude);
-  //   print(currentLocation.longitude);
-  // } catch (e) {
-  //   // Handle location fetch error
-  //   print('Error fetching location: $e');
-  //   return;
-  // }
 
   // Device registration data
   // Fetch device serial number and store in SharedPrefs

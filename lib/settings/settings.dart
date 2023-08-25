@@ -22,14 +22,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     // TODO: implement initState
     super.initState();
 
-    AdHelper().showInterstitialAd();
+    //AdHelper().showInterstitialAd();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
 
-    AdHelper().showInterstitialAd();
+   // AdHelper().showInterstitialAd();
     super.dispose();
   }
 

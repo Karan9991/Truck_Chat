@@ -60,7 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
 
-    AdHelper().showInterstitialAd();
+   // AdHelper().showInterstitialAd();
 
     SharedPrefs.setBool('isUserOnChatScreen', true);
 
@@ -78,7 +78,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void dispose() {
-    AdHelper().disposeInterstitialAd();
+   // AdHelper().disposeInterstitialAd();
     
     SharedPrefs.setBool('isUserOnChatScreen', false);
 
